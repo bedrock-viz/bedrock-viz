@@ -1,0 +1,188 @@
+html, body, .container-fluid, #map {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+.ol-mouse-position { 
+    background-color: #ffffff;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 0.25em 0.5em;
+}
+
+/* note: attempt at fixing blurry zoom */
+#map, img, canvas { 
+    image-rendering: -moz-crisp-edges;         /* Firefox */
+    image-rendering:   -o-crisp-edges;         /* Opera */
+    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+}
+
+/* full screen support */
+.map:-moz-full-screen {
+    height: 100%;
+}
+.map:-webkit-full-screen {
+    height: 100%;
+}
+.map:-ms-fullscreen {
+    height: 100%;
+}
+.map:fullscreen {
+    height: 100%;
+}
+.ol-full-screen {
+    /* move button down a bit */
+    top: 4.5em;
+}
+.ol-rotate {
+    top: 7em;
+}
+
+.popover {
+    z-index: auto;
+    min-width: 300px !important;
+}
+.popover-title {
+    background-color: #202020;
+    color: #f0f0f0;
+    padding: 0.25em 0.5em;
+}
+.popover-content {
+    padding: 0.25em 0.5em;
+    font-size: 90%;
+}
+
+.mob {
+}
+.mob_name {
+    font-weight: bold;
+}
+.mob_id {
+}
+
+/* todo - fix attribution small/weird issue */
+div.ol-attribution.ol-unselectable.ol-control.ol-uncollapsible ul li {
+    /* font-size: 200%; */
+}
+div.ol-attribution.ol-unselectable.ol-control.ol-uncollapsible {
+    /*
+    bottom: 2em;
+    right: 5px;
+   */
+}
+
+#throbber {
+    z-index: auto;
+    background-color: #e0e0e0;
+    color: #000000;
+    border: 2px solid black;
+    border-radius: 5px;
+    height: auto;
+    width: 200px;
+    padding: 10px;
+    -moz-opacity: 0.85;
+    opacity: 0.85;
+    filter: alpha(opacity=85);
+    position: absolute; left: 75px; top: 10px;
+}
+#throbber-msg {
+    color: #606060;
+}
+
+.mycenter {
+    text-align: center;
+}
+
+.lgray {
+    color: #b0b0b0;
+}
+
+
+/* support for measuring tools */
+.measure {
+  top: 8em;
+  left: .5em;
+}
+
+.measureTooltip {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  color: white;
+  padding: 4px 8px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+.measureTooltip-measure {
+  opacity: 1;
+  font-weight: bold;
+}
+.measureTooltip-static {
+  background-color: #f9ec1f;
+  color: black;
+  border: 1px solid white;
+}
+.measureTooltip-measure:before,
+.measureTooltip-static:before {
+  border-top: 6px solid rgba(0, 0, 0, 0.5);
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  margin-left: -7px;
+  left: 50%;
+}
+.measureTooltip-static:before {
+  border-top-color: #f9ec1f;
+}
+
+.nobreak {
+    white-space:nowrap;
+}
+
+
+.my-scrollable {
+    max-height: 300px;
+    overflow: auto;
+}
+
+.my-simple-scrollable {
+    overflow: auto;
+}
+
+
+.inventory-grid {
+    /* background-color: #ffdddd;*/
+    border: 1px dotted gray;
+    white-space:nowrap;
+    padding: 2px;
+    width: 60px;
+}
+.inventory-item-image {
+    /* background-color: #ddffdd;*/
+    /* display: inline-block; */
+    vertical-align: middle;
+    /* float: left; */
+}
+.inventory-item-count {
+    /* background-color: #ddddff; */
+    /* font-size: 24px; */
+    /* display: inline-block; */
+    vertical-align: middle;
+}
+
+/* make tabs on inventories etc much samller; indent them a bit */
+.myTabs > li > a {
+    padding: 2px;
+}
+.myTabsContainer {
+    padding-left: 1em;
+}
+
+.my-indent {
+    padding-left: 1.5em;
+}

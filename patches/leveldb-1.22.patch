@@ -1,0 +1,626 @@
+--- leveldb/CMakeLists.txt	2019-12-05 19:43:27.000000000 +0800
++++ leveldb/CMakeLists.txt	2019-12-05 19:46:10.000000000 +0800
+@@ -44,6 +44,7 @@
+ check_library_exists(crc32c crc32c_value "" HAVE_CRC32C)
+ check_library_exists(snappy snappy_compress "" HAVE_SNAPPY)
+ check_library_exists(tcmalloc malloc "" HAVE_TCMALLOC)
++find_package(ZLIB REQUIRED)
+ 
+ include(CheckCXXSymbolExists)
+ # Using check_cxx_symbol_exists() instead of check_c_symbol_exists() because
+@@ -62,8 +63,8 @@
+   add_definitions(-D_HAS_EXCEPTIONS=0)
+ 
+   # Disable RTTI.
+-  string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
++  # string(REGEX REPLACE "/GR" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
+ else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+   # Enable strict prototype warnings for C code in clang and gcc.
+   if(NOT CMAKE_C_FLAGS MATCHES "-Wstrict-prototypes")
+@@ -75,8 +76,8 @@
+   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions")
+ 
+   # Disable RTTI.
+-  string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
++  # string(REGEX REPLACE "-frtti" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++  # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-rtti")
+ endif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+ 
+ # Test whether -Wthread-safety is available. See
+@@ -156,6 +157,8 @@
+     "port/port_stdcxx.h"
+     "port/port.h"
+     "port/thread_annotations.h"
++    "table/compressor/zlib_compressor.cc"
++    "table/compressor/zlib_compressor.h"
+     "table/block_builder.cc"
+     "table/block_builder.h"
+     "table/block.cc"
+@@ -210,6 +213,7 @@
+     "${LEVELDB_PUBLIC_INCLUDE_DIR}/table_builder.h"
+     "${LEVELDB_PUBLIC_INCLUDE_DIR}/table.h"
+     "${LEVELDB_PUBLIC_INCLUDE_DIR}/write_batch.h"
++    "${LEVELDB_PUBLIC_INCLUDE_DIR}/decompress_allocator.h"
+ )
+ 
+ if (WIN32)
+@@ -270,6 +274,8 @@
+       -Werror -Wthread-safety)
+ endif(HAVE_CLANG_THREAD_SAFETY)
+ 
++target_link_libraries(leveldb ZLIB::ZLIB)
++
+ if(HAVE_CRC32C)
+   target_link_libraries(leveldb crc32c)
+ endif(HAVE_CRC32C)
+@@ -289,6 +295,11 @@
+ )
+ target_link_libraries(leveldbutil leveldb)
+ 
++add_executable(mcpe_test
++  "${PROJECT_SOURCE_DIR}/db/mcpe_test.cc"
++)
++target_link_libraries(mcpe_test leveldb)
++
+ if(LEVELDB_BUILD_TESTS)
+   enable_testing()
+ 
+@@ -466,6 +477,7 @@
+       "${LEVELDB_PUBLIC_INCLUDE_DIR}/table_builder.h"
+       "${LEVELDB_PUBLIC_INCLUDE_DIR}/table.h"
+       "${LEVELDB_PUBLIC_INCLUDE_DIR}/write_batch.h"
++      "${LEVELDB_PUBLIC_INCLUDE_DIR}/decompress_allocator.h"
+     DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/leveldb"
+   )
+ 
+diff -ruN leveldb/db/mcpe_test.cc leveldb-mcpe/db/mcpe_test.cc
+--- leveldb/db/mcpe_test.cc	1970-01-01 08:00:00.000000000 +0800
++++ leveldb/db/mcpe_test.cc	2019-12-05 19:47:51.000000000 +0800
+@@ -0,0 +1,155 @@
++#include <iostream>
++#include <sstream>
++
++#include <leveldb/c.h>
++#include <leveldb/cache.h>
++#include <leveldb/db.h>
++#include <leveldb/decompress_allocator.h>
++#include <leveldb/env.h>
++#include <leveldb/filter_policy.h>
++#include <leveldb/options.h>
++
++namespace bedrock {
++enum class Tag : char {
++  Data2D = 45,
++  Data2DLegacy = 46,
++  SubChunkPrefix = 47,
++  LegacyTerrain = 48,
++  BlockEntity = 49,
++  Entity = 50,
++  PendingTicks = 51,
++  BlockExtraData = 52,
++  BiomeState = 53,
++  FinalizedState = 54,
++  Version = 118
++};
++}
++
++union Coord {
++  int num;
++  char bin[4];
++};
++
++std::string TagToString(const bedrock::Tag& tag) {
++  using namespace bedrock;
++  switch (tag) {
++    case Tag::Data2D:
++      return "Data2D";
++    case Tag::Data2DLegacy:
++      return "Data2DLegacy";
++    case Tag::SubChunkPrefix:
++      return "SubChunkPrefix";
++    case Tag::LegacyTerrain:
++      return "LegacyTerrain";
++    case Tag::BlockEntity:
++      return "BlockEntity";
++    case Tag::Entity:
++      return "Entity";
++    case Tag::PendingTicks:
++      return "PendingTicks";
++    case Tag::BlockExtraData:
++      return "BlockExtraData";
++    case Tag::BiomeState:
++      return "BiomeState";
++    case Tag::FinalizedState:
++      return "FinalizedState";
++    case Tag::Version:
++      return "Version";
++  }
++  return "Unknown";
++}
++
++std::string PrintKeyInfo(const std::string& key) {
++  auto mainWorld = !(key.length() > 4 + 4 + 4 + 1);
++
++  Coord x;
++  x.bin[0] = key[0];
++  x.bin[1] = key[1];
++  x.bin[2] = key[2];
++  x.bin[3] = key[3];
++  Coord z;
++  z.bin[0] = key[4];
++  z.bin[1] = key[5];
++  z.bin[2] = key[6];
++  z.bin[3] = key[7];
++
++  const int tagIndex = (mainWorld ? 8 : 24);
++  if (key.length() - 1 < tagIndex) {
++    std::stringstream ss;
++    ss << "Unknown key: " << key;
++    return ss.str();
++  }
++  const auto tag = bedrock::Tag(key[tagIndex]);
++  const int subtrunkIdIndex = tagIndex + 1;
++  char buffer[100];
++  if (tag == bedrock::Tag::SubChunkPrefix) {
++    snprintf(buffer, 100, "X: %d, Z: %d, Tag: %s, SubTrunkID: %d", x.num, z.num,
++             TagToString(tag).c_str(), key[subtrunkIdIndex]);
++  } else {
++    snprintf(buffer, 100, "X: %d, Z: %d, Tag: %s", x.num, z.num,
++             TagToString(tag).c_str());
++  }
++
++  return std::string(buffer);
++}
++
++int main(int argc, char** argv) {
++  if (argc < 2) {
++    printf("Invalid database\n");
++    return 1;
++  }
++
++  auto path = std::string(argv[1]);
++
++  class NullLogger : public leveldb::Logger {
++   public:
++    void Logv(const char*, va_list) override {}
++  };
++
++  leveldb::Options options;
++
++  // create a bloom filter to quickly tell if a key is in the database or not
++  options.filter_policy = leveldb::NewBloomFilterPolicy(10);
++
++  // create a 40 mb cache (we use this on ~1gb devices)
++  options.block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);
++
++  // create a 4mb write buffer, to improve compression and touch the disk less
++  options.write_buffer_size = 4 * 1024 * 1024;
++
++  // disable internal logging. The default logger will still print out things to
++  // a file
++  options.info_log = new NullLogger();
++
++  options.zlib_compression_level = -1;
++  options.compression = leveldb::CompressionType::kZlibRawCompression;
++
++  // create a reusable memory space for decompression so it allocates less
++  leveldb::ReadOptions readOptions;
++  // readOptions.decompress_allocator = new leveldb::DecompressAllocator();
++
++  //... init leveldb with Options and read with ReadOptions
++  leveldb::DB* db = nullptr;
++  auto s = leveldb::DB::Open(options, path, &db);
++  if (!s.ok()) {
++    fprintf(stderr, "open error: %s\n", s.ToString().c_str());
++    exit(1);
++  }
++
++  auto iter = db->NewIterator(readOptions);
++  int count = 0;
++  for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
++    const auto key = iter->key();
++    if (key == "AutonomousEntities") {
++      printf("AutonomousEntities\n");
++    } else if (key == "Nether") {
++      printf("Nether\n");
++    } else if (key == "TheEnd") {
++      printf("TheEnd\n");
++    } else {
++      std::cout << PrintKeyInfo(key.ToString()) << '\n';
++    }
++  }
++
++  return 0;
++}
+diff -ruN leveldb/include/leveldb/c.h leveldb-mcpe/include/leveldb/c.h
+--- leveldb/include/leveldb/c.h	2019-12-05 18:39:22.000000000 +0800
++++ leveldb/include/leveldb/c.h	2019-12-05 19:47:31.000000000 +0800
+@@ -190,7 +190,12 @@
+ LEVELDB_EXPORT void leveldb_options_set_max_file_size(leveldb_options_t*,
+                                                       size_t);
+ 
+-enum { leveldb_no_compression = 0, leveldb_snappy_compression = 1 };
++enum { 
++    leveldb_no_compression = 0, 
++    leveldb_snappy_compression = 1,
++    leveldb_zlib_compression = 2,
++    leveldb_zlib_raw_compression = 4
++};
+ LEVELDB_EXPORT void leveldb_options_set_compression(leveldb_options_t*, int);
+ 
+ /* Comparator */
+diff -ruN leveldb/include/leveldb/decompress_allocator.h leveldb-mcpe/include/leveldb/decompress_allocator.h
+--- leveldb/include/leveldb/decompress_allocator.h	1970-01-01 08:00:00.000000000 +0800
++++ leveldb/include/leveldb/decompress_allocator.h	2019-12-05 19:48:10.000000000 +0800
+@@ -0,0 +1,26 @@
++#ifndef LEVELDB_DECOMPRESS_ALLOCATOR_H_
++#define LEVELDB_DECOMPRESS_ALLOCATOR_H_
++
++#include <mutex>
++#include <vector>
++#include <string>
++
++#include "leveldb/export.h"
++
++namespace leveldb {
++	class LEVELDB_EXPORT DecompressAllocator {
++	public:
++		virtual ~DecompressAllocator();
++
++		virtual std::string get();
++		virtual void release(std::string&& string);
++
++		virtual void prune();
++
++	protected:
++		std::mutex mutex;
++		std::vector<std::string> stack;
++	};
++}
++
++#endif
+diff -ruN leveldb/include/leveldb/options.h leveldb-mcpe/include/leveldb/options.h
+--- leveldb/include/leveldb/options.h	2019-12-05 18:39:22.000000000 +0800
++++ leveldb/include/leveldb/options.h	2019-12-05 19:49:27.000000000 +0800
+@@ -9,6 +9,8 @@
+ 
+ #include "leveldb/export.h"
+ 
++#include "leveldb/decompress_allocator.h"
++
+ namespace leveldb {
+ 
+ class Cache;
+@@ -17,6 +19,8 @@
+ class FilterPolicy;
+ class Logger;
+ class Snapshot;
++// MCPE
++class Compressor;
+ 
+ // DB contents are stored in a set of blocks, each of which holds a
+ // sequence of key,value pairs.  Each block may be compressed before
+@@ -26,7 +30,9 @@
+   // NOTE: do not change the values of existing entries, as these are
+   // part of the persistent format on disk.
+   kNoCompression = 0x0,
+-  kSnappyCompression = 0x1
++  kSnappyCompression = 0x1,
++  kZlibCompression = 0x2,
++  kZlibRawCompression = 0x4
+ };
+ 
+ // Options to control the behavior of a database (passed to DB::Open)
+@@ -140,6 +146,9 @@
+   // Many applications will benefit from passing the result of
+   // NewBloomFilterPolicy() here.
+   const FilterPolicy* filter_policy = nullptr;
++
++  // MCPE: Zlib Compression Level
++  int zlib_compression_level = -1;
+ };
+ 
+ // Options that control read operations
+@@ -159,6 +168,9 @@
+   // not have been released).  If "snapshot" is null, use an implicit
+   // snapshot of the state at the beginning of this read operation.
+   const Snapshot* snapshot = nullptr;
++
++  // MCPE
++  DecompressAllocator* decompress_allocator = nullptr;
+ };
+ 
+ // Options that control write operations
+diff -ruN leveldb/table/compressor/zlib_compressor.cc leveldb-mcpe/table/compressor/zlib_compressor.cc
+--- leveldb/table/compressor/zlib_compressor.cc	1970-01-01 08:00:00.000000000 +0800
++++ leveldb/table/compressor/zlib_compressor.cc	2019-12-05 19:50:04.000000000 +0800
+@@ -0,0 +1,135 @@
++#include "zlib_compressor.h"
++
++#include <algorithm>
++#include <cassert>
++
++#include <zlib.h>
++
++namespace {
++    bool Zlib_UncompressImpl(const char* input, size_t length, std::string& output, bool raw) {
++        const int CHUNK = 64 * 1024;
++
++		int ret;
++		size_t have;
++		z_stream strm;
++		unsigned char *out = new unsigned char[CHUNK];
++
++		/* allocate inflate state */
++		strm.zalloc = Z_NULL;
++		strm.zfree = Z_NULL;
++		strm.opaque = Z_NULL;
++		strm.avail_in = (uint32_t)length;
++		strm.next_in = (Bytef*)input;
++
++		ret = inflateInit2(&strm, raw ? -15 : 15);
++
++		if (ret != Z_OK)
++		{
++			return ret;
++		}
++
++		/* decompress until deflate stream ends or end of file */
++		do {
++			/* run inflate() on input until output buffer not full */
++			do {
++
++				strm.avail_out = CHUNK;
++				strm.next_out = out;
++
++				ret = ::inflate(&strm, Z_NO_FLUSH);
++
++				if (ret == Z_NEED_DICT) {
++					ret = Z_DATA_ERROR;
++				}
++				if (ret < 0) {
++					(void)inflateEnd(&strm);
++                    delete[] out;
++					return ret;
++				}
++
++				have = CHUNK - strm.avail_out;
++
++				output.append((char*)out, have);
++
++			} while (strm.avail_out == 0);
++
++			/* done when inflate() says it's done */
++		} while (ret != Z_STREAM_END);
++
++		/* clean up and return */
++		(void)inflateEnd(&strm);
++        delete[] out;
++        return ret == Z_STREAM_END;
++    }
++
++    bool Zlib_CompressImpl(int compressionLevel, const char* input, size_t length, std::string& buffer, bool raw) {
++        const size_t BUFSIZE = 128 * 1024;
++		unsigned char* temp_buffer = new unsigned char[BUFSIZE];
++
++		//reserve enough memory to not reallocate on the fly
++		buffer.reserve(buffer.size() + compressBound(length));
++
++		z_stream strm;
++		strm.zalloc = 0;
++		strm.zfree = 0;
++		strm.next_in = (unsigned char *)(input);
++		strm.avail_in = (uint32_t)length;
++		strm.next_out = temp_buffer;
++		strm.avail_out = BUFSIZE;
++
++		auto res = deflateInit2(&strm, compressionLevel, Z_DEFLATED, raw ? -15 : 15, 8, Z_DEFAULT_STRATEGY);
++		assert(res == Z_OK);
++
++		int deflate_res = Z_OK;
++		while (strm.avail_in != 0)
++		{
++			int res = deflate(&strm, Z_NO_FLUSH);
++			assert(res == Z_OK);
++			if (strm.avail_out == 0)
++			{
++				buffer.append(temp_buffer, temp_buffer + BUFSIZE);
++				strm.next_out = temp_buffer;
++				strm.avail_out = BUFSIZE;
++			}
++		}
++
++		while (deflate_res == Z_OK)
++		{
++			if (strm.avail_out == 0)
++			{
++				buffer.append(temp_buffer, temp_buffer + BUFSIZE);
++				strm.next_out = temp_buffer;
++				strm.avail_out = BUFSIZE;
++			}
++			deflate_res = deflate(&strm, Z_FINISH);
++		}
++
++		assert(deflate_res == Z_STREAM_END);
++		buffer.append(temp_buffer, temp_buffer + BUFSIZE - strm.avail_out);
++		deflateEnd(&strm);
++        delete[] temp_buffer;
++        return true;
++    }
++}
++
++namespace leveldb {
++    bool Zlib_Compress(int compressionLevel, const char* input, size_t length, std::string& output)
++    {
++        return Zlib_CompressImpl(compressionLevel, input, length, output, false);
++    }
++
++    bool ZlibRaw_Compress(int compressionLevel, const char* input, size_t length, std::string& output)
++    {
++        return Zlib_CompressImpl(compressionLevel, input, length, output, true);
++    }
++
++    bool Zlib_Uncompress(const char* input, size_t length, std::string& output)
++    {
++        return Zlib_UncompressImpl(input, length, output, false);
++    }
++
++    bool ZlibRaw_Uncompress(const char* input, size_t length, std::string& output)
++    {
++        return Zlib_UncompressImpl(input, length, output, true);
++    }
++}
+diff -ruN leveldb/table/compressor/zlib_compressor.h leveldb-mcpe/table/compressor/zlib_compressor.h
+--- leveldb/table/compressor/zlib_compressor.h	1970-01-01 08:00:00.000000000 +0800
++++ leveldb/table/compressor/zlib_compressor.h	2019-12-05 19:50:24.000000000 +0800
+@@ -0,0 +1,19 @@
++#ifndef STORAGE_LEVELDB_TABLE_ZLIB_COMPRESSOR_H_
++#define STORAGE_LEVELDB_TABLE_ZLIB_COMPRESSOR_H_
++
++#include <string>
++
++namespace leveldb {
++
++bool Zlib_Compress(int compressionLevel, const char* input, size_t length,
++                   std::string& output);
++
++bool ZlibRaw_Compress(int compressionLevel, const char* input, size_t length,
++                      std::string& output);
++
++bool Zlib_Uncompress(const char* input, size_t length, std::string& output);
++
++bool ZlibRaw_Uncompress(const char* input, size_t length, std::string& output);
++
++}  // namespace leveldb
++#endif  // STORAGE_LEVELDB_TABLE_ZLIB_COMPRESSOR_H_
+diff -ruN leveldb/table/format.cc leveldb-mcpe/table/format.cc
+--- leveldb/table/format.cc	2019-12-05 18:39:22.000000000 +0800
++++ leveldb/table/format.cc	2019-12-05 19:51:44.000000000 +0800
+@@ -10,8 +10,36 @@
+ #include "util/coding.h"
+ #include "util/crc32c.h"
+ 
++#include "leveldb/decompress_allocator.h"
++#include "table/compressor/zlib_compressor.h"
++
+ namespace leveldb {
+ 
++DecompressAllocator::~DecompressAllocator() {}
++
++std::string DecompressAllocator::get() {
++
++	std::string buffer;
++	std::lock_guard<std::mutex> lock(mutex);
++
++	if (!stack.empty()) {
++		buffer = std::move(stack.back());
++		buffer.clear();
++		stack.pop_back();
++	}
++	return buffer;
++}
++
++void DecompressAllocator::release(std::string&& string) {
++	std::lock_guard<std::mutex> lock(mutex);
++	stack.push_back(std::move(string));
++}
++
++void DecompressAllocator::prune() {
++	std::lock_guard<std::mutex> lock(mutex);
++	stack.clear();
++}
++
+ void BlockHandle::EncodeTo(std::string* dst) const {
+   // Sanity check that all fields have been set
+   assert(offset_ != ~static_cast<uint64_t>(0));
+@@ -130,6 +158,45 @@
+       result->cachable = true;
+       break;
+     }
++    case kZlibCompression: {
++      std::string output;
++      if (options.decompress_allocator) {
++				output = options.decompress_allocator->get();
++      }
++      if (!Zlib_Uncompress(data, n, output)) {
++        delete[] buf;
++        return Status::Corruption("corrupted compressed block contents");
++      }
++      delete[] buf;
++      char* ubuf = new char[output.size()];
++      std::memcpy(ubuf, output.data(), output.size());
++      result->data = Slice(ubuf, output.size());
++      result->heap_allocated = true;
++      result->cachable = true;
++      if (options.decompress_allocator) {
++	      options.decompress_allocator->release(std::move(output));
++	    }
++      break;
++    }
++    case kZlibRawCompression: {
++      std::string output;
++      if (!ZlibRaw_Uncompress(data, n, output)) {
++        delete[] buf;
++        return Status::Corruption("corrupted compressed block contents");
++      }
++      delete[] buf;
++      char* ubuf = new char[output.size()];
++      std::memcpy(ubuf, output.data(), output.size());
++      result->data = Slice(ubuf, output.size());
++      result->heap_allocated = true;
++      result->cachable = true;
++
++      if (options.decompress_allocator) {
++				options.decompress_allocator->release(std::move(output));
++			}
++
++      break;
++    }
+     default:
+       delete[] buf;
+       return Status::Corruption("bad block type");
+diff -ruN leveldb/table/table_builder.cc leveldb-mcpe/table/table_builder.cc
+--- leveldb/table/table_builder.cc	2019-12-05 18:39:22.000000000 +0800
++++ leveldb/table/table_builder.cc	2019-12-05 19:52:23.000000000 +0800
+@@ -16,6 +16,9 @@
+ #include "util/coding.h"
+ #include "util/crc32c.h"
+ 
++// MCPE
++#include "table/compressor/zlib_compressor.h"
++
+ namespace leveldb {
+ 
+ struct TableBuilder::Rep {
+@@ -168,6 +171,28 @@
+       }
+       break;
+     }
++    case kZlibCompression:{
++      std::string& compressed = r->compressed_output;
++      if (Zlib_Compress(r->options.zlib_compression_level, raw.data(), raw.size(), compressed) &&
++          compressed.size() < raw.size() - (raw.size() / 8u)) {
++            block_contents = compressed;
++      } else {
++        block_contents = raw;
++        type = kNoCompression;
++      }
++      break;
++    }
++    case kZlibRawCompression: {
++      std::string& compressed = r->compressed_output;
++      if (ZlibRaw_Compress(r->options.zlib_compression_level, raw.data(), raw.size(), compressed) &&
++          compressed.size() < raw.size() - (raw.size() / 8u)) {
++            block_contents = compressed;
++      } else {
++        block_contents = raw;
++        type = kNoCompression;
++      }
++      break;
++    }
+   }
+   WriteRawBlock(block_contents, type, handle);
+   r->compressed_output.clear();
