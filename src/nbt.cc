@@ -10,10 +10,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <algorithm>
-
-#if defined(__APPLE__) || defined(__FreeBSD__)
 #include <cmath>
-#endif
 
 #include "util.h"
 #include "mcpe_viz.h"

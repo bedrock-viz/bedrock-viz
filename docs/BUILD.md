@@ -35,6 +35,8 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 * libxml2: `sudo apt install libxml2-dev`
 
+* we use C++ 17 filesystem library, so we need g++-8: `sudo apt install g++-8`
+
 ### How to compile
 
 ```sh
@@ -44,6 +46,9 @@ cd bedrock-viz
 patch -p0 < patches/leveldb-1.22.patch
 # make
 mkdir build && cd build
+# switch gcc-7 to gcc-8
+export CC=/usr/bin/gcc-8
+export CXX=/usr/bin/g++-8
 cmake ..
 make
 ```
@@ -58,9 +63,9 @@ TODO:
 
 - [ ] fix `libgen.h`
 
-- [ ] fix `unistd.h`
+- [x] fix `unistd.h`
 
-- [ ] fix `__attribute__` in util.h
+- [x] fix `__attribute__` in util.h
 
 ### Requirements
 

@@ -7,33 +7,12 @@
   Utility functions
 */
 
-#include <stdio.h>
-#include <libxml/xmlreader.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include <unistd.h>
+#include <cstdio>
 #include <sstream>
-
-// ugliness to support fast file copies :)
-#if defined(__APPLE__) || defined(__FreeBSD__)
-#include <copyfile.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#else
-#if defined(WIN32)
-#include <windows.h>
-#else 
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/sendfile.h>
-#endif
-#endif
+#include <filesystem>
 
 #include "util.h"
 #include "mcpe_viz.h"
-#include "xml.h"
 
 namespace mcpe_viz {
 
@@ -66,26 +45,25 @@ namespace mcpe_viz {
   
   // these hacks work around "const char*" problems
   std::string mybasename( const std::string& fn ) {
-    char tmpstring[1025];
-    memset(tmpstring,0,1025);
-    strncpy(tmpstring,fn.c_str(),1024);
-    std::string ret( basename(tmpstring) );
-    return ret;
+      namespace fs = std::filesystem;
+      fs::path p{fn};
+      return p.filename();
+//    char tmpstring[1025];
+//    memset(tmpstring,0,1025);
+//    strncpy(tmpstring,fn.c_str(),1024);
+//    std::string ret( basename(tmpstring) );
+//    return ret;
   }
 
   std::string mydirname( const std::string& fn ) {
-    char tmpstring[1025];
-    memset(tmpstring,0,1025);
-    strncpy(tmpstring,fn.c_str(),1024);
-    std::string ret( dirname(tmpstring) );
-    return ret;
+      namespace fs = std::filesystem;
+      fs::path p{fn};
+      return p.parent_path();
   }
 
   
   int32_t file_exists(const std::string& fn) {
-    struct stat buf;
-    int32_t ret = stat(fn.c_str(), &buf);
-    return (ret == 0);
+      return std::filesystem::exists(fn);
   }
     
 
@@ -93,7 +71,7 @@ namespace mcpe_viz {
     if ( escapeChars.size() == 0 ) {
       return s;
     }
-    std::string ret="";
+    std::string ret;
     for ( const auto& ch : s ) {
       bool replaced = false;
       for ( const auto& escape : escapeChars ) {
@@ -163,144 +141,41 @@ namespace mcpe_viz {
     fclose(fpdest);
     return 0;
   }
-
-
-#if 0
-  // hacky but expedient text file copy
-  int32_t slow_copyFile ( const std::string& fnSrc, const std::string& fnDest, bool checkExistingFlag ) {
-    char buf[1025];
-    memset(buf,0,1025);
-
-    //slogger.msg(kLogInfo1,"  copyFile src=%s dest=%s\n", fnSrc.c_str(), fnDest.c_str());
-
-    FILE *fpsrc = fopen(fnSrc.c_str(),"rb");
-    if ( ! fpsrc ) {
-      slogger.msg(kLogInfo1,"ERROR: copyFile failed to open src (%s) errno=%s(%d)\n", fnSrc.c_str(), strerror(errno), errno);
-      return -1;
-    }
-    FILE *fpdest = fopen(fnDest.c_str(),"wb");
-    if ( ! fpdest ){
-      slogger.msg(kLogInfo1,"ERROR: copyFile failed to open dest (%s) errno=%s(%d)\n", fnDest.c_str(), strerror(errno), errno);
-      fclose(fpsrc);
-      return -1;
-    }
-
-    while ( ! feof(fpsrc) ) {
-      size_t ct = fread(buf, 1, 1024, fpsrc);
-      if ( ct > 0 ) {
-        fwrite(buf, 1, ct, fpdest);
-      }
-      /*
-      if ( fgets(buf, 1024, fpsrc) ) {
-        fputs(buf,fpdest);
-      }
-      */
-    }
-    fclose(fpsrc);
-    fclose(fpdest);
-    return 0;
-  }
-#endif
   
   // adapted from: http://stackoverflow.com/questions/2180079/how-can-i-copy-a-file-on-unix-using-c
   int copyFile(const std::string& fnSrc, const std::string& fnDest, bool checkExistingFlag ) {
-#if defined(WIN32)
-    // todobig - check existing file?
-    int32_t ret = CopyFile(fnSrc.c_str(), fnDest.c_str(), false);
-    if ( ret != 0 ) {
-      return 0;
-    } else {
-      int32_t err = GetLastError();
-      slogger.msg(kLogInfo1,"ERROR: copyFile failed for src (%s) to dest (%s) error-code (%d)\n", fnSrc.c_str(), fnDest.c_str(), err);
-      return 1;
-    }
-#else
-    int input, output;
+      namespace fs = std::filesystem;
 
-    if ( checkExistingFlag ) {
-      struct stat sSrc, sDest;
-      int resSrc = stat(fnSrc.c_str(), &sSrc);
-      int resDest = stat(fnDest.c_str(), &sDest);
-      if( resSrc == 0 && resDest == 0 ) {
-        if ( sSrc.st_size == sDest.st_size ) {
-#if defined(__APPLE__) || defined(__FreeBSD__)
-          if ( sSrc.st_mtimespec.tv_sec <= sDest.st_mtimespec.tv_sec ) {
-#else
-          if ( sSrc.st_mtim.tv_sec <= sDest.st_mtim.tv_sec ) {
-#endif
-            // file already exists, is the same size and has a good timestamp
-            //slogger.msg(kLogInfo1,"INFO! Skipping existing file (%s) (%s)\n", fnSrc.c_str(), fnDest.c_str());
-            return 0;
-          }
-        }
+      auto options = checkExistingFlag ? fs::copy_options::skip_existing : fs::copy_options::overwrite_existing;
+      try {
+          fs::copy(fnSrc, fnDest, options);
+          return 0;
       }
-    }
-    
-    if ((input = open(fnSrc.c_str(), O_RDONLY)) == -1) {
-      slogger.msg(kLogInfo1,"ERROR: copyFile failed to open src (%s)\n", fnSrc.c_str());
-      return -1;
-    }
-    if ((output = open(fnDest.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0644)) == -1) {
-      slogger.msg(kLogInfo1,"ERROR: copyFile failed to open dest (%s)\n", fnDest.c_str());
-      close(input);
-      return -1;
-    }
-    
-    //Here we use kernel-space copying for performance reasons
-    int ret = -1;
-#if defined(__APPLE__) || defined(__FreeBSD__)
-    //fcopyfile works on FreeBSD and OS X 10.5+
-    int result = fcopyfile(input, output, 0, COPYFILE_ALL);
-    // todobig - would need to investigate what fcopyfile returns
-#else
-    //sendfile will work with non-socket output (i.e. regular file) on Linux 2.6.33+
-    off_t bytesCopied = 0;
-    struct stat fileinfo; // = {0};
-    int result = fstat(input, &fileinfo);
-    if ( result == 0 ) {
-      result = sendfile(output, input, &bytesCopied, fileinfo.st_size);
-    }
-    if ( result >= 0 ) {
-      ret = 0;
-    } else {
-      // todobig - we might fallback to slow_copyFile here
-      // todobig - this is not portable!
-      slogger.msg(kLogInfo1,"ERROR: copyFile failed for src (%s) to dest (%s) error-code (%d)\n", fnSrc.c_str(), fnDest.c_str(), errno);
-      ret = 1;
-    }
-#endif
-    
-    close(input);
-    close(output);
-    
-    return ret;
-#endif
+      catch(const fs::filesystem_error& e) {
+          slogger.msg(kLogInfo1,"ERROR: copyFile failed for src (%s) to dest (%s) error-code (%d)\n",
+                  fnSrc.c_str(), fnDest.c_str(), e.code().value());
+          return 1;
+      }
   }
 
 
   int32_t copyDirToDir ( const std::string& dirSrc, const std::string& dirDest, bool checkExistingFlag ) {
-    struct dirent *dp;
-    DIR *dfd = opendir(dirSrc.c_str());
-    if (dfd != NULL) {
-      while ((dp = readdir(dfd)) != NULL) {
-        if ( strcmp(dp->d_name,".") == 0 || strcmp(dp->d_name,"..") == 0 ) {
-          // skip
-        } else {
-          std::string fnSrc = dirSrc + "/" + dp->d_name;
-          std::string fnDest = dirDest + "/" + mybasename(dp->d_name);
-          copyFile(fnSrc, fnDest, checkExistingFlag);
-        }
+      namespace fs = std::filesystem;
+      auto options = fs::copy_options::recursive | (checkExistingFlag ? fs::copy_options::skip_existing : fs::copy_options::overwrite_existing);
+      try {
+          fs::copy(dirSrc, dirDest, options);
+          return 0;
       }
-      closedir(dfd);
-      return 0;
-    }
-    slogger.msg(kLogInfo1, "ERROR: copyDirToDir( src=%s dest=%s ) failed to open source directory\n", dirSrc.c_str(), dirDest.c_str());
-    return -1;
+      catch(const fs::filesystem_error& e) {
+          slogger.msg(kLogInfo1, "ERROR: copyDirToDir( src=%s dest=%s ) failed to open source directory\n", dirSrc.c_str(), dirDest.c_str());
+          return -1;
+      }
   }
 
   
   int32_t deleteFile ( const std::string& fn ) {
-    return unlink(fn.c_str());
+      auto result = std::filesystem::remove(fn);
+      return result ? 0 : -1;
   }
 
   // from: http://kickjava.com/src/org/eclipse/swt/graphics/RGB.java.htm
@@ -540,12 +415,9 @@ namespace mcpe_viz {
   }
 
   int32_t local_mkdir(const std::string& path) {
-    // todobig - check if dir exists first?
-#if defined(WIN32) || defined(WIN64)
-    return mkdir(path.c_str());
-#else
-    return mkdir(path.c_str(),0755);
-#endif
+      namespace fs = std::filesystem;
+      auto result = fs::create_directory(path);
+      return result ? 0 : -1;
   }
 
 
