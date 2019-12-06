@@ -29,7 +29,11 @@
 
 # CMake
 build/
+cmake-build-debug/
 
 # macOS
 ._*
 .DS_Store
+
+# CLion
+.idea/
