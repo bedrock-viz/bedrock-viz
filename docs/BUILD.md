@@ -50,4 +50,46 @@ make
 
 If all goes well, there will be a "bedrock-viz" in `build/`
 
-## Windows
+## Windows (currently not working)
+
+TODO:
+
+- [ ] fix `getopt.h`
+
+- [ ] fix `libgen.h`
+
+- [ ] fix `unistd.h`
+
+- [ ] fix `__attribute__` in util.h
+
+### Requirements
+
+* vcpkg and cmake
+
+* Visual Studio 2019
+
+* patch for windows: <http://gnuwin32.sourceforge.net/packages/patch.htm>
+
+* libpng: `vcpkg install libpng:x64-windows`
+
+* zlib: `vcpkg install zlib:x64-windows`
+
+* libxml2: `vcpkg install libxml2:x64-windows`
+
+### How to compile
+
+```sh
+git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
+cd bedrock-viz
+
+# patch leveldb
+# !!! change line ending of patch file to CRLF first
+patch -p0 -i patches/leveldb-1.22.patch
+
+# make
+mkdir build
+cd build
+cmake .. -DCMAKE_TOOLCHAIN_FILE=<path-to-vcpkg>/scripts/buildsystems/vcpkg.cmake -G "Visual Studio 16 2019" -A x64
+# in visual studio command line tools
+msbuild bedrock-viz.sln
+```
