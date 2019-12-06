@@ -30,5 +30,10 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/libnbtplusplus/include
 )
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  # GCC requires -lstdc++fs to using <filesystem>
+  target_link_libraries(bedrock-viz stdc++fs)
+endif()
+
 target_link_libraries(bedrock-viz leveldb nbt++
   ${PNG_LIBRARIES} ${ZLIB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${LIBXML2_LIBRARIES})
