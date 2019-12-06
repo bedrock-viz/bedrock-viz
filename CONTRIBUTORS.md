@@ -25,6 +25,11 @@
   * New in template: Armor Stand and Parrot toggles
   * New blocks: Magma Block, Red Nether Brick, Bone Block, Glazed Terracotta, Concrete, Concrete Powder
 
+* **[Asa Packer](https://github.com/marzipan42)**
+
+  * Fix "Did not find 'name' and/or 'val' tags in a chunk palette!" error
+
+
 ## bedorck-viz
 
 * **[Jasper Wan](https://github.com/jasper-wan)**

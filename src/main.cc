@@ -854,25 +854,25 @@ namespace mcpe_viz {
         bool processedFlag = false;
         if ( tc.has_key("name", nbt::tag_type::String) ) {
           std::string bname = tc["name"].as<nbt::tag_string>().get();
+          int bdata = 0;
           if ( tc.has_key("val", nbt::tag_type::Short) ) {
-            int bdata = tc["val"].as<nbt::tag_short>().get();
-            
-            int32_t blockId, blockData;
-            if ( getBlockByUname(bname, blockId, blockData) == 0 ) {
-              chunkBlockPalette_BlockId[i] = blockId;
-              // todonow - correct?
-              chunkBlockPalette_BlockData[i] = bdata;
-            } else {
-              logger.msg(kLogWarning,"Did not find block uname '%s' in XML file\n", bname.c_str());
-              // todonow - reasonable?
-              chunkBlockPalette_BlockId[i] = 0;
-              chunkBlockPalette_BlockData[i] = 0;
-            }
-            processedFlag = true;
+            bdata = tc["val"].as<nbt::tag_short>().get();
           }
+          int32_t blockId, blockData;
+          if ( getBlockByUname(bname, blockId, blockData) == 0 ) {
+            chunkBlockPalette_BlockId[i] = blockId;
+            // todonow - correct?
+            chunkBlockPalette_BlockData[i] = bdata;
+          } else {
+            logger.msg(kLogWarning,"Did not find block uname '%s' in XML file\n", bname.c_str());
+            // todonow - reasonable?
+            chunkBlockPalette_BlockId[i] = 0;
+            chunkBlockPalette_BlockData[i] = 0;
+          }
+          processedFlag = true;
         }
         if ( ! processedFlag ) {
-          slogger.msg(kLogError,"(Safe) Did not find 'name' and/or 'val' tags in a chunk palette! (i=%d) (len=%d)\n"
+          slogger.msg(kLogError,"(Safe) Did not find 'name' tag in a chunk palette! (i=%d) (len=%d)\n"
                       , (int)i, (int)tagList.size() );
           //todozooz - dump tc to screen log
         }
@@ -1703,25 +1703,25 @@ namespace mcpe_viz {
           bool processedFlag = false;
           if ( tc.has_key("name", nbt::tag_type::String) ) {
             std::string bname = tc["name"].as<nbt::tag_string>().get();
+            int bdata = 0;
             if ( tc.has_key("val", nbt::tag_type::Short) ) {
-              int bdata = tc["val"].as<nbt::tag_short>().get();
-              
-              int32_t blockId, blockData;
-              if ( getBlockByUname(bname, blockId, blockData) == 0 ) {
-                chunkBlockPalette_BlockId[i] = blockId;
-                // todonow - correct?
-                chunkBlockPalette_BlockData[i] = bdata;
-              } else {
-                logger.msg(kLogWarning,"Did not find block uname '%s' in XML file\n", bname.c_str());
-                // todonow - reasonable?
-                chunkBlockPalette_BlockId[i] = 0;
-                chunkBlockPalette_BlockData[i] = 0;
-              }
-              processedFlag = true;
+              bdata = tc["val"].as<nbt::tag_short>().get();
             }
+            int32_t blockId, blockData;
+            if ( getBlockByUname(bname, blockId, blockData) == 0 ) {
+              chunkBlockPalette_BlockId[i] = blockId;
+              // todonow - correct?
+              chunkBlockPalette_BlockData[i] = bdata;
+            } else {
+              logger.msg(kLogWarning,"Did not find block uname '%s' in XML file\n", bname.c_str());
+              // todonow - reasonable?
+              chunkBlockPalette_BlockId[i] = 0;
+              chunkBlockPalette_BlockData[i] = 0;
+            }
+            processedFlag = true;
           }
           if ( ! processedFlag ) {
-            slogger.msg(kLogError,"(Safe) Did not find 'name' and/or 'val' tags in a chunk palette! (i=%d) (len=%d)\n"
+            slogger.msg(kLogError,"(Safe) Did not find 'name' tag in a chunk palette! (i=%d) (len=%d)\n"
                         , (int)i, (int)tagList.size() );
             //todozooz - dump tc to screen log
           }
