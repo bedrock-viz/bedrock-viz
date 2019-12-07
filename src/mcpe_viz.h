@@ -12,6 +12,8 @@
 
 #include <map>
 
+#include "logger.h"
+
 namespace mcpe_viz {
 
   //todozooz - MAX_BLOCK_ID MAX_ITEM_ID etc
@@ -27,14 +29,7 @@ namespace mcpe_viz {
 
   extern int32_t globalIconImageId;
   
-  // dimensions
-  enum DimensionType : int32_t {
-    kDimIdOverworld = 0,
-      kDimIdNether = 1,
-      kDimIdTheEnd = 2,
-      // todobig - this is very brittle - consider that add-ons may one day add custome dimensions
-      kDimIdCount = 3
-      };
+
 
   
   void worldPointToImagePoint(int32_t dimId, double wx, double wz, double &ix, double &iy, bool geoJsonFlag);

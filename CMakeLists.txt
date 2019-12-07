@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 project(bedrock-viz VERSION 0.1)
 
 set(CMAKE_CXX_STANDARD 17)
-add_executable(bedrock-viz 
-  "src/main.cc" 
+add_executable(bedrock-viz
+  "src/main.cc"
+  "src/logger.cc"
   "src/xml.cc" 
   "src/nbt.cc" 
   "src/util.cc")
@@ -31,9 +32,14 @@ include_directories(
 )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  # GCC requires -lstdc++fs to using <filesystem>
+  # GCC requires -lstdc++fs to use <filesystem>
   target_link_libraries(bedrock-viz stdc++fs)
 endif()
 
-target_link_libraries(bedrock-viz leveldb nbt++
-  ${PNG_LIBRARIES} ${ZLIB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT} ${LIBXML2_LIBRARIES})
+target_link_libraries(bedrock-viz 
+  leveldb 
+  nbt++
+  ${PNG_LIBRARIES} 
+  ${ZLIB_LIBRARIES} 
+  ${CMAKE_THREAD_LIBS_INIT} 
+  ${LIBXML2_LIBRARIES})

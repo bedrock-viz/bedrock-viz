@@ -15,6 +15,7 @@
 #include "util.h"
 #include "mcpe_viz.h"
 #include "nbt.h"
+#include "define.h"
 
 namespace mcpe_viz {
 

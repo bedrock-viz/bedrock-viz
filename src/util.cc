@@ -48,11 +48,6 @@ namespace mcpe_viz {
       namespace fs = std::filesystem;
       fs::path p{fn};
       return p.filename();
-//    char tmpstring[1025];
-//    memset(tmpstring,0,1025);
-//    strncpy(tmpstring,fn.c_str(),1024);
-//    std::string ret( basename(tmpstring) );
-//    return ret;
   }
 
   std::string mydirname( const std::string& fn ) {

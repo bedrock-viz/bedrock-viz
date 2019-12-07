@@ -6,12 +6,13 @@
 
   XML support
 */
+#include "xml.h"
 
-#include <stdio.h>
+#include <cstdio>
 #include <libxml/xmlreader.h>
 #include "util.h"
 #include "mcpe_viz.h"
-#include "xml.h"
+
 
 namespace mcpe_viz {
     

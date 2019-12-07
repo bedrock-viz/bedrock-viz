@@ -22,6 +22,7 @@
 #include <cmath>
 #include <cerrno>
 #include "version.h"
+#include "logger.h"
 
 namespace mcpe_viz {
 
@@ -61,105 +62,6 @@ namespace mcpe_viz {
 
   void dumpBuffer( const char* header, const char* buf, size_t bufLen);
 
-  enum LogType : int32_t {
-    // todobig - be more clever about this
-    kLogInfo1 = 0x0001,
-      kLogInfo2 = 0x0002,
-      kLogInfo3 = 0x0004,
-      kLogInfo4 = 0x0008,
-
-      kLogInfo = 0x0010,
-      kLogWarning = 0x0020,
-      kLogError = 0x0040,
-      kLogFatalError = 0x0080,
-      kLogDebug = 0x1000,
-      kLogAll = 0xffff
-      };
-
-  const int32_t kLogVerbose = kLogAll ^ (kLogDebug);
-  const int32_t kLogDefault = kLogVerbose;
-  const int32_t kLogQuiet = ( kLogWarning | kLogError | kLogFatalError );
-
-  
-  // todolib - separate .cc/.h for each class... sigh
-  class Logger {
-  public:
-    int32_t logLevelMask;
-    FILE *fpStdout;
-    FILE *fpStderr;
-    bool doFlushFlag;
-    
-    Logger() {
-      init();
-    }
-   
-    void init() {
-      logLevelMask = kLogDefault;
-      fpStdout = nullptr;
-      fpStderr = nullptr;
-    }
-
-    void setFlush(bool f) {
-      doFlushFlag = f;
-    }
-    
-    void setLogLevelMask(int32_t m) {
-      logLevelMask = m;
-    }
-
-    void setStdout(FILE *fp) {
-      fpStdout = fp;
-    }
-
-    void setStderr(FILE *fp) {
-      fpStderr = fp;
-    }
-    
-    // from: http://stackoverflow.com/questions/12573968/how-to-use-gccs-printf-format-attribute-with-c11-variadic-templates
-    // make gcc check calls to this function like it checks printf et al
-    __attribute__((format(printf, 3, 4)))
-      int32_t msg (int32_t levelMask, const char *fmt, ...) {
-      // check if we care about this message
-      if ( (levelMask & logLevelMask) || (levelMask & kLogFatalError) ) {
-        // we care
-      } else {
-        // we don't care
-        return -1;
-      }
-      
-      // todobig - be more clever about logging - if very important or interesting, we might want to print to log AND to stderr
-      FILE *fp = fpStdout;
-
-      if ( fp == nullptr ) {
-        // todobig - output to screen?
-        return -1;
-      }
-      
-      if (levelMask & kLogFatalError)   { fprintf(fp,"** FATAL ERROR: "); }
-      else if (levelMask & kLogError)   { fprintf(fp,"ERROR: "); }
-      else if (levelMask & kLogWarning) { fprintf(fp,"WARNING: "); }
-      else if (levelMask & kLogInfo)    { } // fprintf(fp,"INFO: "); }
-      else                              { } // fprintf(fp,"UNKNOWN: "); }
-      
-      va_list argptr;
-      va_start(argptr,fmt);
-      vfprintf(fp,fmt,argptr);
-      va_end(argptr);
-      
-      if (levelMask & kLogFatalError) {
-        fprintf(fp,"** Exiting on FATAL ERROR\n");
-        fflush(fp);
-        exit(-1);
-      }
-
-      if ( doFlushFlag ) {
-        fflush(fp);
-      }
-      
-      return 0;
-    }
-    
-  };    
 
   extern Logger slogger;
   
