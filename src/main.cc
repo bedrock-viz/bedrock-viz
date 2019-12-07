@@ -211,14 +211,20 @@
 #include <random>
 #include <filesystem>
 #include <iostream>
-
-#include <getopt.h>
+#include <ctime>
+#include <string>
 
 #include <leveldb/db.h>
 #include <leveldb/env.h>
 #include <leveldb/cache.h>
 #include <leveldb/decompress_allocator.h>
 #include <leveldb/filter_policy.h>
+
+#ifndef _MSC_VER
+#include <getopt.h>
+#else
+#include "getopt/getopt.h"
+#endif
 
 #include "define.h"
 #include "util.h"
@@ -4937,7 +4943,11 @@ namespace mcpe_viz {
             if (fp) {
                 time_t xtime = time(NULL);
                 char timebuf[256];
+#if _MSC_VER
+                ctime_s(timebuf, 256, &xtime);
+#else 
                 ctime_r(&xtime, timebuf);
+#endif
                 // todo - this is hideous.
                 // fix time string
                 char *p = strchr(timebuf, '\n');
@@ -5600,7 +5610,7 @@ namespace mcpe_viz {
 //        if ( strcmp(dp->d_name,".") == 0 || strcmp(dp->d_name,"..") == 0 ) {
             // skip
 //        } else {
-            std::string fnSrc{p.path().filename()};
+            std::string fnSrc(p.path().filename().generic_string());
             int32_t blockId = -1, blockData = -1;
             char blockName[1025];
             memset(blockName, 0, 1025);

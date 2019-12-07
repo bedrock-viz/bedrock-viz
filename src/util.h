@@ -591,7 +591,7 @@ namespace mcpe_viz {
     
   private:
     struct compare_less_
-      : std::binary_function<HistogramItem,HistogramItem,bool>
+    //  : std::binary_function<HistogramItem,HistogramItem,bool>
     {
       inline bool operator()(const HistogramItem& lhs, const HistogramItem& rhs) {
         if ( lhs.second == rhs.second ) {
@@ -602,7 +602,7 @@ namespace mcpe_viz {
       }
     };
     struct compare_more_
-      : std::binary_function<HistogramItem,HistogramItem,bool>
+    //  : std::binary_function<HistogramItem,HistogramItem,bool>
     {
       inline bool operator()(const HistogramItem& lhs, const HistogramItem& rhs) {
         if ( lhs.second == rhs.second ) {

@@ -9,6 +9,10 @@ add_executable(bedrock-viz
   "src/nbt.cc" 
   "src/util.cc")
 
+if(MSVC)
+  target_sources(bedrock-viz PRIVATE "src/getopt/getopt.c")
+endif(MSVC)
+
 set(LEVELDB_BUILD_TESTS OFF CACHE INTERNAL "Don't build LevelDB tests")
 set(LEVELDB_BUILD_BENCHMARKS OFF CACHE INTERNAL "Don't build LevelDB benckmarks")
 set(LEVELDB_INSTALL OFF CACHE INTERNAL "Don't install LevelDB headers")

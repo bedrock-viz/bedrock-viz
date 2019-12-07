@@ -47,13 +47,13 @@ namespace mcpe_viz {
   std::string mybasename( const std::string& fn ) {
       namespace fs = std::filesystem;
       fs::path p{fn};
-      return p.filename();
+      return p.filename().generic_string();
   }
 
   std::string mydirname( const std::string& fn ) {
       namespace fs = std::filesystem;
       fs::path p{fn};
-      return p.parent_path();
+      return p.parent_path().generic_string();
   }
 
   

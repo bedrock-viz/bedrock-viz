@@ -5,7 +5,8 @@
 
 namespace mcpe_viz {
     Logger::Logger() {
-        this->logLevelMask = kLogDefault;
+
+        this->logLevelMask = kLogInfo;
         this->fpStderr = nullptr;
         this->fpStdout = nullptr;
         this->doFlushFlag = false;

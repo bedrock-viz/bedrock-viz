@@ -8,9 +8,9 @@ namespace mcpe_viz {
 
     enum LogType : uint32_t {
         // todobig - be more clever about this
-        kLogInfo1 = 0x0001,
+        kLogInfo1 = 0x0010,
 
-        // kLogInfo = 0x0010,
+        kLogInfo = 0x0010,
         kLogWarning = 0x0020,
         kLogError = 0x0040,
         kLogFatalError = 0x0080,
@@ -18,9 +18,9 @@ namespace mcpe_viz {
         kLogAll = 0xffff
     };
 
-    const int32_t kLogVerbose = kLogAll ^ (kLogDebug);
-    const int32_t kLogDefault = kLogVerbose;
-    const int32_t kLogQuiet = ( kLogWarning | kLogError | kLogFatalError );
+    const uint32_t kLogVerbose = kLogAll ^ (kLogDebug);
+    const uint32_t kLogDefault = kLogVerbose;
+    const uint32_t kLogQuiet = ( kLogWarning | kLogError | kLogFatalError );
 
 
     class Logger {
