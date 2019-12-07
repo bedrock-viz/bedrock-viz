@@ -55,17 +55,7 @@ make
 
 If all goes well, there will be a "bedrock-viz" in `build/`
 
-## Windows (currently not working)
-
-TODO:
-
-- [ ] fix `getopt.h`
-
-- [ ] fix `libgen.h`
-
-- [x] fix `unistd.h`
-
-- [x] fix `__attribute__` in util.h
+## Windows
 
 ### Requirements
 
