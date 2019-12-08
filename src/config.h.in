@@ -1,0 +1,17 @@
+/*
+  Minecraft Bedrock Edition World File Visualization & Reporting Tool
+  (c) Jasper Wan, 2019.12.8
+
+  GPL'ed code - see LICENSE
+*/
+#ifndef __BEDROCK_VIZ_CONFIG_H__
+#define __BEDROCK_VIZ_CONFIG_H__
+
+namespace bedrock_viz {
+    const char * const version = R"(${PROJECT_VERSION})";
+    const char * const version_full = R"(bedrock-viz v${PROJECT_VERSION} by Plethora777)";
+
+    const char * const cmake_install_prefix = R"(${CMAKE_INSTALL_PREFIX})";
+}
+
+#endif //__BEDROCK_VIZ_CONFIG_H__

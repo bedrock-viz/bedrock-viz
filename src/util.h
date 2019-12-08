@@ -21,7 +21,7 @@
 #include <png.h>
 #include <cmath>
 #include <cerrno>
-#include "version.h"
+#include "config.h"
 #include "logger.h"
 
 namespace mcpe_viz {
@@ -158,7 +158,7 @@ namespace mcpe_viz {
       png_set_filter(png, 0, PNG_FILTER_NONE);
 
       // add text comments to png
-      addText("Program", mcpe_viz_version);
+      addText("Program", bedrock_viz::version_full);
       addText("Description", imageDescription);
       addText("URL", "https://github.com/Plethora777/mcpe_viz");
       // todo - other text?

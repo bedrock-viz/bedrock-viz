@@ -30,7 +30,7 @@
 # CMake
 build/
 release/
-cmake-build-debug/
+cmake-build-*/
 
 # macOS
 ._*

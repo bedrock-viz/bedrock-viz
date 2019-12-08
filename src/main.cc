@@ -231,6 +231,7 @@
 #include "mcpe_viz.h"
 #include "nbt.h"
 #include "xml.h"
+#include "asset.h"
 
 
 namespace mcpe_viz {
@@ -4966,7 +4967,7 @@ namespace mcpe_viz {
                         "var tileH = %d;\n"
                         "var dimensionInfo = {\n", escapeString(getWorldName().c_str(), "'").c_str(),
                         (long long int) getWorldSeed(), escapeString(timebuf, "'").c_str(),
-                        mcpe_viz_version_short.c_str(), control.noForceGeoJSONFlag ? "true" : "false",
+                        bedrock_viz::version, control.noForceGeoJSONFlag ? "true" : "false",
                         mybasename(control.fnGeoJSON).c_str(), control.doTiles ? "true" : "false", control.tileWidth,
                         control.tileHeight
                 );
@@ -5522,9 +5523,7 @@ namespace mcpe_viz {
     int32_t parseXml() {
         // parse xml file in this order:
         // -- option specified on command-line
-        // -- master dir
-        // -- exec dir
-        // -- local dir
+        // -- asset dir(./data/ or /usr/local/share/bedrock-viz/data/, etc)
         std::string fn;
         int32_t ret;
         char tmpstring[256];
@@ -5545,27 +5544,8 @@ namespace mcpe_viz {
             }
         }
 
-        // default config file
-        // todo - how to support on win32? %HOMEPATH%?
-        if (getenv("HOME")) {
-            std::string fnHome = getenv("HOME");
-            fnHome += "/.mcpe_viz/mcpe_viz.xml";
-            ret = doParseXml(fnHome);
-            if (ret >= 0) {
-                return ret;
-            }
-        }
-
-        // same dir as exec
-        fn = dirExec;
-        fn += "/mcpe_viz.xml";
-        ret = doParseXml(fn);
-        if (ret >= 0) {
-            return ret;
-        }
-
-        // local dir
-        fn = "./mcpe_viz.xml";
+        // in asset folder
+        fn = bedrock_viz::xml_path();
         ret = doParseXml(fn);
         if (ret >= 0) {
             return ret;
@@ -6298,8 +6278,6 @@ namespace mcpe_viz {
         ret = parseXml();
         if (ret != 0) {
             slogger.msg(kLogInfo1, "ERROR: Failed to parse XML file.  Exiting...\n");
-            slogger.msg(kLogInfo1,
-                        "** Hint: Make sure that mcpe_viz.xml is in any of: current dir, exec dir, ~/.mcpe_viz/\n");
             return -1;
         }
 
@@ -6315,7 +6293,7 @@ namespace mcpe_viz {
 
 
 int main(int argc, char **argv) {
-    std::cerr << mcpe_viz_version << '\n';
+    std::cerr << bedrock_viz::version_full << '\n';
 
     int32_t ret = mcpe_viz::init(argc, argv);
     if (ret != 0) {

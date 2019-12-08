@@ -1,7 +1,3 @@
-//
-// Created by 宛嵇祥 on 2019/12/6.
-//
-
 #ifndef BEDROCK_VIZ_DEFINE_H
 #define BEDROCK_VIZ_DEFINE_H
 

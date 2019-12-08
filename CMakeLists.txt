@@ -1,8 +1,16 @@
 cmake_minimum_required(VERSION 3.10)
-project(bedrock-viz VERSION 0.1)
+project(bedrock-viz VERSION 0.1.1)
 
 set(CMAKE_CXX_STANDARD 17)
+
+if (CMAKE_BUILD_TYPE STREQUAL Debug)
+  add_compile_definitions(BEDROCK_VIZ_DEBUG)
+endif(CMAKE_BUILD_TYPE STREQUAL Debug)
+
+configure_file(src/config.h.in config.h)
+
 add_executable(bedrock-viz
+  "src/asset.cc"
   "src/main.cc"
   "src/logger.cc"
   "src/xml.cc" 
@@ -35,6 +43,8 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/libnbtplusplus/include
 )
 
+target_include_directories(bedrock-viz PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   # GCC requires -lstdc++fs to use <filesystem>
   target_link_libraries(bedrock-viz stdc++fs)
@@ -47,3 +57,13 @@ target_link_libraries(bedrock-viz
   ${ZLIB_LIBRARIES} 
   ${CMAKE_THREAD_LIBS_INIT} 
   ${LIBXML2_LIBRARIES})
+
+file(COPY data
+     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+file(COPY static
+        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+install(TARGETS bedrock-viz DESTINATION bin)
+install(DIRECTORY data/ DESTINATION share/bedrock-viz/data)
+install(DIRECTORY static/ DESTINATION share/bedrock-viz/static)
