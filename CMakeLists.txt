@@ -11,6 +11,8 @@ configure_file(src/config.h.in config.h)
 
 add_executable(bedrock-viz
   "src/asset.cc"
+  "src/minecraft.cc"
+  "src/args.cc"
   "src/main.cc"
   "src/logger.cc"
   "src/xml.cc" 
@@ -25,10 +27,11 @@ set(LEVELDB_BUILD_TESTS OFF CACHE INTERNAL "Don't build LevelDB tests")
 set(LEVELDB_BUILD_BENCHMARKS OFF CACHE INTERNAL "Don't build LevelDB benckmarks")
 set(LEVELDB_INSTALL OFF CACHE INTERNAL "Don't install LevelDB headers")
 
-add_subdirectory(leveldb)
+add_subdirectory(third_party/leveldb)
 set(NBT_BUILD_TESTS OFF CACHE INTERNAL "Don't build nbt++ tests")
 
-add_subdirectory(libnbtplusplus)
+add_subdirectory(third_party/libnbtplusplus)
+add_subdirectory(third_party/spdlog)
 
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -39,8 +42,9 @@ include_directories(
   ${PNG_INCLUDE_DIR} 
   ${ZLIB_INCLUDE_DIR} 
   ${LIBXML2_INCLUDE_DIR} 
-  ${PROJECT_SOURCE_DIR}/leveldb/include 
-  ${PROJECT_SOURCE_DIR}/libnbtplusplus/include
+  ${PROJECT_SOURCE_DIR}/third_party/leveldb/include
+  ${PROJECT_SOURCE_DIR}/third_party/libnbtplusplus/include
+  ${PROJECT_SOURCE_DIR}/third_party/spdlog/include
 )
 
 target_include_directories(bedrock-viz PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
@@ -51,11 +55,10 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 target_link_libraries(bedrock-viz 
-  leveldb 
-  nbt++
+  leveldb spdlog nbt++
   ${PNG_LIBRARIES} 
   ${ZLIB_LIBRARIES} 
-  ${CMAKE_THREAD_LIBS_INIT} 
+  ${CMAKE_THREAD_LIBS_INIT}
   ${LIBXML2_LIBRARIES})
 
 file(COPY data

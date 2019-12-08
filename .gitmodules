@@ -1,6 +1,9 @@
 [submodule "libnbtplusplus"]
-	path = libnbtplusplus
+	path = third_party/libnbtplusplus
 	url = https://github.com/ljfa-ag/libnbtplusplus.git
 [submodule "leveldb"]
-	path = leveldb
+	path = third_party/leveldb
 	url = https://github.com/google/leveldb.git
+[submodule "third_party/spdlog"]
+	path = third_party/spdlog
+	url = https://github.com/gabime/spdlog.git

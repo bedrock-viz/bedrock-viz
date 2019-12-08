@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <cstdint>
+#include <spdlog/spdlog.h>
 
 namespace mcpe_viz {
 
@@ -46,6 +47,13 @@ namespace mcpe_viz {
         int32_t msg(uint32_t levelMask, const char *fmt, ...);
 
     };
+}
+
+namespace bedrock_viz::logger {
+    using spdlog::debug;
+    using spdlog::info;
+    using spdlog::warn;
+    using spdlog::error;
 }
 
 #endif //BEDROCK_VIZ_LOGGER_H

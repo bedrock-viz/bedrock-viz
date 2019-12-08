@@ -21,6 +21,7 @@
 #include <png.h>
 #include <cmath>
 #include <cerrno>
+
 #include "config.h"
 #include "logger.h"
 

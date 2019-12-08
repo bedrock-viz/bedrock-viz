@@ -28,10 +28,7 @@ namespace mcpe_viz {
   extern std::vector<std::string> listGeoJSON;
 
   extern int32_t globalIconImageId;
-  
 
-
-  
   void worldPointToImagePoint(int32_t dimId, double wx, double wz, double &ix, double &iy, bool geoJsonFlag);
   void worldPointToGeoJSONPoint(int32_t dimId, double wx, double wz, double &ix, double &iy);
 
@@ -332,8 +329,6 @@ namespace mcpe_viz {
   extern EnchantmentInfoList enchantmentInfoList;
   bool has_key(const EnchantmentInfoList &m, int32_t k);
 
-
-
   typedef std::map<int32_t, int32_t> IntIntMap;
 
   extern IntIntMap mcpcToMcpeBlock;
@@ -342,8 +337,6 @@ namespace mcpe_viz {
   extern IntIntMap mcpeToMcpcItem;
 
   bool has_key(const IntIntMap &m, int32_t k);
-
-
 
   typedef std::map<std::string, int32_t> StringIntMap;
 

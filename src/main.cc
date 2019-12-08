@@ -221,7 +221,9 @@
 #include <leveldb/filter_policy.h>
 
 #ifndef _MSC_VER
+
 #include <getopt.h>
+
 #else
 #include "getopt/getopt.h"
 #endif
@@ -232,6 +234,8 @@
 #include "nbt.h"
 #include "xml.h"
 #include "asset.h"
+#include "args.h"
+#include "minecraft.h"
 
 
 namespace mcpe_viz {
@@ -269,9 +273,6 @@ namespace mcpe_viz {
     PlayerIdToName playerIdToName;
 
     leveldb::ReadOptions levelDbReadOptions;
-
-
-
 
     // suggestion from mcpe_sample_setup.cpp
     class NullLogger : public leveldb::Logger {
@@ -1118,35 +1119,6 @@ namespace mcpe_viz {
 
     typedef std::vector<std::unique_ptr<CheckSpawn> > CheckSpawnList;
 
-
-    // todolib - better name for this
-    class Schematic {
-    public:
-        int32_t x1, y1, z1;
-        int32_t x2, y2, z2;
-        std::string fn;
-
-        Schematic(int32_t tx1, int32_t ty1, int32_t tz1,
-                  int32_t tx2, int32_t ty2, int32_t tz2,
-                  const char *fnSchematic) {
-            // we order the coordinates here so it's easier later
-            x1 = std::min(tx1, tx2);
-            x2 = std::max(tx1, tx2);
-            y1 = std::min(ty1, ty2);
-            y2 = std::max(ty1, ty2);
-            z1 = std::min(tz1, tz2);
-            z2 = std::max(tz1, tz2);
-            fn = fnSchematic;
-        }
-
-        std::string toString() {
-            char tmpstring[2048];
-            sprintf(tmpstring, "p1=%d,%d,%d p2=%d,%d,%d fn=%s", x1, y1, z1, x2, y2, z2, fn.c_str()
-            );
-            return std::string(tmpstring);
-        }
-
-    };
 
     typedef std::vector<std::unique_ptr<Schematic> > SchematicList;
 
@@ -2278,6 +2250,11 @@ namespace mcpe_viz {
                              int32_t x2, int32_t y2, int32_t z2,
                              const char *fnSchematic) {
             listSchematic.push_back(std::unique_ptr<Schematic>(new Schematic(x1, y1, z1, x2, y2, z2, fnSchematic)));
+            return 0;
+        }
+
+        int32_t addSchematic(const Schematic &sc) {
+            listSchematic.push_back(std::unique_ptr<Schematic>(new Schematic(sc)));
             return 0;
         }
 
@@ -4189,14 +4166,6 @@ namespace mcpe_viz {
             // todonow - disabled for now - crashes
             if (false) {
                 if (dbOptions != nullptr) {
-//          if ( dbOptions->compressors[1] ) {
-//            delete dbOptions->compressors[1];
-//            dbOptions->compressors[0] = nullptr;
-//          }
-//          if ( dbOptions->compressors[0] ) {
-//            delete dbOptions->compressors[0];
-//            dbOptions->compressors[0] = nullptr;
-//          }
                     if (dbOptions->filter_policy != NULL) {
                         delete dbOptions->filter_policy;
                         dbOptions->filter_policy = NULL;
@@ -6286,6 +6255,22 @@ namespace mcpe_viz {
         makePalettes();
 
         return 0;
+    }
+
+    void setup_world(const Args &args) {
+
+        for (auto &i: args.hide_top) {
+            world->dimDataList[i.dimId]->blockHideList.push_back(i.blockId);
+        }
+        for (auto &i: args.force_top) {
+            world->dimDataList[i.dimId]->blockHideList.push_back(i.blockId);
+        }
+        for (auto &i: args.geojson_block) {
+            world->dimDataList[i.dimId]->blockToGeoJSONList.push_back(i.blockId);
+        }
+        for (auto &i: args.schematics) {
+            world->dimDataList[i.first]->addSchematic(i.second);
+        }
     }
 
 }  // namespace mcpe_viz
