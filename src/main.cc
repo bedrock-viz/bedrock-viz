@@ -202,20 +202,15 @@
 #include <cstdio>
 #include <map>
 #include <vector>
-#include <algorithm>
 #include <cmath>
 #include <random>
 #include <filesystem>
 #include <iostream>
-#include <ctime>
 #include <string>
 #include <cstdint>
 
 #include <leveldb/db.h>
-#include <leveldb/env.h>
 #include <leveldb/cache.h>
-#include <leveldb/decompress_allocator.h>
-#include <leveldb/filter_policy.h>
 
 #ifndef _MSC_VER
 
@@ -1175,16 +1170,16 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    mcpe_viz::world->init();
-    mcpe_viz::world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
+    world->init();
+    world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
     // todobig - we must do this, for now - we could get clever about this later
     // todobig - we could call this deepParseDb() and only do it if the user wanted it
     if (true || mcpe_viz::control.doDetailParseFlag) {
-        mcpe_viz::world->dbParse();
-        mcpe_viz::world->checkSpawnable();
+        world->dbParse();
+        world->checkSpawnable();
     }
-    mcpe_viz::world->doOutput();
-    mcpe_viz::world->dbClose();
+    world->doOutput();
+    world->dbClose();
 
     // print missing block information
     const auto& recorder = mcpe_viz::BlockRecorder::instance();
@@ -1193,7 +1188,7 @@ int main(int argc, char** argv) {
             const auto& blockId = i.first.first;
             const auto& blockData = i.first.second;
             const auto& blockName = i.second;
-            mcpe_viz::slogger.msg(kLogInfo1,
+            slogger.msg(kLogInfo1,
                 "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG3\n",
                 blockId, blockId,
                 blockName.c_str(), blockData,

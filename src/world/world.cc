@@ -1,5 +1,7 @@
 #include "world.h"
 
+#include <ctime>
+
 #include <leveldb/filter_policy.h>
 #include <leveldb/cache.h>
 #include <leveldb/env.h>
