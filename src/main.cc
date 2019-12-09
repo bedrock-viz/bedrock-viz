@@ -693,24 +693,6 @@ namespace mcpe_viz {
         return 0;
     }
 
-
-
-    // todolib - move to util?
-
-    int32_t myParseInt32(const char *p, int32_t startByte) {
-        int32_t ret;
-        memcpy(&ret, &p[startByte], 4);
-        return ret;
-    }
-
-    int8_t myParseInt8(const char *p, int32_t startByte) {
-        return (p[startByte] & 0xff);
-    }
-
-
-
-
-
     // todobig - it would be nice to do something like this, but unique_ptr stands in the way...
 #if 0
     BlockInfo* getBlockInfo(int32_t id, int32_t blockData) {
