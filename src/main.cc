@@ -248,17 +248,8 @@
 
 namespace mcpe_viz {
 
-    std::string dirExec;
-
-    // todobig -- would be nice for these to be in world class
-    double playerPositionImageX = 0.0, playerPositionImageY = 0.0;
-    int32_t playerPositionDimensionId = kDimIdOverworld;
-
     // palettes
     int32_t palRedBlackGreen[256];
-
-
-    int32_t globalIconImageId = 1;
 
     PlayerIdToName playerIdToName;
 

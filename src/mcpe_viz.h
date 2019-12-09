@@ -8,20 +8,9 @@
 */
 #pragma once
 
-#include <map>
+#include <string>
 
 namespace mcpe_viz {
-
-  //todozooz - MAX_BLOCK_ID MAX_ITEM_ID etc
-
-  // todo ugly globals
-  extern std::string dirExec;
-  extern double playerPositionImageX, playerPositionImageY;
-  extern int32_t playerPositionDimensionId;
-
-  extern int32_t globalIconImageId;
-
-  void worldPointToImagePoint(int32_t dimId, double wx, double wz, double &ix, double &iy, bool geoJsonFlag);
-  void worldPointToGeoJSONPoint(int32_t dimId, double wx, double wz, double &ix, double &iy);
-
+    void worldPointToImagePoint(int32_t dimId, double wx, double wz, double& ix, double& iy, bool geoJsonFlag);
+    void worldPointToGeoJSONPoint(int32_t dimId, double wx, double wz, double& ix, double& iy);
 } // namespace mcpe_viz

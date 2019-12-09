@@ -161,7 +161,7 @@ namespace mcpe_viz {
           fs::copy(dirSrc, dirDest, options);
           return 0;
       }
-      catch(const fs::filesystem_error& e) {
+      catch(const fs::filesystem_error&) {
           slogger.msg(kLogInfo1, "ERROR: copyDirToDir( src=%s dest=%s ) failed to open source directory\n", dirSrc.c_str(), dirDest.c_str());
           return -1;
       }
