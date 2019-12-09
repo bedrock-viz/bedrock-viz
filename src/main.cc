@@ -242,15 +242,13 @@
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/biome_info.h"
+#include "minecraft/conversion.h"
 #include "utils/block_recorder.h"
 
 
 namespace mcpe_viz {
 
     std::string dirExec;
-
-    //Logger logger;
-    //Logger slogger;
 
     // todobig -- would be nice for these to be in world class
     double playerPositionImageX = 0.0, playerPositionImageY = 0.0;
@@ -259,14 +257,7 @@ namespace mcpe_viz {
     // palettes
     int32_t palRedBlackGreen[256];
 
-    EnchantmentInfoList enchantmentInfoList;
 
-    IntIntMap mcpcToMcpeBlock;
-    IntIntMap mcpeToMcpcBlock;
-    IntIntMap mcpcToMcpeItem;
-    IntIntMap mcpeToMcpcItem;
-
-    StringIntMap imageFileMap;
     int32_t globalIconImageId = 1;
 
     PlayerIdToName playerIdToName;
@@ -727,17 +718,7 @@ namespace mcpe_viz {
         return (p[startByte] & 0xff);
     }
 
-    bool has_key(const EnchantmentInfoList &m, int32_t k) {
-        return m.find(k) != m.end();
-    }
 
-    bool has_key(const IntIntMap &m, int32_t k) {
-        return m.find(k) != m.end();
-    }
-
-    bool has_key(const StringIntMap &m, const std::string &k) {
-        return m.find(k) != m.end();
-    }
 
 
 

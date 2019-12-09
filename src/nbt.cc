@@ -21,6 +21,8 @@
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/entity_info.h"
+#include "minecraft/enchantment_info.h"
+#include "minecraft/conversion.h"
 
 namespace mcpe_viz {
 

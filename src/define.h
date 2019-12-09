@@ -1,5 +1,4 @@
-#ifndef BEDROCK_VIZ_DEFINE_H
-#define BEDROCK_VIZ_DEFINE_H
+#pragma once
 
 namespace mcpe_viz {
     // maximum build height -- as of MCPE 0.13 it is 127
@@ -46,5 +45,3 @@ namespace mcpe_viz {
 
     const int32_t kColorDefault = 0xff00ff;
 }
-
-#endif //BEDROCK_VIZ_DEFINE_H
