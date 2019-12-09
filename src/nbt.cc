@@ -19,6 +19,7 @@
 #include "global.h"
 
 #include "minecraft/block_info.h"
+#include "minecraft/item_info.h"
 
 namespace mcpe_viz {
 

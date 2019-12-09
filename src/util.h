@@ -63,10 +63,6 @@ namespace mcpe_viz {
 
   void dumpBuffer( const char* header, const char* buf, size_t bufLen);
 
-
-  extern Logger slogger;
-  
-
   
   class PngWriter {
   public:

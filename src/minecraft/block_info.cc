@@ -36,4 +36,17 @@ namespace mcpe_viz {
     }
 
     BlockInfo blockInfoList[512];
+
+    int32_t findIdByBlockName(std::string& un) {
+        std::string uname = un;
+        std::transform(uname.begin(), uname.end(), uname.begin(), ::tolower);
+        for (const auto& it : blockInfoList) {
+            for (const auto& u : it.unameList) {
+                if (u == uname) {
+                    return it.id;
+                }
+            }
+        }
+        return -1;
+    }
 }
