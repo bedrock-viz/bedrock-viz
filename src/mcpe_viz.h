@@ -29,52 +29,8 @@ namespace mcpe_viz {
 
   void worldPointToImagePoint(int32_t dimId, double wx, double wz, double &ix, double &iy, bool geoJsonFlag);
   void worldPointToGeoJSONPoint(int32_t dimId, double wx, double wz, double &ix, double &iy);
-  
-  //extern BlockInfo blockInfoList[512];
 
-  //BlockInfo* getBlockInfo(int32_t id, int32_t blockData);
-  std::string getBlockName(int32_t id, int32_t blockdata);
 
-  int32_t getBlockByUname(const std::string& uname, int32_t& blockId, int32_t& blockData);
-
-  //std::string getItemName(int32_t id, int32_t extraData, bool nameBasedFlag);
-  
-  
-  class EntityInfo {
-  public:
-    std::string name;
-    std::vector<std::string> unameList;
-    std::string etype;
-    
-    EntityInfo(const std::string& n, const std::string& un, const std::string& e ) {
-      setName(n);
-      setUname(un);
-      setEtype(e);
-    }
-
-    EntityInfo& setName (const std::string& s) {
-      name = std::string(s);
-      return *this;
-    }
-
-    EntityInfo& setUname (const std::string& s) {
-      unameList = mysplit(s,';');
-      return *this;
-    }
-
-    EntityInfo& setEtype (const std::string& e) {
-      etype = std::string(e);
-      return *this;
-    }
-  };
-
-  typedef std::map<int, std::unique_ptr<EntityInfo> > EntityInfoList;
-  extern EntityInfoList entityInfoList;
-  bool has_key(const EntityInfoList &m, int32_t k);
-  int32_t findEntityByUname(const EntityInfoList &m, std::string& un);
-  //int32_t findIdByItemName(std::string& uname);
-  //int32_t findIdByBlockName(std::string& uname);
-  
   class BiomeInfo {
   public:
     std::string name;
