@@ -240,6 +240,7 @@
 #include "control.h"
 
 #include "minecraft/block_info.h"
+#include "utils/block_recorder.h"
 
 
 namespace mcpe_viz {
@@ -2407,11 +2408,10 @@ namespace mcpe_viz {
                                         }
                                     }
                                     if (!vfound) {
-                                        // todo - warn once per id/blockdata or the output volume could get ridiculous
-                                        slogger.msg(kLogInfo1,
-                                                    "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG1\n",
-                                                    blockid, blockid, blockInfoList[blockid].name.c_str(), blockdata,
-                                                    blockdata
+                                        BlockRecorder::instance().addUnknownBlockVariant(
+                                            blockid,
+                                            blockInfoList[blockid].name,
+                                            blockdata
                                         );
                                         // since we did not find the variant, use the parent block's color
                                         color = blockInfoList[blockid].color;
@@ -3059,13 +3059,11 @@ namespace mcpe_viz {
                                                 }
                                             }
                                             if (!vfound) {
-                                                // todo - warn once per id/blockdata or the output volume could get ridiculous
-                                                slogger.msg(kLogInfo1,
-                                                            "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG2\n",
-                                                            blockid, blockid, blockInfoList[blockid].name.c_str(),
-                                                            blockdata, blockdata
+                                                BlockRecorder::instance().addUnknownBlockVariant(
+                                                    blockid,
+                                                    blockInfoList[blockid].name,
+                                                    blockdata
                                                 );
-
                                                 // since we did not find the variant, use the parent block's color
                                                 color = blockInfoList[blockid].color;
                                             }
@@ -3211,12 +3209,10 @@ namespace mcpe_viz {
                                                             }
                                                         }
                                                         if (!vfound) {
-                                                            // todo - warn once per id/blockdata or the output volume could get ridiculous
-                                                            slogger.msg(kLogInfo1,
-                                                                        "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG3\n",
-                                                                        blockid, blockid,
-                                                                        blockInfoList[blockid].name.c_str(), blockdata,
-                                                                        blockdata
+                                                            BlockRecorder::instance().addUnknownBlockVariant(
+                                                                blockid,
+                                                                blockInfoList[blockid].name,
+                                                                blockdata
                                                             );
                                                             // since we did not find the variant, use the parent block's color
                                                             color = blockInfoList[blockid].color;
@@ -3429,13 +3425,11 @@ namespace mcpe_viz {
                                             }
                                         }
                                         if (!vfound) {
-                                            // todo - warn once per id/blockdata or the output volume could get ridiculous
-                                            slogger.msg(kLogInfo1,
-                                                        "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG4\n",
-                                                        blockid, blockid, blockInfoList[blockid].name.c_str(),
-                                                        blockdata, blockdata
+                                            BlockRecorder::instance().addUnknownBlockVariant(
+                                                blockid,
+                                                blockInfoList[blockid].name,
+                                                blockdata
                                             );
-
                                             // since we did not find the variant, use the parent block's color
                                             color = blockInfoList[blockid].color;
                                         }
@@ -6042,6 +6036,7 @@ namespace mcpe_viz {
 
 
 int main(int argc, char **argv) {
+    using namespace mcpe_viz;
     std::cerr << bedrock_viz::version_full << '\n';
 
     int32_t ret = mcpe_viz::init(argc, argv);
@@ -6064,6 +6059,23 @@ int main(int argc, char **argv) {
     }
     mcpe_viz::world->doOutput();
     mcpe_viz::world->dbClose();
+
+    // print missing block information
+    const auto& recorder = mcpe_viz::BlockRecorder::instance();
+    if (!recorder.getUnknownBlockVariant().empty()) {
+        for (auto& i : recorder.getUnknownBlockVariant()) {
+            const auto& blockId = i.first.first;
+            const auto& blockData = i.first.second;
+            const auto& blockName = i.second;
+            mcpe_viz::slogger.msg(kLogInfo1,
+                "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG3\n",
+                blockId, blockId,
+                blockName.c_str(), blockData,
+                blockData
+            );
+        }
+    
+    }
 
     std::cerr << "Done.\n";
 
