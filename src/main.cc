@@ -241,6 +241,7 @@
 
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
+#include "minecraft/biome_info.h"
 #include "utils/block_recorder.h"
 
 
@@ -258,11 +259,6 @@ namespace mcpe_viz {
     // palettes
     int32_t palRedBlackGreen[256];
 
-    // info lists (from XML)
-    //BlockInfo blockInfoList[512];
-    
-    //EntityInfoList entityInfoList;
-    BiomeInfoList biomeInfoList;
     EnchantmentInfoList enchantmentInfoList;
 
     IntIntMap mcpcToMcpeBlock;
@@ -731,12 +727,6 @@ namespace mcpe_viz {
         return (p[startByte] & 0xff);
     }
 
-    
-
-    bool has_key(const BiomeInfoList &m, int32_t k) {
-        return m.find(k) != m.end();
-    }
-
     bool has_key(const EnchantmentInfoList &m, int32_t k) {
         return m.find(k) != m.end();
     }
@@ -775,14 +765,6 @@ namespace mcpe_viz {
   }
 #endif
 
-    std::string getBiomeName(int32_t idv) {
-        if (has_key(biomeInfoList, idv)) {
-            return biomeInfoList[idv]->name;
-        }
-        char s[256];
-        sprintf(s, "ERROR: Failed to find biome id (%d)", idv);
-        return std::string(s);
-    }
 
 
     // todolib - better name for this

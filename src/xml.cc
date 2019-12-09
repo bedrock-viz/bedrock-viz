@@ -15,6 +15,7 @@
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/entity_info.h"
+#include "minecraft/biome_info.h"
 
 #ifdef _MSC_VER 
 //not #if defined(_WIN32) || defined(_WIN64) because we have strncasecmp in mingw

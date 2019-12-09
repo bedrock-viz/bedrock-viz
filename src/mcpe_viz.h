@@ -31,39 +31,7 @@ namespace mcpe_viz {
   void worldPointToGeoJSONPoint(int32_t dimId, double wx, double wz, double &ix, double &iy);
 
 
-  class BiomeInfo {
-  public:
-    std::string name;
-    int32_t color;
-    bool colorSetFlag;
 
-    BiomeInfo(const char* n) {
-      setName(n);
-      setColor(kColorDefault);
-      colorSetFlag = false;
-    }
-
-    BiomeInfo(const char* n, int32_t rgb) {
-      setName(n);
-      setColor(rgb);
-    }
-
-    BiomeInfo& setName (const std::string& s) {
-      name = std::string(s);
-      return *this;
-    }
-
-    BiomeInfo& setColor(int32_t rgb) {
-      // note: we convert color storage to big endian so that we can memcpy when creating images
-      color = htobe32(rgb);
-      colorSetFlag=true;
-      return *this;
-    }
-  };
-
-  typedef std::map<int, std::unique_ptr<BiomeInfo> > BiomeInfoList;
-  extern BiomeInfoList biomeInfoList;
-  bool has_key(const BiomeInfoList &m, int32_t k);
 
 
 
