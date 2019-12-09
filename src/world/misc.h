@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 namespace mcpe_viz {
     uint8_t getBlockId_LevelDB_v2(const char* p, int32_t x, int32_t z, int32_t y);
