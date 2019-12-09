@@ -16,6 +16,9 @@
 #include "mcpe_viz.h"
 #include "nbt.h"
 #include "define.h"
+#include "global.h"
+
+#include "minecraft/block_info.h"
 
 namespace mcpe_viz {
 

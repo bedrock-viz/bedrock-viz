@@ -43,6 +43,8 @@ namespace mcpe_viz {
         // todobig - this is very brittle - consider that add-ons may one day add custome dimensions
         kDimIdCount = 3
     };
+
+    const int32_t kColorDefault = 0xff00ff;
 }
 
 #endif //BEDROCK_VIZ_DEFINE_H

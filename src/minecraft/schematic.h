@@ -1,5 +1,4 @@
-#ifndef __BEDROCK_VIZ_MINECRAFT_H__
-#define __BEDROCK_VIZ_MINECRAFT_H__
+#pragma once
 
 #include <string>
 
@@ -19,6 +18,3 @@ namespace mcpe_viz {
         std::string toString();
     };
 }
-
-
-#endif //__BEDROCK_VIZ_MINECRAFT_H__

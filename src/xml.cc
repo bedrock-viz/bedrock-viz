@@ -12,6 +12,7 @@
 #include <libxml/xmlreader.h>
 #include "util.h"
 #include "mcpe_viz.h"
+#include "minecraft/block_info.h"
 
 #ifdef _MSC_VER 
 //not #if defined(_WIN32) || defined(_WIN64) because we have strncasecmp in mingw

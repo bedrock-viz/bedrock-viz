@@ -9,15 +9,14 @@ endif(CMAKE_BUILD_TYPE STREQUAL Debug)
 
 configure_file(src/config.h.in config.h)
 
+file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB_RECURSE HEADER_FILES ${PROJECT_SOURCE_DIR}/src/*.h)
+
 add_executable(bedrock-viz
-  "src/asset.cc"
-  "src/minecraft.cc"
-  "src/args.cc"
-  "src/main.cc"
-  "src/logger.cc"
-  "src/xml.cc" 
-  "src/nbt.cc" 
-  "src/util.cc")
+  ${SRC_FILES}
+
+  ${HEADER_FILES}
+)
 
 if(MSVC)
   target_sources(bedrock-viz PRIVATE "src/getopt/getopt.c")

@@ -9,7 +9,7 @@
 
 #include "define.h"
 #include "logger.h"
-#include "minecraft.h"
+#include "minecraft/schematic.h"
 
 namespace mcpe_viz {
 

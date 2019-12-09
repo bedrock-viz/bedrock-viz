@@ -47,6 +47,9 @@ namespace mcpe_viz {
         int32_t msg(uint32_t levelMask, const char *fmt, ...);
 
     };
+
+    extern Logger logger;
+    extern Logger slogger;
 }
 
 namespace bedrock_viz::logger {

@@ -60,4 +60,7 @@ namespace mcpe_viz {
 
         return 0;
     }
+
+    Logger logger;
+    Logger slogger;
 }
