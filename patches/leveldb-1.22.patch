@@ -1,5 +1,5 @@
---- leveldb/CMakeLists.txt	2019-12-05 19:43:27.000000000 +0800
-+++ leveldb/CMakeLists.txt	2019-12-05 19:46:10.000000000 +0800
+--- third_party/leveldb/CMakeLists.txt	2019-12-05 19:43:27.000000000 +0800
++++ third_party/leveldb/CMakeLists.txt	2019-12-05 19:46:10.000000000 +0800
 @@ -44,6 +44,7 @@
  check_library_exists(crc32c crc32c_value "" HAVE_CRC32C)
  check_library_exists(snappy snappy_compress "" HAVE_SNAPPY)
@@ -77,8 +77,8 @@
    )
  
 diff -ruN leveldb/db/mcpe_test.cc leveldb-mcpe/db/mcpe_test.cc
---- leveldb/db/mcpe_test.cc	1970-01-01 08:00:00.000000000 +0800
-+++ leveldb/db/mcpe_test.cc	2019-12-05 19:47:51.000000000 +0800
+--- third_party/leveldb/db/mcpe_test.cc	1970-01-01 08:00:00.000000000 +0800
++++ third_party/leveldb/db/mcpe_test.cc	2019-12-05 19:47:51.000000000 +0800
 @@ -0,0 +1,155 @@
 +#include <iostream>
 +#include <sstream>
@@ -236,8 +236,8 @@ diff -ruN leveldb/db/mcpe_test.cc leveldb-mcpe/db/mcpe_test.cc
 +  return 0;
 +}
 diff -ruN leveldb/include/leveldb/c.h leveldb-mcpe/include/leveldb/c.h
---- leveldb/include/leveldb/c.h	2019-12-05 18:39:22.000000000 +0800
-+++ leveldb/include/leveldb/c.h	2019-12-05 19:47:31.000000000 +0800
+--- third_party/leveldb/include/leveldb/c.h	2019-12-05 18:39:22.000000000 +0800
++++ third_party/leveldb/include/leveldb/c.h	2019-12-05 19:47:31.000000000 +0800
 @@ -190,7 +190,12 @@
  LEVELDB_EXPORT void leveldb_options_set_max_file_size(leveldb_options_t*,
                                                        size_t);
@@ -253,8 +253,8 @@ diff -ruN leveldb/include/leveldb/c.h leveldb-mcpe/include/leveldb/c.h
  
  /* Comparator */
 diff -ruN leveldb/include/leveldb/decompress_allocator.h leveldb-mcpe/include/leveldb/decompress_allocator.h
---- leveldb/include/leveldb/decompress_allocator.h	1970-01-01 08:00:00.000000000 +0800
-+++ leveldb/include/leveldb/decompress_allocator.h	2019-12-05 19:48:10.000000000 +0800
+--- third_party/leveldb/include/leveldb/decompress_allocator.h	1970-01-01 08:00:00.000000000 +0800
++++ third_party/leveldb/include/leveldb/decompress_allocator.h	2019-12-05 19:48:10.000000000 +0800
 @@ -0,0 +1,26 @@
 +#ifndef LEVELDB_DECOMPRESS_ALLOCATOR_H_
 +#define LEVELDB_DECOMPRESS_ALLOCATOR_H_
@@ -283,8 +283,8 @@ diff -ruN leveldb/include/leveldb/decompress_allocator.h leveldb-mcpe/include/le
 +
 +#endif
 diff -ruN leveldb/include/leveldb/options.h leveldb-mcpe/include/leveldb/options.h
---- leveldb/include/leveldb/options.h	2019-12-05 18:39:22.000000000 +0800
-+++ leveldb/include/leveldb/options.h	2019-12-05 19:49:27.000000000 +0800
+--- third_party/leveldb/include/leveldb/options.h	2019-12-05 18:39:22.000000000 +0800
++++ third_party/leveldb/include/leveldb/options.h	2019-12-05 19:49:27.000000000 +0800
 @@ -9,6 +9,8 @@
  
  #include "leveldb/export.h"
@@ -335,8 +335,8 @@ diff -ruN leveldb/include/leveldb/options.h leveldb-mcpe/include/leveldb/options
  
  // Options that control write operations
 diff -ruN leveldb/table/compressor/zlib_compressor.cc leveldb-mcpe/table/compressor/zlib_compressor.cc
---- leveldb/table/compressor/zlib_compressor.cc	1970-01-01 08:00:00.000000000 +0800
-+++ leveldb/table/compressor/zlib_compressor.cc	2019-12-05 19:50:04.000000000 +0800
+--- third_party/leveldb/table/compressor/zlib_compressor.cc	1970-01-01 08:00:00.000000000 +0800
++++ third_party/leveldb/table/compressor/zlib_compressor.cc	2019-12-05 19:50:04.000000000 +0800
 @@ -0,0 +1,135 @@
 +#include "zlib_compressor.h"
 +
@@ -474,8 +474,8 @@ diff -ruN leveldb/table/compressor/zlib_compressor.cc leveldb-mcpe/table/compres
 +    }
 +}
 diff -ruN leveldb/table/compressor/zlib_compressor.h leveldb-mcpe/table/compressor/zlib_compressor.h
---- leveldb/table/compressor/zlib_compressor.h	1970-01-01 08:00:00.000000000 +0800
-+++ leveldb/table/compressor/zlib_compressor.h	2019-12-05 19:50:24.000000000 +0800
+--- third_party/leveldb/table/compressor/zlib_compressor.h	1970-01-01 08:00:00.000000000 +0800
++++ third_party/leveldb/table/compressor/zlib_compressor.h	2019-12-05 19:50:24.000000000 +0800
 @@ -0,0 +1,19 @@
 +#ifndef STORAGE_LEVELDB_TABLE_ZLIB_COMPRESSOR_H_
 +#define STORAGE_LEVELDB_TABLE_ZLIB_COMPRESSOR_H_
@@ -497,8 +497,8 @@ diff -ruN leveldb/table/compressor/zlib_compressor.h leveldb-mcpe/table/compress
 +}  // namespace leveldb
 +#endif  // STORAGE_LEVELDB_TABLE_ZLIB_COMPRESSOR_H_
 diff -ruN leveldb/table/format.cc leveldb-mcpe/table/format.cc
---- leveldb/table/format.cc	2019-12-05 18:39:22.000000000 +0800
-+++ leveldb/table/format.cc	2019-12-05 19:51:44.000000000 +0800
+--- third_party/leveldb/table/format.cc	2019-12-05 18:39:22.000000000 +0800
++++ third_party/leveldb/table/format.cc	2019-12-05 19:51:44.000000000 +0800
 @@ -10,8 +10,36 @@
  #include "util/coding.h"
  #include "util/crc32c.h"
@@ -583,8 +583,8 @@ diff -ruN leveldb/table/format.cc leveldb-mcpe/table/format.cc
        delete[] buf;
        return Status::Corruption("bad block type");
 diff -ruN leveldb/table/table_builder.cc leveldb-mcpe/table/table_builder.cc
---- leveldb/table/table_builder.cc	2019-12-05 18:39:22.000000000 +0800
-+++ leveldb/table/table_builder.cc	2019-12-05 19:52:23.000000000 +0800
+--- third_party/leveldb/table/table_builder.cc	2019-12-05 18:39:22.000000000 +0800
++++ third_party/leveldb/table/table_builder.cc	2019-12-05 19:52:23.000000000 +0800
 @@ -16,6 +16,9 @@
  #include "util/coding.h"
  #include "util/crc32c.h"
