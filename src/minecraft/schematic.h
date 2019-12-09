@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <memory>
 
 namespace mcpe_viz {
 
@@ -17,4 +19,6 @@ namespace mcpe_viz {
 
         std::string toString();
     };
+
+    typedef std::vector<std::unique_ptr<Schematic>> SchematicList;
 }
