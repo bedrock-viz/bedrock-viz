@@ -21,6 +21,8 @@ add_executable(bedrock-viz
 
 if(MSVC)
   target_sources(bedrock-viz PRIVATE "src/getopt/getopt.c")
+  # TODO remove all insecure c functions
+  add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif(MSVC)
 
 set(LEVELDB_BUILD_TESTS OFF CACHE INTERNAL "Don't build LevelDB tests")

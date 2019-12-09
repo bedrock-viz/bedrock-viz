@@ -5514,7 +5514,7 @@ namespace mcpe_viz {
         }
 
         // in asset folder
-        fn = bedrock_viz::xml_path();
+        fn = bedrock_viz::xml_path().generic_string();
         ret = doParseXml(fn);
         if (ret >= 0) {
             return ret;
@@ -5732,60 +5732,6 @@ namespace mcpe_viz {
             }
         }
         return 0;
-    }
-
-
-    void print_usage(const char *fn) {
-        slogger.msg(kLogInfo1, "Usage:\n\n");
-        slogger.msg(kLogInfo1, "  %s [required parameters] [options]\n\n", fn);
-        slogger.msg(kLogInfo1, "Required Parameters:\n"
-                               "  --db dir                 Directory which holds world files (level.dat is in this dir)\n"
-                               "  --out fn-part            Filename base for output file(s)\n"
-                               "\n"
-        );
-        slogger.msg(kLogInfo1, "Options:\n"
-                               //"  --detail                 Log extensive details about the world to the log file\n"
-                               "  --html                   Create html and javascript files to use as a fancy viewer\n"
-                               "  --html-most              Create html, javascript, and most image files to use as a fancy viewer\n"
-                               "  --html-all               Create html, javascript, and *all* image files to use as a fancy viewer\n"
-                               //"  --dir-temp dir           Directory for temp files (useful for --slices, use a fast, local directory)\n"
-                               "  --auto-tile              Automatically tile the images if they are very large\n"
-                               "  --tiles[=tilew,tileh]    Create tiles in subdirectory tiles/ (useful for LARGE worlds)\n"
-                               "\n"
-                               "  --hide-top=did,bid       Hide a block from top block (did=dimension id, bid=block id)\n"
-                               "  --force-top=did,bid      Force a block to top block (did=dimension id, bid=block id)\n"
-                               "  --geojson-block=did,bid  Add block to GeoJSON file for use in web app (did=dimension id, bid=block id)\n"
-                               "\n"
-                               "  --check-spawn did,x,z,dist  Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)\n"
-                               "  --schematic-get did,x1,y1,z1,x2,y2,z2,fnpart   Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)\n"
-                               "\n"
-                               "  (note: [=did] is optional dimension-id - if not specified, do all dimensions; 0=Overworld; 1=Nether)\n"
-                               "  --grid[=did]             Display chunk grid on top of images\n"
-                               "\n"
-                               "  --all-image[=did]        Create all image types\n"
-                               "  --biome[=did]            Create a biome map image\n"
-                               "  --grass[=did]            Create a grass color map image\n"
-                               "  --height-col[=did]       Create a height column map image (red is below sea; gray is sea; green is above sea)\n"
-                               "  --height-col-gs[=did]    Create a height column map image (grayscale)\n"
-                               "  --height-col-alpha[=did] Create a height column map image (alpha)\n"
-                               "  --shaded-relief[=did]    Create a shaded relief image\n"
-                               "  --blocklight[=did]       Create a block light map image\n"
-                               "  --skylight[=did]         Create a sky light map image\n"
-                               "  --slime-chunk[=did]      Create a slime chunk map image\n"
-                               "\n"
-                               "  --slices[=did]           Create slices (one image for each layer)\n"
-                               "  --movie[=did]            Create movie of layers\n"
-                               "  --movie-dim x,y,w,h      Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)\n"
-                               "\n"
-                               "  --xml fn                 XML file containing data definitions\n"
-                               "  --log fn                 Send log to a file\n"
-                               "\n"
-                               "  --no-force-geojson       Don't load geojson in html because we are going to use a web server (or Firefox)\n"
-                               "\n"
-                               "  --verbose                verbose output\n"
-                               "  --quiet                  supress normal output, continue to output warning and error messages\n"
-                               "  --help                   this info\n"
-        );
     }
 
     int32_t parseDimIdOptArg(const char *arg) {
@@ -6240,7 +6186,7 @@ namespace mcpe_viz {
 
         ret = parse_args(argc, argv);
         if (ret != 0) {
-            print_usage(argv[0]);
+            mcpe_viz::print_usage();
             return ret;
         }
 

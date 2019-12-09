@@ -1,6 +1,7 @@
 #include "minecraft.h"
 
 #include <cstdio>
+#include <algorithm>
 
 namespace mcpe_viz {
     Schematic::Schematic(int32_t tx1, int32_t ty1, int32_t tz1, int32_t tx2, int32_t ty2, int32_t tz2,
