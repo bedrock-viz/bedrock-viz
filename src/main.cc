@@ -251,8 +251,6 @@ namespace mcpe_viz {
     // palettes
     int32_t palRedBlackGreen[256];
 
-    PlayerIdToName playerIdToName;
-
     leveldb::ReadOptions levelDbReadOptions;
 
     // suggestion from mcpe_sample_setup.cpp

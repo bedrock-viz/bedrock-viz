@@ -12,9 +12,9 @@
 #include <filesystem>
 
 #include "util.h"
-#include "mcpe_viz.h"
 
 namespace mcpe_viz {
+    PlayerIdToName playerIdToName;
 
   // note: this is only used on win32/win64 builds
   // todo - doesn't check host endianness
