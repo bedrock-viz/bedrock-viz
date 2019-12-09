@@ -668,6 +668,9 @@ namespace mcpe_viz {
     int32_t myParseInt32(const char* p, int32_t startByte);
 
     int8_t myParseInt8(const char* p, int32_t startByte);
+
+    int32_t
+        printKeyValue(const char* key, int32_t key_size, const char* value, int32_t value_size, bool printKeyAsStringFlag);
 } // namespace mcpe_viz
 
 #endif // __MCPE_VIZ_UTIL_H__

@@ -246,6 +246,8 @@
 #include "minecraft/conversion.h"
 #include "utils/block_recorder.h"
 
+#include "world/check_spawn.h"
+
 namespace {
 
     using mcpe_viz::MAX_BLOCK_HEIGHT_127;
@@ -724,35 +726,6 @@ namespace mcpe_viz {
             palRedBlackGreen[i] = htobe32(palRedBlackGreen[i]);
         }
     }
-
-
-
-
-
-    // todolib - better name for this
-    class CheckSpawn {
-    public:
-        int32_t x, z, distance;
-
-        CheckSpawn(int32_t nx, int32_t nz, int32_t ndist) {
-            x = nx;
-            z = nz;
-            distance = ndist;
-        }
-
-        bool contains(int32_t tx, int32_t tz) {
-            // todo - faster distance calc? do simple distance tests before sqrt part?
-            double dx = x - tx;
-            double dz = z - tz;
-            double d = sqrt(dx * dx + dz * dz);
-            if (d <= distance) {
-                return true;
-            }
-            return false;
-        }
-    };
-
-    typedef std::vector<std::unique_ptr<CheckSpawn> > CheckSpawnList;
 
 
     // todobig - perhaps this is silly (storing all this info per-chunk)
@@ -3597,25 +3570,6 @@ namespace mcpe_viz {
             return 0;
         }
     };
-
-
-    // todobig - move to util?
-    int32_t
-        printKeyValue(const char* key, int32_t key_size, const char* value, int32_t value_size, bool printKeyAsStringFlag) {
-        logger.msg(kLogInfo1, "WARNING: Unparsed Record: key_size=%d key_string=[%s] key_hex=[", key_size,
-            (printKeyAsStringFlag ? key : "(SKIPPED)"));
-        for (int32_t i = 0; i < key_size; i++) {
-            if (i > 0) { logger.msg(kLogInfo1, " "); }
-            logger.msg(kLogInfo1, "%02x", ((int)key[i] & 0xff));
-        }
-        logger.msg(kLogInfo1, "] value_size=%d value_hex=[", value_size);
-        for (int32_t i = 0; i < value_size; i++) {
-            if (i > 0) { logger.msg(kLogInfo1, " "); }
-            logger.msg(kLogInfo1, "%02x", ((int)value[i] & 0xff));
-        }
-        logger.msg(kLogInfo1, "]\n");
-        return 0;
-    }
 
 
     // note: this is an attempt to remove "bad" chunks as seen in "nyan.zip" world
