@@ -1102,10 +1102,6 @@ int main(int argc, char** argv) {
     using namespace mcpe_viz;
     using namespace bedrock_viz;
     set_argv_0(argv[0]);
-
-    std::cout << xml_path().generic_string() << '\n';
-
-    
     // steps:
     // 1. load args from argv
     // 2. check args, exit and print usage if any error found
