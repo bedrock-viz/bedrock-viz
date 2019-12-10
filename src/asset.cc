@@ -21,7 +21,7 @@ namespace bedrock_viz {
 
     const path& get_prefix()
     {
-        static auto prefix = path(cmake_install_prefix) / "bedrock-viz";
+        static auto prefix = path(cmake_install_prefix) / "share" / "bedrock-viz";
         return use_argv_0 ? argv_0 : prefix;
     }
 
