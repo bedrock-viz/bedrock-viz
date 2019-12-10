@@ -18,6 +18,8 @@
 #include "minecraft/enchantment_info.h"
 #include "minecraft/conversion.h"
 
+#include "utils/fs.h"
+
 #ifdef _MSC_VER 
 //not #if defined(_WIN32) || defined(_WIN64) because we have strncasecmp in mingw
 #define strncasecmp _strnicmp

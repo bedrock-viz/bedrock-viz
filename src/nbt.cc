@@ -24,6 +24,8 @@
 #include "minecraft/enchantment_info.h"
 #include "minecraft/conversion.h"
 
+#include "utils/fs.h"
+
 namespace mcpe_viz {
 
   std::string makeGeojsonHeader(double ix, double iy, bool adjustCoordFlag) {

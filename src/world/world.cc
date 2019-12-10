@@ -13,6 +13,8 @@
 #include "../minecraft/biome_info.h"
 #include "../minecraft/conversion.h"
 
+#include "../utils/fs.h"
+
 namespace
 {
     // suggestion from mcpe_sample_setup.cpp

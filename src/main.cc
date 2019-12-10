@@ -241,6 +241,8 @@
 #include "world/palettes.h"
 #include "world/world.h"
 
+#include "utils/fs.h"
+
 namespace mcpe_viz {
 
     int32_t doParseConfigFile(const std::string& fn) {
@@ -372,15 +374,8 @@ namespace mcpe_viz {
         // -- local dir
         std::string fn;
 
-        // same dir as exec - special filename
-        fn = dirExec;
-        fn += "/mcpe_viz.local.cfg";
-        if (doParseConfigFile(fn) == 0) {
-            // we keep reading other config files
-        }
-
         // as specified on cmdline
-        if (control.fnCfg.size() > 0) {
+        if (!control.fnCfg.empty()) {
             if (doParseConfigFile(control.fnCfg) == 0) {
                 return 0;
             }
@@ -390,21 +385,14 @@ namespace mcpe_viz {
         // todo - how to support on win32? %HOMEPATH%?
         if (getenv("HOME")) {
             std::string fnHome = getenv("HOME");
-            fnHome += "/.mcpe_viz/mcpe_viz.cfg";
+            fnHome += "/.mcpe_viz.cfg";
             if (doParseConfigFile(fnHome) == 0) {
                 return 0;
             }
         }
 
-        // same dir as exec
-        fn = dirExec;
-        fn += "/mcpe_viz.cfg";
-        if (doParseConfigFile(fn) == 0) {
-            return 0;
-        }
-
         // local dir
-        fn = "./mcpe_viz.cfg";
+        fn = "mcpe_viz.cfg";
         if (doParseConfigFile(fn) == 0) {
             return 0;
         }
@@ -1147,6 +1135,15 @@ namespace mcpe_viz {
 
 int main(int argc, char** argv) {
     using namespace mcpe_viz;
+    // steps:
+    // 1. load args from argv
+    // 2. check args, exit and print usage if any error found
+    // 3. if doFindImages, run findImages, exit
+    // 4. load xml and cfg
+    // 5. create then world
+    // 6. parse world
+    // 7. generate output
+    // 8. print warning of unknown blocks/items
 
     int32_t ret = mcpe_viz::init(argc, argv);
     if (ret != 0) {
@@ -1169,22 +1166,7 @@ int main(int argc, char** argv) {
     world->doOutput();
     world->dbClose();
 
-    // print missing block information
-    const auto& recorder = mcpe_viz::BlockRecorder::instance();
-    if (!recorder.getUnknownBlockVariant().empty()) {
-        for (auto& i : recorder.getUnknownBlockVariant()) {
-            const auto& blockId = i.first.first;
-            const auto& blockData = i.first.second;
-            const auto& blockName = i.second;
-            slogger.msg(kLogInfo1,
-                "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG3\n",
-                blockId, blockId,
-                blockName.c_str(), blockData,
-                blockData
-            );
-        }
-
-    }
+    print_unknown_block_warnings();
 
     std::cout << "Done.\n";
 

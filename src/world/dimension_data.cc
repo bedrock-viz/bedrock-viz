@@ -14,6 +14,8 @@
 #include "../global.h"
 #include "../nbt.h"
 
+#include "../utils/fs.h"
+
 namespace mcpe_viz {
 
     bool DimensionData_LevelDB::checkDoForDim(int32_t v) const
@@ -234,11 +236,10 @@ namespace mcpe_viz {
                                     }
                                 }
                                 if (!vfound) {
-                                    BlockRecorder::instance().addUnknownBlockVariant(
+                                    record_unknown_block_variant(
                                         blockid,
                                         blockInfoList[blockid].name,
-                                        blockdata
-                                    );
+                                        blockdata);
                                     // since we did not find the variant, use the parent block's color
                                     color = blockInfoList[blockid].color;
                                 }
@@ -524,11 +525,10 @@ namespace mcpe_viz {
                                             }
                                         }
                                         if (!vfound) {
-                                            BlockRecorder::instance().addUnknownBlockVariant(
+                                            record_unknown_block_variant(
                                                 blockid,
                                                 blockInfoList[blockid].name,
-                                                blockdata
-                                            );
+                                                blockdata);
                                             // since we did not find the variant, use the parent block's color
                                             color = blockInfoList[blockid].color;
                                         }
@@ -681,7 +681,7 @@ namespace mcpe_viz {
                                                         }
                                                     }
                                                     if (!vfound) {
-                                                        BlockRecorder::instance().addUnknownBlockVariant(
+                                                        record_unknown_block_variant(
                                                             blockid,
                                                             blockInfoList[blockid].name,
                                                             blockdata
@@ -902,11 +902,10 @@ namespace mcpe_viz {
                                         }
                                     }
                                     if (!vfound) {
-                                        BlockRecorder::instance().addUnknownBlockVariant(
+                                        record_unknown_block_variant(
                                             blockid,
                                             blockInfoList[blockid].name,
-                                            blockdata
-                                        );
+                                            blockdata);
                                         // since we did not find the variant, use the parent block's color
                                         color = blockInfoList[blockid].color;
                                     }
@@ -1183,20 +1182,20 @@ namespace mcpe_viz {
             slogger.msg(kLogInfo1, "  Generate Shaded Relief Image\n");
             control.fnLayerShadedRelief[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".shaded_relief.png");
+#if 0
 
-            if (false) {
-                // todobig - idea is to oversample the src image and then get higher resolution shaded relief - but, openlayers does not cooperate with this idea :) -- could fiddle with it later
-                // todo - param for oversample
-                std::string fnTemp = std::string(dirOut + "/" + fnBase + "." + name + ".shaded_relief.temp.png");
-                if (oversampleImage(control.fnLayerHeightGrayscale[dimId], fnTemp, 2) == 0) {
-                    generateShadedRelief(fnTemp, control.fnLayerShadedRelief[dimId]);
-                    // remove temporary file
-                    deleteFile(fnTemp);
-                }
+            // todobig - idea is to oversample the src image and then get higher resolution shaded relief - but, openlayers does not cooperate with this idea :) -- could fiddle with it later
+            // todo - param for oversample
+            std::string fnTemp = std::string(dirOut + "/" + fnBase + "." + name + ".shaded_relief.temp.png");
+            if (oversampleImage(control.fnLayerHeightGrayscale[dimId], fnTemp, 2) == 0) {
+                generateShadedRelief(fnTemp, control.fnLayerShadedRelief[dimId]);
+                // remove temporary file
+                deleteFile(fnTemp);
             }
-            else {
-                generateShadedRelief(control.fnLayerHeightGrayscale[dimId], control.fnLayerShadedRelief[dimId]);
-            }
+
+#else
+            generateShadedRelief(control.fnLayerHeightGrayscale[dimId], control.fnLayerShadedRelief[dimId]);
+#endif
         }
 
         if (checkDoForDim(control.doMovie)) {

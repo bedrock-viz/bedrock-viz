@@ -37,27 +37,13 @@ namespace mcpe_viz {
 #define be32toh local_be32toh
 #endif
 
-    int32_t local_mkdir(const std::string& path);
-
-    // these hacks work around "const char*" problems
-    std::string mybasename(const std::string& fn);
-    std::string mydirname(const std::string& fn);
-
-    int32_t file_exists(const std::string& fn);
+   
 
     std::string escapeString(const std::string& s, const std::string& escapeChars);
 
     std::string makeIndent(int32_t indent, const char* hdr);
 
-    typedef std::vector< std::pair<std::string, std::string> > StringReplacementList;
-    int32_t copyFileWithStringReplacement(const std::string& fnSrc, const std::string& fnDest,
-        const StringReplacementList& replaceStrings);
-
-    int32_t copyFile(const std::string& fnSrc, const std::string& fnDest, bool checkExistingFlag);
-
-    int32_t copyDirToDir(const std::string& dirSrc, const std::string& dirDest, bool checkExistingFlag);
-
-    int32_t deleteFile(const std::string& fn);
+    
 
     bool vectorContains(const std::vector<int>& v, int32_t i);
 
@@ -341,106 +327,7 @@ namespace mcpe_viz {
             dirOutput = dirOut;
         }
 
-        int32_t doTile() {
-            // todobig - store tile filenames?
-
-            char tmpstring[256];
-
-            // open source file
-            PngReader pngSrc;
-            pngSrc.init(filename);
-            pngSrc.read_info();
-
-            int32_t srcW = pngSrc.getWidth();
-            int32_t srcH = pngSrc.getHeight();
-            int32_t colorType = pngSrc.getColorType();
-            bool rgbaFlag = false;
-            int32_t bpp = 3;
-            if (colorType == PNG_COLOR_TYPE_RGB_ALPHA) {
-                bpp = 4;
-                rgbaFlag = true;
-            }
-            int32_t numPngW = (int)ceil((double)srcW / (double)tileWidth);
-
-            uint8_t* sbuf = new uint8_t[srcW * bpp];
-
-
-            PngWriter* pngOut = new PngWriter[numPngW];
-            uint8_t** buf;
-            buf = new uint8_t * [numPngW];
-            for (int32_t i = 0; i < numPngW; i++) {
-                buf[i] = new uint8_t[tileWidth * tileHeight * bpp];
-            }
-
-            bool initPngFlag = false;
-            int32_t tileCounterY = 0;
-
-            for (int32_t sy = 0; sy < srcH; sy++) {
-
-                // initialize png helpers
-                if (!initPngFlag) {
-                    initPngFlag = true;
-                    for (int32_t i = 0; i < numPngW; i++) {
-                        sprintf(tmpstring, "%s/%s.%d.%d.png", dirOutput.c_str(), mybasename(filename).c_str(),
-                            tileCounterY, i);
-                        std::string fname = tmpstring;
-                        pngOut[i].init(fname, "MCPE Viz Image Tile", tileWidth, tileHeight, tileHeight, rgbaFlag, true);
-
-                        // clear buffer
-                        memset(&buf[i][0], 0, tileWidth * tileHeight * bpp);
-
-                        // setup row_pointers
-                        for (int32_t ty = 0; ty < tileHeight; ty++) {
-                            pngOut[i].row_pointers[ty] = &buf[i][ty * tileWidth * bpp];
-                        }
-                    }
-                    tileCounterY++;
-                }
-
-                png_read_row(pngSrc.png, sbuf, NULL);
-
-                int32_t tileOffsetY = sy % tileHeight;
-
-                // todobig - step in tileWidth and memcpy as we go - need to check the last one for out of bounds
-                for (int32_t sx = 0; sx < srcW; sx++) {
-                    int32_t tileCounterX = sx / tileWidth;
-                    int32_t tileOffsetX = sx % tileWidth;
-                    memcpy(&buf[tileCounterX][((tileOffsetY * tileWidth) + tileOffsetX) * bpp], &sbuf[sx * bpp], bpp);
-                }
-
-                // write tile png files when they are ready
-                if (((sy + 1) % tileHeight) == 0) {
-                    // write pngs
-                    for (int32_t i = 0; i < numPngW; i++) {
-                        png_write_image(pngOut[i].png, pngOut[i].row_pointers);
-                        pngOut[i].close();
-                    }
-                    initPngFlag = false;
-                }
-            }
-
-            // close final tiles
-            if (initPngFlag) {
-                // write pngs
-                for (int32_t i = 0; i < numPngW; i++) {
-                    png_write_image(pngOut[i].png, pngOut[i].row_pointers);
-                    pngOut[i].close();
-                }
-            }
-
-            delete[] pngOut;
-
-            for (int32_t i = 0; i < numPngW; i++) {
-                delete[] buf[i];
-            }
-            delete[] buf;
-
-            pngSrc.close();
-
-            delete[] sbuf;
-
-            return 0;
-        }
+        int32_t doTile();
 
     };
 
