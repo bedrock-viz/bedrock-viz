@@ -243,18 +243,6 @@
 
 namespace mcpe_viz {
 
-    std::unique_ptr<MinecraftWorld_LevelDB> world;
-
-
-    void worldPointToImagePoint(int32_t dimId, double wx, double wz, double& ix, double& iy, bool geoJsonFlag) {
-        return world->worldPointToImagePoint(dimId, wx, wz, ix, iy, geoJsonFlag);
-    }
-
-    void worldPointToGeoJSONPoint(int32_t dimId, double wx, double wz, double& ix, double& iy) {
-        worldPointToImagePoint(dimId, wx, wz, ix, iy, true);
-    }
-
-
     int32_t doParseConfigFile(const std::string& fn) {
         if (!file_exists(fn)) {
             return -1;

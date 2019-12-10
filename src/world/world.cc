@@ -811,7 +811,7 @@ namespace mcpe_viz {
         return 0;
     }
 
-    ::int32_t MinecraftWorld_LevelDB::doOutput_Tile_image(const std::string& fn)
+    int32_t MinecraftWorld_LevelDB::doOutput_Tile_image(const std::string& fn)
     {
         if (fn.size() <= 0) {
             return -1;
@@ -1318,5 +1318,5 @@ namespace mcpe_viz {
         return 0;
     }
 
-
+    std::unique_ptr<MinecraftWorld_LevelDB> world;
 }

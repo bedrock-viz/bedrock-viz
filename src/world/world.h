@@ -148,4 +148,6 @@ namespace mcpe_viz {
         }
 
     };
+
+    extern std::unique_ptr<MinecraftWorld_LevelDB> world;
 }
