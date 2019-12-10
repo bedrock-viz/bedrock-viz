@@ -5,8 +5,6 @@ namespace mcpe_viz {
     // list of geojson items
     std::vector<std::string> listGeoJSON;
 
-    std::string dirExec;
-
     int32_t globalIconImageId = 1;
 
     // todobig -- would be nice for these to be in world class

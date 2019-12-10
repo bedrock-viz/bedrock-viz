@@ -25,6 +25,7 @@
 #include "minecraft/conversion.h"
 
 #include "utils/fs.h"
+#include "asset.h"
 
 namespace mcpe_viz {
 
@@ -645,7 +646,8 @@ namespace mcpe_viz {
       list.push_back(s);
 
       // todo - not useful?
-      if ( false ) {
+#if 0
+      
         if ( damage >= 0 ) {
           sprintf(tmpstring,"\"Damage\":\"%d\"", damage);
           list.push_back(std::string(tmpstring));
@@ -654,8 +656,8 @@ namespace mcpe_viz {
           sprintf(tmpstring,"\"Slot\":\"%d\"", slot);
           list.push_back(std::string(tmpstring));
         }
-      }
-
+      
+#endif
       if ( showCountFlag && count >= 0 ) {
         sprintf(tmpstring,"\"Count\":\"%d\"", count);
         list.push_back(std::string(tmpstring));
@@ -700,7 +702,7 @@ namespace mcpe_viz {
         strcpy(urlImage, urlImageGeneric);
       }
       
-      if ( file_exists(dirExec + "/" + urlImage) ) {
+      if ( file_exists(bedrock_viz::static_path(urlImage).generic_string())) {
         std::string fImage(urlImage);
         int32_t imgId = -1;
         if ( has_key(imageFileMap, fImage) ) {

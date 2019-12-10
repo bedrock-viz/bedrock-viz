@@ -1,25 +1,41 @@
 #include "config.h"
 #include "asset.h"
 
+
 namespace bedrock_viz {
     using std::filesystem::path;
-// TODO Important: path(".") should be executable path instead of working directory.
+
+
+
 #ifdef BEDROCK_VIZ_DEBUG
-    const auto& prefix = path(".");
+    const auto use_argv_0 = true;
 #else
 #ifdef _MSC_VER
-    const auto& prefix = path(".");
+    const auto use_argv_0 = true;
 #else
-    const auto& prefix = path(cmake_install_prefix) / "bedrock-viz";
+    const auto use_argv_0 = false;
 #endif
 #endif
 
+    path argv_0{"."};
+
+    const path& get_prefix()
+    {
+        static auto prefix = path(cmake_install_prefix) / "bedrock-viz";
+        return use_argv_0 ? argv_0 : prefix;
+    }
+
     path xml_path() {
-        return prefix / "data" / "mcpe_viz.xml";
+        return get_prefix() / "data" / "mcpe_viz.xml";
     }
 
     path static_path(const std::string& filename)
     {
-        return prefix / "static" / filename;
+        return get_prefix() / "static" / filename;
+    }
+
+    void set_argv_0(char* s)
+    {
+        argv_0 = path(s).parent_path();
     }
 }

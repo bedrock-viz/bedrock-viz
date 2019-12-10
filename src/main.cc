@@ -240,6 +240,7 @@
 #include "world/world.h"
 
 #include "utils/fs.h"
+#include "asset.h"
 
 namespace mcpe_viz {
 
@@ -1099,6 +1100,12 @@ namespace mcpe_viz {
 
 int main(int argc, char** argv) {
     using namespace mcpe_viz;
+    using namespace bedrock_viz;
+    set_argv_0(argv[0]);
+
+    std::cout << xml_path().generic_string() << '\n';
+
+    
     // steps:
     // 1. load args from argv
     // 2. check args, exit and print usage if any error found
@@ -1108,8 +1115,6 @@ int main(int argc, char** argv) {
     // 6. parse world
     // 7. generate output
     // 8. print warning of unknown blocks/items
-
-    dirExec = mydirname(argv[0]);
 
     world = std::make_unique<MinecraftWorld_LevelDB>();
 
