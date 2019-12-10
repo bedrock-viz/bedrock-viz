@@ -15,6 +15,8 @@
 
 #include "../utils/fs.h"
 
+#include "../asset.h"
+
 namespace
 {
     // suggestion from mcpe_sample_setup.cpp
@@ -874,18 +876,19 @@ namespace mcpe_viz {
 
     int32_t MinecraftWorld_LevelDB::doOutput_html()
     {
+        using namespace bedrock_viz;
         char tmpstring[1025];
 
         slogger.msg(kLogInfo1, "Do Output: html viewer\n");
 
-        sprintf(tmpstring, "%s/mcpe_viz.html.template", dirExec.c_str());
-        std::string fnHtmlSrc = tmpstring;
+        //sprintf(tmpstring, "%s/mcpe_viz.html.template", dirExec.c_str());
+        const std::string fnHtmlSrc = static_path("mcpe_viz.html.template").generic_string();
 
-        sprintf(tmpstring, "%s/mcpe_viz.js", dirExec.c_str());
-        std::string fnJsSrc = tmpstring;
+        //sprintf(tmpstring, "%s/mcpe_viz.js", dirExec.c_str());
+        const std::string fnJsSrc = static_path("mcpe_viz.js").generic_string();
 
-        sprintf(tmpstring, "%s/mcpe_viz.css", dirExec.c_str());
-        std::string fnCssSrc = tmpstring;
+        //sprintf(tmpstring, "%s/mcpe_viz.css", dirExec.c_str());
+        const std::string fnCssSrc = static_path("mcpe_viz.css").generic_string();
 
         // create html file -- need to substitute one variable (extra js file)
         StringReplacementList replaceStrings;
@@ -1093,7 +1096,8 @@ namespace mcpe_viz {
             // copy javascript files
             std::string dirJs = dirDest + "/js";
             local_mkdir(dirJs);
-            copyDirToDir(dirExec + "/js", dirJs, false);
+            //copyDirToDir(dirExec + "/js", dirJs, false);
+            copyDirToDir(static_path("js").generic_string(), dirJs, false);
 
             // copy images
             // todobig - could save a good amount of time per run if we detect if dir has already been copied
@@ -1101,7 +1105,8 @@ namespace mcpe_viz {
             slogger.msg(kLogInfo1, "Copying icon images\n");
             std::string dirImages = dirDest + "/images";
             local_mkdir(dirImages);
-            copyDirToDir(dirExec + "/images", dirImages, true);
+            //copyDirToDir(dirExec + "/images", dirImages, true);
+            copyDirToDir(static_path("images").generic_string(), dirImages, true);
 
         }
         else {

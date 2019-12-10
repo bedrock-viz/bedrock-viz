@@ -1116,43 +1116,36 @@ int main(int argc, char** argv) {
     slogger.setStdout(stderr);
     slogger.setStderr(stderr);
 
-    int32_t ret = parse_args(argc, argv);
-    if (ret != 0) {
+    if (parse_args(argc, argv) != 0) {
         mcpe_viz::print_usage();
-        return ret;
+        return -1;
     }
 
-    ret = loadXml();
-    if (ret != 0) {
+    if (loadXml() != 0) {
         slogger.msg(kLogInfo1, "ERROR: Failed to parse XML file.\n");
         return -1;
     }
 
     loadConfigFile();
 
-    if (ret != 0) {
-        return -1;
-    }
-
     if (mcpe_viz::control.doFindImages) {
         mcpe_viz::findImages();
-        return 0;
     }
+    else {
+        world->init();
+        world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
+        // todobig - we must do this, for now - we could get clever about this later
+        // todobig - we could call this deepParseDb() and only do it if the user wanted it
+        if (true || mcpe_viz::control.doDetailParseFlag) {
+            world->dbParse();
+            world->checkSpawnable();
+        }
+        world->doOutput();
+        world->dbClose();
 
-    world->init();
-    world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
-    // todobig - we must do this, for now - we could get clever about this later
-    // todobig - we could call this deepParseDb() and only do it if the user wanted it
-    if (true || mcpe_viz::control.doDetailParseFlag) {
-        world->dbParse();
-        world->checkSpawnable();
+        print_unknown_block_warnings();
+
+        std::cout << "Done.\n";
     }
-    world->doOutput();
-    world->dbClose();
-
-    print_unknown_block_warnings();
-
-    std::cout << "Done.\n";
-
     return 0;
 }
