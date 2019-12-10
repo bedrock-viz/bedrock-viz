@@ -141,7 +141,7 @@ namespace mcpe_viz {
             bv.setColor(color);
           } else {
             // no color specified, we increment the parent block's color w/ blockdata (to keep it unique)
-            color = be32toh(block.color);
+            color = local_be32toh(block.color);
             color += blockdata;
             bv.setColor(color);
           }

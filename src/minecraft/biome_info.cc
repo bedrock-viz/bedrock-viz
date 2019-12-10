@@ -14,7 +14,7 @@ namespace mcpe_viz {
     BiomeInfo& BiomeInfo::setColor(int32_t rgb)
     {
         // note: we convert color storage to big endian so that we can memcpy when creating images
-        color = htobe32(rgb);
+        color = local_htobe32(rgb);
         colorSetFlag = true;
         return *this;
     }

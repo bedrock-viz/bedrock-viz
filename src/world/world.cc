@@ -1023,7 +1023,7 @@ namespace mcpe_viz {
                 if (blockInfoList[i].hasVariants()) {
                     // we need to get blockdata
                     for (const auto& itbv : blockInfoList[i].variantList) {
-                        fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n", be32toh(itbv->color),
+                        fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n", local_be32toh(itbv->color),
                             escapeString(itbv->name, "'").c_str(), i, itbv->blockdata
                         );
                     }
@@ -1031,7 +1031,7 @@ namespace mcpe_viz {
                 else {
                     if (blockInfoList[i].colorSetFlag) {
                         fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n",
-                            be32toh(blockInfoList[i].color), escapeString(blockInfoList[i].name, "'").c_str(),
+                            local_be32toh(blockInfoList[i].color), escapeString(blockInfoList[i].name, "'").c_str(),
                             i, 0
                         );
                     }
@@ -1050,7 +1050,7 @@ namespace mcpe_viz {
             fprintf(fp, "var biomeColorLUT = {\n");
             for (const auto& it : biomeInfoList) {
                 if (it.second->colorSetFlag) {
-                    fprintf(fp, "'%d': { name: '%s', id: %d },\n", be32toh(it.second->color),
+                    fprintf(fp, "'%d': { name: '%s', id: %d },\n", local_be32toh(it.second->color),
                         escapeString(it.second->name, "'").c_str(), it.first
                     );
                 }
@@ -1145,14 +1145,14 @@ namespace mcpe_viz {
             if (blockInfoList[i].hasVariants()) {
                 for (const auto& itbv : blockInfoList[i].variantList) {
                     webColorList.push_back(std::unique_ptr<ColorInfo>
-                        (new ColorInfo(itbv->name, be32toh(itbv->color))));
+                        (new ColorInfo(itbv->name, local_be32toh(itbv->color))));
                 }
             }
             else {
                 if (blockInfoList[i].colorSetFlag) {
                     webColorList.push_back(std::unique_ptr<ColorInfo>
                         (new ColorInfo(blockInfoList[i].name,
-                            be32toh(blockInfoList[i].color))));
+                            local_be32toh(blockInfoList[i].color))));
                 }
             }
         }
@@ -1169,7 +1169,7 @@ namespace mcpe_viz {
             if (it.second->colorSetFlag) {
                 // webColorList.emplace_back(blockInfoList[i].name, (int32_t)be32toh(blockInfoList[i].color));
                 webColorList.push_back(
-                    std::unique_ptr<ColorInfo>(new ColorInfo(it.second->name, be32toh(it.second->color))));
+                    std::unique_ptr<ColorInfo>(new ColorInfo(it.second->name, local_be32toh(it.second->color))));
             }
         }
 

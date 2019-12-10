@@ -7,7 +7,6 @@
 
 #include "../control.h"
 #include "../utils/block_recorder.h"
-#include "palettes.h"
 #include "common.h"
 #include "misc.h"
 #include "point_conversion.h"
@@ -15,6 +14,105 @@
 #include "../nbt.h"
 
 #include "../utils/fs.h"
+
+namespace
+{
+    using mcpe_viz::MAX_BLOCK_HEIGHT;
+    using mcpe_viz::kColorDefault;
+    using mcpe_viz::local_htobe32;
+
+
+    // note: super super old hsl2rgb code; origin unknown
+    double _hue_to_rgb(double m1, double m2, double h) {
+        while (h < 1.0) { h += 1.0; }
+        while (h > 1.0) { h -= 1.0; }
+        if ((h * 6.0) < 1.0) {
+            return m1 + (m2 - m1) * h * 6.0;
+        }
+        if ((h * 2.0) < 1.0) {
+            return m2;
+        }
+        if ((h * 3.0) < 2.0) {
+            return m1 + (m2 - m1) * (2.0 / 3.0 - h) * 6.0;
+        }
+        return m1;
+    }
+
+
+    int32_t _clamp(int32_t v, int32_t minv, int32_t maxv) {
+        if (v < minv) return minv;
+        if (v > maxv) return maxv;
+        return v;
+    }
+
+
+    int32_t hsl2rgb(double h, double s, double l, int32_t& r, int32_t& g, int32_t& b) {
+        double m2;
+        if (l <= 0.5) {
+            m2 = l * (s + 1.0);
+        }
+        else {
+            m2 = l + s - l * s;
+        }
+        double m1 = l * 2.0 - m2;
+        double tr = _hue_to_rgb(m1, m2, h + 1.0 / 3.0);
+        double tg = _hue_to_rgb(m1, m2, h);
+        double tb = _hue_to_rgb(m1, m2, h - 1.0 / 3.0);
+        r = _clamp((int)(tr * 255.0), 0, 255);
+        g = _clamp((int)(tg * 255.0), 0, 255);
+        b = _clamp((int)(tb * 255.0), 0, 255);
+        return 0;
+    }
+
+
+    int32_t makeHslRamp(int32_t* pal, int32_t start, int32_t stop, double h1, double h2, double s1, double s2, double l1, double l2) {
+        double steps = stop - start + 1;
+        double dh = (h2 - h1) / steps;
+        double ds = (s2 - s1) / steps;
+        double dl = (l2 - l1) / steps;
+        double h = h1, s = s1, l = l1;
+        int32_t r, g, b;
+        for (int32_t i = start; i <= stop; i++) {
+            hsl2rgb(h, s, l, r, g, b);
+            int32_t c = ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
+            pal[i] = c;
+            h += dh;
+            s += ds;
+            l += dl;
+        }
+        return 0;
+    }
+
+
+    struct Palette {
+        Palette()
+        {
+            memset(this->value, 0, sizeof(this->value));
+            // create red-green ramp; red to black and then black to green
+            makeHslRamp(this->value, 0, 61, 0.0, 0.0, 0.9, 0.9, 0.8, 0.1);
+            makeHslRamp(this->value, 63, MAX_BLOCK_HEIGHT, 0.4, 0.4, 0.9, 0.9, 0.1, 0.8);
+            // force 62 (sea level) to gray
+            this->value[62] = 0x303030;
+
+            // fill 128..255 with purple (we should never see this color)
+            for (int32_t i = (MAX_BLOCK_HEIGHT + 1); i < 256; i++) {
+                this->value[i] = kColorDefault;
+            }
+
+            // convert palette
+            for (int32_t i = 0; i < 256; i++) {
+                this->value[i] = local_htobe32(this->value[i]);
+            }
+        }
+        int32_t value[256];
+    };
+
+    Palette& get_palette()
+    {
+        static Palette instance;
+        return instance;
+    }
+}
 
 namespace mcpe_viz {
 
@@ -167,23 +265,24 @@ namespace mcpe_viz {
                             }
                             else {
                                 slogger.msg(kLogInfo1, "ERROR: Unknown biome %d 0x%x\n", biomeId, biomeId);
-                                color = htobe32(0xff2020);
+                                color = local_htobe32(0xff2020);
                             }
                         }
                         else if (imageMode == kImageModeGrass) {
                             // get grass color
                             int32_t grassColor = it->grassAndBiome[cx][cz] >> 8;
-                            color = htobe32(grassColor);
+                            color = local_htobe32(grassColor);
                         }
                         else if (imageMode == kImageModeHeightCol) {
                             // get height value and use red-black-green palette
                             if (control.heightMode == kHeightModeTop) {
                                 uint8_t c = it->topBlockY[cx][cz];
-                                color = palRedBlackGreen[c];
+                                //color = palRedBlackGreen[c];
+                                color = get_palette().value[c];
                             }
                             else {
                                 uint8_t c = it->heightCol[cx][cz];
-                                color = palRedBlackGreen[c];
+                                color = get_palette().value[c];
                             }
                         }
                         else if (imageMode == kImageModeHeightColGrayscale) {
@@ -255,10 +354,10 @@ namespace mcpe_viz {
                         // do grid lines
                         if (checkDoForDim(control.doGrid) && (cx == 0 || cz == 0)) {
                             if ((it->chunkX == 0) && (it->chunkZ == 0) && (cx == 0) && (cz == 0)) {
-                                color = htobe32(0xeb3333);
+                                color = local_htobe32(0xeb3333);
                             }
                             else {
-                                color = htobe32(0xc1ffc4);
+                                color = local_htobe32(0xc1ffc4);
                             }
                         }
 
@@ -702,7 +801,7 @@ namespace mcpe_viz {
                                                     blockid, imageX, imageZ, cx, cz, cy
                                                 );
                                                 // set an unused color
-                                                color = htobe32(0xf010d0);
+                                                color = local_htobe32(0xf010d0);
                                             }
 
 #ifdef PIXEL_COPY_MEMCPY
@@ -919,10 +1018,10 @@ namespace mcpe_viz {
                                     if ((it.second->chunkX == 0) && (it.second->chunkZ == 0) && (cx == 0) &&
                                         (cz == 0)) {
                                         // highlight (0,0)
-                                        color = htobe32(0xeb3333);
+                                        color = local_htobe32(0xeb3333);
                                     }
                                     else {
-                                        color = htobe32(0xc1ffc4);
+                                        color = local_htobe32(0xc1ffc4);
                                     }
                                 }
 

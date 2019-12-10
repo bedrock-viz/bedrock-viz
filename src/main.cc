@@ -222,7 +222,6 @@
 
 #include "define.h"
 #include "util.h"
-#include "mcpe_viz.h"
 #include "nbt.h"
 #include "xml.h"
 #include "asset.h"
@@ -238,7 +237,6 @@
 #include "world/common.h"
 #include "world/dimension_data.h"
 
-#include "world/palettes.h"
 #include "world/world.h"
 
 #include "utils/fs.h"
@@ -366,13 +364,11 @@ namespace mcpe_viz {
     }
 
 
-    int32_t parseConfigFile() {
+    int32_t loadConfigFile() {
         // parse cfg files in this order:
         // -- option specified on command-line
-        // -- master dir
-        // -- exec dir
+        // -- home dir
         // -- local dir
-        std::string fn;
 
         // as specified on cmdline
         if (!control.fnCfg.empty()) {
@@ -392,8 +388,7 @@ namespace mcpe_viz {
         }
 
         // local dir
-        fn = "mcpe_viz.cfg";
-        if (doParseConfigFile(fn) == 0) {
+        if (doParseConfigFile(std::string("mcpe_viz.cfg")) == 0) {
             return 0;
         }
 
@@ -402,7 +397,7 @@ namespace mcpe_viz {
     }
 
 
-    int32_t parseXml() {
+    int32_t loadXml() {
         // parse xml file in this order:
         // -- option specified on command-line
         // -- asset dir(./data/ or /usr/local/share/bedrock-viz/data/, etc)
@@ -1100,38 +1095,7 @@ namespace mcpe_viz {
         return errct;
     }
 
-    int32_t init(int argc, char** argv) {
-
-        int32_t ret;
-
-        dirExec = mydirname(argv[0]);
-
-        world = std::unique_ptr<MinecraftWorld_LevelDB>(new MinecraftWorld_LevelDB());
-
-        slogger.setStdout(stderr);
-        slogger.setStderr(stderr);
-
-        ret = parse_args(argc, argv);
-        if (ret != 0) {
-            mcpe_viz::print_usage();
-            return ret;
-        }
-
-        ret = parseXml();
-        if (ret != 0) {
-            slogger.msg(kLogInfo1, "ERROR: Failed to parse XML file.  Exiting...\n");
-            return -1;
-        }
-
-        parseConfigFile();
-
-        makePalettes();
-
-        return 0;
-    }
-
 }  // namespace mcpe_viz
-
 
 int main(int argc, char** argv) {
     using namespace mcpe_viz;
@@ -1145,7 +1109,27 @@ int main(int argc, char** argv) {
     // 7. generate output
     // 8. print warning of unknown blocks/items
 
-    int32_t ret = mcpe_viz::init(argc, argv);
+    dirExec = mydirname(argv[0]);
+
+    world = std::make_unique<MinecraftWorld_LevelDB>();
+
+    slogger.setStdout(stderr);
+    slogger.setStderr(stderr);
+
+    int32_t ret = parse_args(argc, argv);
+    if (ret != 0) {
+        mcpe_viz::print_usage();
+        return ret;
+    }
+
+    ret = loadXml();
+    if (ret != 0) {
+        slogger.msg(kLogInfo1, "ERROR: Failed to parse XML file.\n");
+        return -1;
+    }
+
+    loadConfigFile();
+
     if (ret != 0) {
         return -1;
     }

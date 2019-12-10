@@ -27,23 +27,46 @@
 
 namespace mcpe_viz {
 
+    // note: this is only used on win32/win64 builds
+    // todo - doesn't check host endianness
+    inline int32_t local_htobe32(const int32_t src) {
 #ifndef htobe32
-    int32_t local_htobe32(const int32_t src);
-#define htobe32 local_htobe32
+        int32_t dst;
+        const char* ps = (char*)&src;
+        char* pd = (char*)&dst;
+        pd[0] = ps[3];
+        pd[1] = ps[2];
+        pd[2] = ps[1];
+        pd[3] = ps[0];
+        return dst;
+#else
+        return htobe32(src);
 #endif
+    }
 
+    // note: this is only used on win32/win64 builds
+    // todo - doesn't check host endianness
+    inline int32_t local_be32toh(const int32_t src) {
 #ifndef be32toh
-    int32_t local_be32toh(const int32_t src);
-#define be32toh local_be32toh
+        int32_t dst;
+        const char* ps = (char*)&src;
+        char* pd = (char*)&dst;
+        pd[0] = ps[3];
+        pd[1] = ps[2];
+        pd[2] = ps[1];
+        pd[3] = ps[0];
+        return dst;
+#else
+        return be32toh(src);
 #endif
+    }
 
-   
 
     std::string escapeString(const std::string& s, const std::string& escapeChars);
 
     std::string makeIndent(int32_t indent, const char* hdr);
 
-    
+
 
     bool vectorContains(const std::vector<int>& v, int32_t i);
 
@@ -336,11 +359,6 @@ namespace mcpe_viz {
 
 
     int32_t rgb2hsb(int32_t red, int32_t green, int32_t blue, double& hue, double& saturation, double& brightness);
-
-    int32_t hsl2rgb(double h, double s, double l, int32_t& r, int32_t& g, int32_t& b);
-
-    int32_t makeHslRamp(int32_t* pal, int32_t start, int32_t stop, double h1, double h2, double s1, double s2, double l1, double l2);
-
 
 
     class ColorInfo {
