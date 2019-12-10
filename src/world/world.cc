@@ -23,7 +23,7 @@ namespace
     };
 
     // note: this is an attempt to remove "bad" chunks as seen in "nyan.zip" world
-    inline bool legalChunkPos(int32_t chunkX, int32_t chunkZ) {
+    bool legalChunkPos(int32_t chunkX, int32_t chunkZ) {
         if ((uint32_t)chunkX == 0x80000000 && (uint32_t)chunkZ == 0x80000000) {
             return false;
         }
@@ -153,6 +153,7 @@ namespace mcpe_viz {
     int32_t MinecraftWorld_LevelDB::dbOpen(const std::string& dirDb)
     {
         // todobig - leveldb read-only? snapshot?
+        // note: seems impossible, see <https://github.com/google/leveldb/issues/182>
         slogger.msg(kLogInfo1, "DB Open: dir=%s\n", dirDb.c_str());
         leveldb::Status dstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
         slogger.msg(kLogInfo1, "DB Open Status: %s (block_size=%d bloom_filter_bits=%d)\n",

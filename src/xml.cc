@@ -11,7 +11,6 @@
 #include <cstdio>
 #include <libxml/xmlreader.h>
 #include "util.h"
-#include "mcpe_viz.h"
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/entity_info.h"

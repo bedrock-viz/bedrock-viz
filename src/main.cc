@@ -256,7 +256,7 @@ namespace mcpe_viz {
 
 
     int32_t doParseConfigFile(const std::string& fn) {
-        if (!file_exists(fn.c_str())) {
+        if (!file_exists(fn)) {
             return -1;
         }
 
