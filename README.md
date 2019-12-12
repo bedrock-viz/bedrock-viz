@@ -1,7 +1,8 @@
-# MCPE Viz
-by Plethora777 -- Twitter: [@Plethora777](https://twitter.com/Plethora777) -- Reddit: [/u/Plethora777](https://www.reddit.com/user/Plethora777/)
+# Bedrock Viz
 
-MCPE Viz is a tool that parses Minecraft Pocket Edition (MCPE) world files.  It creates overview images from the world files, and reports *lots* of details on your world.
+A fork of [mcpe_viz](https://github.com/Plethora777/mcpe_viz.git), now maintained by [Jasper Wan](https://github.com/jasper-wan).
+
+Bedrock Viz is a tool that parses Minecraft Bedrock Edition world files.  It creates overview images from the world files, and reports *lots* of details on your world.
 
 It can also create a powerful Google Maps-like Web App for viewing your world.
 
@@ -36,27 +37,28 @@ Additional Features:
     * Histogram of blocks
     * Histogram of biomes (per-block column)
 
+## Quick Start
 
-## Example Output
+For Windows 10 users:
 
-[Here are example images](http://imgur.com/a/YiIWe)
+* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.1/bedrock-viz_v0.1.1_win64.zip) and unzip that file
 
-[Here's an example of movie output](https://www.youtube.com/watch?v=kBCOrctFIGM)
+* Inside you will find `bedrock-viz.exe`
 
+For macOS users(requires macOS 10.15 and above):
 
-## Quick Start -- How to run it on Windows with a GUI
+* Install via homeberw:
+  ```
+  brew tap bedrock-viz/homebrew-tap && brew install bedrock-viz
+  ```
 
-* [Download the zip file](https://github.com/Plethora777/mcpe_viz/archive/master.zip)
+For linux and macOS users:
 
-* Unzip that file.
+* [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.1/bedrock-viz_v0.1.1.tar.gz) and compiling from source
 
-* Inside you will find "mcpe_viz.win32.zip" (windows 32-bit) and "mcpe_viz.win64.zip" (windows 64-bit).  Choose one that is appropriate for your system.  Unzip it.
+**DO NOT RUN THIS ON YOUR ORIGINAL WORLD SAVES**
 
-* Inside you will find mcpe_viz_helper.exe
-
-* Run mcpe_viz_helper.exe
-
-**DO NOT RUN THIS ON YOUR ORIGINAL MCPE DATA FILES; MAKE A BACKUP COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY!**
+**MAKE A BACKUP COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY**
 
 Use the app to select the MCPE world file, the output directory, output name, and mode.  Press "Go!".  Watch the progress of mcpe_viz.  If it completes successfully, you can click the "Launch Web App" button.  If there was a problem, you should look in the "Progress" window for details that might help you resolve the issue.
 
@@ -125,10 +127,6 @@ If you are running Firefox or serving the files from a web server, you can make 
 
 ## Usage
 
-**DO NOT RUN THIS ON YOUR ORIGINAL MCPE DATA FILES**
-
-**DO NOT RUN THIS ON YOUR ONLY BACKUP OF MCPE DATA FILES**
-
 **MAKE A COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY!**
 
 See "./mcpe_viz --help" for the most up-to-date usage info
@@ -156,24 +154,16 @@ Note that MCPE is sometimes weird about actually closing world files -- that is,
 
 On Android, you can use [DropSync](https://play.google.com/store/apps/details?id=com.ttxapps.dropsync) to automatically backup your MCPE world to your dropbox account.  You configure this tool to backup any of your world files to dropbox.  As you play on your device, DropSync will copy the updated world files to Dropbox.  Very cool!  Install Dropbox's client (there's even one for [Linux](https://www.dropbox.com/install?os=lnx)) on the machine you use for MCPE Viz.  It is recommended to copy the data from your local Dropbox folder to another folder to prevent Dropbox from syncing *from* your MCPE Viz machine.  Running MCPE Viz on the world files *does* change the world files.  This method has only been *lightly* tested, so be careful.
 
-
-## Customization
-
-You can copy mcpe_viz.cfg to ~/.mcpe_viz/mcpe_viz.cfg and then edit that file to customize the way mcpe_viz works.
-
-You can copy mcpe_viz.xml to ~/.mcpe_viz/mcpe_viz.xml and then edit that file to set custom colors for blocks and biomes.
-
-
 ## Error messages
 
 This program uses a lot of file handles and depending on your OS's defaults (OS X's are too low) you can have a failure that resembles the following:
 ```
   Generate full-size slices
     Writing all images in one pass
-ERROR: Failed to open output file (../worlds/output/images/kYQJAGOeAQA=.mcpe_viz_slice.full.overworld.247.png) errno=Too many open files(24)
-libpng error: No IDATs written into file
-ERROR: PngWriter setjmp triggered -- image might be too large (2672 x 1600)
-zsh: segmentation fault  ../mcpe_viz/build/mcpe_viz --db ../worlds/kYQJAGOeAQA= --out  --html-all
+  ERROR: Failed to open output file (../worlds/output/images/kYQJAGOeAQA=.mcpe_viz_slice.full.overworld.247.png) errno=Too many open files(24)
+  libpng error: No IDATs written into file
+  ERROR: PngWriter setjmp triggered -- image might be too large (2672 x 1600)
+  zsh: segmentation fault  ../mcpe_viz/build/mcpe_viz --db ../worlds/kYQJAGOeAQA= --out  --html-all
 ```
 
 You can check your limits and temporarily set file descriptors with the following:
@@ -182,88 +172,6 @@ ulimit -a
 ulimit -n 8192
 ```
 
-## Compiling from source
+### Compiling from source
 
-If you just want to run the software on windows, see above :)  If you would like to compile it for Linux (or Windows, or OS X), read on.
-
-### Requirements
-
-* You know how to compile things :)
-* Mojang's LevelDB from github (see below) (https://github.com/Mojang/leveldb-mcpe.git)
-* libnbt++ from github (see below) (https://github.com/ljfa-ag/libnbtplusplus.git)
-* [Optional] *ffmpeg* for creating movies
-
-
-### How to compile
-
-#### Mojang's LevelDB
-
-The code uses Mojang's modified version of LevelDB.  Here's how to compile it (from the top dir of mcpe_viz):
-
-```
-> git clone https://github.com/Mojang/leveldb-mcpe.git
-> chdir leveldb-mcpe
-> make
-```
-
-If all goes well, there will be a "libleveldb.a" in leveldb-mcpe/
-
-To get it to compile on Fedora, I found that I needed to do this from leveldb-mcpe/:
-
-```
-> ln -s /usr/include include/zlib
-```
-
-If you have compile errors, check the README* files from leveldb-mcpe for prerequisites
-
-#### libnbt++
-
-The code uses libnbt++.  Here's how to compile it (from the top dir of mcpe_viz):
-
-```
-> git clone https://github.com/ljfa-ag/libnbtplusplus.git
-> chdir libnbtplusplus
-> mkdir build
-> chdir build
-> cmake .. -DNBT_BUILD_TESTS=OFF
-> make
-```
-
-If all goes well, there will be a "libnbt++.a" in libnbtplusplus/build/
-
-If you have compile errors, check the README* files from libnbtplusplus for prerequisites
-
-#### Compile mcpe_viz
-
-From the top directory of mcpe_viz:
-
-```
-> make
-```
-
-If all goes well, you will have "mcpe_viz" in build/
-
-
-#### Compile mcpe_viz_helper
-
-From the top directory of mcpe_viz:
-
-```
-> cd gui
-> qmake
-> make
-```
-
-If all goes well, you will have "mcpe_viz_helper"
-
-Note: On Fedora, I use "qmake-qt4" instead of "qmake".
-
-
-## Icon Images
-
-Icon images used in the web app are borrowed from the [Minecraft Wiki](http://minecraft.gamepedia.com/).  The textures themselves are copyright Mojang.
-
-
-## TODO
-
-There is lots still todo.  Search on 'todo' in the code to see what needs attention.
+see [BUILD.md](https://github.com/bedrock-viz/bedrock-viz/blob/master/docs/BUILD.md)
