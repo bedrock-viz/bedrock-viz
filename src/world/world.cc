@@ -1116,79 +1116,6 @@ namespace mcpe_viz {
         return 0;
     }
 
-    int32_t MinecraftWorld_LevelDB::doOutput_colortest() const
-    {
-        slogger.msg(kLogInfo1, "Do Output: html colortest\n");
-
-        std::string fnOut = control.fnOutputBase + ".colortest.html";
-        FILE* fp = fopen(fnOut.c_str(), "w");
-
-        if (!fp) {
-            slogger.msg(kLogInfo1, "ERROR: failed to open output file (%s error=%s (%d))\n", fnOut.c_str(),
-                strerror(errno), errno);
-            return -1;
-        }
-
-        // put start of html file
-        fprintf(fp,
-            "<!doctype html>\n"
-            "<html><head><title>MCPE Viz Color Test</title>\n"
-            "<style>"
-            ".section { width: 100%%; padding: 2em 2em; }"
-            ".colorBlock { width: 100%%; padding: 0.5em 2em; }"
-            ".darkBlock  { color: #ffffff; }"
-            "</style>"
-            "</head>"
-            "<body>"
-        );
-
-        // create list of all colors and sort them by HSL
-        std::vector<std::unique_ptr<ColorInfo> > webColorList;
-
-        webColorList.clear();
-        for (int32_t i = 0; i < 512; i++) {
-            if (blockInfoList[i].hasVariants()) {
-                for (const auto& itbv : blockInfoList[i].variantList) {
-                    webColorList.push_back(std::unique_ptr<ColorInfo>
-                        (new ColorInfo(itbv->name, local_be32toh(itbv->color))));
-                }
-            }
-            else {
-                if (blockInfoList[i].colorSetFlag) {
-                    webColorList.push_back(std::unique_ptr<ColorInfo>
-                        (new ColorInfo(blockInfoList[i].name,
-                            local_be32toh(blockInfoList[i].color))));
-                }
-            }
-        }
-
-        std::sort(webColorList.begin(), webColorList.end(), compareColorInfo);
-        fprintf(fp, "<div class=\"section\">Block Colors</div>");
-        for (const auto& it : webColorList) {
-            fprintf(fp, "%s\n", it->toHtml().c_str());
-        }
-
-
-        webColorList.clear();
-        for (const auto& it : biomeInfoList) {
-            if (it.second->colorSetFlag) {
-                // webColorList.emplace_back(blockInfoList[i].name, (int32_t)be32toh(blockInfoList[i].color));
-                webColorList.push_back(
-                    std::unique_ptr<ColorInfo>(new ColorInfo(it.second->name, local_be32toh(it.second->color))));
-            }
-        }
-
-        std::sort(webColorList.begin(), webColorList.end(), compareColorInfo);
-        fprintf(fp, "<div class=\"section\">Biome Colors</div>");
-        for (const auto& it : webColorList) {
-            fprintf(fp, "%s\n", it->toHtml().c_str());
-        }
-
-        fprintf(fp, "\n</body></html>\n");
-        fclose(fp);
-        return 0;
-    }
-
     int32_t MinecraftWorld_LevelDB::doOutput_GeoJSON()
     {
         if (false) {
@@ -1316,10 +1243,6 @@ namespace mcpe_viz {
             doOutput_Tile();
             doOutput_html();
             doOutput_GeoJSON();
-        }
-
-        if (control.colorTestFlag) {
-            doOutput_colortest();
         }
 
         return 0;

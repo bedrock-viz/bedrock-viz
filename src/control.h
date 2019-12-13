@@ -49,7 +49,6 @@ namespace mcpe_viz {
         bool autoTileFlag;
         bool noForceGeoJSONFlag;
         bool shortRunFlag;
-        bool colorTestFlag;
         bool verboseFlag;
         bool quietFlag;
         int32_t movieX, movieY, movieW, movieH;
@@ -119,7 +118,6 @@ namespace mcpe_viz {
             dirFindImagesOut = "";
 
             shortRunFlag = false;
-            colorTestFlag = false;
             verboseFlag = false;
             quietFlag = false;
             movieX = movieY = movieW = movieH = 0;

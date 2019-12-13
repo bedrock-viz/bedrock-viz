@@ -722,7 +722,6 @@ namespace mcpe_viz {
                 {"tiles",              optional_argument, NULL, '['},
 
                 {"shortrun",           no_argument,       NULL, '$'}, // this is just for testing
-                {"colortest",          no_argument,       NULL, '!'}, // this is just for testing
 
                 {"flush",              no_argument,       NULL, 'f'},
 
@@ -1049,9 +1048,6 @@ namespace mcpe_viz {
 
             case '$':
                 control.shortRunFlag = true;
-                break;
-            case '!':
-                control.colorTestFlag = true;
                 break;
 
             case 'v':

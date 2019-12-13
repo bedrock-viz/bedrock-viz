@@ -131,10 +131,6 @@ namespace mcpe_viz {
 
         int32_t doOutput_html();
 
-
-        int32_t doOutput_colortest() const;
-
-
         int32_t doOutput_GeoJSON();
 
 
