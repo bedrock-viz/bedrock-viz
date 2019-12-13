@@ -832,6 +832,10 @@ namespace mcpe_viz {
             errct++;
             slogger.msg(kLogInfo1, "ERROR: Must specify --db\n");
         }
+
+        if (!file_exists(control.outputDir.generic_string())) {
+            local_mkdir(control.outputDir.generic_string());
+        }
         
 
         // make sure that output directory is NOT world data directory
@@ -855,6 +859,7 @@ int main(int argc, char** argv)
     using namespace mcpe_viz;
     using namespace bedrock_viz;
     set_argv_0(argv[0]);
+    setup_logger_stage_1();
     // steps:
     // 1. load args from argv
     // 2. check args, exit and print usage if any error found
@@ -873,6 +878,10 @@ int main(int argc, char** argv)
         mcpe_viz::print_usage();
         return -1;
     }
+    auto console_log_level = control.quietFlag ? Level::Warn : (control.verboseFlag ? Level::Debug : Level::Info);
+    auto file_log_level = control.verboseFlag ? Level::Debug : Level::Info;
+
+    setup_logger_stage_2(control.logFile(), console_log_level, file_log_level);
 
     if (loadXml() != 0) {
         slogger.msg(kLogInfo1, "ERROR: Failed to parse XML file.\n");

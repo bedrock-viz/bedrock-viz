@@ -16,7 +16,10 @@ namespace mcpe_viz {
         std::string fnXml;
 
         std::filesystem::path fnHtml() const { return this->outputDir / "index.html"; }
-        std::filesystem::path fnLog() const { return this->outputDir / "bedrock_viz.log"; }
+        // used by old logger
+        std::filesystem::path fnLog() const { return this->outputDir / "output.log"; }
+        // new logger output file
+        std::filesystem::path logFile() const { return this->outputDir / "bedrock_viz.log"; }
         std::filesystem::path fnJs() const { return this->outputDir / "output.js"; }
         std::filesystem::path fnGeoJSON() const { return this->outputDir / "output.geojson";  }
 

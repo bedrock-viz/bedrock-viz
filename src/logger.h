@@ -1,8 +1,8 @@
-#ifndef BEDROCK_VIZ_LOGGER_H
-#define BEDROCK_VIZ_LOGGER_H
+#pragma once
 
 #include <cstdio>
 #include <cstdint>
+#include <filesystem>
 #include <spdlog/spdlog.h>
 
 namespace mcpe_viz {
@@ -50,13 +50,23 @@ namespace mcpe_viz {
 
     extern Logger logger;
     extern Logger slogger;
-}
 
-namespace bedrock_viz::logger {
     using spdlog::debug;
     using spdlog::info;
     using spdlog::warn;
     using spdlog::error;
-}
 
-#endif //BEDROCK_VIZ_LOGGER_H
+    enum class Level {
+        Debug = spdlog::level::debug,
+        Info = spdlog::level::info,
+        Warn = spdlog::level::warn,
+        Error = spdlog::level::err
+    };
+
+
+    // setup a console-only logger since we don't know the output path
+    void setup_logger_stage_1();
+
+    // setup both console logger and file logger
+    void setup_logger_stage_2(const std::filesystem::path& outdir, Level consoleLevel, Level fileLevel);
+}
