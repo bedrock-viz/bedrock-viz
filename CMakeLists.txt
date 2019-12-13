@@ -37,6 +37,7 @@ set(NBT_BUILD_TESTS OFF CACHE INTERNAL "Don't build nbt++ tests")
 
 add_subdirectory(third_party/libnbtplusplus)
 add_subdirectory(third_party/spdlog)
+add_subdirectory(third_party/pugixml)
 
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -50,6 +51,7 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/third_party/leveldb/include
   ${PROJECT_SOURCE_DIR}/third_party/libnbtplusplus/include
   ${PROJECT_SOURCE_DIR}/third_party/spdlog/include
+  ${PROJECT_SOURCE_DIR}/third_party/pugixml/include
 )
 
 target_include_directories(bedrock-viz PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
@@ -60,7 +62,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 target_link_libraries(bedrock-viz 
-  leveldb spdlog nbt++
+  leveldb spdlog nbt++ pugixml::static
   ${PNG_LIBRARIES} 
   ${ZLIB_LIBRARIES} 
   ${CMAKE_THREAD_LIBS_INIT}
@@ -105,7 +107,7 @@ if(BEDROCK_VIZ_BUILD_TESTS)
 
     target_link_libraries("${test_target_name}" 
       gtest 
-      leveldb spdlog nbt++
+      leveldb spdlog nbt++ pugixml::static
       ${PNG_LIBRARIES} 
       ${ZLIB_LIBRARIES} 
       ${CMAKE_THREAD_LIBS_INIT}

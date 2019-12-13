@@ -212,6 +212,8 @@
 #include <leveldb/db.h>
 #include <leveldb/cache.h>
 
+#include <pugixml.hpp>
+
 #ifndef _MSC_VER
 
 #include <getopt.h>
