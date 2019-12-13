@@ -18,8 +18,6 @@ namespace mcpe_viz {
         colorSetNeedCount = 0;
         variantList.clear();
         valid = false;
-        userVar1 = 0;
-        userString1 = "";
     }
 
     BlockInfo& BlockInfo::setUname(const std::string& s) {

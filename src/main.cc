@@ -212,12 +212,8 @@
 #include <leveldb/db.h>
 #include <leveldb/cache.h>
 
-#include <pugixml.hpp>
-
 #ifndef _MSC_VER
-
 #include <getopt.h>
-
 #else
 #include "getopt/getopt.h"
 #endif
@@ -228,7 +224,6 @@
 #include "asset.h"
 #include "args.h"
 #include "control.h"
-
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/conversion.h"
@@ -855,20 +850,20 @@ namespace mcpe_viz {
 
 }  // namespace mcpe_viz
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
     using namespace mcpe_viz;
     using namespace bedrock_viz;
     set_argv_0(argv[0]);
     // steps:
     // 1. load args from argv
     // 2. check args, exit and print usage if any error found
-    // 3. if doFindImages, run findImages, exit
-    // 4. load xml and cfg
-    // 5. create then world
-    // 6. parse world
-    // 7. generate output
-    // 8. print warning of unknown blocks/items
-
+    // 3. load xml and cfg
+    // 4. create then world
+    // 5. parse world
+    // 6. generate output
+    // 7. print warning of unknown blocks/items
+    
     world = std::make_unique<MinecraftWorld_LevelDB>();
 
     slogger.setStdout(stderr);
@@ -883,7 +878,7 @@ int main(int argc, char** argv) {
         slogger.msg(kLogInfo1, "ERROR: Failed to parse XML file.\n");
         return -1;
     }
-
+    
     loadConfigFile();
     
     world->init();

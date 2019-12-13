@@ -22,8 +22,6 @@ namespace mcpe_viz {
         std::vector< std::unique_ptr<BlockInfo> > variantList;
         bool valid;
 
-        int32_t userVar1;
-        std::string userString1;
 
         BlockInfo();
 
@@ -41,13 +39,6 @@ namespace mcpe_viz {
         BlockInfo& setUname(const std::string& s);
 
         bool isValid() { return valid; }
-
-        void setUserVar1(int32_t v) { userVar1 = v; }
-        void deltaUserVar1(int32_t d) { userVar1 += d; }
-        int32_t getUserVar1() { return userVar1; }
-
-        void setUserString1(const std::string& s) { userString1 = s; }
-        std::string& getUserString1() { return userString1; }
 
         BlockInfo& setColor(int32_t rgb);
 
@@ -99,20 +90,6 @@ namespace mcpe_viz {
             bv->setBlockData(bd);
             variantList.push_back(std::move(bv));
             return *(variantList.back());
-        }
-
-        std::string toString() {
-            char tmpstring[1024];
-            sprintf(tmpstring, "Block: name=%s color=0x%06x solid=%d opaque=%d liquid=%d spawnable=%d"
-                , name.c_str()
-                , color
-                , (int)solidFlag
-                , (int)opaqueFlag
-                , (int)liquidFlag
-                , (int)spawnableFlag
-            );
-            // todo variants?
-            return std::string(tmpstring);
         }
     };
 
