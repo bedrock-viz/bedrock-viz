@@ -93,14 +93,13 @@ namespace {
 
 Required Parameters:
     --db dir                 Directory which holds world files (level.dat is in this dir)
-    --out fn-part           Filename base for output file(s)
 
 Options:
+    --outdir dir             Directory for output file(s). Defaults to "./output/"
     --detail                 Log extensive details about the world to the log file
     --html                   Create html and javascript files to use as a fancy viewer
     --html-most              Create html, javascript, and most image files to use as a fancy viewer
     --html-all               Create html, javascript, and *all* image files to use as a fancy viewer
-    --dir-temp dir           Directory for temp files (useful for --slices, use a fast, local directory)
     --auto-tile              Automatically tile the images if they are very large
     --tiles[=tilew,tileh]    Create tiles in subdirectory tiles/ (useful for LARGE worlds)
 
@@ -129,7 +128,6 @@ Options:
     --movie-dim x,y,w,h      Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)
 
     --xml fn                 XML file containing data definitions
-    --log fn                 Send log to a file
 
     --no-force-geojson       Don't load geojson in html because we are going to use a web server (or Firefox)
 

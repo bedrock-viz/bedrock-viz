@@ -1207,7 +1207,7 @@ namespace mcpe_viz {
                 }
             }
 
-            std::string fnOut = control.fnOutputBase + ".schematic." + schematic->fn + ".nbt";
+            std::string fnOut = (control.outputDir / ("bedrock_viz.schematic." + schematic->fn + ".nbt")).generic_string();
 
             writeSchematicFile(fnOut, sizex, sizey, sizez, blockArray, blockDataArray);
 
@@ -1225,9 +1225,9 @@ namespace mcpe_viz {
         doOutput_GeoJSON();
 
         // we put images in subdir
-        std::string fnBase = mybasename(control.fnOutputBase);
-        std::string dirOut = mydirname(control.fnOutputBase) + "/images";
-        local_mkdir(dirOut.c_str());
+        std::string fnBase = "bedrock_viz";
+        std::string dirOut = (control.outputDir / "images").generic_string();
+        local_mkdir(dirOut);
 
         slogger.msg(kLogInfo1, "  Generate Image\n");
         control.fnLayerTop[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".map.png");
@@ -1299,8 +1299,8 @@ namespace mcpe_viz {
 
         if (checkDoForDim(control.doMovie)) {
             slogger.msg(kLogInfo1, "  Generate movie\n");
-            generateMovie(db, dirOut + "/" + fnBase, std::string(control.fnOutputBase + "." + name + ".mp4"), true,
-                true);
+            const std::string movieName = (control.outputDir / ("bedrock_viz." + name + ".mp4")).generic_string();
+            generateMovie(db, dirOut + "/" + fnBase, movieName, true, true);
         }
 
         if (checkDoForDim(control.doSlices)) {

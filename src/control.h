@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <filesystem>
 
 #include "define.h"
 
@@ -9,14 +10,15 @@ namespace mcpe_viz {
     // all user options are stored here
     class Control {
     public:
+        std::filesystem::path outputDir;
         std::string dirLeveldb;
-        std::string fnOutputBase;
         std::string fnCfg;
         std::string fnXml;
-        std::string fnLog;
-        std::string fnGeoJSON;
-        std::string fnHtml;
-        std::string fnJs;
+
+        std::filesystem::path fnHtml() const { return this->outputDir / "index.html"; }
+        std::filesystem::path fnLog() const { return this->outputDir / "bedrock_viz.log"; }
+        std::filesystem::path fnJs() const { return this->outputDir / "output.js"; }
+        std::filesystem::path fnGeoJSON() const { return this->outputDir / "output.geojson";  }
 
         // per-dimension filenames
         std::string fnLayerTop[kDimIdCount];
@@ -85,11 +87,7 @@ namespace mcpe_viz {
         void init() {
             dirLeveldb = "";
             fnXml = "";
-            fnOutputBase = "";
-            fnLog = "";
-            fnGeoJSON = "";
-            fnHtml = "";
-            fnJs = "";
+            outputDir = std::filesystem::path("output");
             doDetailParseFlag = false;
 
             doMovie = kDoOutputNone;

@@ -12,7 +12,8 @@
     <script src="js/bootstrap-tour.min.js"></script>
     <link rel="stylesheet" href="mcpe_viz.css" type="text/css" />
     <script src="mcpe_viz.js"></script>
-    %JSFILE%
+    <script src="output.js"></script>
+	%JSFILE%
   </head>
   <body>
     <div class="container-fluid" data-role="content">

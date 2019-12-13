@@ -224,25 +224,18 @@
 
 #include "define.h"
 #include "util.h"
-#include "nbt.h"
 #include "xml.h"
 #include "asset.h"
 #include "args.h"
-#include "global.h"
 #include "control.h"
 
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/conversion.h"
 #include "utils/block_recorder.h"
-
-#include "world/common.h"
 #include "world/dimension_data.h"
-
 #include "world/world.h"
-
 #include "utils/fs.h"
-#include "asset.h"
 
 namespace mcpe_viz {
 
@@ -678,10 +671,10 @@ namespace mcpe_viz {
 
         static struct option longoptlist[] = {
                 {"db",                 required_argument, NULL, 'D'},
-                {"out",                required_argument, NULL, 'O'},
+                {"outdir",             required_argument, nullptr, 'o'},
+                
 
                 {"xml",                required_argument, NULL, 'X'},
-                {"log",                required_argument, NULL, 'L'},
 
                 {"detail",             no_argument,       NULL, '@'},
 
@@ -744,14 +737,11 @@ namespace mcpe_viz {
 
         while ((optc = getopt_long_only(argc, argv, "", longoptlist, &option_index)) != -1) {
             switch (optc) {
-            case 'O':
-                control.fnOutputBase = optarg;
+            case 'o':
+                control.outputDir = optarg;
                 break;
             case 'X':
                 control.fnXml = optarg;
-                break;
-            case 'L':
-                control.fnLog = optarg;
                 break;
             case 'D':
                 control.dirLeveldb = optarg;
@@ -1075,13 +1065,10 @@ namespace mcpe_viz {
             errct++;
             slogger.msg(kLogInfo1, "ERROR: Must specify --db\n");
         }
-        if (control.fnOutputBase.length() <= 0) {
-            errct++;
-            slogger.msg(kLogInfo1, "ERROR: Must specify --out\n");
-        }
+        
 
         // make sure that output directory is NOT world data directory
-        std::string fnTest = mydirname(control.fnOutputBase) + "/level.dat";
+        std::string fnTest = (control.outputDir / "level.dat").generic_string();
         if (file_exists(fnTest)) {
             errct++;
             slogger.msg(kLogInfo1, "ERROR: You cannot send mcpe_viz output to a world file data directory\n");

@@ -821,8 +821,8 @@ namespace mcpe_viz {
             return -1;
         }
 
-        std::string dirOut = mydirname(control.fnOutputBase) + "/tiles";
-        local_mkdir(dirOut.c_str());
+        std::string dirOut = (control.outputDir / "tiles").generic_string();
+        local_mkdir(dirOut);
 
         slogger.msg(kLogInfo1, "Creating tiles for %s...\n", mybasename(fn).c_str());
         PngTiler pngTiler(fn, control.tileWidth, control.tileHeight, dirOut);
@@ -893,31 +893,19 @@ namespace mcpe_viz {
         // create html file -- need to substitute one variable (extra js file)
         StringReplacementList replaceStrings;
 
-        if (control.noForceGeoJSONFlag) {
-            // we do not include the geojson file
-            replaceStrings.push_back(std::make_pair(std::string("%JSFILE%"),
-                "<script src=\"" +
-                std::string(mybasename(control.fnJs.c_str())) +
-                "\"></script>"
-            )
-            );
-        }
-        else {
+        if (!control.noForceGeoJSONFlag) {
             // we do include the geojson file
             replaceStrings.push_back(std::make_pair(std::string("%JSFILE%"),
                 "<script src=\"" +
-                std::string(mybasename(control.fnJs.c_str())) +
-                "\"></script>\n" +
-                "<script src=\"" +
-                std::string(mybasename(control.fnGeoJSON.c_str())) +
+                std::string(mybasename(control.fnGeoJSON().generic_string().c_str())) +
                 "\"></script>"
             )
             );
         }
-        copyFileWithStringReplacement(fnHtmlSrc, control.fnHtml, replaceStrings);
+        copyFileWithStringReplacement(fnHtmlSrc, control.fnHtml().generic_string(), replaceStrings);
 
         // create javascript file w/ filenames etc
-        FILE* fp = fopen(control.fnJs.c_str(), "w");
+        FILE* fp = fopen(control.fnJs().generic_string().c_str(), "w");
         if (fp) {
             time_t xtime = time(NULL);
             char timebuf[256];
@@ -945,7 +933,8 @@ namespace mcpe_viz {
                 "var dimensionInfo = {\n", escapeString(getWorldName().c_str(), "'").c_str(),
                 (long long int) getWorldSeed(), escapeString(timebuf, "'").c_str(),
                 bedrock_viz::version, control.noForceGeoJSONFlag ? "true" : "false",
-                mybasename(control.fnGeoJSON).c_str(), control.doTiles ? "true" : "false", control.tileWidth,
+                mybasename(control.fnGeoJSON().generic_string()).c_str(),
+                control.doTiles ? "true" : "false", control.tileWidth,
                 control.tileHeight
             );
             for (int32_t did = 0; did < kDimIdCount; did++) {
@@ -1077,11 +1066,11 @@ namespace mcpe_viz {
         }
         else {
             slogger.msg(kLogInfo1, "ERROR: Failed to open javascript output file (fn=%s error=%s (%d))\n",
-                control.fnJs.c_str(), strerror(errno), errno);
+                control.fnJs().generic_string().c_str(), strerror(errno), errno);
         }
 
         // copy helper files to destination directory
-        std::string dirDest = mydirname(control.fnOutputBase);
+        std::string dirDest = control.outputDir.generic_string();
 
         if (dirDest.size() > 0 && dirDest != ".") {
             // todo - how to be sure that this is a diff dir?
@@ -1169,10 +1158,10 @@ namespace mcpe_viz {
 
             // plain text file version
 
-            FILE* fpGeoJSON = fopen(control.fnGeoJSON.c_str(), "w");
+            FILE* fpGeoJSON = fopen(control.fnGeoJSON().generic_string().c_str(), "w");
             if (!fpGeoJSON) {
                 slogger.msg(kLogInfo1, "ERROR: Failed to create GeoJSON output file (%s error=%s (%d)).\n",
-                    control.fnGeoJSON.c_str(), strerror(errno), errno);
+                    control.fnGeoJSON().generic_string().c_str(), strerror(errno), errno);
                 return -1;
             }
 
