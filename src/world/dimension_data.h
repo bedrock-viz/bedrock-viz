@@ -690,7 +690,7 @@ namespace mcpe_viz {
                     // rgb
                     buf[offset] =
                         buf[offset + 1] =
-                        buf[offset + 2] = hillshade;
+                        buf[offset + 2] = uint8_t(hillshade);
 
                     // alpha
                     // note: reduce the opacity for brighter parts; idea is to reduce haziness

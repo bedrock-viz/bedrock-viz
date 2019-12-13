@@ -196,7 +196,7 @@ namespace mcpe_viz {
                 double v = ((double)(ti * ti) / vmax) * 255.0;
                 if (v > 235.0) { v = 235.0; }
                 if (v < 0.0) { v = 0.0; }
-                lut[i] = v;
+                lut[i] = uint8_t(v);
             }
         }
 

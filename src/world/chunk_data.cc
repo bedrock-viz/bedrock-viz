@@ -465,7 +465,7 @@ namespace mcpe_viz {
                 (unsigned int)cdata[offsetBlockInfoList + 5] & 0xff
             );
         }
-        parseNbtQuiet(&cdata[xoff], cdata_size - xoff, cdata[offsetBlockInfoList + 3], tagList);
+        parseNbtQuiet(&cdata[xoff], int32_t(cdata_size - xoff), cdata[offsetBlockInfoList + 3], tagList);
         //parseNbt("chunk-palette",&cdata[xoff], cdata_size-xoff, tagList);
 
         std::vector<int32_t> chunkBlockPalette_BlockId(tagList.size());

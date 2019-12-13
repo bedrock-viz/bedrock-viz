@@ -437,7 +437,7 @@ namespace mcpe_viz {
 
         int32_t nextInt(int64_t bound) {
             if ((bound & -bound) == bound)  // i.e., bound is a power of 2
-                return ((bound * this->next(31)) >> 31);
+                return int32_t((bound * this->next(31)) >> 31);
 
             int32_t bits, val;
             do {

@@ -201,7 +201,7 @@ namespace mcpe_viz {
         const char* key;
         for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
             skey = iter->key();
-            key_size = skey.size();
+            key_size = int32_t(skey.size());
             key = skey.data();
 
             ++recordCt;
@@ -795,11 +795,11 @@ namespace mcpe_viz {
             else {
                 logger.msg(kLogInfo1, "WARNING: Unknown chunk - key_size=%d cdata_size=%d\n", (int32_t)key_size,
                     (int32_t)cdata_size);
-                printKeyValue(key, key_size, cdata, cdata_size, true);
+                printKeyValue(key, key_size, cdata, int32_t(cdata_size), true);
                 if (false) {
                     // try to nbt decode
                     logger.msg(kLogInfo1, "WARNING: Attempting NBT Decode:\n");
-                    parseNbt("WARNING: ", cdata, cdata_size, tagList);
+                    parseNbt("WARNING: ", cdata, int32_t(cdata_size), tagList);
                 }
             }
         }
@@ -965,7 +965,7 @@ namespace mcpe_viz {
 
                 // list of blocks that were added to geojson
                 fprintf(fp, "  geojsonBlocks: [ ");
-                int32_t llen = dimDataList[did]->blockToGeoJSONList.size();
+                int32_t llen = int32_t(dimDataList[did]->blockToGeoJSONList.size());
                 for (const auto& it : dimDataList[did]->blockToGeoJSONList) {
                     fprintf(fp, "'%s'", blockInfoList[it].name.c_str());
                     if (--llen > 0) {

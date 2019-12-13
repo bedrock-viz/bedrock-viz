@@ -423,8 +423,8 @@ namespace mcpe_viz {
       if ( valid ) {
         double tix, tiy;
         worldPointToImagePoint(dimId, x,z, tix,tiy, false);
-        int32_t ix = tix;
-        int32_t iy = tiy;
+        int32_t ix = int32_t(tix);
+        int32_t iy = int32_t(tiy);
         std::ostringstream str;
         str << ix << ", " << iy;
         return str.str();
@@ -665,7 +665,7 @@ namespace mcpe_viz {
         
       if ( enchantmentList.size() > 0 ) {
         s = "\"Enchantments\":[";
-        int32_t i = enchantmentList.size();
+        int32_t i = int32_t(enchantmentList.size());
         for ( const auto& it: enchantmentList ) {
           s+="{" + it->toGeoJSON() + "}";
           if ( --i > 0 ) {
@@ -718,7 +718,7 @@ namespace mcpe_viz {
 
       // combine the list and put the commas in the right spots (stupid json)
       s = "";
-      int32_t i=list.size();
+      int32_t i = int32_t(list.size());
       for ( const auto& iter: list ) {
         s += iter;
         if ( --i > 0 ) {
@@ -771,7 +771,7 @@ namespace mcpe_viz {
 
       if ( enchantmentList.size() > 0 ) {
         s += " Enchantments=[";
-        int32_t i=enchantmentList.size();
+        int32_t i = int32_t(enchantmentList.size());
         for ( const auto& it: enchantmentList ) {
           s += it->toString();
           if ( --i > 0 ) {
@@ -1024,7 +1024,7 @@ namespace mcpe_viz {
         }
         if ( tlist.size() > 0 ) {
           std::string ts = "\"Armor\":[";
-          int32_t i = tlist.size();
+          int32_t i = int32_t(tlist.size());
           for (const auto& iter : tlist ) {
             ts += iter;
             if ( --i > 0 ) {
@@ -1046,7 +1046,7 @@ namespace mcpe_viz {
         }
         if ( tlist.size() > 0 ) {
           std::string ts = "\"Inventory\":[";
-          int32_t i = tlist.size();
+          int32_t i = int32_t(tlist.size());
           for (const auto& iter : tlist ) {
             ts += iter;
             if ( --i > 0 ) {
@@ -1068,7 +1068,7 @@ namespace mcpe_viz {
         }
         if ( tlist.size() > 0 ) {
           std::string ts = "\"EnderChest\":[";
-          int32_t i = tlist.size();
+          int32_t i = int32_t(tlist.size());
           for (const auto& iter : tlist ) {
             ts += iter;
             if ( --i > 0 ) {
@@ -1106,7 +1106,7 @@ namespace mcpe_viz {
 
       if ( list.size() > 0 ) {
         list.push_back(std::string("\"Entity\":\"true\""));
-        int32_t i = list.size();
+        int32_t i = int32_t(list.size());
         for (const auto& iter : list ) {
           s += iter;
           if ( --i > 0 ) {
@@ -1311,7 +1311,7 @@ namespace mcpe_viz {
       signTotalStringLength=0;
       for ( const auto& it : text ) {
         // todo this should trim leading/trailing whitespace
-        signTotalStringLength += it.length();
+        signTotalStringLength += int32_t(it.length());
       }
       return 0;
     }
@@ -1359,7 +1359,7 @@ namespace mcpe_viz {
         }
         if ( tlist.size() > 0 ) {
           std::string ts = "\"Items\":[";
-          int32_t i = tlist.size();
+          int32_t i = int32_t(tlist.size());
           for (const auto& iter : tlist ) {
             ts += "{" + iter + "}";
             if ( --i > 0 ) {
@@ -1373,7 +1373,7 @@ namespace mcpe_viz {
 
       if ( notes.size() > 0 ) {
         std::string ts = "\"Notes\":{";
-        int32_t i = notes.size();
+        int32_t i = int32_t(notes.size());
         int32_t t=1;
         for ( const auto& it: notes ) {
           sprintf(tmpstring,"\"Note%d\":\"%s\"", t++, escapeString(it,"\"\\").c_str());
@@ -1397,7 +1397,7 @@ namespace mcpe_viz {
         list.push_back("\"Name\":\"" + xname + "\"");
         std::string ts = "\"" + xname + "\":{";
 
-        int32_t i = text.size();
+        int32_t i = int32_t(text.size());
         int32_t t=1;
         for ( const auto& it: text ) {
           // todo - think about how to handle weird chars people put in signs
@@ -1443,7 +1443,7 @@ namespace mcpe_viz {
         worldPointToGeoJSONPoint(forceDimensionId, pos.x,pos.z, ix,iy);
         s += makeGeojsonHeader(ix,iy);
           
-        int32_t i = list.size();
+        int32_t i = int32_t(list.size());
         for (const auto& iter : list ) {
           s += iter;
           if ( --i > 0 ) {
@@ -1472,7 +1472,7 @@ namespace mcpe_viz {
         }
           
         s+=" " + id + "=[";
-        int32_t i = items.size();
+        int32_t i = int32_t(items.size());
         for ( const auto& it: items ) {
           std::string sitem = it->toString(true,0);
           --i;
@@ -1488,7 +1488,7 @@ namespace mcpe_viz {
 
       if ( text.size() > 0 ) {
         s+=" Sign=[";
-        int32_t i = text.size();
+        int32_t i = int32_t(text.size());
         for ( const auto& it: text ) {
           s += it;
           if ( --i > 0 ) {
@@ -1835,7 +1835,7 @@ namespace mcpe_viz {
           std::string vout = "";
           if (vadd.size() > 0 ) {
             vout = vbase + " (";
-            int32_t j = vadd.size();
+            int32_t j = int32_t(vadd.size());
             for (const auto& iter : vadd ) {
               vout += iter;
               if ( --j > 0 ) {
@@ -2195,7 +2195,7 @@ namespace mcpe_viz {
         worldPointToGeoJSONPoint(dimId, pos.x,pos.z, ix,iy);
         s += makeGeojsonHeader(ix,iy);
           
-        int32_t i = list.size();
+        int32_t i = int32_t(list.size());
         for (const auto& iter : list ) {
           s += iter;
           if ( --i > 0 ) {
@@ -2321,7 +2321,7 @@ namespace mcpe_viz {
       if ( list.size() > 0 ) {
         std::string s="";
 
-        int32_t i = list.size();
+        int32_t i = int32_t(list.size());
         for (const auto& iter : list ) {
           s += iter;
           if ( --i > 0 ) {
@@ -2380,7 +2380,7 @@ namespace mcpe_viz {
       if ( list.size() > 0 ) {
         std::string s="";
 
-        int32_t i = list.size();
+        int32_t i = int32_t(list.size());
         for (const auto& iter : list ) {
           s += iter;
           if ( --i > 0 ) {
@@ -2525,7 +2525,7 @@ namespace mcpe_viz {
       }
       if ( templist.size() > 0 ) {
         std::string s="";
-        int32_t i = templist.size();
+        int32_t i = int32_t(templist.size());
         for (const auto& iter : templist ) {
           s += iter;
           if ( --i > 0 ) {
@@ -2545,7 +2545,7 @@ namespace mcpe_viz {
       }
       if ( templist.size() > 0 ) {
         std::string s="";
-        int32_t i = templist.size();
+        int32_t i = int32_t(templist.size());
         for (const auto& iter : templist ) {
           s += iter;
           if ( --i > 0 ) {
@@ -2566,8 +2566,8 @@ namespace mcpe_viz {
         templist.push_back( "{" + it->toGeoJSON() + "}" );
       }
       if ( templist.size() > 0 ) {
-        std::string s="";
-        int32_t i = templist.size();
+        std::string s;
+        int32_t i = int32_t(templist.size());
         for (const auto& iter : templist ) {
           s += iter;
           if ( --i > 0 ) {
@@ -2619,7 +2619,7 @@ namespace mcpe_viz {
         delete [] ylist;
 #endif
 
-        int32_t i = list.size();
+        int32_t i = int32_t(list.size());
         for (const auto& iter : list ) {
           s += iter;
           if ( --i > 0 ) {

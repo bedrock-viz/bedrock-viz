@@ -6,12 +6,18 @@
 
   NBT support for mcpe_viz
 */
+#pragma once
 
-#ifndef __MCPE_VIZ_NBT_H__
-#define __MCPE_VIZ_NBT_H__
-
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4661)
+#endif
 #include "nbt_tags.h"
 
+#ifdef _MSC_VER
+// Your function
+#pragma warning( pop ) 
+#endif
 namespace mcpe_viz {
 
   // helper types for NBT
@@ -38,5 +44,3 @@ namespace mcpe_viz {
                              nbt::tag_byte_array& blockArray, nbt::tag_byte_array& blockDataArray);
   
 } // namespace mcpe_viz
-
-#endif // __MCPE_VIZ_NBT_H__
