@@ -390,49 +390,6 @@ namespace mcpe_viz {
     }
     return 0;
   }
-
-  int32_t doParseXML_mcpcToMcpeList(xmlNodePtr cur) {
-    cur = cur->xmlChildrenNode;
-    while (cur != NULL) {
-      int32_t mode = -1;
-
-      if ( xmlStrcmp(cur->name, (const xmlChar *)"block") == 0 ) {
-        mode = 1;
-      }
-      else if ( xmlStrcmp(cur->name, (const xmlChar *)"item") == 0 ) {
-        mode = 2;
-      }
-
-      if ( mode > 0 ) {
-
-        bool mcpcIdValid, mcpeIdValid;
-          
-        int32_t mcpcId = xmlGetInt(cur, (const xmlChar*)"mcpcId", mcpcIdValid);
-        int32_t mcpeId = xmlGetInt(cur, (const xmlChar*)"mcpeId", mcpeIdValid);
-
-        // create data
-        if ( mcpcIdValid && mcpeIdValid ) {
-
-          if ( mode == 1) {
-            mcpcToMcpeBlock.insert( std::make_pair( mcpcId, mcpeId ) );
-            mcpeToMcpcBlock.insert( std::make_pair( mcpeId, mcpcId ) );
-          } else {
-            mcpcToMcpeItem.insert( std::make_pair( mcpcId, mcpeId ) );
-            mcpeToMcpcItem.insert( std::make_pair( mcpeId, mcpcId ) );
-          }
-        } else {
-          // todo error - better detail
-          fprintf(stderr,"WARNING: Did not find valid mcpc_id and mcpe_id for item!\n"
-                  );
-        }
-      }
-      else {
-        doParseXml_Unknown(cur);
-      }
-      cur = cur->next;
-    }
-    return 0;
-  }
   
   int32_t doParseXML_xml(xmlNodePtr cur) {
     cur = cur->xmlChildrenNode;
@@ -456,9 +413,6 @@ namespace mcpe_viz {
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"enchantmentlist") == 0 ) {
         doParseXML_enchantmentlist(cur);
-      }
-      else if ( xmlStrcmp(cur->name, (const xmlChar *)"mcpcToMcpeList") == 0 ) {
-        doParseXML_mcpcToMcpeList(cur);
       }
       else {
         doParseXml_Unknown(cur);

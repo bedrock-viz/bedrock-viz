@@ -1665,27 +1665,4 @@
     <enchantment id="0x18" name="Lure" officialName="lure" />
   </enchantmentlist>
 
-  <!--
-      mapping of MCPC block id's to MCPE block id's
-      there are (unfortunately) some differences between MCPE and MCPC block id's.
-      this will help us translate between the two.
-      note: use -1 for items that do not exist
-  -->
-  <mcpcToMcpeList>
-    <!-- wooden double slab -->
-    <block mcpcId="0x7d" mcpeId="0x9d" />
-    <!-- wood slab -->
-    <block mcpcId="0x7e" mcpeId="0x9e" />
-    <!-- activator rail -->
-    <block mcpcId="0x9d" mcpeId="0x7e" />
-    <!-- dropper -->
-    <block mcpcId="0x9e" mcpeId="0x7d" />
-
-    <!-- armor stand -->
-    <item mcpcId="0x1a0" mcpeId="-1" />
-    <!-- prismarine -->
-    <item mcpcId="0x19a" mcpeId="0xA8" />
-    <!-- hopper -->
-    <!-- todobig - MCPC does NOT have a separate item for the hopper, but MCPE does? -->
-  </mcpcToMcpeList>
 </xml>

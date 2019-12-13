@@ -371,17 +371,17 @@ namespace mcpe_viz {
             if (strncmp(key, "BiomeData", key_size) == 0) {
                 // 0x61 +"BiomeData" -- snow accum? -- overworld only?
                 logger.msg(kLogInfo1, "BiomeData value:\n");
-                parseNbt("BiomeData: ", cdata, cdata_size, tagList);
+                parseNbt("BiomeData: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList? snow accumulation amounts
             }
             else if (strncmp(key, "Overworld", key_size) == 0) {
                 logger.msg(kLogInfo1, "Overworld value:\n");
-                parseNbt("Overworld: ", cdata, cdata_size, tagList);
+                parseNbt("Overworld: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList? a list of "LimboEntities"
             }
             else if (strncmp(key, "~local_player", key_size) == 0) {
                 logger.msg(kLogInfo1, "Local Player value:\n");
-                ret = parseNbt("Local Player: ", cdata, cdata_size, tagList);
+                ret = parseNbt("Local Player: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_entity(-1, "", tagList, true, false, "Local Player", "");
                 }
@@ -392,20 +392,20 @@ namespace mcpe_viz {
 
                 logger.msg(kLogInfo1, "Remote Player (id=%s) value:\n", playerRemoteId.c_str());
 
-                ret = parseNbt("Remote Player: ", cdata, cdata_size, tagList);
+                ret = parseNbt("Remote Player: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_entity(-1, "", tagList, false, true, "Remote Player", playerRemoteId);
                 }
             }
             else if (strncmp(key, "villages", key_size) == 0) {
                 logger.msg(kLogInfo1, "Villages value:\n");
-                parseNbt("villages: ", cdata, cdata_size, tagList);
+                parseNbt("villages: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList? usually empty, unless player is in range of village; test that!
             }
             else if (strncmp(key, "mVillages", key_size) == 0) {
                 // todobig -- new for 0.13? what is it?
                 logger.msg(kLogInfo1, "mVillages value:\n");
-                ret = parseNbt("mVillages: ", cdata, cdata_size, tagList);
+                ret = parseNbt("mVillages: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_mVillages(tagList);
                 }
@@ -420,23 +420,23 @@ namespace mcpe_viz {
             else if (strncmp(key, "idcounts", key_size) == 0) {
                 // todobig -- new for 0.13? what is it? is it a 4-byte int?
                 logger.msg(kLogInfo1, "idcounts value:\n");
-                parseNbt("idcounts: ", cdata, cdata_size, tagList);
+                parseNbt("idcounts: ", cdata, int32_t(cdata_size), tagList);
             }
             else if (strncmp(key, "Nether", key_size) == 0) {
                 logger.msg(kLogInfo1, "Nether value:\n");
-                parseNbt("Nether: ", cdata, cdata_size, tagList);
+                parseNbt("Nether: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList?  list of LimboEntities
             }
             else if (strncmp(key, "portals", key_size) == 0) {
                 logger.msg(kLogInfo1, "portals value:\n");
-                ret = parseNbt("portals: ", cdata, cdata_size, tagList);
+                ret = parseNbt("portals: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_portals(tagList);
                 }
             }
             else if (strncmp(key, "AutonomousEntities", key_size) == 0) {
                 logger.msg(kLogInfo1, "AutonomousEntities value:\n");
-                ret = parseNbt("AutonomousEntities: ", cdata, cdata_size, tagList);
+                ret = parseNbt("AutonomousEntities: ", cdata, int32_t(cdata_size), tagList);
                 // todostopper - what to do with this info?
                 //          if ( ret == 0 ) {
                 //            parseNbt_portals(tagList);
@@ -473,7 +473,7 @@ namespace mcpe_viz {
             else if (strncmp(key, "dimension", 9) == 0) {
                 std::string keyString(key, key_size);
                 logger.msg(kLogInfo1, "Dimension chunk -- key: (%s) value:\n", keyString.c_str());
-                ret = parseNbt("Dimension: ", cdata, cdata_size, tagList);
+                ret = parseNbt("Dimension: ", cdata, int32_t(cdata_size), tagList);
                 // todostopper - what to do with this info?
                 //          if ( ret == 0 ) {
                 //            parseNbt_portals(tagList);
@@ -597,7 +597,7 @@ namespace mcpe_viz {
                     // "BlockEntity"
                     // tile entity record (e.g. a chest)
                     logger.msg(kLogInfo1, "%s 0x31 chunk (tile entity data):\n", dimName.c_str());
-                    ret = parseNbt("0x31-te: ", cdata, cdata_size, tagList);
+                    ret = parseNbt("0x31-te: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_tileEntity(chunkDimId, dimName + "-", tagList);
                     }
@@ -607,7 +607,7 @@ namespace mcpe_viz {
                     // "Entity"
                     // entity record (e.g. a mob)
                     logger.msg(kLogInfo1, "%s 0x32 chunk (entity data):\n", dimName.c_str());
-                    ret = parseNbt("0x32-e: ", cdata, cdata_size, tagList);
+                    ret = parseNbt("0x32-e: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_entity(chunkDimId, dimName + "-", tagList, false, false, "", "");
                     }
@@ -617,7 +617,7 @@ namespace mcpe_viz {
                     // "PendingTicks"
                     // todo - this appears to be info on blocks that can move: water + lava + fire + sand + gravel
                     logger.msg(kLogInfo1, "%s 0x33 chunk (tick-list):\n", dimName.c_str());
-                    parseNbt("0x33-tick: ", cdata, cdata_size, tagList);
+                    parseNbt("0x33-tick: ", cdata, int32_t(cdata_size), tagList);
                     // todo - parse tagList?
                     // todobig - could show location of active fires
                     break;
@@ -627,7 +627,7 @@ namespace mcpe_viz {
                     logger.msg(kLogInfo1, "%s 0x34 chunk (TODO - MYSTERY RECORD - BlockExtraData)\n",
                         dimName.c_str());
                     if (control.verboseFlag) {
-                        printKeyValue(key, key_size, cdata, cdata_size, false);
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // according to tommo (https://www.reddit.com/r/MCPE/comments/5cw2tm/level_format_changes_in_mcpe_0171_100/)
                     // "BlockExtraData"
@@ -645,7 +645,7 @@ namespace mcpe_viz {
                     logger.msg(kLogInfo1, "%s 0x35 chunk (TODO - MYSTERY RECORD - BiomeState)\n",
                         dimName.c_str());
                     if (control.verboseFlag) {
-                        printKeyValue(key, key_size, cdata, cdata_size, false);
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // according to tommo (https://www.reddit.com/r/MCPE/comments/5cw2tm/level_format_changes_in_mcpe_0171_100/)
                     // "BiomeState"
@@ -661,7 +661,7 @@ namespace mcpe_viz {
                     // new for v1.2?
                     logger.msg(kLogInfo1, "%s 0x36 chunk (TODO - MYSTERY RECORD - TBD)\n", dimName.c_str());
                     if (control.verboseFlag) {
-                        printKeyValue(key, key_size, cdata, cdata_size, false);
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - what is this?
                     // appears to be a single 4-byte integer?
@@ -671,7 +671,7 @@ namespace mcpe_viz {
                     // new for v1.2?
                     logger.msg(kLogInfo1, "%s 0x39 chunk (TODO - MYSTERY RECORD - TBD)\n", dimName.c_str());
                     if (control.verboseFlag) {
-                        printKeyValue(key, key_size, cdata, cdata_size, false);
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - what is this?
                     break;
@@ -731,7 +731,7 @@ namespace mcpe_viz {
 
                     // todonow - would be better to get the version # from the proper chunk record (0x76)
                 {
-                    dimDataList[chunkDimId]->addChunkColumnData(3, chunkX, chunkZ, cdata, cdata_size);
+                    dimDataList[chunkDimId]->addChunkColumnData(3, chunkX, chunkZ, cdata, int32_t(cdata_size));
                 }
                 break;
 
@@ -782,20 +782,22 @@ namespace mcpe_viz {
                     logger.msg(kLogInfo1, "WARNING: %s unknown chunk - key_size=%d type=0x%x length=%d\n",
                         dimName.c_str(),
                         (int32_t)key_size, chunkType, (int32_t)cdata_size);
-                    printKeyValue(key, key_size, cdata, cdata_size, true);
+                    printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), true);
 
-                    if (false) {
-                        if (cdata_size > 10) {
-                            parseNbt("UNK: ", cdata, cdata_size, tagList);
-                        }
+                    
+#if 0
+                    if (cdata_size > 10) {
+                        parseNbt("UNK: ", cdata, int32_t(cdata_size), tagList);
                     }
+#endif
+                    
                     break;
                 }
             }
             else {
                 logger.msg(kLogInfo1, "WARNING: Unknown chunk - key_size=%d cdata_size=%d\n", (int32_t)key_size,
                     (int32_t)cdata_size);
-                printKeyValue(key, key_size, cdata, int32_t(cdata_size), true);
+                printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), true);
                 if (false) {
                     // try to nbt decode
                     logger.msg(kLogInfo1, "WARNING: Attempting NBT Decode:\n");

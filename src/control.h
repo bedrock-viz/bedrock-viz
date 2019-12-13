@@ -55,10 +55,6 @@ namespace mcpe_viz {
         bool quietFlag;
         int32_t movieX, movieY, movieW, movieH;
 
-        bool doFindImages;
-        std::string dirFindImagesIn;
-        std::string dirFindImagesOut;
-
         int32_t heightMode;
 
         int32_t tileWidth;
@@ -110,10 +106,6 @@ namespace mcpe_viz {
             // todobig - reasonable default? strike a balance between speed/# of files
             tileWidth = 1024;
             tileHeight = 1024;
-
-            doFindImages = false;
-            dirFindImagesIn = "";
-            dirFindImagesOut = "";
 
             shortRunFlag = false;
             verboseFlag = false;

@@ -428,224 +428,6 @@ namespace mcpe_viz {
         return -1;
     }
 
-
-    // a developer's function to match MCPE Viz block + items with PNG files from minecraft wiki
-    int32_t findImages() {
-        std::string dirSrc = control.dirFindImagesIn;
-        std::string dirDest = control.dirFindImagesOut;
-
-        // clear block list
-        for (int i = 0; i < 512; i++) {
-            if (blockInfoList[i].isValid()) {
-                if (blockInfoList[i].hasVariants()) {
-                    for (const auto& itbv : blockInfoList[i].variantList) {
-                        itbv->setUserVar1(0);
-                    }
-                }
-                blockInfoList[i].setUserVar1(0);
-            }
-        }
-
-        // clear item list
-        for (auto& iter : itemInfoList) {
-            iter.second->setUserVar1(0);
-        }
-
-        // get list of input images
-        // they are named like this: blockId.blockData.blockName.png (e.g. "1.0.Stone.png")
-        namespace fs = std::filesystem;
-        //    struct dirent *dp;
-        //    DIR *dfd = opendir(dirSrc.c_str());
-
-        //    if (dfd != NULL) {
-        //      while ((dp = readdir(dfd)) != NULL) {
-        for (auto& p : fs::directory_iterator(dirSrc)) {
-            //        if ( strcmp(dp->d_name,".") == 0 || strcmp(dp->d_name,"..") == 0 ) {
-                        // skip
-            //        } else {
-            std::string fnSrc(p.path().filename().generic_string());
-            int32_t blockId = -1, blockData = -1;
-            char blockName[1025];
-            memset(blockName, 0, 1025);
-            if (sscanf(fnSrc.c_str(), "%d.%d.%s.png", &blockId, &blockData, blockName) == 3) {
-
-                //slogger.msg(kLogInfo1, "Parsed (%d) (%d) (%s) (%s)\n", blockId, blockData, blockName, fnSrc.c_str());
-
-                // check for mapping mcpc to mcpe
-                if (has_key(mcpcToMcpeBlock, blockId)) {
-                    blockId = mcpcToMcpeBlock[blockId];
-                }
-                if (has_key(mcpcToMcpeItem, blockId)) {
-                    blockId = mcpcToMcpeItem[blockId];
-                }
-
-                bool found = false;
-
-                if (blockId < 512) {
-                    // it's a block, look it up
-
-                    if (blockInfoList[blockId].isValid()) {
-                        if (blockInfoList[blockId].hasVariants()) {
-                            for (const auto& itbv : blockInfoList[blockId].variantList) {
-                                if (itbv->blockdata == blockData) {
-                                    slogger.msg(kLogInfo1, "FOUND Block: %s (%d) (%d) (%s)\n", itbv->name.c_str(),
-                                        blockId, blockData, blockName);
-                                    itbv->deltaUserVar1(1);
-                                    itbv->setUserString1(dirSrc + "/" + fnSrc);
-                                    found = true;
-                                }
-                            }
-                        }
-                        else {
-                            if (blockData == 0) {
-                                slogger.msg(kLogInfo1, "FOUND Block: %s (%d) (%d) (%s)\n",
-                                    blockInfoList[blockId].name.c_str(), blockId, blockData, blockName);
-                                blockInfoList[blockId].deltaUserVar1(1);
-                                blockInfoList[blockId].setUserString1(dirSrc + "/" + fnSrc);
-                                found = true;
-                            }
-                        }
-                    }
-
-                }
-                else {
-                    if (has_key(itemInfoList, blockId)) {
-                        if (itemInfoList[blockId]->hasVariants()) {
-                            for (const auto& itbv : itemInfoList[blockId]->variantList) {
-                                if (itbv->extraData == blockData) {
-                                    slogger.msg(kLogInfo1, "FOUND  Item: %s (%d) (%d) (%s)\n", itbv->name.c_str(),
-                                        blockId, blockData, blockName);
-                                    itbv->deltaUserVar1(1);
-                                    itbv->setUserString1(dirSrc + "/" + fnSrc);
-                                    found = true;
-                                }
-                            }
-                        }
-                        else {
-                            if (blockData == 0) {
-                                slogger.msg(kLogInfo1, "FOUND  Item: %s (%d) (%d) (%s)\n",
-                                    itemInfoList[blockId]->name.c_str(), blockId, blockData, blockName);
-                                itemInfoList[blockId]->deltaUserVar1(1);
-                                itemInfoList[blockId]->setUserString1(dirSrc + "/" + fnSrc);
-                                found = true;
-                            }
-                        }
-                    }
-                }
-
-                if (!found) {
-                    slogger.msg(kLogInfo1, "-- WARNING: did not find target for 0x%04x 0x%02x (%s)\n", blockId,
-                        blockData, blockName);
-                }
-
-            }
-            else {
-                slogger.msg(kLogWarning, "** Failed to parse filename (%s)\n", fnSrc.c_str());
-            }
-            //        }
-        }
-        //      closedir(dfd);
-        //    } else {
-        //      slogger.msg(kLogError, "Failed to open source dir (%s)\n", dirSrc.c_str());
-        //      return -1;
-        //    }
-
-                // check blocks
-        slogger.msg(kLogInfo1, "\n** BLOCK SUMMARY **\n");
-        for (int i = 0; i < 512; i++) {
-            if (blockInfoList[i].isValid()) {
-                if (blockInfoList[i].hasVariants()) {
-                    for (const auto& itbv : blockInfoList[i].variantList) {
-                        if (itbv->getUserVar1() == 0) {
-                            slogger.msg(kLogInfo1, "Did NOT find block-variant: %d %d %s\n", i, itbv->blockdata,
-                                itbv->name.c_str());
-                        }
-                        if (itbv->getUserVar1() > 1) {
-                            slogger.msg(kLogInfo1, "Found multiple (%d) for block-variant: %d %d %s\n",
-                                itbv->getUserVar1(), i, itbv->blockdata, itbv->name.c_str());
-                        }
-                    }
-                }
-                else {
-                    if (blockInfoList[i].getUserVar1() == 0) {
-                        slogger.msg(kLogInfo1, "Did NOT find block: %d %s\n", i, blockInfoList[i].name.c_str());
-                    }
-                    if (blockInfoList[i].getUserVar1() > 1) {
-                        slogger.msg(kLogInfo1, "Found multiple (%d) for block: %d %s\n", blockInfoList[i].getUserVar1(),
-                            i, blockInfoList[i].name.c_str());
-                    }
-                }
-            }
-        }
-
-        // clear item list
-        slogger.msg(kLogInfo1, "\n** ITEM SUMMARY **\n");
-        for (auto& iter : itemInfoList) {
-            if (iter.second->hasVariants()) {
-                for (const auto& itbv : iter.second->variantList) {
-                    if (itbv->getUserVar1() == 0) {
-                        slogger.msg(kLogInfo1, "Did NOT find item-variant: %d %d %s\n", iter.first, itbv->extraData,
-                            itbv->name.c_str());
-                    }
-                    if (itbv->getUserVar1() > 1) {
-                        slogger.msg(kLogInfo1, "Found multiple (%d) for item-variant: %d %d %s\n", itbv->getUserVar1(),
-                            iter.first, itbv->extraData, itbv->name.c_str());
-                    }
-                }
-            }
-            else {
-                if (iter.second->getUserVar1() == 0) {
-                    slogger.msg(kLogInfo1, "Did NOT find item: %d %s\n", iter.first, iter.second->name.c_str());
-                }
-                if (iter.second->getUserVar1() > 1) {
-                    slogger.msg(kLogInfo1, "Found multiple (%d) for item: %d %s\n", iter.second->getUserVar1(),
-                        iter.first, iter.second->name.c_str());
-                }
-            }
-        }
-
-        // process found blocks
-        // todobig - might be faster/cooler to make a sprite sheet
-        char fnDest[1025];
-        for (int i = 0; i < 512; i++) {
-            if (blockInfoList[i].isValid()) {
-                if (blockInfoList[i].hasVariants()) {
-                    for (const auto& itbv : blockInfoList[i].variantList) {
-                        if (itbv->getUserVar1() > 0) {
-                            sprintf(fnDest, "%s/mcpe_viz.block.%d.%d.png", dirDest.c_str(), i, itbv->blockdata);
-                            copyFile(itbv->getUserString1(), fnDest, false);
-                        }
-                    }
-                }
-                else {
-                    if (blockInfoList[i].getUserVar1() > 0) {
-                        sprintf(fnDest, "%s/mcpe_viz.block.%d.%d.png", dirDest.c_str(), i, blockInfoList[i].blockdata);
-                        copyFile(blockInfoList[i].getUserString1(), fnDest, false);
-                    }
-                }
-            }
-        }
-
-        // process found items
-        for (auto& iter : itemInfoList) {
-            if (iter.second->hasVariants()) {
-                for (const auto& itbv : iter.second->variantList) {
-                    if (itbv->getUserVar1() > 0) {
-                        sprintf(fnDest, "%s/mcpe_viz.item.%d.%d.png", dirDest.c_str(), iter.first, itbv->extraData);
-                        copyFile(itbv->getUserString1(), fnDest, false);
-                    }
-                }
-            }
-            else {
-                if (iter.second->getUserVar1() > 0) {
-                    sprintf(fnDest, "%s/mcpe_viz.item.%d.%d.png", dirDest.c_str(), iter.first, iter.second->extraData);
-                    copyFile(iter.second->getUserString1(), fnDest, false);
-                }
-            }
-        }
-        return 0;
-    }
-
     int32_t parseDimIdOptArg(const char* arg) {
         int32_t did = kDoOutputAll;
         if (arg) {
@@ -721,8 +503,6 @@ namespace mcpe_viz {
                 {"leveldb-filter",     required_argument, NULL, '<'},
                 {"leveldb-block-size", required_argument, NULL, '>'},
 
-                {"find-images",        required_argument, NULL, '"'},
-
                 {"verbose",            no_argument,       NULL, 'v'},
                 {"quiet",              no_argument,       NULL, 'q'},
                 {"help",               no_argument,       NULL, 'h'},
@@ -765,14 +545,6 @@ namespace mcpe_viz {
                     control.leveldbBlockSize = 4096;
                 }
                 break;
-
-            case '"':
-                control.doFindImages = true;
-                // todobig - specify an in and an out dir
-                control.dirFindImagesIn = optarg;
-                control.dirFindImagesOut = optarg;
-                break;
-
             case 'H': {
                 bool pass = false;
                 int32_t dimId, blockId;
@@ -1113,25 +885,21 @@ int main(int argc, char** argv) {
     }
 
     loadConfigFile();
-
-    if (mcpe_viz::control.doFindImages) {
-        mcpe_viz::findImages();
+    
+    world->init();
+    world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
+    // todobig - we must do this, for now - we could get clever about this later
+    // todobig - we could call this deepParseDb() and only do it if the user wanted it
+    if (true || mcpe_viz::control.doDetailParseFlag) {
+        world->dbParse();
+        world->checkSpawnable();
     }
-    else {
-        world->init();
-        world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
-        // todobig - we must do this, for now - we could get clever about this later
-        // todobig - we could call this deepParseDb() and only do it if the user wanted it
-        if (true || mcpe_viz::control.doDetailParseFlag) {
-            world->dbParse();
-            world->checkSpawnable();
-        }
-        world->doOutput();
-        world->dbClose();
+    world->doOutput();
+    world->dbClose();
 
-        print_unknown_block_warnings();
+    print_unknown_block_warnings();
 
-        std::cout << "Done.\n";
-    }
+    std::cout << "Done.\n";
+    
     return 0;
 }
