@@ -52,6 +52,7 @@ namespace mcpe_viz {
     extern Logger slogger;
     namespace log
     {
+        using spdlog::trace;
         using spdlog::debug;
         using spdlog::info;
         using spdlog::warn;
@@ -60,6 +61,7 @@ namespace mcpe_viz {
     
 
     enum class Level {
+        Trace = spdlog::level::trace,
         Debug = spdlog::level::debug,
         Info = spdlog::level::info,
         Warn = spdlog::level::warn,
