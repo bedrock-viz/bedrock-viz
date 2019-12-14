@@ -511,9 +511,6 @@ namespace mcpe_viz {
             case '@':
                 control.doDetailParseFlag = true;
                 break;
-            case 'f':
-                slogger.setFlush(true);
-                break;
 
             case '<':
                 control.leveldbFilter = atoi(optarg);

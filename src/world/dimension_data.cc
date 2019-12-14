@@ -285,7 +285,7 @@ namespace mcpe_viz {
                                 color = biomeInfoList[biomeId]->color;
                             }
                             else {
-                                slogger.msg(kLogInfo1, "ERROR: Unknown biome %d 0x%x\n", biomeId, biomeId);
+                                log::error("Unknown biome {} 0x{:x}", biomeId, biomeId);
                                 color = local_htobe32(0xff2020);
                             }
                         }
@@ -399,11 +399,11 @@ namespace mcpe_viz {
                             int32_t twx = (worldX + cx);
                             int32_t twz = (worldZ + cz);
                             if ((twx == 0) && (twz == 0)) {
-                                slogger.msg(kLogInfo1, "    Info: World (0, 0) is at image (%d, %d)\n", tix, tiz);
+                                log::info("    Info: World (0, 0) is at image ({}, {})", tix, tiz);
                             }
                             // todobig - just report this somwhere instead of having to pass the spawn params
-                            if ((twx == worldSpawnX) && (twz == worldSpawnZ)) {
-                                slogger.msg(kLogInfo1, "    Info: World Spawn (%d, %d) is at image (%d, %d)\n",
+                            if (twx == worldSpawnX && twz == worldSpawnZ) {
+                                log::info("    Info: World Spawn ({}, {}) is at image ({}, {})",
                                     worldSpawnX, worldSpawnZ, tix, tiz);
                             }
                         }
@@ -423,8 +423,8 @@ namespace mcpe_viz {
         if (imageMode == kImageModeTerrain) {
             for (int32_t i = 0; i < 512; i++) {
                 if (blockInfoList[i].colorSetNeedCount) {
-                    slogger.msg(kLogInfo1, "    Need pixel color for: 0x%x '%s' (%d)\n", i,
-                        blockInfoList[i].name.c_str(), blockInfoList[i].colorSetNeedCount);
+                    log::info("    Need pixel color for: 0x{:x} '{}' ({})",
+                        i, blockInfoList[i].name, blockInfoList[i].colorSetNeedCount);
                 }
             }
         }
@@ -509,7 +509,7 @@ namespace mcpe_viz {
         uint8_t kt_v3 = 0x2f;
         leveldb::Status dstatus;
 
-        slogger.msg(kLogInfo1, "    Writing all images in one pass\n");
+        log::info("    Writing all images in one pass");
 
         std::string svalue;
 
@@ -571,7 +571,7 @@ namespace mcpe_viz {
         for (int32_t imageZ = 0, chunkZ = minChunkZ; imageZ < imageH; imageZ += 16, chunkZ++) {
 
             if ((runCt++ % 20) == 0) {
-                slogger.msg(kLogInfo1, "    Row %d of %d\n", imageZ, imageH);
+                log::info("    Row {} of {}", imageZ, imageH);
             }
 
             for (int32_t imageX = 0, chunkX = minChunkX; imageX < imageW; imageX += 16, chunkX++) {
@@ -817,10 +817,8 @@ namespace mcpe_viz {
                                             else {
                                                 // bad blockid
                                                 //todozooz todostopper - we get a lot of these w/ negative blockid around row 4800 of world 'another1'
-                                                slogger.msg(kLogError,
-                                                    "Invalid blockid=%d (image %d %d) (cc %d %d %d)\n",
-                                                    blockid, imageX, imageZ, cx, cz, cy
-                                                );
+                                                log::error("Invalid blockid={} (image {} {}) (cc {} {} {})",
+                                                    blockid, imageX, imageZ, cx, cz, cy);
                                                 // set an unused color
                                                 color = local_htobe32(0xf010d0);
                                             }
@@ -950,7 +948,7 @@ namespace mcpe_viz {
         const char* pcolor = (const char*)&color;
         for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
             // todo - make this part a func so that user can ask for specific slices from the cmdline?
-            slogger.msg(kLogInfo1, "  Layer %d\n", cy);
+            log::info("  Layer {}", cy);
             for (const auto& it : chunks) {
                 int32_t imageX = (it.second->chunkX + chunkOffsetX) * 16;
                 int32_t imageZ = (it.second->chunkZ + chunkOffsetZ) * 16;
@@ -993,8 +991,7 @@ namespace mcpe_viz {
                                 leveldb::Slice key(keybuf, keybuflen);
                                 leveldb::Status dstatus = db->Get(levelDbReadOptions, key, &svalue);
                                 if (!dstatus.ok()) {
-                                    slogger.msg(kLogInfo1, "WARNING: LevelDB operation returned status=%s\n",
-                                        dstatus.ToString().c_str());
+                                    log::warn("LevelDB operation returned status={}", dstatus.ToString());
                                 }
                                 pchunk = svalue.data();
                                 pchunkX = it.second->chunkX;
@@ -1092,7 +1089,7 @@ namespace mcpe_viz {
             cmdline += fnOut;
             int32_t ret = system(cmdline.c_str());
             if (ret != 0) {
-                slogger.msg(kLogInfo1, "Failed to create movie ret=(%d) cmd=(%s)\n", ret, cmdline.c_str());
+                log::error("Failed to create movie ret=({}) cmd=({})", ret, cmdline);
             }
 
             // todo - delete temp slice files? cmdline option to NOT delete
@@ -1147,7 +1144,7 @@ namespace mcpe_viz {
             uint8_t kt = 0x30;
             leveldb::Status dstatus;
 
-            slogger.msg(kLogInfo1, "  Processing Schematic: %s\n", schematic->toString().c_str());
+            log::info("  Processing Schematic: {}", schematic->toString());
 
             std::string svalue;
             const char* pchunk = nullptr;
@@ -1250,56 +1247,56 @@ namespace mcpe_viz {
         std::string dirOut = (control.outputDir / "images").generic_string();
         local_mkdir(dirOut);
 
-        slogger.msg(kLogInfo1, "  Generate Image\n");
+        log::info("  Generate Image");
         control.fnLayerTop[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".map.png");
         generateImage(control.fnLayerTop[dimId], kImageModeTerrain);
 
         if (checkDoForDim(control.doImageBiome)) {
-            slogger.msg(kLogInfo1, "  Generate Biome Image\n");
+            log::info("  Generate Biome Image");
             control.fnLayerBiome[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".biome.png");
             generateImage(control.fnLayerBiome[dimId], kImageModeBiome);
         }
         if (checkDoForDim(control.doImageGrass)) {
-            slogger.msg(kLogInfo1, "  Generate Grass Image\n");
+            log::info("  Generate Grass Image");
             control.fnLayerGrass[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".grass.png");
             generateImage(control.fnLayerGrass[dimId], kImageModeGrass);
         }
         if (checkDoForDim(control.doImageHeightCol)) {
-            slogger.msg(kLogInfo1, "  Generate Height Column Image\n");
+            log::info("  Generate Height Column Image");
             control.fnLayerHeight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".height_col.png");
             generateImage(control.fnLayerHeight[dimId], kImageModeHeightCol);
         }
         if (checkDoForDim(control.doImageHeightColGrayscale)) {
-            slogger.msg(kLogInfo1, "  Generate Height Column (grayscale) Image\n");
+            log::info("  Generate Height Column (grayscale) Image");
             control.fnLayerHeightGrayscale[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".height_col_grayscale.png");
             generateImage(control.fnLayerHeightGrayscale[dimId], kImageModeHeightColGrayscale);
         }
         if (checkDoForDim(control.doImageHeightColAlpha)) {
-            slogger.msg(kLogInfo1, "  Generate Height Column (alpha) Image\n");
+            log::info("  Generate Height Column (alpha) Image");
             control.fnLayerHeightAlpha[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".height_col_alpha.png");
             generateImage(control.fnLayerHeightAlpha[dimId], kImageModeHeightColAlpha);
         }
         if (checkDoForDim(control.doImageLightBlock)) {
-            slogger.msg(kLogInfo1, "  Generate Block Light Image\n");
+            log::info("  Generate Block Light Image");
             control.fnLayerBlockLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_block.png");
             generateImage(control.fnLayerBlockLight[dimId], kImageModeBlockLight);
         }
         if (checkDoForDim(control.doImageLightSky)) {
-            slogger.msg(kLogInfo1, "  Generate Sky Light Image\n");
+            log::info("  Generate Sky Light Image");
             control.fnLayerSkyLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_sky.png");
             generateImage(control.fnLayerSkyLight[dimId], kImageModeSkyLight);
         }
         if (checkDoForDim(control.doImageSlimeChunks)) {
-            slogger.msg(kLogInfo1, "  Generate Slime Chunks Image\n");
+            log::info("  Generate Slime Chunks Image");
             control.fnLayerSlimeChunks[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".slime_chunks.png");
             generateImageSpecial(control.fnLayerSlimeChunks[dimId], kImageModeSlimeChunksMCPE);
         }
 
         if (checkDoForDim(control.doImageShadedRelief)) {
-            slogger.msg(kLogInfo1, "  Generate Shaded Relief Image\n");
+            log::info("  Generate Shaded Relief Image");
             control.fnLayerShadedRelief[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".shaded_relief.png");
 #if 0
@@ -1319,13 +1316,13 @@ namespace mcpe_viz {
         }
 
         if (checkDoForDim(control.doMovie)) {
-            slogger.msg(kLogInfo1, "  Generate movie\n");
+            log::info("  Generate movie");
             const std::string movieName = (control.outputDir / ("bedrock_viz." + name + ".mp4")).generic_string();
             generateMovie(db, dirOut + "/" + fnBase, movieName, true, true);
         }
 
         if (checkDoForDim(control.doSlices)) {
-            slogger.msg(kLogInfo1, "  Generate full-size slices\n");
+            log::info("  Generate full-size slices");
             generateSlices(db, dirOut + "/" + fnBase);
         }
 

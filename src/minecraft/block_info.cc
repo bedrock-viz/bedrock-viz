@@ -58,17 +58,16 @@ namespace mcpe_viz {
                     }
                 }
                 // warn about missing variant, but return parent's name
-                slogger.msg(kLogWarning, "getBlockName failed to find variant id=%d (0x%x) blockdata=%d (0x%x)\n", id,
-                    id, blockdata, blockdata);
+                log::warn("getBlockName failed to find variant id={} (0x{:x}) blockdata={} (0x{:x})",
+                    id, id, blockdata, blockdata);
                 return blockInfoList[id].name;
             }
             else {
                 return blockInfoList[id].name;
             }
         }
-
-        slogger.msg(kLogWarning, "getBlockName failed to find id=%d (0x%x) blockdata=%d (0x%x)\n", id, id, blockdata,
-            blockdata);
+        log::warn("getBlockName failed to find id={} (0x{:x}) blockdata={} (0x{:x})",
+            id, id, blockdata, blockdata);
         char tmpstring[256];
         sprintf(tmpstring, "(Unknown-block-id-%d-data-%d)", id, blockdata);
         return std::string(tmpstring);
@@ -102,7 +101,7 @@ namespace mcpe_viz {
         // force to "air"
         blockId = 0;
         blockData = 0;
-        slogger.msg(kLogWarning, "getBlockByUname failed to find uname=%s\n", uname.c_str());
+        log::warn("getBlockByUname failed to find uname={}", uname);
         return -1;
     }
 }

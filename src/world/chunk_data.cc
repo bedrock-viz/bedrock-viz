@@ -490,7 +490,7 @@ namespace mcpe_viz {
                         chunkBlockPalette_BlockData[i] = bdata;
                     }
                     else {
-                        logger.msg(kLogWarning, "Did not find block uname '%s' in XML file\n", bname.c_str());
+                        log::warn("Did not find block uname '{}' in XML file", bname);
                         // todonow - reasonable?
                         chunkBlockPalette_BlockId[i] = 0;
                         chunkBlockPalette_BlockData[i] = 0;
@@ -498,8 +498,7 @@ namespace mcpe_viz {
                     processedFlag = true;
                 }
                 if (!processedFlag) {
-                    slogger.msg(kLogError, "(Safe) Did not find 'name' tag in a chunk palette! (i=%d) (len=%d)\n",
-                        (int)i, (int)tagList.size());
+                    log::warn("Did not find 'name' tag in a chunk palette! (i={}) (len={})", i, tagList.size());
                     //todozooz - dump tc to screen log
                 }
             }
@@ -527,8 +526,8 @@ namespace mcpe_viz {
                     else {
                         blockId = 0;
                         blockData = 0;
-                        logger.msg(kLogWarning, "Found chunk palette id out of range %d (size=%d)\n",
-                            paletteBlockId, (int)chunkBlockPalette_BlockId.size());
+                        log::warn("Found chunk palette id out of range {} (size={})",
+                            paletteBlockId, chunkBlockPalette_BlockId.size());
                     }
                     histogramBlock[blockId]++;
                     histogramGlobalBlock.add(blockId);
