@@ -71,7 +71,7 @@ namespace mcpe_viz {
 #ifdef _WIN32
         console_sink->set_color(spdlog::level::info, console_sink->WHITE);
 #else
-        sink->set_color(spdlog::level::info, sink->white);
+        console_sink->set_color(spdlog::level::info, console_sink->white);
 #endif
         return console_sink;
     }
