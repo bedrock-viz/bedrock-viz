@@ -67,7 +67,7 @@ namespace mcpe_viz {
     auto create_console_sink()
     {
         auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-        console_sink->set_pattern("[%^%l%$] %v");
+        console_sink->set_pattern("[%^%7l%$] %v");
 #ifdef _WIN32
         console_sink->set_color(spdlog::level::info, console_sink->WHITE);
 #else

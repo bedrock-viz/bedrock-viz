@@ -73,8 +73,7 @@ namespace mcpe_viz {
         int32_t parseLevelName(const std::string& fname) {
             FILE* fp = fopen(fname.c_str(), "r");
             if (!fp) {
-                slogger.msg(kLogInfo1, "ERROR: Failed to open input file (fn=%s error=%s (%d))\n", fname.c_str(),
-                    strerror(errno), errno);
+                log::error("Failed to open input file (fn={} error={} ({}))", fname, strerror(errno), errno);
                 return -1;
             }
 
@@ -84,8 +83,8 @@ namespace mcpe_viz {
 
             setWorldName(buf);
 
-            slogger.msg(kLogInfo1, "  Level name is [%s]\n", (strlen(buf) > 0) ? buf : "(UNKNOWN)");
-            logger.msg(kLogInfo1, "\nlevelname.txt: Level name is [%s]\n", (strlen(buf) > 0) ? buf : "(UNKNOWN)");
+            log::info("levelname.txt: Level name is '{}'", strlen(buf) > 0 ? buf : "(UNKNOWN)");
+            
             fclose(fp);
 
             return 0;
@@ -113,8 +112,7 @@ namespace mcpe_viz {
             // then we collect all of that chunk's data and do the spawn checking
 
             for (int did = 0; did < kDimIdCount; did++) {
-                slogger.msg(kLogInfo1, "Check Spawnable: Dimension '%s' (%d)\n", dimDataList[did]->getName().c_str(),
-                    did);
+                log::info("Check Spawnable: Dimension '{}' ({})", dimDataList[did]->getName(), did);
                 dimDataList[did]->checkSpawnable(db);
             }
 

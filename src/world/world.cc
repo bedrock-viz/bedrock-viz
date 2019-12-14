@@ -88,8 +88,7 @@ namespace mcpe_viz {
     {
         FILE* fp = fopen(fname.c_str(), "rb");
         if (!fp) {
-            slogger.msg(kLogInfo1, "ERROR: Failed to open input file (fn=%s error=%s (%d))\n", fname.c_str(),
-                strerror(errno), errno);
+            log::error("Failed to open input file (fn={} error={} ({}))", fname, strerror(errno), errno);
             return -1;
         }
 
@@ -135,8 +134,8 @@ namespace mcpe_viz {
     {
         int32_t ret = parseLevelFile(std::string(control.dirLeveldb + "/level.dat"));
         if (ret != 0) {
-            slogger.msg(kLogInfo1, "ERROR: Failed to parse level.dat file.  Exiting...\n");
-            slogger.msg(kLogInfo1, "** Hint: --db must point to the dir which contains level.dat\n");
+            log::error("Failed to parse level.dat file.  Exiting...");
+            log::error("** Hint: --db must point to the dir which contains level.dat");
             return -1;
         }
 
@@ -191,7 +190,7 @@ namespace mcpe_viz {
 
         int32_t chunkX = -1, chunkZ = -1, chunkDimId = -1, chunkType = -1;
 
-        slogger.msg(kLogInfo1, "Scan keys to get world boundaries\n");
+        log::info("Scan keys to get world boundaries");
         int32_t recordCt = 0;
 
         // todobig - is there a faster way to enumerate the keys?
@@ -266,8 +265,7 @@ namespace mcpe_viz {
         }
 
         if (!iter->status().ok()) {
-            slogger.msg(kLogInfo1, "WARNING: LevelDB operation returned status=%s\n",
-                iter->status().ToString().c_str());
+            log::warn("LevelDB operation returned status={}", iter->status().ToString());
         }
         delete iter;
 
@@ -277,7 +275,7 @@ namespace mcpe_viz {
             dimDataList[i]->reportChunkBounds();
         }
 
-        slogger.msg(kLogInfo1, "  %d records\n", recordCt);
+        log::info("  {} records", recordCt);
         totalRecordCt = recordCt;
 
         return 0;
@@ -296,7 +294,7 @@ namespace mcpe_viz {
 
         // report hide and force lists
         {
-            slogger.msg(kLogInfo1, "Active 'hide-top', 'force-top', and 'geojson-block':\n");
+            log::info("Active 'hide-top', 'force-top', and 'geojson-block':");
             int32_t itemCt = 0;
             int32_t blockId;
             for (int32_t dimId = 0; dimId < kDimIdCount; dimId++) {
@@ -326,11 +324,11 @@ namespace mcpe_viz {
                 }
             }
             if (itemCt == 0) {
-                slogger.msg(kLogInfo1, "None\n");
+                log::info("  None");
             }
         }
 
-        slogger.msg(kLogInfo1, "Parse all leveldb records\n");
+        log::info("Parse all leveldb records");
 
         MyNbtTagList tagList;
         int32_t recordCt = 0, ret;
@@ -360,11 +358,8 @@ namespace mcpe_viz {
             }
             if ((recordCt % 10000) == 0) {
                 double pct = (double)recordCt / (double)totalRecordCt;
-                slogger.msg(kLogInfo1, "  Processing records: %d / %d (%.1lf%%)\n", recordCt, totalRecordCt,
-                    (pct * 100.0));
+                log::info("  Processing records: {} / {} ({:.1f}%)", recordCt, totalRecordCt, pct * 100.0);
             }
-
-            logger.msg(kLogInfo1, "\n");
 
             // we look at the key to determine what we have, some records have text keys
 
@@ -523,9 +518,7 @@ namespace mcpe_viz {
 
                     // check for new dim id's
                     if (chunkDimId != kDimIdNether && chunkDimId != kDimIdTheEnd) {
-                        slogger.msg(kLogInfo1,
-                            "WARNING: UNKNOWN -- Found new chunkDimId=0x%x -- we are not prepared for that -- skipping chunk\n",
-                            chunkDimId);
+                        log::warn("UNKNOWN -- Found new chunkDimId=0x{:x} -- we are not prepared for that -- skipping chunk", chunkDimId);
                         continue;
                     }
                 }
@@ -549,17 +542,14 @@ namespace mcpe_viz {
 
                     // check for new dim id's
                     if (chunkDimId != kDimIdNether && chunkDimId != kDimIdTheEnd) {
-                        slogger.msg(kLogInfo1,
-                            "WARNING: UNKNOWN -- Found new chunkDimId=0x%x -- we are not prepared for that -- skipping chunk\n",
-                            chunkDimId);
+                        log::warn("UNKNOWN -- Found new chunkDimId=0x{:x} -- we are not prepared for that -- skipping chunk", chunkDimId);
                         continue;
                     }
                 }
 
                 // we check for corrupt chunks
                 if (!legalChunkPos(chunkX, chunkZ)) {
-                    slogger.msg(kLogInfo1, "WARNING: Found a chunk with invalid chunk coordinates cx=%d cz=%d\n",
-                        chunkX, chunkZ);
+                    log::warn("Found a chunk with invalid chunk coordinates cx={} cz={}", chunkX, chunkZ);
                     continue;
                 }
 
@@ -669,7 +659,7 @@ namespace mcpe_viz {
 
                 case 0x39:
                     // new for v1.2?
-                    logger.msg(kLogInfo1, "%s 0x39 chunk (TODO - MYSTERY RECORD - TBD)\n", dimName.c_str());
+                    log::warn("%s 0x39 chunk (TODO - MYSTERY RECORD - TBD)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -809,8 +799,7 @@ namespace mcpe_viz {
         slogger.msg(kLogInfo1, "Status: %s\n", iter->status().ToString().c_str());
 
         if (!iter->status().ok()) {
-            slogger.msg(kLogInfo1, "WARNING: LevelDB operation returned status=%s\n",
-                iter->status().ToString().c_str());
+            log::warn("LevelDB operation returned status={}", iter->status().ToString());
         }
         delete iter;
 
@@ -825,8 +814,7 @@ namespace mcpe_viz {
 
         std::string dirOut = (control.outputDir / "tiles").generic_string();
         local_mkdir(dirOut);
-
-        slogger.msg(kLogInfo1, "Creating tiles for %s...\n", mybasename(fn).c_str());
+        log::info("Creating tiles for {}...", mybasename(fn));
         PngTiler pngTiler(fn, control.tileWidth, control.tileHeight, dirOut);
         if (pngTiler.doTile() == 0) {
             // all is good
@@ -881,7 +869,7 @@ namespace mcpe_viz {
         using namespace bedrock_viz;
         char tmpstring[1025];
 
-        slogger.msg(kLogInfo1, "Do Output: html viewer\n");
+        log::info("Do Output: html viewer");
 
         //sprintf(tmpstring, "%s/mcpe_viz.html.template", dirExec.c_str());
         const std::string fnHtmlSrc = static_path("mcpe_viz.html.template").generic_string();
@@ -1067,8 +1055,8 @@ namespace mcpe_viz {
 
         }
         else {
-            slogger.msg(kLogInfo1, "ERROR: Failed to open javascript output file (fn=%s error=%s (%d))\n",
-                control.fnJs().generic_string().c_str(), strerror(errno), errno);
+            log::error("Failed to open javascript output file (fn={} error={} ({}))",
+                control.fnJs().generic_string(), strerror(errno), errno);
         }
 
         // copy helper files to destination directory
@@ -1093,7 +1081,7 @@ namespace mcpe_viz {
             // copy images
             // todobig - could save a good amount of time per run if we detect if dir has already been copied
             // todobig - could save a bit of time by only copying images used (use imageFileMap)
-            slogger.msg(kLogInfo1, "Copying icon images\n");
+            log::info("Copying icon images");
             std::string dirImages = dirDest + "/images";
             local_mkdir(dirImages);
             //copyDirToDir(dirExec + "/images", dirImages, true);
@@ -1162,8 +1150,8 @@ namespace mcpe_viz {
 
             FILE* fpGeoJSON = fopen(control.fnGeoJSON().generic_string().c_str(), "w");
             if (!fpGeoJSON) {
-                slogger.msg(kLogInfo1, "ERROR: Failed to create GeoJSON output file (%s error=%s (%d)).\n",
-                    control.fnGeoJSON().generic_string().c_str(), strerror(errno), errno);
+                log::error("Failed to create GeoJSON output file ({} error={} ({}))",
+                    control.fnGeoJSON().generic_string(), strerror(errno), errno);
                 return -1;
             }
 
@@ -1226,7 +1214,7 @@ namespace mcpe_viz {
                 // todobig - 5000 a reasonable default max image size before we auto-tile?
                 int32_t maxImageSize = 5000;
                 if (imageW > maxImageSize || imageH > maxImageSize) {
-                    slogger.msg(kLogInfo1, "Detected large images and 'auto-tile' is enabled, enabling tiles!\n");
+                    log::info("Detected large images and 'auto-tile' is enabled, enabling tiles");
                     control.doTiles = true;
                 }
             }

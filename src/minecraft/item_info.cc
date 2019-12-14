@@ -26,17 +26,16 @@ namespace mcpe_viz {
                     }
                 }
                 // warn about missing variant, but return parent's name
-                slogger.msg(kLogWarning, "getItemName failed to find variant id=%d (0x%x) extradata=%d (0x%x) nbf=%d\n",
-                    id, id, extraData, extraData, (int)nameBasedFlag);
+                log::warn("getItemName failed to find variant id={} (0x{:x}) extradata={} (0x{:x}) nbf={}",
+                    id, id, extraData, extraData, nameBasedFlag);
                 return itemInfoList[id]->name;
             }
             else {
                 return itemInfoList[id]->name;
             }
         }
-
-        slogger.msg(kLogWarning, "getItemName failed to find id=%d (0x%x) extradata=%d (0x%x) nbf=%d\n", id, id,
-            extraData, extraData, (int)nameBasedFlag);
+        log::warn("getItemName failed to find id={} (0x{:x}) extradata={} (0x{:x}) nbf={}",
+            id, id, extraData, extraData, nameBasedFlag);
         char tmpstring[256];
         sprintf(tmpstring, "(Unknown-item-id-%d-data-%d)", id, extraData);
         return std::string(tmpstring);
