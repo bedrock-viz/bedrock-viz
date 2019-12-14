@@ -200,7 +200,6 @@
   */
 
 #include <cstdio>
-#include <map>
 #include <vector>
 #include <cmath>
 #include <random>
@@ -225,8 +224,6 @@
 #include "args.h"
 #include "control.h"
 #include "minecraft/block_info.h"
-#include "minecraft/item_info.h"
-#include "minecraft/conversion.h"
 #include "utils/block_recorder.h"
 #include "world/dimension_data.h"
 #include "world/world.h"
@@ -246,12 +243,10 @@ namespace mcpe_viz {
 
         FILE* fp = fopen(fn.c_str(), "r");
         if (!fp) {
-            slogger.msg(kLogInfo1, "ERROR: Failed to open file (%s error=%s (%d)\n", fn.c_str(), strerror(errno),
-                errno);
+            log::error("Failed to open file ({}) error={} ({})", fn, strerror(errno), errno);
             return 1;
         }
-
-        slogger.msg(kLogInfo1, "Reading config from %s\n", fn.c_str());
+        std::cout << "Reading config from " << fn << '\n';
 
         char buf[1025], * p;
         while (!feof(fp)) {
@@ -382,8 +377,6 @@ namespace mcpe_viz {
         if (doParseConfigFile(std::string("mcpe_viz.cfg")) == 0) {
             return 0;
         }
-
-        //slogger.msg(kLogInfo1,"WARNING: Did not find a valid config file\n");
         return -1;
     }
 
@@ -418,8 +411,7 @@ namespace mcpe_viz {
         if (ret >= 0) {
             return ret;
         }
-
-        slogger.msg(kLogInfo1, "ERROR: Did not find a valid XML file\n");
+        log::error("Did not find a valid XML file");
         return -1;
     }
 
@@ -830,7 +822,7 @@ namespace mcpe_viz {
         // verify/test args
         if (control.dirLeveldb.length() <= 0) {
             errct++;
-            slogger.msg(kLogInfo1, "ERROR: Must specify --db\n");
+            log::error("Must specify --db");
         }
 
         if (!file_exists(control.outputDir.generic_string())) {
@@ -841,7 +833,7 @@ namespace mcpe_viz {
         std::string fnTest = (control.outputDir / "level.dat").generic_string();
         if (file_exists(fnTest)) {
             errct++;
-            slogger.msg(kLogInfo1, "ERROR: You cannot send mcpe_viz output to a world file data directory\n");
+            log::error("You cannot send mcpe_viz output to a world file data directory");
         }
 
         if (errct <= 0) {
@@ -878,12 +870,12 @@ int main(int argc, char** argv)
         return -1;
     }
     auto console_log_level = control.quietFlag ? Level::Warn : (control.verboseFlag ? Level::Debug : Level::Info);
-    auto file_log_level = control.verboseFlag ? Level::Debug : Level::Info;
+    auto file_log_level = control.verboseFlag ? Level::Trace : Level::Debug;
 
     setup_logger_stage_2(control.logFile(), console_log_level, file_log_level);
 
     if (loadXml() != 0) {
-        slogger.msg(kLogInfo1, "ERROR: Failed to parse XML file.\n");
+        log::error("Failed to parse XML file");
         return -1;
     }
     

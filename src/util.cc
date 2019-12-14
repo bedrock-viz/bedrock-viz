@@ -86,7 +86,7 @@ namespace mcpe_viz {
     int32_t oversampleImage(const std::string& fnSrc, const std::string& fnDest, int32_t oversample) {
         PngReader pngSrc;
         if (pngSrc.init(fnSrc) != 0) {
-            slogger.msg(kLogInfo1, "ERROR: Failed to open src png");
+            log::error("Failed to open src png (fn={})", fnSrc);
             return -1;
         }
         pngSrc.read();
@@ -108,7 +108,7 @@ namespace mcpe_viz {
 
         PngWriter pngOut;
         if (pngOut.init(fnDest, "MCPE Viz Oversampled Image", destW, destH, destH, true, true) != 0) {
-            slogger.msg(kLogInfo1, "ERROR: Failed to create dest png");
+            log::error("Failed to create dest png (fn={})", fnDest);
             delete[] buf;
             pngSrc.close();
             return -2;
@@ -199,14 +199,12 @@ namespace mcpe_viz {
             }
 
             if (playerId.size() > 0 && playerName.size() > 0) {
-                // slogger.msg(kLogInfo1, "INFO: parsePlayerIdToName -- found valid playerId (%s) and playerName (%s) in passed string (%s)\n", playerId.c_str(), playerName.c_str(), s);
                 return addPlayerIdToName(playerId, playerName);
             }
-            slogger.msg(kLogInfo1, "ERROR: Failed parsePlayerIdToName -- did not find valid playerId (%s) and playerName (%s) in passed string (%s)\n", playerId.c_str(), playerName.c_str(), s);
+            log::error("Did not find valid playerId ({}) and playerName ({}) in passed string ({})", playerId, playerName, s);
             return -1;
         }
-
-        slogger.msg(kLogInfo1, "ERROR: Failed parsePlayerIdToName -- did not find valid playerId and playerName in passed string (%s)\n", s);
+        log::error("Did not find valid playerId and playerName in passed string ({})", s);
         return -2;
     }
 

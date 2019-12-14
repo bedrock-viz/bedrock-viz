@@ -103,7 +103,7 @@ namespace mcpe_viz {
         int32_t open(const std::string& imageDescription, int32_t width, int32_t height, int32_t numRowPointers, bool rgbaFlag, bool wholeImageFlag) {
             fp = fopen(fn.c_str(), "wb");
             if (!fp) {
-                slogger.msg(kLogInfo1, "ERROR: Failed to open output file (%s) errno=%s(%d)\n", fn.c_str(), strerror(errno), errno);
+                log::error("Failed to open output file ({}) errno={}({})", fn, strerror(errno), errno);
                 return -1;
             }
 
@@ -117,26 +117,26 @@ namespace mcpe_viz {
             */
             png = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
             if (!png) {
-                slogger.msg(kLogInfo1, "ERROR: Failed png_create_write_struct\n");
+                log::error("Failed png_create_write_struct");
                 fclose(fp);
                 return -2;
             }
 
             info = png_create_info_struct(png);
             if (!info) {
-                slogger.msg(kLogInfo1, "ERROR: Failed png_create_info_struct\n");
+                log::error("Failed png_create_info_struct");
                 fclose(fp);
                 return -2;
             }
 
             // todo - can we do something more clever here?
             if (setjmp(png_jmpbuf(png))) {
-                slogger.msg(kLogInfo1, "ERROR: PngWriter setjmp triggered -- image might be too large (%d x %d)\n", width, height);
+                log::error("PngWriter setjmp triggered -- image might be too large ({} x {})", width, height);
                 png_destroy_write_struct(&png, &info);
                 fclose(fp);
                 //return -5;
                 // if we've failed here, there is not much chance that we can continue
-                slogger.msg(kLogInfo1, "ERROR: Cannot continue.\n");
+                log::error("Cannot continue");
                 exit(-1);
             }
 
@@ -244,13 +244,13 @@ namespace mcpe_viz {
 
         int32_t open() {
             if (fn.length() <= 0) {
-                slogger.msg(kLogInfo1, "ERROR: Empty input filename (fn=%s)\n", fn.c_str());
+                log::error("Empty input filename (fn={})", fn);
                 return -1;
             }
 
             fp = fopen(fn.c_str(), "rb");
             if (!fp) {
-                slogger.msg(kLogInfo1, "ERROR: Failed to open input file (%s) errno=%s(%d)\n", fn.c_str(), strerror(errno), errno);
+                log::error("Failed to open input file ({}) errno={}({})", fn, strerror(errno), errno);
                 return -1;
             }
 
@@ -264,14 +264,14 @@ namespace mcpe_viz {
             */
             png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
             if (!png) {
-                slogger.msg(kLogInfo1, "ERROR: Failed png_create_write_struct\n");
+                log::error("Failed png_create_write_struct");
                 fclose(fp);
                 return -2;
             }
 
             info = png_create_info_struct(png);
             if (!info) {
-                slogger.msg(kLogInfo1, "ERROR: Failed png_create_info_struct (info)\n");
+                log::error("Failed png_create_info_struct (info)");
                 fclose(fp);
                 png_destroy_read_struct(&png,
                     (png_infopp)NULL, (png_infopp)NULL);
@@ -280,7 +280,7 @@ namespace mcpe_viz {
 
             end_info = png_create_info_struct(png);
             if (!end_info) {
-                slogger.msg(kLogInfo1, "ERROR: Failed png_create_info_struct (end_info)\n");
+                log::error("Failed png_create_info_struct (end_info)");
                 fclose(fp);
                 png_destroy_read_struct(&png, &info, (png_infopp)NULL);
                 return -4;
@@ -288,7 +288,7 @@ namespace mcpe_viz {
 
             // todo - can we do something more clever here?
             if (setjmp(png_jmpbuf(png))) {
-                slogger.msg(kLogInfo1, "ERROR: PngReader setjmp triggered (fn=%s)\n", fn.c_str());
+                log::error("ERROR: PngReader setjmp triggered (fn={})", fn);
                 //png_destroy_read_struct(&png, &info, &end_info);
                 //fclose(fp);
                 return -5;
