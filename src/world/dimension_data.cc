@@ -148,50 +148,6 @@ namespace mcpe_viz {
         return false;
     }
 
-    void DimensionData_LevelDB::doOutputStats()
-    {
-        logger.msg(kLogInfo1, "\n%s Statistics:\n", name.c_str());
-        logger.msg(kLogInfo1, "chunk-count: %d\n", (int)chunks.size());
-        logger.msg(kLogInfo1, "Min-dim:  %d %d\n", minChunkX, minChunkZ);
-        logger.msg(kLogInfo1, "Max-dim:  %d %d\n", maxChunkX, maxChunkZ);
-        int32_t dx = (maxChunkX - minChunkX + 1);
-        int32_t dz = (maxChunkZ - minChunkZ + 1);
-        logger.msg(kLogInfo1, "diff-dim: %d %d\n", dx, dz);
-        logger.msg(kLogInfo1, "pixels:   %d %d\n", dx * 16, dz * 16);
-
-        logger.msg(kLogInfo1, "\nGlobal Chunk Type Histogram:\n");
-        for (int32_t i = 0; i < 256; i++) {
-            if (histogramChunkType[i] > 0) {
-                logger.msg(kLogInfo1, "hg-chunktype: %02x %6d\n", i, histogramChunkType[i]);
-            }
-        }
-
-        double htotal;
-        HistogramVector hvector;
-
-        logger.msg(kLogInfo1, "\nGlobal Block Histogram (block-id count pct name):\n");
-        htotal = histogramGlobalBlock.getTotal();
-        hvector = histogramGlobalBlock.sort(1);
-        for (auto& it : hvector) {
-            int32_t k = it.first;
-            int32_t v = it.second;
-            double pct = ((double)v / htotal) * 100.0;
-            logger.msg(kLogInfo1, "hg-globalblock: 0x%02x %10d %7.3lf%% %s\n", k, v, pct,
-                blockInfoList[k].name.c_str());
-        }
-
-        logger.msg(kLogInfo1, "\nGlobal Biome Histogram (biome-id count pct name):\n");
-        htotal = histogramGlobalBiome.getTotal();
-        hvector = histogramGlobalBiome.sort(1);
-        for (auto& it : hvector) {
-            int32_t k = it.first;
-            int32_t v = it.second;
-            double pct = ((double)v / htotal) * 100.0;
-            //      logger.msg(kLogInfo1,"hg-globalbiome: 0x%02x %10d %7.3lf%% %s\n", k, v, pct, biomeInfoList[k]->name.c_str());
-            logger.msg(kLogInfo1, "hg-globalbiome: 0x%02x %10d %7.3lf%%\n", k, v, pct);
-        }
-    }
-
     int32_t DimensionData_LevelDB::generateImage(const std::string& fname, const ImageModeType imageMode)
     {
         const int32_t chunkOffsetX = -minChunkX;
@@ -1236,7 +1192,6 @@ namespace mcpe_viz {
     int32_t DimensionData_LevelDB::doOutput(leveldb::DB* db)
     {
         log::info("Do Output: {}", name);
-        doOutputStats();
 
         doOutput_GeoJSON();
 

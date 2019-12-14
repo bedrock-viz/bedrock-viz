@@ -262,18 +262,16 @@ namespace mcpe_viz {
     // todobig - move to util?
     int32_t
         printKeyValue(const char* key, int32_t key_size, const char* value, int32_t value_size, bool printKeyAsStringFlag) {
-        logger.msg(kLogInfo1, "WARNING: Unparsed Record: key_size=%d key_string=[%s] key_hex=[", key_size,
-            (printKeyAsStringFlag ? key : "(SKIPPED)"));
+        log::trace("Unparsed Record: key_size={} key_string=[{}] key_hex=[", 
+            key_size, (printKeyAsStringFlag ? key : "(SKIPPED)"));
         for (int32_t i = 0; i < key_size; i++) {
-            if (i > 0) { logger.msg(kLogInfo1, " "); }
-            logger.msg(kLogInfo1, "%02x", ((int)key[i] & 0xff));
+            log::trace(" {:02x}", int(key[i] & 0xff));
         }
-        logger.msg(kLogInfo1, "] value_size=%d value_hex=[", value_size);
+        log::trace("] value_size={} value_hex=[", value_size);
         for (int32_t i = 0; i < value_size; i++) {
-            if (i > 0) { logger.msg(kLogInfo1, " "); }
-            logger.msg(kLogInfo1, "%02x", ((int)value[i] & 0xff));
+            log::trace(" {:02x}", int(value[i] & 0xff));
         }
-        logger.msg(kLogInfo1, "]\n");
+        log::trace("]");
         return 0;
     }
 

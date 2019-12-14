@@ -259,8 +259,6 @@ namespace mcpe_viz {
       */
         }
 
-        void doOutputStats();
-
         std::string makeImageDescription(int32_t imageMode, int32_t layerNumber) {
             std::string ret = "MCPE Viz Image -- World=(" + worldName + ")";
             ret += " Dimension=(" + name + ")";

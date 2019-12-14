@@ -147,32 +147,24 @@ namespace mcpe_viz
         case nbt::tag_type::Byte_Array:
         {
             nbt::tag_byte_array v = t.second->as<nbt::tag_byte_array>();
-            logger.msg(kLogInfo1, "[");
-            int32_t i = 0;
-            for (const auto& itt : v) {
-                if (i++ > 0) { logger.msg(kLogInfo1, " "); }
-                log::trace("{}", itt);
-            }
-            log::trace("] (hex byte array)");
         }
         break;
         case nbt::tag_type::String:
         {
             nbt::tag_string v = t.second->as<nbt::tag_string>();
-            logger.msg(kLogInfo1, "'%s' (string)\n", v.get().c_str());
         }
         break;
         case nbt::tag_type::List:
         {
             nbt::tag_list v = t.second->as<nbt::tag_list>();
             int32_t lnum = ++globalNbtListNumber;
-            logger.msg(kLogInfo1, "LIST-%d {\n", lnum);
+            log::trace("LIST-{} {{", lnum);
             indent++;
             for (const auto& it : v) {
                 parseNbtTag(hdr, indent, std::make_pair(std::string(""), it.get().clone()));
             }
             if (--indent < 0) { indent = 0; }
-            logger.msg(kLogInfo1, "%s} LIST-%d\n", makeIndent(indent, hdr).c_str(), lnum);
+            log::trace("{}}} LIST-{}", makeIndent(indent, hdr), lnum);
         }
         break;
         case nbt::tag_type::Compound:
@@ -191,17 +183,10 @@ namespace mcpe_viz
         case nbt::tag_type::Int_Array:
         {
             nbt::tag_int_array v = t.second->as<nbt::tag_int_array>();
-            logger.msg(kLogInfo1, "[");
-            int32_t i = 0;
-            for (const auto& itt : v) {
-                if (i++ > 0) { logger.msg(kLogInfo1, " "); }
-                logger.msg(kLogInfo1, "%x", itt);
-            }
-            logger.msg(kLogInfo1, "] (hex int array)\n");
         }
         break;
         default:
-            logger.msg(kLogInfo1, "[ERROR: Unknown tag type = %d]\n", (int)tagType);
+            log::error("Unknown tag type = {}", tagType);
             break;
         }
 
@@ -1012,7 +997,7 @@ namespace mcpe_viz
 
             // we make sure that the entity is valid -- have seen rare occurances of mobs with "nan" in pos et al
             if (!pos.isValid() || !rotation.isValid()) {
-                logger.msg(kLogInfo1, "WARNING: Not outputting geojson for mob with invalid position/rotation\n");
+                log::warn("Not outputting geojson for mob with invalid position/rotation");
                 return "";
             }
 
@@ -1734,7 +1719,7 @@ namespace mcpe_viz
                     entity->idShort = entity->idFull & 0xFF;
                 }
                 else {
-                    logger.msg(kLogInfo1, "WARNING: Did not find uname for entity id (%s)\n", ids.c_str());
+                    record_unknow_uname(ids);
                 }
             }
             else if (tc.has_key("identifier")) {
@@ -1751,7 +1736,7 @@ namespace mcpe_viz
             }
             else {
                 // todonow -this appears to happen for maps
-                logger.msg(kLogInfo1, "WARNING: Did not find id or uname for entity! Weird.\n");
+                log::debug("Did not find id or uname for entity! Weird.");
             }
 
             // todo - diff entities have other fields:
@@ -1977,7 +1962,7 @@ namespace mcpe_viz
             entity->checkOtherProp(tc, "identifier");
             entity->checkOtherProp(tc, "Name");
 
-            logger.msg(kLogInfo1, "%sParsedEntity: %s\n", dimName.c_str(), entity->toString(actualDimensionId).c_str());
+            log::trace("{} ParsedEntity: {}", dimName, entity->toString(actualDimensionId));
 
             std::string geojson = entity->toGeoJSON(actualDimensionId);
             if (geojson.length() > 0) {
@@ -2204,12 +2189,12 @@ namespace mcpe_viz
                 }
 
                 else {
-                    logger.msg(kLogInfo1, "WARNING: Unknown tileEntity id=(%s)\n", tileEntity->id.c_str());
+                    log::debug("Unknown tileEntity id=({})", tileEntity->id);
                 }
             }
 
             if (parseFlag) {
-                logger.msg(kLogInfo1, "%sParsedTileEntity: %s\n", dimName.c_str(), tileEntity->toString(dimensionId).c_str());
+                log::trace("{} ParsedTileEntity: {}", dimName, tileEntity->toString(dimensionId));
 
                 std::string json = tileEntity->toGeoJSON(dimensionId);
                 if (json.size() > 0) {
@@ -2357,7 +2342,7 @@ namespace mcpe_viz
 
                             portal->set(pc);
 
-                            logger.msg(kLogInfo1, "ParsedPortal: %s\n", portal->toString().c_str());
+                            log::trace("ParsedPortal: {}", portal->toString());
 
                             std::string json = portal->toGeoJSON();
                             if (json.size() > 0) {
@@ -2783,7 +2768,7 @@ namespace mcpe_viz
                             village->clear();
                             village->set(pc);
 
-                            logger.msg(kLogInfo1, "ParsedVillage: %s\n", village->toString().c_str());
+                            log::trace("ParsedVillage: {}", village->toString());
 
                             std::string json = village->toGeoJSON();
                             if (json.size() > 0) {
