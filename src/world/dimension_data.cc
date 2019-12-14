@@ -6,7 +6,7 @@
 #include "../minecraft/biome_info.h"
 
 #include "../control.h"
-#include "../utils/block_recorder.h"
+#include "../utils/unknown_recorder.h"
 #include "common.h"
 #include "misc.h"
 #include "point_conversion.h"

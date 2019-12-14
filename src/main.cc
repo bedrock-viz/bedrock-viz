@@ -224,7 +224,7 @@
 #include "args.h"
 #include "control.h"
 #include "minecraft/block_info.h"
-#include "utils/block_recorder.h"
+#include "utils/unknown_recorder.h"
 #include "world/dimension_data.h"
 #include "world/world.h"
 #include "utils/fs.h"
@@ -879,6 +879,7 @@ int main(int argc, char** argv)
     world->doOutput();
     world->dbClose();
 
+    print_unknown_uname();
     print_unknown_block_warnings();
 
     std::cout << "Done.\n";

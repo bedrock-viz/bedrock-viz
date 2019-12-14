@@ -25,6 +25,7 @@
 #include "minecraft/conversion.h"
 
 #include "utils/fs.h"
+#include "utils/unknown_recorder.h"
 #include "asset.h"
 
 namespace mcpe_viz {
@@ -571,7 +572,7 @@ namespace mcpe_viz {
             }
           }
           if (id < 0 ) {
-              log::warn("Did not find uname '{}' (item parse)", name);
+            record_unknow_uname(name);
           }
         }
       }

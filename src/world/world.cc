@@ -22,12 +22,14 @@ namespace
     // suggestion from mcpe_sample_setup.cpp
     class NullLogger : public leveldb::Logger {
     public:
-        void Logv(const char*, va_list) override {
+        void Logv(const char*, va_list) override
+        {
         }
     };
 
     // note: this is an attempt to remove "bad" chunks as seen in "nyan.zip" world
-    bool legalChunkPos(int32_t chunkX, int32_t chunkZ) {
+    bool legalChunkPos(int32_t chunkX, int32_t chunkZ)
+    {
         if ((uint32_t)chunkX == 0x80000000 && (uint32_t)chunkZ == 0x80000000) {
             return false;
         }
@@ -35,7 +37,8 @@ namespace
     }
 }
 
-namespace mcpe_viz {
+namespace mcpe_viz
+{
     MinecraftWorld_LevelDB::MinecraftWorld_LevelDB()
     {
         db = nullptr;
@@ -97,7 +100,7 @@ namespace mcpe_viz {
         fread(&fVersion, sizeof(int32_t), 1, fp);
         fread(&bufLen, sizeof(int32_t), 1, fp);
 
-        slogger.msg(kLogInfo1, "parseLevelFile: name=%s version=%d len=%d\n", fname.c_str(), fVersion, bufLen);
+        log::info("parseLevelFile: name={} version={} len={}", fname, fVersion, bufLen);
 
         int32_t ret = -2;
         if (bufLen > 0) {
@@ -115,7 +118,9 @@ namespace mcpe_viz {
                 setWorldSpawnX(tc["SpawnX"].as<nbt::tag_int>().get());
                 setWorldSpawnY(tc["SpawnY"].as<nbt::tag_int>().get());
                 setWorldSpawnZ(tc["SpawnZ"].as<nbt::tag_int>().get());
-                slogger.msg(kLogInfo1, "  Found World Spawn: x=%d y=%d z=%d\n", getWorldSpawnX(), getWorldSpawnY(),
+                log::info("  Found World Spawn: x={} y={} z={}",
+                    getWorldSpawnX(),
+                    getWorldSpawnY(),
                     getWorldSpawnZ());
 
                 setWorldSeed(tc["RandomSeed"].as<nbt::tag_long>().get());
@@ -141,8 +146,8 @@ namespace mcpe_viz {
 
         ret = parseLevelName(std::string(control.dirLeveldb + "/levelname.txt"));
         if (ret != 0) {
-            slogger.msg(kLogInfo1, "WARNING: Failed to parse levelname.txt file.\n");
-            slogger.msg(kLogInfo1, "** Hint: --db must point to the dir which contains levelname.txt\n");
+            log::warn("WARNING: Failed to parse levelname.txt file.");
+            log::warn("** Hint: --db must point to the dir which contains levelname.txt");
         }
 
         // update dimension data
@@ -157,13 +162,12 @@ namespace mcpe_viz {
     {
         // todobig - leveldb read-only? snapshot?
         // note: seems impossible, see <https://github.com/google/leveldb/issues/182>
-        slogger.msg(kLogInfo1, "DB Open: dir=%s\n", dirDb.c_str());
+        log::info("DB Open: dir={}", dirDb);
         leveldb::Status dstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
-        slogger.msg(kLogInfo1, "DB Open Status: %s (block_size=%d bloom_filter_bits=%d)\n",
-            dstatus.ToString().c_str(), control.leveldbBlockSize, control.leveldbFilter);
+        log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", dstatus.ToString(), control.leveldbBlockSize, control.leveldbFilter);
         fflush(stderr);
         if (!dstatus.ok()) {
-            slogger.msg(kLogInfo1, "ERROR: LevelDB operation returned status=%s\n", dstatus.ToString().c_str());
+            log::error("LevelDB operation returned status={}", dstatus.ToString());
             exit(-2);
         }
         return 0;
@@ -301,25 +305,28 @@ namespace mcpe_viz {
                 dimDataList[dimId]->updateFastLists();
                 for (const auto& iter : dimDataList[dimId]->blockHideList) {
                     blockId = iter;
-                    slogger.msg(kLogInfo1, "  'hide-top' block: %s - %s (dimId=%d blockId=%d (0x%02x))\n",
-                        dimDataList[dimId]->getName().c_str(), blockInfoList[blockId].name.c_str(), dimId,
-                        blockId, blockId);
+                    log::info("  'hide-top' block: {} - {} (dimId={} blockId={} (0x{:x}))",
+                        dimDataList[dimId]->getName(),
+                        blockInfoList[blockId].name,
+                        dimId, blockId, blockId);
                     itemCt++;
                 }
 
                 for (const auto& iter : dimDataList[dimId]->blockForceTopList) {
                     blockId = iter;
-                    slogger.msg(kLogInfo1, "  'force-top' block: %s - %s (dimId=%d blockId=%d (0x%02x))\n",
-                        dimDataList[dimId]->getName().c_str(), blockInfoList[blockId].name.c_str(), dimId,
-                        blockId, blockId);
+                    log::info("  'force-top' block: {} - {} (dimId={} blockId={} (0x{:x}))",
+                        dimDataList[dimId]->getName(),
+                        blockInfoList[blockId].name,
+                        dimId, blockId, blockId);
                     itemCt++;
                 }
 
                 for (const auto& iter : dimDataList[dimId]->blockToGeoJSONList) {
                     blockId = iter;
-                    slogger.msg(kLogInfo1, "  'geojson' block: %s - %s (dimId=%d blockId=%d (0x%02x))\n",
-                        dimDataList[dimId]->getName().c_str(), blockInfoList[blockId].name.c_str(), dimId,
-                        blockId, blockId);
+                    log::info("  'genjson' block: {} - {} (dimId={} blockId={} (0x{:x}))",
+                        dimDataList[dimId]->getName(),
+                        blockInfoList[blockId].name,
+                        dimId, blockId, blockId);
                     itemCt++;
                 }
             }
@@ -365,17 +372,17 @@ namespace mcpe_viz {
 
             if (strncmp(key, "BiomeData", key_size) == 0) {
                 // 0x61 +"BiomeData" -- snow accum? -- overworld only?
-                logger.msg(kLogInfo1, "BiomeData value:\n");
+                log::trace("BiomeData value:");
                 parseNbt("BiomeData: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList? snow accumulation amounts
             }
             else if (strncmp(key, "Overworld", key_size) == 0) {
-                logger.msg(kLogInfo1, "Overworld value:\n");
+                log::trace("Overworld value:");
                 parseNbt("Overworld: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList? a list of "LimboEntities"
             }
             else if (strncmp(key, "~local_player", key_size) == 0) {
-                logger.msg(kLogInfo1, "Local Player value:\n");
+                log::trace("Local Player value:");
                 ret = parseNbt("Local Player: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_entity(-1, "", tagList, true, false, "Local Player", "");
@@ -385,7 +392,7 @@ namespace mcpe_viz {
                 // note: key contains player id (e.g. "player_-1234")
                 std::string playerRemoteId = std::string(&key[strlen("player_")], key_size - strlen("player_"));
 
-                logger.msg(kLogInfo1, "Remote Player (id=%s) value:\n", playerRemoteId.c_str());
+                log::trace("Remote Player (id={}) value:", playerRemoteId);
 
                 ret = parseNbt("Remote Player: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
@@ -649,7 +656,7 @@ namespace mcpe_viz {
 
                 case 0x36:
                     // new for v1.2?
-                    logger.msg(kLogInfo1, "%s 0x36 chunk (TODO - MYSTERY RECORD - TBD)\n", dimName.c_str());
+                    log::debug("{} 0x36 chunk (TODO - MYSTERY RECORD - TBD)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -659,7 +666,7 @@ namespace mcpe_viz {
 
                 case 0x39:
                     // new for v1.2?
-                    log::warn("%s 0x39 chunk (TODO - MYSTERY RECORD - TBD)", dimName);
+                    log::debug("{} 0x39 chunk (TODO - MYSTERY RECORD - TBD)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -769,24 +776,13 @@ namespace mcpe_viz {
 */
 
                 default:
-                    logger.msg(kLogInfo1, "WARNING: %s unknown chunk - key_size=%d type=0x%x length=%d\n",
-                        dimName.c_str(),
-                        (int32_t)key_size, chunkType, (int32_t)cdata_size);
+                    log::debug("{} unknown chunk - key_size={} type=0x{:x} length={}", dimName, key_size, chunkType, cdata_size);
                     printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), true);
-
-                    
-#if 0
-                    if (cdata_size > 10) {
-                        parseNbt("UNK: ", cdata, int32_t(cdata_size), tagList);
-                    }
-#endif
-                    
                     break;
                 }
             }
             else {
-                logger.msg(kLogInfo1, "WARNING: Unknown chunk - key_size=%d cdata_size=%d\n", (int32_t)key_size,
-                    (int32_t)cdata_size);
+                log::debug("Unknown chunk - key_size={} cdata_size={}", key_size, cdata_size);
                 printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), true);
                 if (false) {
                     // try to nbt decode
@@ -795,8 +791,8 @@ namespace mcpe_viz {
                 }
             }
         }
-        slogger.msg(kLogInfo1, "Read %d records\n", recordCt);
-        slogger.msg(kLogInfo1, "Status: %s\n", iter->status().ToString().c_str());
+        log::info("Read {} records", recordCt);
+        log::info("Status: {}", iter->status().ToString());
 
         if (!iter->status().ok()) {
             log::warn("LevelDB operation returned status={}", iter->status().ToString());
@@ -1097,96 +1093,45 @@ namespace mcpe_viz {
 
     int32_t MinecraftWorld_LevelDB::doOutput_GeoJSON()
     {
-        if (false) {
-#if 0
-            // todobig - this would be lovely but does not work when run on windows (browser does not like the gzip'ed geojson file)
+        // plain text file version
 
-// we output gzip'ed data (saves a ton of disk+bandwidth for very little cost)
+        FILE* fpGeoJSON = fopen(control.fnGeoJSON().generic_string().c_str(), "w");
+        if (!fpGeoJSON) {
+            log::error("Failed to create GeoJSON output file ({} error={} ({}))",
+                control.fnGeoJSON().generic_string(), strerror(errno), errno);
+            return -1;
+        }
 
-            gzFile_s* fpGeoJSON = gzopen(control.fnGeoJSON.c_str(), "w");
-            if (!fpGeoJSON) {
-                slogger.msg(kLogInfo1, "ERROR: Failed to create GeoJSON output file (%s).\n", control.fnGeoJSON.c_str());
-                return -1;
+        // put the geojson preamble stuff
+        if (!control.noForceGeoJSONFlag) {
+            fprintf(fpGeoJSON, "var geojson =\n");
+        }
+        fprintf(fpGeoJSON,
+            "{ \"type\": \"FeatureCollection\",\n"
+            // todo - correct way to specify this?
+            "\"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"mcpe_viz-image\" } },\n"
+            "\"features\": [\n"
+        );
+
+        // put the list with correct commas (silly)
+        int32_t i = int32_t(listGeoJSON.size());
+        for (const auto& it : listGeoJSON) {
+            fputs(it.c_str(), fpGeoJSON);
+            if (--i > 0) {
+                fputc(',', fpGeoJSON);
             }
+            fputc('\n', fpGeoJSON);
+        }
 
-            // set params for gzip
-            //gzsetparams(fpGeoJSON, Z_BEST_COMPRESSION, Z_DEFAULT_STRATEGY);
-
-            // put the geojson preamble stuff
-            if (!control.noForceGeoJSONFlag) {
-                gzprintf(fpGeoJSON, "var geojson =\n");
-            }
-            gzprintf(fpGeoJSON,
-                "{ \"type\": \"FeatureCollection\",\n"
-                // todo - correct way to specify this?
-                "\"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"mcpe_viz-image\" } },\n"
-                "\"features\": [\n"
-            );
-
-            // put the list with correct commas (silly)
-            int32_t i = listGeoJSON.size();
-            for (const auto& it : listGeoJSON) {
-                gzputs(fpGeoJSON, it.c_str());
-                if (--i > 0) {
-                    gzputc(fpGeoJSON, ',');
-                }
-                gzputc(fpGeoJSON, '\n');
-            }
-
-            // close out the geojson properly
-            if (control.noForceGeoJSONFlag) {
-                gzprintf(fpGeoJSON, "] }\n");
-            }
-            else {
-                gzprintf(fpGeoJSON, "] };\n");
-            }
-
-            gzclose(fpGeoJSON);
-#endif
+        // close out the geojson properly
+        if (control.noForceGeoJSONFlag) {
+            fprintf(fpGeoJSON, "] }\n");
         }
         else {
-
-            // plain text file version
-
-            FILE* fpGeoJSON = fopen(control.fnGeoJSON().generic_string().c_str(), "w");
-            if (!fpGeoJSON) {
-                log::error("Failed to create GeoJSON output file ({} error={} ({}))",
-                    control.fnGeoJSON().generic_string(), strerror(errno), errno);
-                return -1;
-            }
-
-            // put the geojson preamble stuff
-            if (!control.noForceGeoJSONFlag) {
-                fprintf(fpGeoJSON, "var geojson =\n");
-            }
-            fprintf(fpGeoJSON,
-                "{ \"type\": \"FeatureCollection\",\n"
-                // todo - correct way to specify this?
-                "\"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"mcpe_viz-image\" } },\n"
-                "\"features\": [\n"
-            );
-
-            // put the list with correct commas (silly)
-            int32_t i = int32_t(listGeoJSON.size());
-            for (const auto& it : listGeoJSON) {
-                fputs(it.c_str(), fpGeoJSON);
-                if (--i > 0) {
-                    fputc(',', fpGeoJSON);
-                }
-                fputc('\n', fpGeoJSON);
-            }
-
-            // close out the geojson properly
-            if (control.noForceGeoJSONFlag) {
-                fprintf(fpGeoJSON, "] }\n");
-            }
-            else {
-                fprintf(fpGeoJSON, "] };\n");
-            }
-
-            fclose(fpGeoJSON);
-
+            fprintf(fpGeoJSON, "] };\n");
         }
+
+        fclose(fpGeoJSON);
         return 0;
     }
 

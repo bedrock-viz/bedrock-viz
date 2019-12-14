@@ -2,6 +2,7 @@
 
 #include "../define.h"
 #include "../util.h"
+#include "../utils/unknown_recorder.h"
 
 namespace mcpe_viz {
     BlockInfo::BlockInfo()
@@ -101,7 +102,7 @@ namespace mcpe_viz {
         // force to "air"
         blockId = 0;
         blockData = 0;
-        log::warn("getBlockByUname failed to find uname={}", uname);
+        record_unknow_uname(uname);
         return -1;
     }
 }

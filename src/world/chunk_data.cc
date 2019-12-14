@@ -9,6 +9,7 @@
 #include "misc.h"
 #include "point_conversion.h"
 #include "common.h"
+#include "../utils/unknown_recorder.h"
 
 namespace mcpe_viz {
     int32_t ChunkData_LevelDB::_do_chunk_v2(int32_t tchunkX, int32_t tchunkZ, const char* cdata,
@@ -490,7 +491,7 @@ namespace mcpe_viz {
                         chunkBlockPalette_BlockData[i] = bdata;
                     }
                     else {
-                        log::warn("Did not find block uname '{}' in XML file", bname);
+                        record_unknow_uname(bname);
                         // todonow - reasonable?
                         chunkBlockPalette_BlockId[i] = 0;
                         chunkBlockPalette_BlockData[i] = 0;
