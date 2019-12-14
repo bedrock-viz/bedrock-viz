@@ -2,6 +2,7 @@
 
 #include "../define.h"
 #include "../util.h"
+#include "../logger.h"
 
 namespace mcpe_viz {
     BiomeInfo::BiomeInfo(const char* n)
@@ -31,7 +32,7 @@ namespace mcpe_viz {
             return biomeInfoList[idv]->name;
         }
         char s[256];
-        sprintf(s, "ERROR: Failed to find biome id (%d)", idv);
+        log::error("Failed to find biome id ({})", idv);
         return std::string(s);
     }
 }

@@ -48,6 +48,7 @@ namespace mcpe_viz {
     void print_unknown_block_warnings()
     {
         const auto& recorder = BlockRecorder::instance();
+
         for (auto& i : recorder.getUnknownBlockVariant()) {
             const auto& blockId = i.first.first;
             const auto& blockData = i.first.second;
