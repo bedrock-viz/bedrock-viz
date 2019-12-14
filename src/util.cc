@@ -145,17 +145,6 @@ namespace mcpe_viz {
         return 0;
     }
 
-
-    bool vectorContains(const std::vector<int>& v, int32_t i) {
-        for (const auto& iter : v) {
-            if (iter == i) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
     std::string makeIndent(int32_t indent, const char* hdr) {
         std::string s;
         s.append(hdr);

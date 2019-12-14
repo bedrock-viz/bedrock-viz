@@ -75,13 +75,7 @@ namespace mcpe_viz {
             worldSeed = wSeed;
         }
 
-        void updateFastLists() {
-            for (int32_t bid = 0; bid < 512; bid++) {
-                fastBlockHideList[bid] = vectorContains(blockHideList, bid);
-                fastBlockForceTopList[bid] = vectorContains(blockForceTopList, bid);
-                fastBlockToGeoJSONList[bid] = vectorContains(blockToGeoJSONList, bid);
-            }
-        }
+        void updateFastLists();
 
         void setName(const std::string& s) {
             name = s;

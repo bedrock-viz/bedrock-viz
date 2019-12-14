@@ -66,10 +66,6 @@ namespace mcpe_viz {
 
     std::string makeIndent(int32_t indent, const char* hdr);
 
-
-
-    bool vectorContains(const std::vector<int>& v, int32_t i);
-
     void dumpBuffer(const char* header, const char* buf, size_t bufLen);
 
 
