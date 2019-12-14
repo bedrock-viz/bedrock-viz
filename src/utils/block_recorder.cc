@@ -53,12 +53,8 @@ namespace mcpe_viz {
             const auto& blockData = i.first.second;
             const auto& blockName = i.second;
 
-            slogger.msg(kLogInfo1,
-                "WARNING: Did not find block variant for block (id=%d (0x%x) '%s') with blockdata=%d (0x%x) MSG3\n",
-                blockId, blockId,
-                blockName.c_str(), blockData,
-                blockData
-            );
+            log::warn("Did not find block variant for block (id={} (0x{:x}) '{}') with blockdata={} (0x{:x})",
+                blockId, blockId, blockName, blockData, blockData);
         }
     }
 }

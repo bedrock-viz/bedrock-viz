@@ -50,11 +50,14 @@ namespace mcpe_viz {
 
     extern Logger logger;
     extern Logger slogger;
-
-    using spdlog::debug;
-    using spdlog::info;
-    using spdlog::warn;
-    using spdlog::error;
+    namespace log
+    {
+        using spdlog::debug;
+        using spdlog::info;
+        using spdlog::warn;
+        using spdlog::error;
+    }
+    
 
     enum class Level {
         Debug = spdlog::level::debug,

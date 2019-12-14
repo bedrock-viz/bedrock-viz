@@ -837,7 +837,6 @@ namespace mcpe_viz {
             local_mkdir(control.outputDir.generic_string());
         }
         
-
         // make sure that output directory is NOT world data directory
         std::string fnTest = (control.outputDir / "level.dat").generic_string();
         if (file_exists(fnTest)) {
