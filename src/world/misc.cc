@@ -1,26 +1,12 @@
 #include "misc.h"
 
 #include "../define.h"
-#include "../control.h"
 #include "../nbt.h"
 #include "../logger.h"
 #include "../util.h"
 #include "../minecraft/block_info.h"
 
 namespace mcpe_viz {
-    using mcpe_viz::MAX_BLOCK_HEIGHT_127;
-    using mcpe_viz::MAX_BLOCK_HEIGHT;
-    using mcpe_viz::control;
-    using mcpe_viz::slogger;
-    using mcpe_viz::logger;
-    using mcpe_viz::kLogError;
-    using mcpe_viz::kLogWarning;
-    using mcpe_viz::kLogInfo1;
-    using mcpe_viz::getBitsFromBytes;
-    using mcpe_viz::NUM_BYTES_CHUNK_V3;
-    using mcpe_viz::MyNbtTagList;
-    using mcpe_viz::parseNbtQuiet;
-    using mcpe_viz::getBlockByUname;
 
     // todolib - these funcs should be in a class?
 
@@ -112,10 +98,10 @@ namespace mcpe_viz {
         // todonow - temp test to find bug
         size_t tmp_offset = (16 * 16 * 16) + 1 + off2;
         if (tmp_offset >= plen) {
-            if (control.verboseFlag) {
-                slogger.msg(kLogError, "getBlockData_LevelDB_v3 get data out of bounds! (%d >= %d) (%d %d %d)\n",
-                    (int32_t)tmp_offset, (int32_t)plen, x, z, y);
-            }
+            
+            log::debug("getBlockData_LevelDB_v3 get data out of bounds! ({} >= {}) ({} {} {})",
+                tmp_offset, plen, x, z, y);
+            
             return 0;
         }
         int32_t v = p[tmp_offset];
@@ -136,10 +122,10 @@ namespace mcpe_viz {
         // todonow - temp test to find bug
         size_t tmp_offset = (16 * 16 * 16) + 1 + off2;
         if (tmp_offset >= plen) {
-            if (control.verboseFlag) {
-                slogger.msg(kLogError, "getBlockData_LevelDB_v3 get data out of bounds! (%d >= %d) (%d %d %d)\n",
-                    (int32_t)tmp_offset, (int32_t)plen, x, z, y);
-            }
+            
+            log::debug("getBlockData_LevelDB_v3 get data out of bounds! ({} >= {}) ({} {} {})",
+                tmp_offset, plen, x, z, y);
+            
             return 0;
         }
         int32_t v = p[tmp_offset];
@@ -160,10 +146,10 @@ namespace mcpe_viz {
         // todonow - temp test to find bug
         size_t tmp_offset = (16 * 16 * 16) + 1 + (16 * 16 * 8) + off2;
         if (tmp_offset >= plen) {
-            if (control.verboseFlag) {
-                slogger.msg(kLogError, "getBlockSkyLight_LevelDB_v3 get data out of bounds! (%d >= %d) (%d %d %d)\n",
-                    (int32_t)tmp_offset, (int32_t)plen, x, z, y);
-            }
+            
+            log::debug("getBlockSkyLight_LevelDB_v3 get data out of bounds! ({} >= {}) ({} {} {})",
+                tmp_offset, plen, x, z, y);
+            
             return 0;
         }
         int32_t v = p[tmp_offset];
@@ -184,10 +170,10 @@ namespace mcpe_viz {
         // todonow - temp test to find bug
         size_t tmp_offset = (16 * 16 * 16) + 1 + (16 * 16 * 8) + (16 * 16 * 8) + off2;
         if (tmp_offset >= plen) {
-            if (control.verboseFlag) {
-                slogger.msg(kLogError, "getBlockBlockLight_LevelDB_v3 get data out of bounds! (%d >= %d) (%d %d %d)\n",
-                    (int32_t)tmp_offset, (int32_t)plen, x, z, y);
-            }
+            
+            log::debug("getBlockBlockLight_LevelDB_v3 get data out of bounds! ({} >= {}) ({} {} {})",
+                tmp_offset, plen, x, z, y);
+            
             return 0;
         }
         int32_t v = p[tmp_offset];
@@ -332,8 +318,7 @@ namespace mcpe_viz {
             offsetBlockInfoList = (4096 / blocksPerWord) * 4;
             break;
         default:
-            slogger.msg(kLogError, "Unknown chunk cdata[1] value = %d\n", (int)v);
-            logger.msg(kLogError, "Unknown chunk cdata[1] value = %d\n", (int)v);
+            log::error("Unknown chunk cdata[1] value = {}", v);
             return -1;
         }
 
@@ -394,8 +379,9 @@ namespace mcpe_viz {
                     processedFlag = true;
                 }
                 if (!processedFlag) {
-                    slogger.msg(kLogError, "(Safe) Did not find 'name' tag in a chunk palette! (i=%d) (len=%d)\n",
-                        (int)i, (int)tagList.size());
+                    log::warn("(Safe) Did not find 'name' tag in a chunk palette! (i={}) (len={})",
+                        i, tagList.size());
+                    
                     //todozooz - dump tc to screen log
                 }
             }

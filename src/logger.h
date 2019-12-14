@@ -49,7 +49,6 @@ namespace mcpe_viz {
     };
 
     extern Logger logger;
-    extern Logger slogger;
     namespace log
     {
         using spdlog::trace;

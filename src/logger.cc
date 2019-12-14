@@ -100,5 +100,4 @@ namespace mcpe_viz {
     }
 
     Logger logger;
-    Logger slogger;
 }

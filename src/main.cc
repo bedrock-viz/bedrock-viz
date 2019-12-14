@@ -849,9 +849,6 @@ int main(int argc, char** argv)
     
     world = std::make_unique<MinecraftWorld_LevelDB>();
 
-    slogger.setStdout(stderr);
-    slogger.setStderr(stderr);
-
     if (parse_args(argc, argv) != 0) {
         mcpe_viz::print_usage();
         return -1;
