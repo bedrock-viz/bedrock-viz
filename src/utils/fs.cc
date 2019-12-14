@@ -26,16 +26,14 @@ namespace mcpe_viz {
         const StringReplacementList& replaceStrings) {
         char buf[1025];
 
-        //slogger.msg(kLogInfo1,"  copyFileWithStringReplacement src=%s dest=%s\n", fnSrc.c_str(), fnDest.c_str());
-
         FILE* fpsrc = fopen(fnSrc.c_str(), "r");
         if (!fpsrc) {
-            slogger.msg(kLogInfo1, "ERROR: copyFileWithStringReplacement failed to open src (%s) errno=%s(%d)\n", fnSrc.c_str(), strerror(errno), errno);
+            log::error("copyFileWithStringReplacement failed to open src ({}) errno={}({})", fnSrc, strerror(errno), errno);
             return -1;
         }
         FILE* fpdest = fopen(fnDest.c_str(), "w");
         if (!fpdest) {
-            slogger.msg(kLogInfo1, "ERROR: copyFileWithStringReplacement failed to open dest (%s) errno=%s(%d)\n", fnDest.c_str(), strerror(errno), errno);
+            log::error("copyFileWithStringReplacement failed to open dest ({}) errno={}({})", fnDest, strerror(errno), errno);
             fclose(fpsrc);
             return -1;
         }
@@ -82,8 +80,7 @@ namespace mcpe_viz {
             return 0;
         }
         catch (const fs::filesystem_error & e) {
-            slogger.msg(kLogInfo1, "ERROR: copyFile failed for src (%s) to dest (%s) error-code (%d)\n",
-                fnSrc.c_str(), fnDest.c_str(), e.code().value());
+            log::error("copyFile failed for src ({}) to dest ({}) error-code ({})", fnSrc, fnDest, e.code().value());
             return 1;
         }
     }
@@ -97,7 +94,7 @@ namespace mcpe_viz {
             return 0;
         }
         catch (const fs::filesystem_error&) {
-            slogger.msg(kLogInfo1, "ERROR: copyDirToDir( src=%s dest=%s ) failed to open source directory\n", dirSrc.c_str(), dirDest.c_str());
+            log::error("copyDirToDir(src={} dest={}) failed to open source directory", dirSrc, dirDest);
             return -1;
         }
     }
