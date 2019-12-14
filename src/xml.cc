@@ -16,7 +16,6 @@
 #include "minecraft/entity_info.h"
 #include "minecraft/biome_info.h"
 #include "minecraft/enchantment_info.h"
-#include "minecraft/conversion.h"
 
 #include "utils/fs.h"
 
@@ -438,7 +437,7 @@ namespace mcpe_viz {
     }
 
     // todo - use verboseflag to show all items as they are processed
-    fprintf(stderr,"Reading XML from %s\n", fn.c_str());
+    log::info("Reading XML from {}", fn);
       
     int32_t ret = 2;
     cur = xmlDocGetRootElement(doc);

@@ -227,6 +227,7 @@
 #include "world/dimension_data.h"
 #include "world/world.h"
 #include "utils/fs.h"
+#include "global.h"
 
 namespace mcpe_viz {
 
@@ -792,7 +793,6 @@ namespace mcpe_viz {
                 break;
             case 'q':
                 control.quietFlag = true;
-                logger.setLogLevelMask(kLogQuiet);
                 break;
             default:
                 log::error("Unrecognized option: '{}'", optc);
@@ -822,10 +822,6 @@ namespace mcpe_viz {
             log::error("You cannot send mcpe_viz output to a world file data directory");
         }
 
-        if (errct <= 0) {
-            control.setupOutput();
-        }
-
         return errct;
     }
 
@@ -851,6 +847,9 @@ int main(int argc, char** argv)
     if (parse_args(argc, argv) != 0) {
         mcpe_viz::print_usage();
         return -1;
+    }
+    if (control.doHtml) {
+        listGeoJSON.clear();
     }
     auto console_log_level = control.quietFlag ? Level::Warn : (control.verboseFlag ? Level::Debug : Level::Info);
     auto file_log_level = control.verboseFlag ? Level::Trace : Level::Debug;

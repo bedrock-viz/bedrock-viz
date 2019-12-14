@@ -1,52 +1,9 @@
 #include "logger.h"
 
-#include <cstdarg>
-#include <cstdlib>
-
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
 namespace mcpe_viz {
-    Logger::Logger() {
-
-        this->logLevelMask = kLogInfo;
-        this->fpStderr = nullptr;
-        this->fpStdout = nullptr;
-    }
-
-    void Logger::setLogLevelMask(uint32_t m) { logLevelMask = m; }
-
-    void Logger::setStdout(FILE * fp) { fpStdout = fp; }
-
-    void Logger::setStderr(FILE * fp) { fpStderr = fp; }
-
-    int32_t Logger::msg(uint32_t levelMask, const char * fmt, ...) {
-        // check if we care about this message
-        if (levelMask & logLevelMask) {
-            // we care
-        } else {
-            // we don't care
-            return -1;
-        }
-
-        // todobig - be more clever about logging - if very important or interesting, we might want to print to log AND to stderr
-        FILE *fp = fpStdout;
-
-        if (fp == nullptr) {
-            // todobig - output to screen?
-            return -1;
-        }
-
-        if (levelMask & kLogError) { fprintf(fp, "ERROR: "); }
-        else if (levelMask & kLogWarning) { fprintf(fp, "WARNING: "); }
-
-        va_list argptr;
-        va_start(argptr, fmt);
-        vfprintf(fp, fmt, argptr);
-        va_end(argptr);
-
-        return 0;
-    }
 
     auto create_console_sink()
     {
@@ -83,5 +40,4 @@ namespace mcpe_viz {
         spdlog::set_level(spdlog::level::level_enum(consoleLevel > fileLevel ? fileLevel : consoleLevel));
     }
 
-    Logger logger;
 }

@@ -195,47 +195,6 @@ namespace mcpe_viz {
 #endif
             }
         }
-
-        if (control.quietFlag) {
-            return 0;
-        }
-
-        // print chunk info
-        logger.msg(kLogInfo1, "Top Blocks (block-id:block-data:biome-id):\n");
-        // note the different use of cx/cz here
-        uint32_t rawData;
-        for (int32_t cz = 0; cz < 16; cz++) {
-            for (int32_t cx = 0; cx < 16; cx++) {
-                rawData = grassAndBiome[cx][cz];
-                biomeId = (uint8_t)(rawData & 0xFF);
-                logger.msg(kLogInfo1, "%03x:%x:%02x ", (int)blocks[cx][cz], (int)data[cx][cz], (int)biomeId);
-            }
-            logger.msg(kLogInfo1, "\n");
-        }
-        logger.msg(kLogInfo1, "Block Histogram:\n");
-        for (int32_t i = 0; i < 512; i++) {
-            if (histogramBlock[i] > 0) {
-                logger.msg(kLogInfo1, "%s-hg: %02x: %6d (%s)\n", dimName.c_str(), i, histogramBlock[i],
-                    blockInfoList[i].name.c_str());
-            }
-        }
-        logger.msg(kLogInfo1, "Biome Histogram:\n");
-        for (int32_t i = 0; i < 256; i++) {
-            if (histogramBiome[i] > 0) {
-                std::string biomeName(getBiomeName(i));
-                logger.msg(kLogInfo1, "%s-hg-biome: %02x: %6d (%s)\n", dimName.c_str(), i, histogramBiome[i],
-                    biomeName.c_str());
-            }
-        }
-        logger.msg(kLogInfo1, "Block Light (skylight:blocklight:heightcol):\n");
-        for (int32_t cz = 0; cz < 16; cz++) {
-            for (int32_t cx = 0; cx < 16; cx++) {
-                logger.msg(kLogInfo1, "%x:%x:%02x ", (int)((topLight[cx][cz] >> 4) & 0xf),
-                    int(topLight[cx][cz] & 0xf), (int)heightCol[cx][cz]);
-            }
-            logger.msg(kLogInfo1, "\n");
-        }
-
         return 0;
     }
 
@@ -280,7 +239,7 @@ namespace mcpe_viz {
         }
 
         // iterate over chunk space
-        uint8_t blockId, biomeId;
+        uint8_t blockId;
         for (int32_t cy = 0; cy < 16; cy++) {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
@@ -348,51 +307,6 @@ namespace mcpe_viz {
                 }
             }
         }
-
-        if (control.quietFlag) {
-            return 0;
-        }
-
-        // todonow todobig todohere todostopper - this is not valid until we have the whole chunk
-
-        if (false) {
-            // print chunk info
-            logger.msg(kLogInfo1, "Top Blocks (block-id:block-data:biome-id):\n");
-            // note the different use of cx/cz here
-            uint32_t rawData;
-            for (int32_t cz = 0; cz < 16; cz++) {
-                for (int32_t cx = 0; cx < 16; cx++) {
-                    rawData = grassAndBiome[cx][cz];
-                    biomeId = (uint8_t)(rawData & 0xFF);
-                    logger.msg(kLogInfo1, "%03x:%x:%02x ", (int)blocks[cx][cz], (int)data[cx][cz], (int)biomeId);
-                }
-                logger.msg(kLogInfo1, "\n");
-            }
-            logger.msg(kLogInfo1, "Block Histogram:\n");
-            for (int32_t i = 0; i < 512; i++) {
-                if (histogramBlock[i] > 0) {
-                    logger.msg(kLogInfo1, "%s-hg: %02x: %6d (%s)\n", dimName.c_str(), i, histogramBlock[i],
-                        blockInfoList[i].name.c_str());
-                }
-            }
-            logger.msg(kLogInfo1, "Biome Histogram:\n");
-            for (int32_t i = 0; i < 256; i++) {
-                if (histogramBiome[i] > 0) {
-                    std::string biomeName(getBiomeName(i));
-                    logger.msg(kLogInfo1, "%s-hg-biome: %02x: %6d (%s)\n", dimName.c_str(), i, histogramBiome[i],
-                        biomeName.c_str());
-                }
-            }
-            logger.msg(kLogInfo1, "Block Light (skylight:blocklight:heightcol):\n");
-            for (int32_t cz = 0; cz < 16; cz++) {
-                for (int32_t cx = 0; cx < 16; cx++) {
-                    logger.msg(kLogInfo1, "%x:%x:%02x ", (int)((topLight[cx][cz] >> 4) & 0xf),
-                        (int)(topLight[cx][cz] & 0xf), (int)heightCol[cx][cz]);
-                }
-                logger.msg(kLogInfo1, "\n");
-            }
-        }
-
         return 0;
     }
 
@@ -453,19 +367,7 @@ namespace mcpe_viz {
         // read chunk palette and associate old-school block id's
         MyNbtTagList tagList;
         int xoff = offsetBlockInfoList + 6 + extraOffset;
-        // debug
-        if (false) {
-            logger.msg(kLogWarning,
-                "hey -- cdata[0..2] = %02x %02x %02x // blocksPerWord=%02x bitsPerBlock=%02x maxPal=%.0lf // before nbt = %02x %02x %02x %02x %02x %02x\n",
-                (int)cdata[0], (int)cdata[1], (int)cdata[2], blocksPerWord, bitsPerBlock,
-                pow(2.0, (double)bitsPerBlock), (unsigned int)cdata[offsetBlockInfoList + 0] & 0xff,
-                (unsigned int)cdata[offsetBlockInfoList + 1] & 0xff,
-                (unsigned int)cdata[offsetBlockInfoList + 2] & 0xff,
-                (unsigned int)cdata[offsetBlockInfoList + 3] & 0xff,
-                (unsigned int)cdata[offsetBlockInfoList + 4] & 0xff,
-                (unsigned int)cdata[offsetBlockInfoList + 5] & 0xff
-            );
-        }
+
         parseNbtQuiet(&cdata[xoff], int32_t(cdata_size - xoff), cdata[offsetBlockInfoList + 3], tagList);
         //parseNbt("chunk-palette",&cdata[xoff], cdata_size-xoff, tagList);
 
@@ -504,13 +406,13 @@ namespace mcpe_viz {
                 }
             }
             else {
-                logger.msg(kLogWarning, "Unexpected NBT format in _do_chunk_v7\n");
+                log::warn("Unexpected NBT format in _do_chunk_v7");
             }
         }
 
         //todozooz -- new 16-bit block-id's (instead of 8-bit) are a BIG issue - this needs attention here
         // iterate over chunk space
-        uint8_t paletteBlockId, blockData, biomeId;
+        uint8_t paletteBlockId, blockData;
         int32_t blockId;
         for (int32_t cy = 0; cy < 16; cy++) {
             for (int32_t cx = 0; cx < 16; cx++) {
@@ -594,51 +496,6 @@ namespace mcpe_viz {
                 }
             }
         }
-
-        if (control.quietFlag) {
-            return 0;
-        }
-
-        // todonow todobig todohere todostopper - this is not valid until we have the whole chunk
-
-        if (false) {
-            // print chunk info
-            logger.msg(kLogInfo1, "Top Blocks (block-id:block-data:biome-id):\n");
-            // note the different use of cx/cz here
-            uint32_t rawData;
-            for (int32_t cz = 0; cz < 16; cz++) {
-                for (int32_t cx = 0; cx < 16; cx++) {
-                    rawData = grassAndBiome[cx][cz];
-                    biomeId = (uint8_t)(rawData & 0xFF);
-                    logger.msg(kLogInfo1, "%03x:%x:%02x ", (int)blocks[cx][cz], (int)data[cx][cz], (int)biomeId);
-                }
-                logger.msg(kLogInfo1, "\n");
-            }
-            logger.msg(kLogInfo1, "Block Histogram:\n");
-            for (int32_t i = 0; i < 512; i++) {
-                if (histogramBlock[i] > 0) {
-                    logger.msg(kLogInfo1, "%s-hg: %02x: %6d (%s)\n", dimName.c_str(), i, histogramBlock[i],
-                        blockInfoList[i].name.c_str());
-                }
-            }
-            logger.msg(kLogInfo1, "Biome Histogram:\n");
-            for (int32_t i = 0; i < 256; i++) {
-                if (histogramBiome[i] > 0) {
-                    std::string biomeName(getBiomeName(i));
-                    logger.msg(kLogInfo1, "%s-hg-biome: %02x: %6d (%s)\n", dimName.c_str(), i, histogramBiome[i],
-                        biomeName.c_str());
-                }
-            }
-            logger.msg(kLogInfo1, "Block Light (skylight:blocklight:heightcol):\n");
-            for (int32_t cz = 0; cz < 16; cz++) {
-                for (int32_t cx = 0; cx < 16; cx++) {
-                    logger.msg(kLogInfo1, "%x:%x:%02x ", (int)((topLight[cx][cz] >> 4) & 0xf),
-                        (int)(topLight[cx][cz] & 0xf), (int)heightCol[cx][cz]);
-                }
-                logger.msg(kLogInfo1, "\n");
-            }
-        }
-
         return 0;
     }
     int32_t ChunkData_LevelDB::_do_chunk_biome_v3(int32_t tchunkX, int32_t tchunkZ, const char* cdata, int32_t cdatalen,
@@ -646,23 +503,6 @@ namespace mcpe_viz {
     {
         chunkX = tchunkX;
         chunkZ = tchunkZ;
-
-        // debug
-        if (false) {
-            logger.msg(kLogInfo1, "biome_v3: x=%d z=%d datalen=%d -- data:", tchunkX, tchunkZ, cdatalen);
-            bool newlineStart = true;
-            for (int i = 0; i < cdatalen; i++) {
-                if (newlineStart) {
-                    logger.msg(kLogInfo1, "\nbiome_v3_data:");
-                    newlineStart = false;
-                }
-                logger.msg(kLogInfo1, " %02x", cdata[i]);
-                if (((i + 1) % 16) == 0) {
-                    newlineStart = true;
-                }
-            }
-            logger.msg(kLogInfo1, "\n");
-        }
 
         int16_t histogramBiome[256];
         memset(histogramBiome, 0, sizeof(histogramBiome));

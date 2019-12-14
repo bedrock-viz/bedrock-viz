@@ -63,9 +63,6 @@ namespace mcpe_viz {
         int32_t tileWidth;
         int32_t tileHeight;
 
-        bool fpLogNeedCloseFlag;
-        FILE *fpLog;
-
         // this is the BloomFilterPolicy bits, set to 0 to disable filter
         int32_t leveldbFilter = 10;
         // this is the block_size used by leveldb
@@ -75,13 +72,7 @@ namespace mcpe_viz {
             init();
         }
 
-        ~Control() {
-            if (fpLogNeedCloseFlag) {
-                if (fpLog != nullptr) {
-                    fclose(fpLog);
-                }
-            }
-        }
+        ~Control() = default;
 
         void init() {
             dirLeveldb = "";
@@ -114,8 +105,6 @@ namespace mcpe_viz {
             verboseFlag = false;
             quietFlag = false;
             movieX = movieY = movieW = movieH = 0;
-            fpLogNeedCloseFlag = false;
-            fpLog = stdout;
 
             leveldbFilter = 10;
             leveldbBlockSize = 4096;
@@ -139,8 +128,6 @@ namespace mcpe_viz {
                 }
             }
         }
-
-        void setupOutput();
     };
 
     extern Control control;
