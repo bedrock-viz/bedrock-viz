@@ -462,7 +462,7 @@ namespace mcpe_viz {
         //MTwister random = new MTwister();
         std::mt19937 random;
         //random.init_genrand(seed);
-        random.seed(seed);
+        random.seed(unsigned(seed));
 
         // The output of the random function, first operand of the asm umull instruction
         //int64_tn = random.genrand_int32();
@@ -1200,9 +1200,8 @@ namespace mcpe_viz {
                             dstatus = db->Get(levelDbReadOptions, leveldb::Slice(keybuf, keybuflen), &svalue);
                             if (!dstatus.ok()) {
                                 notFoundCt2++;
-                                slogger.msg(kLogInfo1,
-                                    "WARNING: Did not find chunk in leveldb x=%d z=%d status=%s\n", chunkX,
-                                    chunkZ, dstatus.ToString().c_str());
+                                log::warn("Did not find chunk in leveldb x={} z={} status={}",
+                                    chunkX, chunkZ, dstatus.ToString());
                                 blockArray.push_back(0);
                                 blockDataArray.push_back(0);
                                 continue;
@@ -1236,8 +1235,7 @@ namespace mcpe_viz {
 
     int32_t DimensionData_LevelDB::doOutput(leveldb::DB* db)
     {
-        slogger.msg(kLogInfo1, "Do Output: %s\n", name.c_str());
-
+        log::info("Do Output: {}", name);
         doOutputStats();
 
         doOutput_GeoJSON();

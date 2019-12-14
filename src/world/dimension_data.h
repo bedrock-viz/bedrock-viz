@@ -109,13 +109,10 @@ namespace mcpe_viz {
             const int32_t chunkH = (maxChunkZ - minChunkZ + 1);
             const int32_t imageW = chunkW * 16;
             const int32_t imageH = chunkH * 16;
-
-            slogger.msg(kLogInfo1, "  Bounds (chunk): DimId=%d X=(%d %d) Z=(%d %d)\n", dimId, minChunkX, maxChunkX,
-                minChunkZ, maxChunkZ
-            );
-            slogger.msg(kLogInfo1, "  Bounds (pixel): DimId=%d X=(%d %d) Z=(%d %d) Image=(%d %d)\n", dimId,
-                minChunkX * 16, maxChunkX * 16, minChunkZ * 16, maxChunkZ * 16, imageW, imageH
-            );
+            log::info("  Bounds (chunk): DimId={} X=({} {}) Z=({} {})", 
+                dimId, minChunkX, maxChunkX, minChunkZ, maxChunkZ);
+            log::info("  Bounds (pixel): DimId={} X=({} {}) Z=({} {}) Image=({} {})", 
+                dimId, minChunkX * 16, maxChunkX * 16, minChunkZ * 16, maxChunkZ * 16, imageW, imageH);
         }
 
         void addToChunkBounds(int32_t chunkX, int32_t chunkZ) {
@@ -172,9 +169,8 @@ namespace mcpe_viz {
                     fastBlockHideList, fastBlockForceTopList,
                     fastBlockToGeoJSONList,
                     listCheckSpawn);
-                return 0;
             }
-            slogger.msg(kLogError, "UNKNOWN CHUNK FORMAT (%d)\n", tchunkFormatVersion);
+            log::error("Unknown chunk format ({})", tchunkFormatVersion);
             return -1;
         }
 
@@ -196,7 +192,7 @@ namespace mcpe_viz {
 
                 return chunks[chunkKey]->_do_chunk_biome_v3(chunkX, chunkZ, cdata, cdatalen, histogramGlobalBiome);
             }
-            slogger.msg(kLogError, "UNKNOWN CHUNK FORMAT (%d)\n", tchunkFormatVersion);
+            log::error("Unknown chunk format ({})", tchunkFormatVersion);
             return -1;
         }
 
@@ -492,7 +488,7 @@ namespace mcpe_viz {
 
             PngReader pngSrc;
             if (pngSrc.init(fnSrc) != 0) {
-                slogger.msg(kLogInfo1, "ERROR: Failed to open src png");
+                log::error("Failed to open src png");
                 return -1;
             }
 
