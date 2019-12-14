@@ -12,10 +12,7 @@ namespace mcpe_viz {
         this->logLevelMask = kLogInfo;
         this->fpStderr = nullptr;
         this->fpStdout = nullptr;
-        this->doFlushFlag = false;
     }
-
-    void Logger::setFlush(bool f) { doFlushFlag = f; }
 
     void Logger::setLogLevelMask(uint32_t m) { logLevelMask = m; }
 
@@ -25,7 +22,7 @@ namespace mcpe_viz {
 
     int32_t Logger::msg(uint32_t levelMask, const char * fmt, ...) {
         // check if we care about this message
-        if ((levelMask & logLevelMask) || (levelMask & kLogFatalError)) {
+        if (levelMask & logLevelMask) {
             // we care
         } else {
             // we don't care
@@ -40,26 +37,13 @@ namespace mcpe_viz {
             return -1;
         }
 
-        if (levelMask & kLogFatalError) { fprintf(fp, "** FATAL ERROR: "); }
-        else if (levelMask & kLogError) { fprintf(fp, "ERROR: "); }
+        if (levelMask & kLogError) { fprintf(fp, "ERROR: "); }
         else if (levelMask & kLogWarning) { fprintf(fp, "WARNING: "); }
-//        else if (levelMask & kLogInfo) {} // fprintf(fp,"INFO: "); }
-//        else {} // fprintf(fp,"UNKNOWN: "); }
 
         va_list argptr;
         va_start(argptr, fmt);
         vfprintf(fp, fmt, argptr);
         va_end(argptr);
-
-        if (levelMask & kLogFatalError) {
-            fprintf(fp, "** Exiting on FATAL ERROR\n");
-            fflush(fp);
-            exit(-1);
-        }
-
-        if (doFlushFlag) {
-            fflush(fp);
-        }
 
         return 0;
     }

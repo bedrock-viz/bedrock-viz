@@ -784,11 +784,6 @@ namespace mcpe_viz
             else {
                 log::debug("Unknown chunk - key_size={} cdata_size={}", key_size, cdata_size);
                 printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), true);
-                if (false) {
-                    // try to nbt decode
-                    logger.msg(kLogInfo1, "WARNING: Attempting NBT Decode:\n");
-                    parseNbt("WARNING: ", cdata, int32_t(cdata_size), tagList);
-                }
             }
         }
         log::info("Read {} records", recordCt);

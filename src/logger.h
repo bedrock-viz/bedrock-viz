@@ -14,14 +14,13 @@ namespace mcpe_viz {
         kLogInfo = 0x0010,
         kLogWarning = 0x0020,
         kLogError = 0x0040,
-        kLogFatalError = 0x0080,
         kLogDebug = 0x1000,
         kLogAll = 0xffff
     };
 
     const uint32_t kLogVerbose = kLogAll ^ (kLogDebug);
     const uint32_t kLogDefault = kLogVerbose;
-    const uint32_t kLogQuiet = ( kLogWarning | kLogError | kLogFatalError );
+    const uint32_t kLogQuiet = ( kLogWarning | kLogError );
 
 
     class Logger {
@@ -29,11 +28,8 @@ namespace mcpe_viz {
         uint32_t logLevelMask;
         FILE *fpStdout;
         FILE *fpStderr;
-        bool doFlushFlag;
 
         Logger();
-
-        void setFlush(bool f);
 
         void setLogLevelMask(uint32_t m);
 
