@@ -93,8 +93,9 @@ namespace mcpe_viz {
   int32_t globalNbtCompoundNumber=0;
 
   int32_t parseNbtTag( const char* hdr, int& indent, const MyNbtTag& t ) {
+      log::trace("{}[{}]", makeIndent(indent, hdr), t.first);
 
-    logger.msg(kLogInfo1,"%s[%s] ", makeIndent(indent,hdr).c_str(), t.first.c_str());
+    //logger.msg(kLogInfo1,"%s[%s] ", makeIndent(indent,hdr).c_str(), t.first.c_str());
 
     nbt::tag_type tagType = t.second->get_type();
       
@@ -174,13 +175,13 @@ namespace mcpe_viz {
       {
         nbt::tag_compound v = t.second->as<nbt::tag_compound>();
         int32_t cnum = ++globalNbtCompoundNumber;
-        logger.msg(kLogInfo1,"COMPOUND-%d {\n",cnum);
+        log::trace("COMPOUND-{}", cnum);
         indent++;
         for ( const auto& it: v ) {
           parseNbtTag( hdr, indent, std::make_pair( it.first, it.second.get().clone() ) );
         }
         if ( --indent < 0 ) { indent=0; }
-        logger.msg(kLogInfo1,"%s} COMPOUND-%d\n", makeIndent(indent,hdr).c_str(),cnum);
+        log::trace("{}}} COMPOUND-{}", makeIndent(indent, hdr), cnum);
       }
       break;
     case nbt::tag_type::Int_Array:
@@ -206,9 +207,7 @@ namespace mcpe_viz {
     
   int32_t parseNbt( const char* hdr, const char* buf, int32_t bufLen, MyNbtTagList& tagList ) {
     int32_t indent=0;
-
-    logger.msg(kLogInfo1,"%sNBT Decode Start\n",makeIndent(indent,hdr).c_str());
-
+    log::trace("{}NBT Decode Start", makeIndent(indent, hdr));
     // these help us look at dumped nbt data and match up LIST's and COMPOUND's
     globalNbtListNumber=0;
     globalNbtCompoundNumber=0;
@@ -250,8 +249,7 @@ namespace mcpe_viz {
     for ( const auto& itt: tagList ) {
       parseNbtTag( hdr, indent, itt );
     }
-
-    logger.msg(kLogInfo1,"%sNBT Decode End (%d tags)\n",makeIndent(indent,hdr).c_str(), (int)tagList.size());
+    log::trace("{}NBT Decode End ({} tags)", makeIndent(indent, hdr), tagList.size());
 
     return 0;
   }
@@ -573,7 +571,7 @@ namespace mcpe_viz {
             }
           }
           if (id < 0 ) {
-            slogger.msg(kLogWarning, "Did not find uname '%s' (item parse)\n", name.c_str());
+              log::warn("Did not find uname '{}' (item parse)", name);
           }
         }
       }
@@ -988,7 +986,7 @@ namespace mcpe_viz {
           list.push_back(std::string(tmpstring));
           // we log it to screen so that people have an easier time adding new player name mappings
           if ( playerId.length() > 0 ) {
-            slogger.msg(kLogInfo1,"INFO: Unmapped remote player: %s\n", playerId.c_str());
+              log::info("Unmapped remote player: {}", playerId);
           }
         }
       } else {
@@ -1652,7 +1650,6 @@ namespace mcpe_viz {
       else if(tc.has_key("identifier")) {
         std::string identifier = tc["identifier"].as<nbt::tag_string>().get();
         int32_t idFindFinally = findEntityByUname(entityInfoList, identifier);
-        //slogger.msg(kLogWarning, "Identifier is: %s", identifier.c_str());
         if (identifier != "minecraft:gravel") {
           entity->idFull = idFindFinally;
           entity->idShort = entity->idFull;

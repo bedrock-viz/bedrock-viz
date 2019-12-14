@@ -283,8 +283,7 @@ namespace mcpe_viz {
                     world->dimDataList[dimId]->blockHideList.push_back(blockId);
                 }
                 else {
-                    slogger.msg(kLogInfo1, "%sERROR: Failed to parse cfg item 'hide-top': [%s]\n",
-                        makeIndent(indent, hdr).c_str(), buf);
+                    log::error("{}Failed to parse cfg item 'hide-top': [{}]", makeIndent(indent, hdr), buf);
                 }
             }
             else if ((p = strstr(buf, "force-top:"))) {
@@ -306,8 +305,7 @@ namespace mcpe_viz {
                     world->dimDataList[dimId]->blockForceTopList.push_back(blockId);
                 }
                 else {
-                    slogger.msg(kLogInfo1, "%sERROR: Failed to parse cfg item 'force-top': [%s]\n",
-                        makeIndent(indent, hdr).c_str(), buf);
+                    log::error("{}Failed to parse cfg item 'force-top': [{}]", makeIndent(indent, hdr), buf);
                 }
             }
             else if ((p = strstr(buf, "geojson-block:"))) {
@@ -329,8 +327,7 @@ namespace mcpe_viz {
                     world->dimDataList[dimId]->blockToGeoJSONList.push_back(blockId);
                 }
                 else {
-                    slogger.msg(kLogInfo1, "%sERROR: Failed to parse cfg item 'geojson-block': [%s]\n",
-                        makeIndent(indent, hdr).c_str(), buf);
+                    log::error("{}Failed to parse cfg item 'geojson-block': [{}]", makeIndent(indent, hdr), buf);
                 }
             }
             else if ((p = strstr(buf, "player-id:"))) {
@@ -338,8 +335,7 @@ namespace mcpe_viz {
                     // all good
                 }
                 else {
-                    slogger.msg(kLogInfo1, "%sWARNING: Unparsed config line: [%s]\n", makeIndent(indent, hdr).c_str(),
-                        buf);
+                    log::warn("{}Unparsed config line: [{}]", makeIndent(indent, hdr), buf);
                 }
             }
 
@@ -425,8 +421,7 @@ namespace mcpe_viz {
                 // all is good
             }
             else {
-                slogger.msg(kLogInfo1, "ERROR: Invalid dimension-id supplied (%d), defaulting to Overworld only\n",
-                    did);
+                log::warn("Invalid dimension-id supplied ({}), defaulting to Overworld only", did);
                 did = kDimIdOverworld;
             }
         }
@@ -439,61 +434,61 @@ namespace mcpe_viz {
     int32_t parse_args(int argc, char** argv) {
 
         static struct option longoptlist[] = {
-                {"db",                 required_argument, NULL, 'D'},
+                {"db",                 required_argument, nullptr, 'D'},
                 {"outdir",             required_argument, nullptr, 'o'},
                 
 
-                {"xml",                required_argument, NULL, 'X'},
+                {"xml",                required_argument, nullptr, 'X'},
 
-                {"detail",             no_argument,       NULL, '@'},
+                {"detail",             no_argument,       nullptr, '@'},
 
-                {"hide-top",           required_argument, NULL, 'H'},
-                {"force-top",          required_argument, NULL, 'F'},
-                {"geojson-block",      required_argument, NULL, '+'},
+                {"hide-top",           required_argument, nullptr, 'H'},
+                {"force-top",          required_argument, nullptr, 'F'},
+                {"geojson-block",      required_argument, nullptr, '+'},
 
-                {"check-spawn",        required_argument, NULL, 'C'},
-                {"check-spawnable",    required_argument, NULL, 'C'},
+                {"check-spawn",        required_argument, nullptr, 'C'},
+                {"check-spawnable",    required_argument, nullptr, 'C'},
 
-                {"schematic",          required_argument, NULL, 'Z'},
-                {"schematic-get",      required_argument, NULL, 'Z'},
+                {"schematic",          required_argument, nullptr, 'Z'},
+                {"schematic-get",      required_argument, nullptr, 'Z'},
 
-                {"all-image",          optional_argument, NULL, 'A'},
-                {"biome",              optional_argument, NULL, 'B'},
-                {"grass",              optional_argument, NULL, 'g'},
-                {"height-col",         optional_argument, NULL, 'd'},
-                {"height-col-gs",      optional_argument, NULL, '#'},
-                {"height-col-alpha",   optional_argument, NULL, 'a'},
-                {"shaded-relief",      optional_argument, NULL, 'S'},
-                {"blocklight",         optional_argument, NULL, 'b'},
-                {"skylight",           optional_argument, NULL, 's'},
-                {"slime-chunk",        optional_argument, NULL, '%'},
+                {"all-image",          optional_argument, nullptr, 'A'},
+                {"biome",              optional_argument, nullptr, 'B'},
+                {"grass",              optional_argument, nullptr, 'g'},
+                {"height-col",         optional_argument, nullptr, 'd'},
+                {"height-col-gs",      optional_argument, nullptr, '#'},
+                {"height-col-alpha",   optional_argument, nullptr, 'a'},
+                {"shaded-relief",      optional_argument, nullptr, 'S'},
+                {"blocklight",         optional_argument, nullptr, 'b'},
+                {"skylight",           optional_argument, nullptr, 's'},
+                {"slime-chunk",        optional_argument, nullptr, '%'},
 
-                {"slices",             optional_argument, NULL, '('},
+                {"slices",             optional_argument, nullptr, '('},
 
-                {"movie",              optional_argument, NULL, 'M'},
-                {"movie-dim",          required_argument, NULL, '*'},
+                {"movie",              optional_argument, nullptr, 'M'},
+                {"movie-dim",          required_argument, nullptr, '*'},
 
-                {"grid",               optional_argument, NULL, 'G'},
+                {"grid",               optional_argument, nullptr, 'G'},
 
-                {"html",               no_argument,       NULL, ')'},
-                {"html-most",          no_argument,       NULL, '='},
-                {"html-all",           no_argument,       NULL, '_'},
-                {"no-force-geojson",   no_argument,       NULL, ':'},
+                {"html",               no_argument,       nullptr, ')'},
+                {"html-most",          no_argument,       nullptr, '='},
+                {"html-all",           no_argument,       nullptr, '_'},
+                {"no-force-geojson",   no_argument,       nullptr, ':'},
 
-                {"auto-tile",          no_argument,       NULL, ']'},
-                {"tiles",              optional_argument, NULL, '['},
+                {"auto-tile",          no_argument,       nullptr, ']'},
+                {"tiles",              optional_argument, nullptr, '['},
 
-                {"shortrun",           no_argument,       NULL, '$'}, // this is just for testing
+                {"shortrun",           no_argument,       nullptr, '$'}, // this is just for testing
 
-                {"flush",              no_argument,       NULL, 'f'},
+                {"flush",              no_argument,       nullptr, 'f'},
 
-                {"leveldb-filter",     required_argument, NULL, '<'},
-                {"leveldb-block-size", required_argument, NULL, '>'},
+                {"leveldb-filter",     required_argument, nullptr, '<'},
+                {"leveldb-block-size", required_argument, nullptr, '>'},
 
-                {"verbose",            no_argument,       NULL, 'v'},
-                {"quiet",              no_argument,       NULL, 'q'},
-                {"help",               no_argument,       NULL, 'h'},
-                {NULL,                 no_argument,       NULL, 0}
+                {"verbose",            no_argument,       nullptr, 'v'},
+                {"quiet",              no_argument,       nullptr, 'q'},
+                {"help",               no_argument,       nullptr, 'h'},
+                {nullptr,              no_argument,       nullptr, 0}
         };
 
         int32_t option_index = 0;
@@ -553,7 +548,7 @@ namespace mcpe_viz {
                 }
 
                 if (!pass) {
-                    slogger.msg(kLogInfo1, "ERROR: Failed to parse --hide-top %s\n", optarg);
+                    log::error("Failed to parse --hide-top {}", optarg);
                     errct++;
                 }
             }
@@ -580,7 +575,7 @@ namespace mcpe_viz {
                 }
 
                 if (!pass) {
-                    slogger.msg(kLogInfo1, "ERROR: Failed to parse --force-top %s\n", optarg);
+                    log::error("Failed to parse --force-top {}", optarg);
                     errct++;
                 }
             }
@@ -607,15 +602,14 @@ namespace mcpe_viz {
                 }
 
                 if (!pass) {
-                    slogger.msg(kLogInfo1, "ERROR: Failed to parse --geojson-block %s\n", optarg);
+                    log::error("Failed to parse --geojson-block {}", optarg);
                     errct++;
                 }
             }
                     break;
 
             case 'C': {
-                slogger.msg(kLogInfo1,
-                    "ERROR: --spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info\n");
+                log::warn("--spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info");
                 errct++;
 
                 bool pass = false;
@@ -637,7 +631,7 @@ namespace mcpe_viz {
                 }
 
                 if (!pass) {
-                    slogger.msg(kLogInfo1, "ERROR: Failed to parse --check-spawn %s\n", optarg);
+                    log::error("Failed to parse --check-spawn {}", optarg);
                     errct++;
                 }
             }
@@ -668,7 +662,7 @@ namespace mcpe_viz {
                 }
 
                 if (!pass) {
-                    slogger.msg(kLogInfo1, "ERROR: Failed to parse --schematic %s\n", optarg);
+                    log::error("Failed to parse --schematic {}", optarg);
                     errct++;
                 }
             }
@@ -691,8 +685,7 @@ namespace mcpe_viz {
                         if (sscanf(optarg, "%d,%d", &tw, &th) == 2) {
                             control.tileWidth = tw;
                             control.tileHeight = th;
-                            slogger.msg(kLogInfo1, "Overriding tile dimensions: %d x %d\n", control.tileWidth,
-                                control.tileHeight);
+                            log::info("Overriding tile dimensions: %d x %d", tw, th);
                         }
                     }
                 }
@@ -790,7 +783,7 @@ namespace mcpe_viz {
                     // good
                 }
                 else {
-                    slogger.msg(kLogInfo1, "ERROR: Failed to parse --movie-dim\n");
+                    log::error("Failed to parse --movie-dim ({})", optarg);
                     errct++;
                 }
                 break;
@@ -798,7 +791,6 @@ namespace mcpe_viz {
             case '$':
                 control.shortRunFlag = true;
                 break;
-
             case 'v':
                 control.verboseFlag = true;
                 break;
@@ -806,10 +798,8 @@ namespace mcpe_viz {
                 control.quietFlag = true;
                 logger.setLogLevelMask(kLogQuiet);
                 break;
-
-                /* Usage */
             default:
-                slogger.msg(kLogInfo1, "ERROR: Unrecognized option: '%c'\n", optc);
+                log::error("Unrecognized option: '{}'", optc);
                 return -1;
 
             case 'h':
