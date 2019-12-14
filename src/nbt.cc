@@ -101,49 +101,47 @@ namespace mcpe_viz
     {
         log::trace("{}[{}]", makeIndent(indent, hdr), t.first);
 
-        //logger.msg(kLogInfo1,"%s[%s] ", makeIndent(indent,hdr).c_str(), t.first.c_str());
-
         nbt::tag_type tagType = t.second->get_type();
 
         switch (tagType) {
         case nbt::tag_type::End:
-            logger.msg(kLogInfo1, "TAG_END\n");
+            log::trace("TAG_END");
             break;
         case nbt::tag_type::Byte:
         {
             nbt::tag_byte v = t.second->as<nbt::tag_byte>();
-            logger.msg(kLogInfo1, "%d 0x%x (byte)\n", v.get(), v.get());
+            log::trace("{} 0x{:x} (byte)", v.get(), v.get());
         }
         break;
         case nbt::tag_type::Short:
         {
             nbt::tag_short v = t.second->as<nbt::tag_short>();
-            logger.msg(kLogInfo1, "%d 0x%x (short)\n", v.get(), v.get());
+            log::trace("{} 0x{:x} (short)", v.get(), v.get());
         }
         break;
         case nbt::tag_type::Int:
         {
             nbt::tag_int v = t.second->as<nbt::tag_int>();
-            logger.msg(kLogInfo1, "%d 0x%x (int)\n", v.get(), v.get());
+            log::trace("{} 0x{:x} (int)", v.get(), v.get());
         }
         break;
         case nbt::tag_type::Long:
         {
             nbt::tag_long v = t.second->as<nbt::tag_long>();
             // note: silly work around for linux vs win32 weirdness
-            logger.msg(kLogInfo1, "%lld 0x%llx (long)\n", (long long int)v.get(), (long long int)v.get());
+            log::trace("{} 0x{:x} (long)", v.get(), v.get());
         }
         break;
         case nbt::tag_type::Float:
         {
             nbt::tag_float v = t.second->as<nbt::tag_float>();
-            logger.msg(kLogInfo1, "%f (float)\n", v.get());
+            log::trace("{} (float)", v.get());
         }
         break;
         case nbt::tag_type::Double:
         {
             nbt::tag_double v = t.second->as<nbt::tag_double>();
-            logger.msg(kLogInfo1, "%lf (double)\n", v.get());
+            log::trace("{} (double)", v.get());
         }
         break;
         case nbt::tag_type::Byte_Array:
@@ -153,9 +151,9 @@ namespace mcpe_viz
             int32_t i = 0;
             for (const auto& itt : v) {
                 if (i++ > 0) { logger.msg(kLogInfo1, " "); }
-                logger.msg(kLogInfo1, "%02x", (int)itt);
+                log::trace("{}", itt);
             }
-            logger.msg(kLogInfo1, "] (hex byte array)\n");
+            log::trace("] (hex byte array)");
         }
         break;
         case nbt::tag_type::String:

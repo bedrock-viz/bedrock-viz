@@ -400,13 +400,13 @@ namespace mcpe_viz
                 }
             }
             else if (strncmp(key, "villages", key_size) == 0) {
-                logger.msg(kLogInfo1, "Villages value:\n");
+                log::trace("Villages value:");
                 parseNbt("villages: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList? usually empty, unless player is in range of village; test that!
             }
             else if (strncmp(key, "mVillages", key_size) == 0) {
                 // todobig -- new for 0.13? what is it?
-                logger.msg(kLogInfo1, "mVillages value:\n");
+                log::trace("mVillages value:");
                 ret = parseNbt("mVillages: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_mVillages(tagList);
@@ -415,29 +415,29 @@ namespace mcpe_viz
             else if (strncmp(key, "game_flatworldlayers", key_size) == 0) {
                 // todobig -- what is it?
                 // example data (standard flat): 5b 37 2c 33 2c 33 2c 32 5d
-                logger.msg(kLogInfo1, "game_flatworldlayers value: (todo)\n");
+                log::trace("game_flatworldlayers value: (todo)");
                 // parseNbt("game_flatworldlayers: ", cdata, cdata_size, tagList);
                 // todo - parse tagList?
             }
             else if (strncmp(key, "idcounts", key_size) == 0) {
                 // todobig -- new for 0.13? what is it? is it a 4-byte int?
-                logger.msg(kLogInfo1, "idcounts value:\n");
+                log::trace("idcounts value:");
                 parseNbt("idcounts: ", cdata, int32_t(cdata_size), tagList);
             }
             else if (strncmp(key, "Nether", key_size) == 0) {
-                logger.msg(kLogInfo1, "Nether value:\n");
+                log::trace("Nether value:");
                 parseNbt("Nether: ", cdata, int32_t(cdata_size), tagList);
                 // todo - parse tagList?  list of LimboEntities
             }
             else if (strncmp(key, "portals", key_size) == 0) {
-                logger.msg(kLogInfo1, "portals value:\n");
+                log::trace("portals value:");
                 ret = parseNbt("portals: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_portals(tagList);
                 }
             }
             else if (strncmp(key, "AutonomousEntities", key_size) == 0) {
-                logger.msg(kLogInfo1, "AutonomousEntities value:\n");
+                log::trace("AutonomousEntities value:");
                 ret = parseNbt("AutonomousEntities: ", cdata, int32_t(cdata_size), tagList);
                 // todostopper - what to do with this info?
                 //          if ( ret == 0 ) {
@@ -474,7 +474,7 @@ namespace mcpe_viz
 */
             else if (strncmp(key, "dimension", 9) == 0) {
                 std::string keyString(key, key_size);
-                logger.msg(kLogInfo1, "Dimension chunk -- key: (%s) value:\n", keyString.c_str());
+                log::debug("Dimension chunk -- key: ({}) value:", keyString);
                 ret = parseNbt("Dimension: ", cdata, int32_t(cdata_size), tagList);
                 // todostopper - what to do with this info?
                 //          if ( ret == 0 ) {
@@ -576,7 +576,7 @@ namespace mcpe_viz
                     sprintf(tmpstring, " (image %d %d)", (int32_t)imageX, (int32_t)imageZ);
                     chunkstr += tmpstring;
                 }
-                logger.msg(kLogInfo1, "%s\n", chunkstr.c_str());
+                log::trace("{}", chunkstr);
 
                 // see what kind of chunk we have
                 // tommo posted useful info about the various record types here (around 0.17 beta):
@@ -593,7 +593,7 @@ namespace mcpe_viz
                 case 0x31:
                     // "BlockEntity"
                     // tile entity record (e.g. a chest)
-                    logger.msg(kLogInfo1, "%s 0x31 chunk (tile entity data):\n", dimName.c_str());
+                    log::debug("{} 0x31 chunk (tile entity data):", dimName);
                     ret = parseNbt("0x31-te: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_tileEntity(chunkDimId, dimName + "-", tagList);
@@ -603,7 +603,7 @@ namespace mcpe_viz
                 case 0x32:
                     // "Entity"
                     // entity record (e.g. a mob)
-                    logger.msg(kLogInfo1, "%s 0x32 chunk (entity data):\n", dimName.c_str());
+                    log::debug("{} 0x32 chunk (entity data):", dimName);
                     ret = parseNbt("0x32-e: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_entity(chunkDimId, dimName + "-", tagList, false, false, "", "");
@@ -613,7 +613,7 @@ namespace mcpe_viz
                 case 0x33:
                     // "PendingTicks"
                     // todo - this appears to be info on blocks that can move: water + lava + fire + sand + gravel
-                    logger.msg(kLogInfo1, "%s 0x33 chunk (tick-list):\n", dimName.c_str());
+                    log::debug("{} 0x33 chunk (tick-list):", dimName);
                     parseNbt("0x33-tick: ", cdata, int32_t(cdata_size), tagList);
                     // todo - parse tagList?
                     // todobig - could show location of active fires
@@ -621,7 +621,7 @@ namespace mcpe_viz
 
                 case 0x34:
                     // "BlockExtraData"
-                    logger.msg(kLogInfo1, "%s 0x34 chunk (TODO - MYSTERY RECORD - BlockExtraData)\n",
+                    log::debug("{} 0x34 chunk (TODO - MYSTERY RECORD - BlockExtraData)",
                         dimName.c_str());
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
@@ -639,8 +639,8 @@ namespace mcpe_viz
 
                 case 0x35:
                     // "BiomeState"
-                    logger.msg(kLogInfo1, "%s 0x35 chunk (TODO - MYSTERY RECORD - BiomeState)\n",
-                        dimName.c_str());
+                    log::debug("{} 0x35 chunk (TODO - MYSTERY RECORD - BiomeState)",
+                        dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -681,13 +681,12 @@ namespace mcpe_viz
                     // note: it would be interesting if this is not == 2 (as of MCPE 0.12.x it is always 2)
                     if (control.verboseFlag || ((cdata[0] != 2) && (cdata[0] != 3) && (cdata[0] != 9))) {
                         if (cdata[0] != 2 && cdata[0] != 9) {
-                            logger.msg(kLogInfo1,
-                                "WARNING: UNKNOWN CHUNK VERSION!  %s 0x76 chunk (world format version): v=%d\n",
-                                dimName.c_str(), (int)(cdata[0]));
+                            log::debug("UNKNOWN CHUNK VERSION!  {} 0x76 chunk (world format version): v={}",
+                                dimName, int(cdata[0]));
                         }
                         else {
-                            logger.msg(kLogInfo1, "%s 0x76 chunk (world format version): v=%d\n",
-                                dimName.c_str(), (int)(cdata[0]));
+                            log::debug("{} 0x76 chunk (world format version): v={}",
+                                dimName, int(cdata[0]));
                         }
                     }
                 }
@@ -708,8 +707,7 @@ namespace mcpe_viz
                     }
                     else {
                         if (cdata_size != 6145 && cdata_size != 10241) {
-                            logger.msg(kLogInfo1, "WARNING: UNKNOWN cdata_size=%d of 0x2f chunk\n",
-                                (int)cdata_size);
+                            log::warn("UNKNOWN cdata_size={} of 0x2f chunk", cdata_size);
                         }
                         dimDataList[chunkDimId]->addChunk(chunkFormatVersion, chunkX, chunkY, chunkZ, cdata,
                             cdata_size);

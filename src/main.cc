@@ -204,7 +204,6 @@
 #include <cmath>
 #include <random>
 #include <filesystem>
-#include <iostream>
 #include <string>
 #include <cstdint>
 
@@ -246,7 +245,7 @@ namespace mcpe_viz {
             log::error("Failed to open file ({}) error={} ({})", fn, strerror(errno), errno);
             return 1;
         }
-        std::cout << "Reading config from " << fn << '\n';
+        log::info("Reading config from {}", fn);
 
         char buf[1025], * p;
         while (!feof(fp)) {
@@ -879,7 +878,7 @@ int main(int argc, char** argv)
     print_unknown_uname();
     print_unknown_block_warnings();
 
-    std::cout << "Done.\n";
+    log::info("Done.");
     
     return 0;
 }

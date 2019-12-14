@@ -5,6 +5,7 @@
 #include "../logger.h"
 #include "../util.h"
 #include "../minecraft/block_info.h"
+#include "../utils/unknown_recorder.h"
 
 namespace mcpe_viz {
 
@@ -371,7 +372,8 @@ namespace mcpe_viz {
                         chunkBlockPalette_BlockData[i] = bdata;
                     }
                     else {
-                        logger.msg(kLogWarning, "Did not find block uname '%s' in XML file\n", bname.c_str());
+                        record_unknow_uname(bname);
+                        
                         // todonow - reasonable?
                         chunkBlockPalette_BlockId[i] = 0;
                         chunkBlockPalette_BlockData[i] = 0;
@@ -386,7 +388,7 @@ namespace mcpe_viz {
                 }
             }
             else {
-                logger.msg(kLogWarning, "Unexpected NBT format in _do_chunk_v7\n");
+                log::warn("Unexpected NBT format in _do_chunk_v7");
             }
         }
 
@@ -409,8 +411,8 @@ namespace mcpe_viz {
                     else {
                         blockId = 0;
                         blockData = 0;
-                        logger.msg(kLogWarning, "Found chunk palette id out of range %d (size=%d)\n", paletteBlockId,
-                            (int)chunkBlockPalette_BlockId.size());
+                        log::warn("Found chunk palette id out of range {} (size={})", 
+                            paletteBlockId, chunkBlockPalette_BlockId.size());
                     }
 
                     int32_t bdoff = _calcOffsetBlock_LevelDB_v3(cx, cz, cy);
