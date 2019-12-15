@@ -16,6 +16,7 @@
 #include "../utils/fs.h"
 
 #include "../asset.h"
+#include "../minecraft/v2/biome.h"
 
 namespace
 {
@@ -1019,10 +1020,11 @@ namespace mcpe_viz
             );
 
             fprintf(fp, "var biomeColorLUT = {\n");
-            for (const auto& it : biomeInfoList) {
-                if (it.second->colorSetFlag) {
-                    fprintf(fp, "'%d': { name: '%s', id: %d },\n", local_be32toh(it.second->color),
-                        escapeString(it.second->name, "'").c_str(), it.first
+            for(auto& i : Biome::list()) {
+                if (i == nullptr) continue;
+                if (i->is_color_set()) {
+                    fprintf(fp, "'%d': { name: '%s', id: %d },\n", local_be32toh(i->color()),
+                            escapeString(i->name, "'").c_str(), i->id
                     );
                 }
             }

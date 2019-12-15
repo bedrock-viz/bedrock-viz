@@ -69,19 +69,6 @@ namespace mcpe_viz {
         return 0;
     }
 
-    bool compareColorInfo(std::unique_ptr<ColorInfo> const& a, std::unique_ptr<ColorInfo> const& b) {
-        double dh = a->h - b->h;
-        if (dh < 0.0) { return true; }
-        if (dh > 0.0) { return false; }
-        double ds = a->s - b->s;
-        if (ds < 0.0) { return true; }
-        if (ds > 0.0) { return false; }
-        double dl = a->l - b->l;
-        if (dl < 0.0) { return true; }
-        if (dl > 0.0) { return false; }
-        return false;
-    }
-
 
     int32_t oversampleImage(const std::string& fnSrc, const std::string& fnDest, int32_t oversample) {
         PngReader pngSrc;
@@ -197,25 +184,6 @@ namespace mcpe_viz {
         return -2;
     }
 
-    inline uint8_t _getBitFromByte(const char* cdata, int32_t bitnum) {
-        int byteStart = bitnum / 8;
-        int byteOffset = bitnum % 8;
-        return cdata[byteStart] & (1 << byteOffset);
-    }
-
-    // todo - this is probably quite slow
-    int32_t getBitsFromBytes(const char* cdata, int32_t bitstart, int32_t bitlen) {
-        int32_t ret = 0;
-        for (int b = 0; b < bitlen; b++) {
-            uint8_t bit = _getBitFromByte(cdata, bitstart + b);
-            if (bit) {
-                ret |= 1 << b;
-                // ret |= 1 << (bitlen-1-b);
-            }
-        }
-        return ret;
-    }
-
     // adapted from: http://ysonggit.github.io/coding/2014/12/16/split-a-string-using-c.html
     std::vector<std::string> mysplit(const std::string& s, char delim) {
         std::stringstream ss(s);
@@ -227,25 +195,6 @@ namespace mcpe_viz {
         return tokens;
     }
 
-
-    void dumpBuffer(const char* header, const char* buf, size_t bufLen) {
-        fprintf(stderr, "%s  (hex):\n", header);
-        for (size_t i = 0; i < bufLen; i++) {
-            fprintf(stderr, "%02x ", (uint8_t)buf[i] & 0xff);
-        }
-        fprintf(stderr, "\n");
-
-        fprintf(stderr, "%s (char):\n", header);
-        for (size_t i = 0; i < bufLen; i++) {
-            if (isprint(buf[i])) {
-                fputc(buf[i], stderr);
-            }
-            else {
-                fputc('.', stderr);
-            }
-        }
-        fprintf(stderr, "\n");
-    }
 
     // todolib - move to util?
 

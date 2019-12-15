@@ -14,6 +14,7 @@
 #include "../nbt.h"
 
 #include "../utils/fs.h"
+#include "../minecraft/v2/biome.h"
 
 namespace
 {
@@ -237,8 +238,10 @@ namespace mcpe_viz {
                         if (imageMode == kImageModeBiome) {
                             // get biome color
                             int32_t biomeId = it->grassAndBiome[cx][cz] & 0xff;
-                            if (has_key(biomeInfoList, biomeId)) {
-                                color = biomeInfoList[biomeId]->color;
+
+                            auto biome = Biome::get(biomeId);
+                            if (biome != nullptr) {
+                                color = biome->color();
                             }
                             else {
                                 log::error("Unknown biome {} 0x{:x}", biomeId, biomeId);

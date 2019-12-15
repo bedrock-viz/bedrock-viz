@@ -228,6 +228,7 @@
 #include "world/world.h"
 #include "utils/fs.h"
 #include "global.h"
+#include "xml/loader.h"
 
 namespace mcpe_viz {
 
@@ -859,6 +860,20 @@ int main(int argc, char** argv)
     if (loadXml() != 0) {
         log::error("Failed to parse XML file");
         return -1;
+    }
+
+    {
+        int ret = 0;
+        if (control.fnXml.empty()) {
+            ret = load_xml(xml_path().generic_string());
+        }
+        else {
+            ret = load_xml(control.fnXml);
+        }
+        if (ret != 0) {
+            log::error("Failed to load xml file");
+            return -1;
+        }
     }
     
     loadConfigFile();

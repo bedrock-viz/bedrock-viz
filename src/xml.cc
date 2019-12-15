@@ -14,7 +14,6 @@
 #include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/entity_info.h"
-#include "minecraft/biome_info.h"
 #include "minecraft/enchantment_info.h"
 
 #include "utils/fs.h"
@@ -355,41 +354,6 @@ namespace mcpe_viz {
     }
     return 0;
   }
-
-  int32_t doParseXML_biomelist(xmlNodePtr cur) {
-    cur = cur->xmlChildrenNode;
-    while (cur != NULL) {
-      if ( xmlStrcmp(cur->name, (const xmlChar *)"biome") == 0 ) {
-
-        bool idValid, nameValid, colorValid;
-          
-        int32_t id = xmlGetInt(cur, (const xmlChar*)"id", idValid);
-        std::string name = xmlGetString(cur, (const xmlChar*)"name", nameValid);
-        int32_t color = xmlGetInt(cur, (const xmlChar*)"color", colorValid);
-
-        // create data
-        if ( idValid && nameValid ) {
-          std::unique_ptr<BiomeInfo> b(new BiomeInfo(name.c_str()));
-          if ( colorValid ) {
-            b->setColor(color);
-          }
-          biomeInfoList.insert( std::make_pair(id, std::move(b)) );
-        } else {
-          // todo error
-          fprintf(stderr,"WARNING: Did not find valid id and name for biome: (0x%x) (%s)\n"
-                  , id
-                  , name.c_str()
-                  );
-        }
-      }
-      else {
-        doParseXml_Unknown(cur);
-      }
-      cur = cur->next;
-    }
-    return 0;
-  }
-  
   int32_t doParseXML_xml(xmlNodePtr cur) {
     cur = cur->xmlChildrenNode;
     while (cur != NULL) {
@@ -408,7 +372,7 @@ namespace mcpe_viz {
         doParseXML_entitylist(cur);
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"biomelist") == 0 ) {
-        doParseXML_biomelist(cur);
+//        doParseXML_biomelist(cur);
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"enchantmentlist") == 0 ) {
         doParseXML_enchantmentlist(cur);

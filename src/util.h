@@ -66,9 +66,6 @@ namespace mcpe_viz {
 
     std::string makeIndent(int32_t indent, const char* hdr);
 
-    void dumpBuffer(const char* header, const char* buf, size_t bufLen);
-
-
     class PngWriter {
     public:
         std::string fn;
@@ -353,63 +350,6 @@ namespace mcpe_viz {
 
     int32_t oversampleImage(const std::string& fnSrc, const std::string& fnDest, int32_t oversample);
 
-
-    int32_t rgb2hsb(int32_t red, int32_t green, int32_t blue, double& hue, double& saturation, double& brightness);
-
-
-    class ColorInfo {
-    public:
-        std::string name;
-        int32_t color;
-        int32_t r, g, b;
-        double h, s, l;
-
-        ColorInfo(const std::string& n, int32_t c) {
-            name = std::string(n);
-            color = c;
-            calcHSL();
-        }
-
-        ColorInfo& operator=(const ColorInfo& other) = default;
-
-        int32_t calcHSL() {
-            r = (color & 0xFF0000) >> 16;
-            g = (color & 0xFF00) >> 8;
-            b = color & 0xFF;
-            h = s = l = 0.0;
-            rgb2hsb(r, g, b, h, s, l);
-            //rgb2hsv(r,g,b, h,s,l);
-
-            // todo - we could adjust some items to help with the sort
-            //if ( s < 0.2 ) { s=0.0; }
-
-            return 0;
-        }
-
-        std::string toHtml() const {
-            char tmpstring[256];
-            std::string ret = "<div class=\"colorBlock";
-            if (l < 0.2) {
-                ret += " darkBlock";
-            }
-            ret += "\" style=\"background-color:";
-            sprintf(tmpstring, "#%02x%02x%02x", r, g, b);
-            ret += tmpstring;
-            ret += "\">" + name + " (";
-            sprintf(tmpstring, "0x%06x", color);
-            ret += tmpstring;
-            ret += ") ";
-            sprintf(tmpstring, "[ h=%lf s=%lf l=%lf ]", h, s, l);
-            ret += tmpstring;
-            ret += "</div>\n";
-            return ret;
-        }
-    };
-
-    bool compareColorInfo(std::unique_ptr<ColorInfo> const& a, std::unique_ptr<ColorInfo> const& b);
-
-
-
     // quick-n-dirty emulation of java random number generator
     // details from: https://docs.oracle.com/javase/8/docs/api/java/util/Random.html
     class JavaRandom {
@@ -448,70 +388,11 @@ namespace mcpe_viz {
 
 
     // todobig - template this for diff types?
-    typedef std::pair<int32_t, int32_t> HistogramItem;
-    typedef std::map<int32_t, int32_t> HistogramMap;
-    typedef std::vector< HistogramItem > HistogramVector;
     class Histogram {
     public:
-        HistogramMap map;
-
-        bool has_key(int32_t k) {
-            return map.find(k) != map.end();
-        }
 
         void add(int32_t k) {
-            if (has_key(k)) {
-                map[k]++;
-            }
-            else {
-                map[k] = 1;
-            }
         }
-
-        int32_t getTotal() {
-            int32_t total = 0;
-            for (auto& it : map) {
-                total += it.second;
-            }
-            return total;
-        }
-
-        HistogramVector sort(int32_t order) {
-            HistogramVector vector(map.begin(), map.end());
-
-            if (order <= 0) {
-                std::sort(vector.begin(), vector.end(), compare_less_());
-            }
-            else {
-                std::sort(vector.begin(), vector.end(), compare_more_());
-            }
-
-            return vector;
-        }
-
-    private:
-        struct compare_less_
-            //  : std::binary_function<HistogramItem,HistogramItem,bool>
-        {
-            inline bool operator()(const HistogramItem& lhs, const HistogramItem& rhs) {
-                if (lhs.second == rhs.second) {
-                    // if counts are equal, compare the id
-                    return lhs.first < rhs.first;
-                }
-                return lhs.second < rhs.second;
-            }
-        };
-        struct compare_more_
-            //  : std::binary_function<HistogramItem,HistogramItem,bool>
-        {
-            inline bool operator()(const HistogramItem& lhs, const HistogramItem& rhs) {
-                if (lhs.second == rhs.second) {
-                    // if counts are equal, compare the id
-                    return lhs.first > rhs.first;
-                }
-                return lhs.second > rhs.second;
-            }
-        };
     };
 
 
@@ -521,8 +402,6 @@ namespace mcpe_viz {
     extern PlayerIdToName playerIdToName;
 
     int32_t parsePlayerIdToName(const char* s);
-
-    int32_t getBitsFromBytes(const char* cdata, int32_t bitstart, int32_t infolen);
 
     std::vector<std::string> mysplit(const std::string& s, char delim);
 
@@ -546,18 +425,6 @@ namespace mcpe_viz {
     static inline void trim(std::string& s) {
         ltrim(s);
         rtrim(s);
-    }
-
-    // trim from start (copying)
-    static inline std::string ltrim_copy(std::string s) {
-        ltrim(s);
-        return s;
-    }
-
-    // trim from end (copying)
-    static inline std::string rtrim_copy(std::string s) {
-        rtrim(s);
-        return s;
     }
 
     // trim from both ends (copying)

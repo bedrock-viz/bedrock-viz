@@ -16,8 +16,6 @@ namespace mcpe_viz {
         std::string fnXml;
 
         std::filesystem::path fnHtml() const { return this->outputDir / "index.html"; }
-        // used by old logger
-        std::filesystem::path fnLog() const { return this->outputDir / "output.log"; }
         // new logger output file
         std::filesystem::path logFile() const { return this->outputDir / "bedrock_viz.log"; }
         std::filesystem::path fnJs() const { return this->outputDir / "output.js"; }
@@ -71,8 +69,6 @@ namespace mcpe_viz {
         Control() {
             init();
         }
-
-        ~Control() = default;
 
         void init() {
             dirLeveldb = "";

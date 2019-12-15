@@ -7,6 +7,28 @@
 #include "../minecraft/block_info.h"
 #include "../utils/unknown_recorder.h"
 
+namespace
+{
+    inline uint8_t _getBitFromByte(const char* cdata, int32_t bitnum) {
+        int byteStart = bitnum / 8;
+        int byteOffset = bitnum % 8;
+        return cdata[byteStart] & (1 << byteOffset);
+    }
+
+    // todo - this is probably quite slow
+    int32_t getBitsFromBytes(const char* cdata, int32_t bitstart, int32_t bitlen) {
+        int32_t ret = 0;
+        for (int b = 0; b < bitlen; b++) {
+            uint8_t bit = _getBitFromByte(cdata, bitstart + b);
+            if (bit) {
+                ret |= 1 << b;
+                // ret |= 1 << (bitlen-1-b);
+            }
+        }
+        return ret;
+    }
+}
+
 namespace mcpe_viz {
 
     // todolib - these funcs should be in a class?
