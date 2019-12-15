@@ -10,11 +10,8 @@
 #include "../nbt.h"
 #include "../global.h"
 #include "../minecraft/block_info.h"
-#include "../minecraft/biome_info.h"
 #include "../minecraft/conversion.h"
-
 #include "../utils/fs.h"
-
 #include "../asset.h"
 #include "../minecraft/v2/biome.h"
 
@@ -60,23 +57,13 @@ namespace mcpe_viz
 
         dbOptions->block_size = control.leveldbBlockSize;
 
-        // start: suggestions from leveldb/mcpe_sample_setup.cpp
         //create a 40 mb cache (we use this on ~1gb devices)
         dbOptions->block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);
 
         //create a 4mb write buffer, to improve compression and touch the disk less
         dbOptions->write_buffer_size = 4 * 1024 * 1024;
-
-        //disable internal logging. The default logger will still print out things to a file
         dbOptions->info_log = new NullLogger();
-
-        //use the new raw-zip compressor to write (and read)
-//      dbOptions->compressors[0] = new leveldb::ZlibCompressorRaw(-1);
         dbOptions->compression = leveldb::kZlibRawCompression;
-        //also setup the old, slower compressor for backwards compatibility. This will only be used to read old compressed blocks.
-//      dbOptions->compressors[1] = new leveldb::ZlibCompressor();
-            // end: suggestions from leveldb/mcpe_sample_setup.cpp
-
 
         for (int32_t i = 0; i < kDimIdCount; i++) {
             dimDataList[i] = std::make_unique<DimensionData_LevelDB>();

@@ -27,16 +27,6 @@ Additional Features:
 
 * Create movies of all layers from bedrock to build limit (*ffmpeg* required)
 
-* Dump a *huge* amount of info about your world including:
-  * Dumps detailed information about all mobs, players and items in your world
-  * For each 16x16 block chunk:
-    * Top blocks (block type, block data, biome)
-    * Histogram of all blocks in the chunk
-    * And more...
-  * For each world type (e.g. overworld, nether):
-    * Histogram of blocks
-    * Histogram of biomes (per-block column)
-
 ## Quick Start
 
 For Windows 10 users:

@@ -3,9 +3,7 @@
 #include "../define.h"
 #include "../minecraft/block_info.h"
 #include "../global.h"
-#include "../control.h"
 #include "../nbt.h"
-#include "../minecraft/biome_info.h"
 #include "misc.h"
 #include "point_conversion.h"
 #include "common.h"
@@ -21,11 +19,6 @@ namespace mcpe_viz {
         chunkX = tchunkX;
         chunkZ = tchunkZ;
         chunkFormatVersion = 2;
-
-        int16_t histogramBlock[512];
-        int16_t histogramBiome[256];
-        memset(histogramBlock, 0, sizeof(histogramBlock));
-        memset(histogramBiome, 0, sizeof(histogramBiome));
 
         // see if we need to check any columns in this chunk for spawnable
         int32_t wx = chunkX * 16;
@@ -55,7 +48,6 @@ namespace mcpe_viz {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
                     blockId = getBlockId_LevelDB_v2(cdata, cx, cz, cy);
-                    histogramBlock[blockId]++;
 
                     // todobig - handle block variant?
                     if (fastBlockToGeoJSON[blockId]) {
@@ -178,18 +170,6 @@ namespace mcpe_viz {
             for (int32_t cz = 0; cz < 16; cz++) {
                 heightCol[cx][cz] = getColData_Height_LevelDB_v2(cdata, cx, cz);
                 grassAndBiome[cx][cz] = getColData_GrassAndBiome_LevelDB_v2(cdata, cx, cz);
-
-                biomeId = (uint8_t)(grassAndBiome[cx][cz] & 0xFF);
-                histogramBiome[biomeId]++;
-
-#if 0
-                // todo - testing idea about lighting - get lighting from top solid block - result is part good, part crazy
-                int32_t ty = heightCol[cx][cz] + 1;
-                if (ty > MAX_BLOCK_HEIGHT_127) { ty = MAX_BLOCK_HEIGHT_127; }
-                uint8_t sl = getBlockSkyLight_LevelDB_v2(cdata, cx, cz, ty);
-                uint8_t bl = getBlockBlockLight_LevelDB_v2(cdata, cx, cz, ty);
-                topLight[cx][cz] = (sl << 4) | bl;
-#endif
             }
         }
         return 0;
@@ -205,13 +185,6 @@ namespace mcpe_viz {
         int32_t chunkY = tchunkY;
         chunkZ = tchunkZ;
         chunkFormatVersion = 3;
-
-        // todonow todostopper - this is problematic for cubic chunks
-        int16_t histogramBlock[512];
-        int16_t histogramBiome[256];
-        memset(histogramBlock, 0, sizeof(histogramBlock));
-        memset(histogramBiome, 0, sizeof(histogramBiome));
-
         // see if we need to check any columns in this chunk for spawnable
         int32_t wx = chunkX * 16;
         int32_t wz = chunkZ * 16;
@@ -240,7 +213,6 @@ namespace mcpe_viz {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
                     blockId = getBlockId_LevelDB_v3(cdata, cx, cz, cy);
-                    histogramBlock[blockId]++;
 
                     // todobig - handle block variant?
                     if (fastBlockToGeoJSON[blockId]) {
@@ -315,12 +287,6 @@ namespace mcpe_viz {
         int32_t chunkY = tchunkY;
         chunkZ = tchunkZ;
         chunkFormatVersion = 7;
-
-        // todonow todostopper - this is problematic for cubic chunks
-        int16_t histogramBlock[512];
-        int16_t histogramBiome[256];
-        memset(histogramBlock, 0, sizeof(histogramBlock));
-        memset(histogramBiome, 0, sizeof(histogramBiome));
 
         // see if we need to check any columns in this chunk for spawnable
         int32_t wx = chunkX * 16;
@@ -426,7 +392,6 @@ namespace mcpe_viz {
                         log::warn("Found chunk palette id out of range {} (size={})",
                             paletteBlockId, chunkBlockPalette_BlockId.size());
                     }
-                    histogramBlock[blockId]++;
 
                     // todobig - handle block variant?
                     if (fastBlockToGeoJSON[blockId]) {
@@ -496,33 +461,15 @@ namespace mcpe_viz {
         chunkX = tchunkX;
         chunkZ = tchunkZ;
 
-        int16_t histogramBiome[256];
-        memset(histogramBiome, 0, sizeof(histogramBiome));
-
         // get per-column data
         uint8_t biomeId = 0;
         for (int32_t cx = 0; cx < 16; cx++) {
             for (int32_t cz = 0; cz < 16; cz++) {
                 heightCol[cx][cz] = getColData_Height_LevelDB_v3(cdata, cx, cz);
                 grassAndBiome[cx][cz] = getColData_GrassAndBiome_LevelDB_v3(cdata, cdatalen, cx, cz);
-
-                biomeId = (uint8_t)(grassAndBiome[cx][cz] & 0xFF);
-                histogramBiome[biomeId]++;
-
-#if 0
-                // todo - testing idea about lighting - get lighting from top solid block - result is part good, part crazy
-                int32_t ty = heightCol[cx][cz] + 1;
-                if (ty > MAX_BLOCK_HEIGHT) { ty = MAX_BLOCK_HEIGHT; }
-                uint8_t sl = getBlockSkyLight_LevelDB_v3(cdata, cx, cz, ty);
-                uint8_t bl = getBlockBlockLight_LevelDB_v3(cdata, cx, cz, ty);
-                topLight[cx][cz] = (sl << 4) | bl;
-#endif
             }
         }
-
-
         return 0;
-        
     }
 
     int32_t ChunkData_LevelDB::checkSpawnable(leveldb::DB* db, int32_t dimId, const CheckSpawnList& listCheckSpawn)

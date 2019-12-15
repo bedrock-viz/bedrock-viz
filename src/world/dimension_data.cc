@@ -3,8 +3,6 @@
 #include <random>
 
 #include "../minecraft/block_info.h"
-#include "../minecraft/biome_info.h"
-
 #include "../control.h"
 #include "../utils/unknown_recorder.h"
 #include "common.h"
@@ -12,7 +10,6 @@
 #include "point_conversion.h"
 #include "../global.h"
 #include "../nbt.h"
-
 #include "../utils/fs.h"
 #include "../minecraft/v2/biome.h"
 

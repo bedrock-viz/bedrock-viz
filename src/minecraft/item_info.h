@@ -13,16 +13,12 @@ namespace mcpe_viz {
         std::vector<std::string> unameList;
         int32_t extraData;
         std::vector< std::unique_ptr<ItemInfo> > variantList;
-        int32_t userVar1;
-        std::string userString1;
 
         ItemInfo(const char* n, const char* un) {
             setName(n);
             setUname(un);
             extraData = 0;
             variantList.clear();
-            userVar1 = 0;
-            userString1 = "";
         }
 
         ItemInfo& setName(const std::string& s) {
@@ -31,13 +27,6 @@ namespace mcpe_viz {
         }
 
         ItemInfo& setUname(const std::string& un);
-
-        void setUserVar1(int32_t v) { userVar1 = v; }
-        void deltaUserVar1(int32_t d) { userVar1 += d; }
-        int32_t getUserVar1() { return userVar1; }
-
-        void setUserString1(const std::string& s) { userString1 = s; }
-        std::string& getUserString1() { return userString1; }
 
         bool hasVariants() {
             return (variantList.size() > 0);
