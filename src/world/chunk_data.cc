@@ -417,8 +417,8 @@ namespace mcpe_viz {
         for (int32_t cy = 0; cy < 16; cy++) {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
-                    paletteBlockId = getBlockId_LevelDB_v7(&cdata[2 + extraOffset], blocksPerWord, bitsPerBlock, cx,
-                        cz, cy);
+                    paletteBlockId = getBlockId_LevelDB_v7(&cdata[2 + extraOffset],
+                        blocksPerWord, bitsPerBlock, cx, cz, cy);
 
                     // look up blockId
                     //todonow error checking

@@ -3,31 +3,9 @@
 #include "../define.h"
 #include "../nbt.h"
 #include "../logger.h"
-#include "../util.h"
 #include "../minecraft/block_info.h"
 #include "../utils/unknown_recorder.h"
 
-namespace
-{
-    inline uint8_t _getBitFromByte(const char* cdata, int32_t bitnum) {
-        int byteStart = bitnum / 8;
-        int byteOffset = bitnum % 8;
-        return cdata[byteStart] & (1 << byteOffset);
-    }
-
-    // todo - this is probably quite slow
-    int32_t getBitsFromBytes(const char* cdata, int32_t bitstart, int32_t bitlen) {
-        int32_t ret = 0;
-        for (int b = 0; b < bitlen; b++) {
-            uint8_t bit = _getBitFromByte(cdata, bitstart + b);
-            if (bit) {
-                ret |= 1 << b;
-                // ret |= 1 << (bitlen-1-b);
-            }
-        }
-        return ret;
-    }
-}
 
 namespace mcpe_viz {
 
@@ -263,19 +241,7 @@ namespace mcpe_viz {
     }
 
 
-    uint8_t
-        getBlockId_LevelDB_v7(const char* p, int blocksPerWord, int bitsPerBlock, int32_t x, int32_t z, int32_t y) {
-        //int bitstart = ( (((x*16) + z) * 16) + y ) * bitsPerBlock;
-        // int bitstart = ( (((y*16) + x) * 16) + z ) * bitsPerBlock;
 
-        int blockPos = (((x * 16) + z) * 16) + y;
-        // we find which 4-byte word we want
-        int wordStart = blockPos / blocksPerWord;
-        // we find the bit offset within that 4-byte word
-        int bitOffset = (blockPos % blocksPerWord) * bitsPerBlock;
-        int bitStart = wordStart * 4 * 8 + bitOffset;
-        return getBitsFromBytes(p, bitStart, bitsPerBlock);
-    }
 
 
     // todomajor -- see tomcc gist re multiple storages in ONE cubick chunk in version == 8
@@ -344,8 +310,6 @@ namespace mcpe_viz {
             log::error("Unknown chunk cdata[1] value = {}", v);
             return -1;
         }
-
-        //    logger.msg(kLogInfo, "setupBlockVars_v7 v=%d bpw=%d bpb=%d pf=%d ob=%d\n", v, blocksPerWord, bitsPerBlock, (int)paddingFlag, offsetBlockInfoList);
         return 0;
     }
 
