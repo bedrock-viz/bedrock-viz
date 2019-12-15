@@ -15,8 +15,7 @@ namespace mcpe_viz {
     };
 
     enum HeightMode : int32_t {
-        kHeightModeTop = 0,
-        kHeightModeLevelDB = 1
+        kHeightModeTop = 0
     };
 
     // output image types

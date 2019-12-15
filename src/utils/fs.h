@@ -9,7 +9,6 @@ namespace mcpe_viz {
 
     // these hacks work around "const char*" problems
     std::string mybasename(const std::string& fn);
-    std::string mydirname(const std::string& fn);
 
     int32_t file_exists(const std::string& fn);
 

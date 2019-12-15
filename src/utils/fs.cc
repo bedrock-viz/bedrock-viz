@@ -11,12 +11,6 @@ namespace mcpe_viz {
         return p.filename().generic_string();
     }
 
-    std::string mydirname(const std::string& fn) {
-        namespace fs = std::filesystem;
-        fs::path p{ fn };
-        return p.parent_path().generic_string();
-    }
-
 
     int32_t file_exists(const std::string& fn) {
         return std::filesystem::exists(fn);

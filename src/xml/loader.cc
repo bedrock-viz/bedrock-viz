@@ -1,7 +1,4 @@
 #include "loader.h"
-
-#include <iostream>
-
 #include "../logger.h"
 #include "load_biome.h"
 

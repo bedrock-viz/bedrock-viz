@@ -13,7 +13,7 @@
 #include <cmath>
 
 #include "util.h"
-#include "mcpe_viz.h"
+#include "world/point_conversion.h"
 #include "nbt.h"
 #include "define.h"
 #include "global.h"

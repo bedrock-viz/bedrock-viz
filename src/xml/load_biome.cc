@@ -1,5 +1,4 @@
 #include "load_biome.h"
-#include <cstdio>
 #include "../minecraft/v2/biome.h"
 #include "../logger.h"
 namespace mcpe_viz

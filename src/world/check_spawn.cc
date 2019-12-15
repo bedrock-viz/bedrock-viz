@@ -14,9 +14,6 @@ namespace mcpe_viz {
         double dx = x - tx;
         double dz = z - tz;
         double d = sqrt(dx * dx + dz * dz);
-        if (d <= distance) {
-            return true;
-        }
-        return false;
+        return d <= distance;
     }
 }

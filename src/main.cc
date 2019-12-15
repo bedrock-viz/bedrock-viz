@@ -200,9 +200,6 @@
   */
 
 #include <cstdio>
-#include <vector>
-#include <cmath>
-#include <random>
 #include <filesystem>
 #include <string>
 #include <cstdint>
@@ -224,7 +221,6 @@
 #include "control.h"
 #include "minecraft/block_info.h"
 #include "utils/unknown_recorder.h"
-#include "world/dimension_data.h"
 #include "world/world.h"
 #include "utils/fs.h"
 #include "global.h"
