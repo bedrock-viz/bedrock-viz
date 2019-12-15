@@ -561,8 +561,6 @@ namespace mcpe_viz
                     continue;
                 }
 
-                dimDataList[chunkDimId]->addHistogramChunkType(chunkType);
-
                 // report info about the chunk
                 chunkstr = dimName + "-chunk: ";
                 sprintf(tmpstring, "%d %d (type=0x%02x) (subtype=0x%02x) (size=%d)", chunkX, chunkZ, chunkType,

@@ -14,7 +14,6 @@
 namespace mcpe_viz {
     int32_t ChunkData_LevelDB::_do_chunk_v2(int32_t tchunkX, int32_t tchunkZ, const char* cdata,
         int32_t dimensionId, const std::string& dimName,
-        Histogram& histogramGlobalBlock, Histogram& histogramGlobalBiome,
         const bool* fastBlockHideList, const bool* fastBlockForceTopList,
         const bool* fastBlockToGeoJSON,
         const CheckSpawnList& listCheckSpawn)
@@ -57,7 +56,6 @@ namespace mcpe_viz {
                 for (int32_t cz = 0; cz < 16; cz++) {
                     blockId = getBlockId_LevelDB_v2(cdata, cx, cz, cy);
                     histogramBlock[blockId]++;
-                    histogramGlobalBlock.add(blockId);
 
                     // todobig - handle block variant?
                     if (fastBlockToGeoJSON[blockId]) {
@@ -183,7 +181,6 @@ namespace mcpe_viz {
 
                 biomeId = (uint8_t)(grassAndBiome[cx][cz] & 0xFF);
                 histogramBiome[biomeId]++;
-                histogramGlobalBiome.add(biomeId);
 
 #if 0
                 // todo - testing idea about lighting - get lighting from top solid block - result is part good, part crazy
@@ -200,7 +197,6 @@ namespace mcpe_viz {
 
     int32_t ChunkData_LevelDB::_do_chunk_v3(int32_t tchunkX, int32_t tchunkY, int32_t tchunkZ, const char* cdata, size_t cdata_size,
         int32_t dimensionId, const std::string& dimName,
-        Histogram& histogramGlobalBlock,
         const bool* fastBlockHideList, const bool* fastBlockForceTopList,
         const bool* fastBlockToGeoJSON,
         const CheckSpawnList& listCheckSpawn)
@@ -245,7 +241,6 @@ namespace mcpe_viz {
                 for (int32_t cz = 0; cz < 16; cz++) {
                     blockId = getBlockId_LevelDB_v3(cdata, cx, cz, cy);
                     histogramBlock[blockId]++;
-                    histogramGlobalBlock.add(blockId);
 
                     // todobig - handle block variant?
                     if (fastBlockToGeoJSON[blockId]) {
@@ -312,7 +307,6 @@ namespace mcpe_viz {
 
     int32_t ChunkData_LevelDB::_do_chunk_v7(int32_t tchunkX, int32_t tchunkY, int32_t tchunkZ, const char* cdata, size_t cdata_size,
         int32_t dimensionId, const std::string& dimName,
-        Histogram& histogramGlobalBlock,
         const bool* fastBlockHideList, const bool* fastBlockForceTopList,
         const bool* fastBlockToGeoJSON,
         const CheckSpawnList& listCheckSpawn)
@@ -433,7 +427,6 @@ namespace mcpe_viz {
                             paletteBlockId, chunkBlockPalette_BlockId.size());
                     }
                     histogramBlock[blockId]++;
-                    histogramGlobalBlock.add(blockId);
 
                     // todobig - handle block variant?
                     if (fastBlockToGeoJSON[blockId]) {
@@ -498,8 +491,7 @@ namespace mcpe_viz {
         }
         return 0;
     }
-    int32_t ChunkData_LevelDB::_do_chunk_biome_v3(int32_t tchunkX, int32_t tchunkZ, const char* cdata, int32_t cdatalen,
-        Histogram& histogramGlobalBiome)
+    int32_t ChunkData_LevelDB::_do_chunk_biome_v3(int32_t tchunkX, int32_t tchunkZ, const char* cdata, int32_t cdatalen)
     {
         chunkX = tchunkX;
         chunkZ = tchunkZ;
@@ -516,7 +508,6 @@ namespace mcpe_viz {
 
                 biomeId = (uint8_t)(grassAndBiome[cx][cz] & 0xFF);
                 histogramBiome[biomeId]++;
-                histogramGlobalBiome.add(biomeId);
 
 #if 0
                 // todo - testing idea about lighting - get lighting from top solid block - result is part good, part crazy

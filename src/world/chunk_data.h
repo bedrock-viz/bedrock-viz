@@ -42,7 +42,6 @@ namespace mcpe_viz {
 
         int32_t _do_chunk_v2(int32_t tchunkX, int32_t tchunkZ, const char* cdata,
             int32_t dimensionId, const std::string& dimName,
-            Histogram& histogramGlobalBlock, Histogram& histogramGlobalBiome,
             const bool* fastBlockHideList, const bool* fastBlockForceTopList,
             const bool* fastBlockToGeoJSON,
             const CheckSpawnList& listCheckSpawn);
@@ -50,7 +49,6 @@ namespace mcpe_viz {
 
         int32_t _do_chunk_v3(int32_t tchunkX, int32_t tchunkY, int32_t tchunkZ, const char* cdata, size_t cdata_size,
             int32_t dimensionId, const std::string& dimName,
-            Histogram& histogramGlobalBlock,
             const bool* fastBlockHideList, const bool* fastBlockForceTopList,
             const bool* fastBlockToGeoJSON,
             const CheckSpawnList& listCheckSpawn);
@@ -58,14 +56,12 @@ namespace mcpe_viz {
 
         int32_t _do_chunk_v7(int32_t tchunkX, int32_t tchunkY, int32_t tchunkZ, const char* cdata, size_t cdata_size,
             int32_t dimensionId, const std::string& dimName,
-            Histogram& histogramGlobalBlock,
             const bool* fastBlockHideList, const bool* fastBlockForceTopList,
             const bool* fastBlockToGeoJSON,
             const CheckSpawnList& listCheckSpawn);
 
 
-        int32_t _do_chunk_biome_v3(int32_t tchunkX, int32_t tchunkZ, const char* cdata, int32_t cdatalen,
-            Histogram& histogramGlobalBiome);
+        int32_t _do_chunk_biome_v3(int32_t tchunkX, int32_t tchunkZ, const char* cdata, int32_t cdatalen);
 
         int32_t checkSpawnable(leveldb::DB* db, int32_t dimId, const CheckSpawnList& listCheckSpawn);
     };

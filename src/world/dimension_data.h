@@ -28,10 +28,6 @@ namespace mcpe_viz {
         int32_t minChunkZ, maxChunkZ;
         bool chunkBoundsValid;
 
-        int32_t histogramChunkType[256];
-        Histogram histogramGlobalBlock;
-        Histogram histogramGlobalBiome;
-
         bool fastBlockForceTopList[512];
         bool fastBlockHideList[512];
         bool fastBlockToGeoJSONList[512];
@@ -62,7 +58,6 @@ namespace mcpe_viz {
             maxChunkX = 0;
             minChunkZ = 0;
             maxChunkZ = 0;
-            memset(histogramChunkType, 0, sizeof(histogramChunkType));
             worldName = "(UNKNOWN)";
             worldSpawnX = worldSpawnZ = 0;
             worldSeed = 0;
@@ -86,10 +81,6 @@ namespace mcpe_viz {
         }
 
         void setDimId(int32_t id) { dimId = id; }
-
-        void addHistogramChunkType(uint8_t t) {
-            histogramChunkType[t]++;
-        }
 
         void unsetChunkBoundsValid() {
             minChunkX = minChunkZ = maxChunkX = maxChunkZ = 0;
@@ -138,7 +129,6 @@ namespace mcpe_viz {
                 // pre-0.17
                 chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
                 return chunks[chunkKey]->_do_chunk_v2(chunkX, chunkZ, cdata, dimId, name,
-                    histogramGlobalBlock, histogramGlobalBiome,
                     fastBlockHideList, fastBlockForceTopList,
                     fastBlockToGeoJSONList,
                     listCheckSpawn);
@@ -152,7 +142,6 @@ namespace mcpe_viz {
                 }
 
                 return chunks[chunkKey]->_do_chunk_v3(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
-                    histogramGlobalBlock,
                     fastBlockHideList, fastBlockForceTopList,
                     fastBlockToGeoJSONList,
                     listCheckSpawn);
@@ -165,7 +154,6 @@ namespace mcpe_viz {
                 }
 
                 return chunks[chunkKey]->_do_chunk_v7(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
-                    histogramGlobalBlock,
                     fastBlockHideList, fastBlockForceTopList,
                     fastBlockToGeoJSONList,
                     listCheckSpawn);
@@ -190,7 +178,7 @@ namespace mcpe_viz {
                     chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
                 }
 
-                return chunks[chunkKey]->_do_chunk_biome_v3(chunkX, chunkZ, cdata, cdatalen, histogramGlobalBiome);
+                return chunks[chunkKey]->_do_chunk_biome_v3(chunkX, chunkZ, cdata, cdatalen);
             }
             log::error("Unknown chunk format ({})", tchunkFormatVersion);
             return -1;

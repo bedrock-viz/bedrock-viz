@@ -386,16 +386,6 @@ namespace mcpe_viz {
     };
 
 
-
-    // todobig - template this for diff types?
-    class Histogram {
-    public:
-
-        void add(int32_t k) {
-        }
-    };
-
-
     typedef std::map<std::string, std::string> PlayerIdToName;
     bool has_key(const PlayerIdToName& m, const std::string& k);
 
