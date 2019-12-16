@@ -11,8 +11,8 @@ namespace mcpe_viz
             auto id = i.attribute("id").as_int();
             auto biome = Biome::add(id, name);
             if (biome == nullptr) {
-                log::warn("add biome failed(name={}, color={}, id={}",
-                    name, color, id);
+                log::error("add biome failed(name={}, id={}",
+                           name, id);
                 return -1;
             }
             biome->color(color);

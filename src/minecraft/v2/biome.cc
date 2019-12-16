@@ -2,49 +2,50 @@
 
 #include <map>
 
+#include "config.h"
 #include "../../logger.h"
 #include "../../utils/pointer_array.h"
 
 namespace
 {
     std::map<std::string, mcpe_viz::Biome*> sNameBiomeMap;
+    std::vector<mcpe_viz::Biome*> sBiomes;
 }
 
 namespace mcpe_viz
 {
-    using Wrapper = PointerArray<Biome, kBiomeMaxSize>;
+    using Wrapper = PointerArray<Biome, kMaxBiomeCount>;
 
-    const std::array<Biome*, kBiomeMaxSize>& Biome::list()
+    const std::vector<Biome*>& Biome::list()
     {
-        return Wrapper::value();
+        return sBiomes;
     }
 
-    Biome *Biome::add(const BaseObject::IdType &id, const std::string &name)
+    Biome* Biome::add(const BaseObject::IdType& id, const std::string& name)
     {
         auto& inst = Wrapper::value();
         if (inst[id] != nullptr) {
-            log::error("Biome {} (name={}) already exists",
-                id, inst[id]->name);
+            log::error("Biome {} (name={}) already exists", id, inst[id]->name);
             return nullptr;
         }
 
         auto biome = new Biome(id, name);
         inst[id] = biome;
         sNameBiomeMap[name] = biome;
+        sBiomes.emplace_back(biome);
         return biome;
     }
 
-    const Biome *Biome::get(const BaseObject::IdType &id)
+    const Biome* Biome::get(const BaseObject::IdType& id)
     {
         return Wrapper::value()[id];
     }
 
-    const Biome *Biome::get(const std::string& name)
+    const Biome* Biome::get(const std::string& name)
     {
         if (sNameBiomeMap.find(name) != sNameBiomeMap.end()) {
             return sNameBiomeMap[name];
-        }
-        else {
+        } else {
             return nullptr;
         }
     }

@@ -9,9 +9,6 @@
 #include "base.h"
 
 namespace mcpe_viz {
-
-    const int kBlockMaxSize = 512;
-    
     class Block final: public BaseObject {
     public:
         using IdType = unsigned short;
@@ -30,7 +27,15 @@ namespace mcpe_viz {
         std::map<Variant::DataType, Variant*> variants_;
     public:
 
-        Block(IdType id, const std::string& name);
+        Block(IdType id, const std::string& name)
+            : BaseObject{id, name}
+            , color_set_need_count{0}
+            , solid{false}
+            , opaque{false}
+            , liquid{false}
+            , spawnable{false}
+        {
+        }
         Block(const Block&) = delete;
         Block(const Block&&) = delete;
         Block& operator=(const Block&) = delete;
@@ -43,9 +48,6 @@ namespace mcpe_viz {
             }
             this->variants_.clear();
         }
-        
-
-        IdType id;
 
         int color_set_need_count;
 
@@ -54,23 +56,13 @@ namespace mcpe_viz {
         bool liquid;
         bool spawnable;
 
-
         void addUname(const std::string& uname);
+        Variant* addVariant(Variant::DataType data, const std::string& name);
 
-        int addVariant(Variant::DataType data, const std::string& name)
-        {
-            if (this->variants_.find(data) != this->variants_.end()) {
-                log::error("Variant(data={}, blockId={}, blockName={}) already exists",
-                    data, this->id, this->name);
-                return -1;
-            }
-            assert(this->variants_.find(data) == this->variants_.end());
-            auto const variant = new Variant(data, name);
-            this->variants_[data] = variant;
-        }
-
+        [[nodiscard]]
         bool hasVariants() const { return !this->variants_.empty(); }
 
+        [[nodiscard]]
         const Variant* getVariantByBlockData(Variant::DataType data) const
         {
             const auto iter = this->variants_.find(data);
@@ -80,16 +72,11 @@ namespace mcpe_viz {
             return iter->second;
         }
 
-
         static const Block* getById(IdType id);
-
         static const Block* getByName(const std::string& name);
-
         static const Block* getByUname(const std::string& uname);
-
         static Block* add(IdType id, const std::string& name);
-
-        static const std::array<Block*, kBlockMaxSize>& list();
+        static const std::vector<Block*>& list();
     };
 
 }

@@ -841,7 +841,6 @@ namespace mcpe_viz
 
     int32_t MinecraftWorld_LevelDB::doOutput_html()
     {
-        using namespace bedrock_viz;
         char tmpstring[1025];
 
         log::info("Do Output: html viewer");
@@ -897,7 +896,7 @@ namespace mcpe_viz
                 "var tileH = %d;\n"
                 "var dimensionInfo = {\n", escapeString(getWorldName().c_str(), "'").c_str(),
                 (long long int) getWorldSeed(), escapeString(timebuf, "'").c_str(),
-                bedrock_viz::version, control.noForceGeoJSONFlag ? "true" : "false",
+                version, control.noForceGeoJSONFlag ? "true" : "false",
                 mybasename(control.fnGeoJSON().generic_string()).c_str(),
                 control.doTiles ? "true" : "false", control.tileWidth,
                 control.tileHeight
@@ -1006,7 +1005,6 @@ namespace mcpe_viz
 
             fprintf(fp, "var biomeColorLUT = {\n");
             for(auto& i : Biome::list()) {
-                if (i == nullptr) continue;
                 if (i->is_color_set()) {
                     fprintf(fp, "'%d': { name: '%s', id: %d },\n", local_be32toh(i->color()),
                             escapeString(i->name, "'").c_str(), i->id

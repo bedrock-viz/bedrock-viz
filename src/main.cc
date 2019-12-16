@@ -399,7 +399,7 @@ namespace mcpe_viz {
         }
 
         // in asset folder
-        fn = bedrock_viz::xml_path().generic_string();
+        fn = xml_path().generic_string();
         ret = doParseXml(fn);
         if (ret >= 0) {
             return ret;
@@ -827,7 +827,6 @@ namespace mcpe_viz {
 int main(int argc, char** argv)
 {
     using namespace mcpe_viz;
-    using namespace bedrock_viz;
     set_argv_0(argv[0]);
     setup_logger_stage_1();
     // steps:

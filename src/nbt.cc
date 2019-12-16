@@ -737,7 +737,7 @@ namespace mcpe_viz
                 strcpy(urlImage, urlImageGeneric);
             }
 
-            if (file_exists(bedrock_viz::static_path(urlImage).generic_string())) {
+            if (file_exists(static_path(urlImage).generic_string())) {
                 std::string fImage(urlImage);
                 int32_t imgId = -1;
                 if (has_key(imageFileMap, fImage)) {

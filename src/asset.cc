@@ -2,7 +2,7 @@
 #include "asset.h"
 
 
-namespace bedrock_viz {
+namespace mcpe_viz {
     using std::filesystem::path;
 
 

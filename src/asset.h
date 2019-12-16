@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <string>
 
-namespace bedrock_viz {
+namespace mcpe_viz {
     std::filesystem::path xml_path();
 
     std::filesystem::path static_path(const std::string& filename);
