@@ -90,6 +90,12 @@ namespace mcpe_viz {
             return this->name;
         }
 
+        [[nodiscard]]
+        auto getVariants() const
+        {
+            return this->variants_;
+        }
+
         static const Block* get(IdType id);
         static const Block* getByName(const std::string& name);
         static const Block* getByUname(const std::string& uname);

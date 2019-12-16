@@ -14,6 +14,7 @@
 #include "../utils/fs.h"
 #include "../asset.h"
 #include "../minecraft/v2/biome.h"
+#include "../minecraft/v2/block.h"
 
 namespace
 {
@@ -295,7 +296,7 @@ namespace mcpe_viz
                     blockId = iter;
                     log::info("  'hide-top' block: {} - {} (dimId={} blockId={} (0x{:x}))",
                         dimDataList[dimId]->getName(),
-                        blockInfoList[blockId].name,
+                        Block::queryName(blockId),
                         dimId, blockId, blockId);
                     itemCt++;
                 }
@@ -304,8 +305,8 @@ namespace mcpe_viz
                     blockId = iter;
                     log::info("  'force-top' block: {} - {} (dimId={} blockId={} (0x{:x}))",
                         dimDataList[dimId]->getName(),
-                        blockInfoList[blockId].name,
-                        dimId, blockId, blockId);
+                              Block::queryName(blockId),
+                              dimId, blockId, blockId);
                     itemCt++;
                 }
 
@@ -313,7 +314,7 @@ namespace mcpe_viz
                     blockId = iter;
                     log::info("  'genjson' block: {} - {} (dimId={} blockId={} (0x{:x}))",
                         dimDataList[dimId]->getName(),
-                        blockInfoList[blockId].name,
+                              Block::queryName(blockId),
                         dimId, blockId, blockId);
                     itemCt++;
                 }
@@ -931,7 +932,7 @@ namespace mcpe_viz
                 fprintf(fp, "  geojsonBlocks: [ ");
                 int32_t llen = int32_t(dimDataList[did]->blockToGeoJSONList.size());
                 for (const auto& it : dimDataList[did]->blockToGeoJSONList) {
-                    fprintf(fp, "'%s'", blockInfoList[it].name.c_str());
+                    fprintf(fp, "'%s'", Block::queryName(it).c_str());
                     if (--llen > 0) {
                         fprintf(fp, ", ");
                     }
@@ -975,20 +976,21 @@ namespace mcpe_viz
             );
 
             fprintf(fp, "var blockColorLUT = {\n");
-            for (int32_t i = 0; i < 512; i++) {
-                if (blockInfoList[i].hasVariants()) {
-                    // we need to get blockdata
-                    for (const auto& itbv : blockInfoList[i].variantList) {
-                        fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n", local_be32toh(itbv->color),
-                            escapeString(itbv->name, "'").c_str(), i, itbv->blockdata
+            for(auto& i: Block::list()) {
+                if (i->hasVariants()) {
+                    for(auto& v: i->getVariants()) {
+                        fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n",
+                                local_be32toh(v.second->color()),
+                                escapeString(v.second->name, "'").c_str(),
+                                i->id, v.second->data
                         );
                     }
                 }
                 else {
-                    if (blockInfoList[i].colorSetFlag) {
+                    if (i->is_color_set()) {
                         fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n",
-                            local_be32toh(blockInfoList[i].color), escapeString(blockInfoList[i].name, "'").c_str(),
-                            i, 0
+                                local_be32toh(i->color()), escapeString(i->name, "'").c_str(),
+                                i->id, 0
                         );
                     }
                 }
