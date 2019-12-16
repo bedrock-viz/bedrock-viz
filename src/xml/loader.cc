@@ -1,5 +1,6 @@
 #include "loader.h"
 #include "../logger.h"
+#include "load_block.h"
 #include "load_biome.h"
 
 namespace mcpe_viz
@@ -15,8 +16,14 @@ namespace mcpe_viz
             return -1;
         }
 
-        if (load_biome(doc.child("xml").child("biomelist")) != 0) {
+        auto root = doc.child("xml");
+
+        if (load_biome(root.child("biomelist")) != 0) {
             log::error("biomelist parse failed");
+            return -1;
+        }
+        if (load_block(root.child("blocklist")) != 0) {
+            log::error("blocklist parse failed");
             return -1;
         }
 

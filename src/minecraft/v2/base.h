@@ -3,18 +3,17 @@
 #include <string>
 
 namespace mcpe_viz {
-    class BaseObject {
+
+    class BaseObjectNoId {
     public:
         using ColorType = int32_t;
-        using IdType = int32_t;
     protected:
         ColorType color_;
         bool is_color_set_;
     public:
         std::string name;
-        IdType id;
 
-        BaseObject(const IdType& id, std::string name);
+        BaseObjectNoId(std::string name);
 
         [[nodiscard]]
         ColorType color() const { return this->color_; }
@@ -22,5 +21,17 @@ namespace mcpe_viz {
 
         [[nodiscard]]
         bool is_color_set() const { return this->is_color_set_; }
+    };
+
+    class BaseObject: public BaseObjectNoId {
+    public:
+        using IdType = int32_t;
+        IdType id;
+
+        BaseObject(const IdType& id, std::string name)
+            : BaseObjectNoId{name}
+            , id{id}
+        {
+        }
     };
 }
