@@ -95,6 +95,8 @@ namespace mcpe_viz {
         static const Block* getByUname(const std::string& uname);
         static Block* add(IdType id, const std::string& name);
         static const std::vector<Block*>& list();
-    };
 
+        static std::string queryName(const IdType& id, const Variant::DataType& data);
+        static std::string queryName(const IdType& id);
+    };
 }

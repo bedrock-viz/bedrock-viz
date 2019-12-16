@@ -38,8 +38,6 @@ namespace mcpe_viz {
 
         BlockInfo& setUname(const std::string& s);
 
-        bool isValid() { return valid; }
-
         BlockInfo& setColor(int32_t rgb);
 
         BlockInfo& setSolidFlag(bool f) {
@@ -94,7 +92,4 @@ namespace mcpe_viz {
     };
 
     extern BlockInfo blockInfoList[512];
-
-    std::string getBlockName(int32_t id, int32_t blockdata);
-
 }

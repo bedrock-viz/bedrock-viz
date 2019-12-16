@@ -78,4 +78,32 @@ namespace mcpe_viz
         return variant;
     }
 
+    std::string Block::queryName(const IdType& id, const Variant::DataType& data)
+    {
+        auto block = Block::get(id);
+        if (block != nullptr) {
+            return block->getVariantName(data);
+        }
+        else {
+            record_unknow_id(id);
+            char buffer[256];
+            sprintf(buffer, "(Unknown-block-id-%d-data-%d)", id, data);
+            return std::string(buffer);
+        }
+    }
+
+    std::string Block::queryName(const IdType& id)
+    {
+        auto block = Block::get(id);
+        if (block != nullptr) {
+            return block->name;
+        }
+        else {
+            record_unknow_id(id);
+            char buffer[256];
+            sprintf(buffer, "(unknown-id-0x%02x)", id);
+            return std::string(buffer);
+        }
+    }
+
 }

@@ -667,7 +667,7 @@ namespace mcpe_viz
             s = "\"Name\":";
             if (nameBasedFlag) {
                 if (blockFlag) {
-                    s += "\"" + getBlockName(id, damage) + "\"";
+                    s += "\"" + Block::queryName(id, damage) + "\"";
                 }
                 else {
                     std::string iname = getItemName(id, damage, nameBasedFlag);
@@ -676,7 +676,7 @@ namespace mcpe_viz
             }
             else {
                 if (id >= 0 && id < 256) {
-                    s += "\"" + getBlockName(id, damage) + "\"";
+                    s += "\"" + Block::queryName(id, damage) + "\"";
                 }
                 else {
                     std::string iname = getItemName(id, damage, nameBasedFlag);
@@ -789,7 +789,7 @@ namespace mcpe_viz
 
             if (nameBasedFlag) {
                 if (blockFlag) {
-                    s += "Block:" + getBlockName(id, damage);
+                    s += "Block:" + Block::queryName(id, damage);
                 }
                 else {
                     s += "Item:" + getItemName(id, damage, nameBasedFlag);
@@ -797,7 +797,7 @@ namespace mcpe_viz
             }
             else {
                 if (id >= 0 && id < 256) {
-                    s += "Block:" + getBlockName(id, damage);
+                    s += "Block:" + Block::queryName(id, damage);
                 }
                 else {
                     s += "Item:" + getItemName(id, damage, nameBasedFlag);
@@ -1285,7 +1285,7 @@ namespace mcpe_viz
             }
 
             if (tileId >= 0) {
-                sprintf(tmpstring, " Tile=[%s (%d 0x%x)]", blockInfoList[tileId].name.c_str(), tileId, tileId);
+                sprintf(tmpstring, " Tile=[%s (%d 0x%x)]", Block::queryName(tileId).c_str(), tileId, tileId);
                 s += tmpstring;
             }
 
