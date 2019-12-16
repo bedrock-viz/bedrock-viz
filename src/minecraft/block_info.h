@@ -95,9 +95,6 @@ namespace mcpe_viz {
 
     extern BlockInfo blockInfoList[512];
 
-    int32_t findIdByBlockName(std::string& uname);
-
     std::string getBlockName(int32_t id, int32_t blockdata);
 
-    int32_t getBlockByUname(const std::string& uname, int32_t& blockId, int32_t& blockData);
 }

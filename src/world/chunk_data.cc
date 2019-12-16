@@ -8,6 +8,7 @@
 #include "point_conversion.h"
 #include "common.h"
 #include "../utils/unknown_recorder.h"
+#include "../minecraft/v2/block.h"
 
 namespace mcpe_viz {
     int32_t ChunkData_LevelDB::_do_chunk_v2(int32_t tchunkX, int32_t tchunkZ, const char* cdata,
@@ -43,7 +44,7 @@ namespace mcpe_viz {
         }
 
         // iterate over chunk space
-        uint8_t blockId, biomeId;
+        uint8_t blockId;
         for (int32_t cy = MAX_BLOCK_HEIGHT_127; cy >= 0; cy--) {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
@@ -346,9 +347,10 @@ namespace mcpe_viz {
                     if (tc.has_key("val", nbt::tag_type::Short)) {
                         bdata = tc["val"].as<nbt::tag_short>().get();
                     }
-                    int32_t blockId, blockData;
-                    if (getBlockByUname(bname, blockId, blockData) == 0) {
-                        chunkBlockPalette_BlockId[i] = blockId;
+
+                    auto block = Block::getByUname(bname);
+                    if (block != nullptr) {
+                        chunkBlockPalette_BlockId[i] = block->id;
                         // todonow - correct?
                         chunkBlockPalette_BlockData[i] = bdata;
                     }

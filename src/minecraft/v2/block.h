@@ -1,10 +1,9 @@
 #pragma once
 
-#include <cstdint>
 #include <string>
 #include <array>
 #include <map>
-#include <cassert>
+#include <vector>
 
 #include "base.h"
 
@@ -17,8 +16,11 @@ namespace mcpe_viz {
         public:
             using DataType = unsigned short;
             DataType data;
+            bool spawnable;
             Variant(DataType data, const std::string& name)
-                : BaseObjectNoId{name}, data{data}
+                : BaseObjectNoId{name}
+                , data{data}
+                , spawnable{false}
             {
             }
         };
@@ -30,7 +32,7 @@ namespace mcpe_viz {
         Block(IdType id, const std::string& name)
             : BaseObject{id, name}
             , color_set_need_count{0}
-            , solid{false}
+            , solid{true}
             , opaque{false}
             , liquid{false}
             , spawnable{false}
@@ -41,7 +43,7 @@ namespace mcpe_viz {
         Block& operator=(const Block&) = delete;
         Block& operator=(const Block&&) = delete;
 
-        virtual ~Block()
+        ~Block()
         {
             for(auto& i : this->variants_) {
                 delete i.second;
@@ -72,7 +74,7 @@ namespace mcpe_viz {
             return iter->second;
         }
 
-        static const Block* getById(IdType id);
+        static const Block* get(IdType id);
         static const Block* getByName(const std::string& name);
         static const Block* getByUname(const std::string& uname);
         static Block* add(IdType id, const std::string& name);

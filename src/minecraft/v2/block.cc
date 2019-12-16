@@ -24,7 +24,7 @@ namespace mcpe_viz
         unameBlockMap[uname] = this;
     }
 
-    const Block* Block::getById(IdType id)
+    const Block* Block::get(IdType id)
     {
         auto& instance = Wrapper::value();
         return instance[id];
@@ -41,7 +41,10 @@ namespace mcpe_viz
 
     const Block* Block::getByUname(const std::string& uname)
     {
-        auto const iter = unameBlockMap.find(uname);
+        std::string s = uname;
+        std::transform(s.begin(), s.end(), s.begin(), ::tolower);
+
+        auto const iter = unameBlockMap.find(s);
         if (iter != unameBlockMap.end()) {
             return iter->second;
         }

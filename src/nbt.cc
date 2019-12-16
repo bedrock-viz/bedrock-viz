@@ -27,6 +27,7 @@
 #include "utils/fs.h"
 #include "utils/unknown_recorder.h"
 #include "asset.h"
+#include "minecraft/v2/block.h"
 
 namespace mcpe_viz
 {
@@ -580,8 +581,11 @@ namespace mcpe_viz
                 if (name.length() > 0) {
                     if (blockFlag) {
                         // try block first
-                        id = findIdByBlockName(name);
-                        if (id < 0) {
+                        auto block = Block::getByUname(name);
+                        if (block != nullptr) {
+                            id = block->id;
+                        }
+                        else {
                             id = findIdByItemName(name);
                             if (id >= 0) {
                                 blockFlag = false;
@@ -592,9 +596,13 @@ namespace mcpe_viz
                         // try item first
                         id = findIdByItemName(name);
                         if (id < 0) {
-                            id = findIdByBlockName(name);
-                            if (id >= 0) {
+                            auto block = Block::getByUname(name);
+                            if (block != nullptr) {
+                                id = block->id;
                                 blockFlag = true;
+                            }
+                            else {
+                                id = -1;
                             }
                         }
                     }

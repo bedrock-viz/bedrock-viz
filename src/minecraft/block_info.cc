@@ -36,19 +36,6 @@ namespace mcpe_viz {
 
     BlockInfo blockInfoList[512];
 
-    int32_t findIdByBlockName(std::string& un) {
-        std::string uname = un;
-        std::transform(uname.begin(), uname.end(), uname.begin(), ::tolower);
-        for (const auto& it : blockInfoList) {
-            for (const auto& u : it.unameList) {
-                if (u == uname) {
-                    return it.id;
-                }
-            }
-        }
-        return -1;
-    }
-
     std::string getBlockName(int32_t id, int32_t blockdata) {
         if (blockInfoList[id].isValid()) {
             if (blockInfoList[id].hasVariants()) {
@@ -72,37 +59,5 @@ namespace mcpe_viz {
         char tmpstring[256];
         sprintf(tmpstring, "(Unknown-block-id-%d-data-%d)", id, blockdata);
         return std::string(tmpstring);
-    }
-
-
-    int32_t getBlockByUname(const std::string& un, int32_t& blockId, int32_t& blockData) {
-        // convert search key to lower case
-        std::string uname = un;
-        std::transform(uname.begin(), uname.end(), uname.begin(), ::tolower);
-        for (const auto& it : blockInfoList) {
-            for (const auto& u : it.unameList) {
-                if (u == uname) {
-                    blockId = it.id;
-                    blockData = 0;
-                    return 0;
-                }
-            }
-
-            for (const auto& itbv : it.variantList) {
-                for (const auto& u : itbv->unameList) {
-                    if (u == uname) {
-                        blockId = it.id;
-                        blockData = itbv->blockdata;
-                        return 0;
-                    }
-                }
-            }
-        }
-
-        // force to "air"
-        blockId = 0;
-        blockData = 0;
-        record_unknow_uname(uname);
-        return -1;
     }
 }

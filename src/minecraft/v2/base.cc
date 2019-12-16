@@ -15,7 +15,7 @@ namespace mcpe_viz
     }
 
     BaseObjectNoId::BaseObjectNoId(std::string  name)
-        : color_{kColorDefault}
+        : color_{local_htobe32(kColorDefault)}
         , is_color_set_{false}
         , name{std::move(name)}
     {

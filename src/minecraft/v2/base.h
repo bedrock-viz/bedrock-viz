@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstdint>
 
 namespace mcpe_viz {
 
@@ -29,7 +30,7 @@ namespace mcpe_viz {
         IdType id;
 
         BaseObject(const IdType& id, std::string name)
-            : BaseObjectNoId{name}
+            : BaseObjectNoId{std::move(name)}
             , id{id}
         {
         }

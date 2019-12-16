@@ -5,6 +5,7 @@
 #include "../logger.h"
 #include "../minecraft/block_info.h"
 #include "../utils/unknown_recorder.h"
+#include "../minecraft/v2/block.h"
 
 
 namespace mcpe_viz {
@@ -351,15 +352,14 @@ namespace mcpe_viz {
                     if (tc.has_key("val", nbt::tag_type::Short)) {
                         bdata = tc["val"].as<nbt::tag_short>().get();
                     }
-                    int32_t blockId, blockData;
-                    if (getBlockByUname(bname, blockId, blockData) == 0) {
-                        chunkBlockPalette_BlockId[i] = blockId;
+                    auto block = Block::getByUname(bname);
+                    if (block != nullptr) {
+                        chunkBlockPalette_BlockId[i] = block->id;
                         // todonow - correct?
                         chunkBlockPalette_BlockData[i] = bdata;
                     }
                     else {
                         record_unknow_uname(bname);
-                        
                         // todonow - reasonable?
                         chunkBlockPalette_BlockId[i] = 0;
                         chunkBlockPalette_BlockData[i] = 0;
