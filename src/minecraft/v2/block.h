@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "base.h"
+#include "../../utils/unknown_recorder.h"
 
 namespace mcpe_viz {
     class Block final: public BaseObject {
@@ -72,6 +73,21 @@ namespace mcpe_viz {
                 return nullptr;
             }
             return iter->second;
+        }
+
+        [[nodiscard]]
+        std::string getVariantName(const Variant::DataType& data) const
+        {
+            if (this->hasVariants()) {
+                for(auto& i : this->variants_) {
+                    if (i.first == data) {
+                        return i.second->name;
+                    }
+                }
+            }
+            // TODO record when necessary
+            // record_unknown_block_variant(this->id, this->name, data);
+            return this->name;
         }
 
         static const Block* get(IdType id);

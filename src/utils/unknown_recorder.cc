@@ -12,6 +12,8 @@ namespace
     BlockVariantMap unknown_block_variant;
 
     std::set<std::string> unknown_uname;
+
+    std::set<int32_t> unknown_id;
 }
 
 namespace mcpe_viz {
@@ -30,22 +32,26 @@ namespace mcpe_viz {
         unknown_uname.insert(uname);
     }
 
-    void print_unknown_uname()
+    void record_unknow_id(int32_t id)
+    {
+        unknown_id.insert(id);
+    }
+
+    void print_unknown_warnings()
     {
         for (auto& i : unknown_uname) {
             log::warn("Unknown uname: {}", i);
         }
-    }
-
-    void print_unknown_block_warnings()
-    {
         for (auto& i : unknown_block_variant) {
             const auto& blockId = i.first.first;
             const auto& blockData = i.first.second;
             const auto& blockName = i.second;
 
             log::warn("Unknown block variant for block (id={} (0x{:x}) '{}') with blockdata={} (0x{:x})",
-                blockId, blockId, blockName, blockData, blockData);
+                      blockId, blockId, blockName, blockData, blockData);
+        }
+        for (auto& i : unknown_id) {
+            log::warn("Unknown id: {} (0x{:x})", i, i);
         }
     }
 }

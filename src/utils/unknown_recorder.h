@@ -9,7 +9,7 @@ namespace mcpe_viz {
 
     void record_unknow_uname(const std::string& uname);
 
-    void print_unknown_uname();
-    
-    void print_unknown_block_warnings();
+    void record_unknow_id(int32_t id);
+
+    void print_unknown_warnings();
 }

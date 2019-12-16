@@ -884,10 +884,7 @@ int main(int argc, char** argv)
     world->doOutput();
     world->dbClose();
 
-    print_unknown_uname();
-    print_unknown_block_warnings();
-
+    print_unknown_warnings();
     log::info("Done.");
-    
     return 0;
 }
