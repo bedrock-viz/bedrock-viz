@@ -5,24 +5,23 @@
 
 namespace mcpe_viz {
 
-    class NamedObject {
+    class Named {
     public:
         std::string name;
-        NamedObject(std::string name)
+        explicit Named(std::string name)
             : name{std::move(name)}
         {
         }
     };
 
-    class BaseObjectNoId: public NamedObject {
+    class Colored {
     public:
         using ColorType = int32_t;
     protected:
         ColorType color_;
         bool is_color_set_;
     public:
-
-        BaseObjectNoId(std::string name);
+        Colored();
 
         [[nodiscard]]
         ColorType color() const { return this->color_; }
@@ -32,14 +31,23 @@ namespace mcpe_viz {
         bool is_color_set() const { return this->is_color_set_; }
     };
 
-    class BaseObject: public BaseObjectNoId {
+    class WithId {
     public:
         using IdType = int32_t;
         IdType id;
+        explicit WithId(const IdType& id)
+            : id{id}
+        {
+        }
+    };
 
+
+    class BaseObject: public Named, public Colored, public WithId {
+    public:
         BaseObject(const IdType& id, std::string name)
-            : BaseObjectNoId{std::move(name)}
-            , id{id}
+            : Named{std::move(name)}
+            , Colored{}
+            , WithId{id}
         {
         }
     };

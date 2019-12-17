@@ -13,13 +13,13 @@ namespace mcpe_viz {
     public:
         using IdType = unsigned short;
 
-        class Variant: public BaseObjectNoId {
+        class Variant: public Named {
         public:
             using DataType = unsigned short;
             DataType data;
             bool spawnable;
             Variant(DataType data, const std::string& name)
-                : BaseObjectNoId{name}
+                : Named{name}
                 , data{data}
                 , spawnable{false}
             {
