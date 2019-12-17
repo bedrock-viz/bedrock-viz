@@ -11,11 +11,13 @@ namespace
 
     VariantMap sUnknownBlockVariants;
     VariantMap sUnknownItemVariants;
+    VariantMap sUnknownEntityVariants;
 
     std::set<std::string> unknown_uname;
 
     std::set<int32_t> sUnknownBlockId;
     std::set<int32_t> sUnknownItemId;
+    std::set<int32_t> sUnknownEntityId;
 }
 
 namespace mcpe_viz {
@@ -44,6 +46,11 @@ namespace mcpe_viz {
         sUnknownItemId.insert(itemId);
     }
 
+    void record_unknown_entity_id(int32_t entityId)
+    {
+        sUnknownEntityId.insert(entityId);
+    }
+
     void record_unknown_item_variant(int32_t itemId, const std::string& itemName, int32_t blockData)
     {
         using std::make_pair;
@@ -52,6 +59,15 @@ namespace mcpe_viz {
             sUnknownItemVariants.insert(make_pair(make_pair(itemId, blockData), itemName));
         }
     }
+
+    void record_unknown_entity_variant(int32_t entityId, const std::string& entityName, int32_t extraData)
+    {
+        using std::make_pair;
+        if (sUnknownEntityVariants.find(make_pair(entityId, extraData)) == sUnknownEntityVariants.end()) {
+            sUnknownEntityVariants.insert(make_pair(make_pair(entityId, extraData), entityName));
+        }
+    }
+
 
     void print_unknown_warnings()
     {
@@ -73,12 +89,23 @@ namespace mcpe_viz {
             log::warn("Unknown item variant for item(id={} (0x{:x}) '{}') with extradata={} (0x{:x})",
                 id, id, name, data, data);
         }
+        for (auto& i : sUnknownEntityVariants) {
+            const auto& id = i.first.first;
+            const auto& data = i.first.second;
+            const auto& name = i.second;
+            log::warn("Unknown entity variant for item(id={} (0x{:x}) '{}') with extradata={} (0x{:x})",
+                id, id, name, data, data);
+        }
         for (auto& i : sUnknownBlockId) {
             log::warn("Unknown block id: {} (0x{:x})", i, i);
         }
 
         for (auto& i: sUnknownItemId) {
             log::warn("Unknown item id: {} (0x{:x})", i, i);
+        }
+
+        for (auto& i: sUnknownEntityId) {
+            log::warn("Unknown entity id: {} (0x{:x})", i, i);
         }
     }
 }

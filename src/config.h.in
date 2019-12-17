@@ -13,8 +13,8 @@ namespace mcpe_viz {
     const char * const cmake_install_prefix = R"(${CMAKE_INSTALL_PREFIX})";
 
     const int kMaxBiomeCount = 256;
-
     const int kMaxBlockCount = 768;
-
     const int kMaxItemCount = 768;
+    const int kMaxEntityCount = 256;
+    const int kMaxEnchantmentCount = 64;
 }
