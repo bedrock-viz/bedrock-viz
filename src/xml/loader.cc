@@ -3,6 +3,7 @@
 #include "load_block.h"
 #include "load_biome.h"
 #include "load_item.h"
+#include "load_entity.h"
 
 namespace mcpe_viz
 {
@@ -29,6 +30,10 @@ namespace mcpe_viz
         }
         if (load_item(root.child("itemlist")) != 0) {
             log::error("itemlist parse failed");
+            return -1;
+        }
+        if (load_entity(root.child("entitylist")) != 0) {
+            log::error("entity parse failed");
             return -1;
         }
 

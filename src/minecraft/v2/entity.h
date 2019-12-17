@@ -23,12 +23,14 @@ namespace mcpe_viz
             P = 1, // for passive
             H = 2, // for hostile
         };
+        EType etype;
     private:
         std::map<Variant::DataType, Variant*> variants_;
     public:
         Entity(const IdType& id, const std::string& name)
             : Named{name}
             , WithId{id}
+            , etype{EType::NA}
         {
         }
 

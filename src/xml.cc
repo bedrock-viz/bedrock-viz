@@ -194,10 +194,6 @@ namespace mcpe_viz {
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"enchantmentlist") == 0 ) {
         doParseXML_enchantmentlist(cur);
       }
-      else {
-        doParseXml_Unknown(cur);
-      }
-        
       cur = cur->next;
     }
     return 0;
