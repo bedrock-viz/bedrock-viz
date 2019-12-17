@@ -219,7 +219,6 @@
 #include "asset.h"
 #include "args.h"
 #include "control.h"
-#include "minecraft/block_info.h"
 #include "utils/unknown_recorder.h"
 #include "world/world.h"
 #include "utils/fs.h"
@@ -380,15 +379,6 @@ namespace mcpe_viz {
         // -- asset dir(./data/ or /usr/local/share/bedrock-viz/data/, etc)
         std::string fn;
         int32_t ret;
-        char tmpstring[256];
-
-        // initialize lists
-        // todobig - others?
-        for (int32_t i = 0; i < 512; i++) {
-            sprintf(tmpstring, "(unknown-id-0x%02x)", i);
-            blockInfoList[i].setName(tmpstring);
-            blockInfoList[i].valid = false;
-        }
 
         // as specified on cmdline
         if (control.fnXml.length() > 0) {

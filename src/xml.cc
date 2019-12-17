@@ -11,7 +11,6 @@
 #include <cstdio>
 #include <libxml/xmlreader.h>
 #include "util.h"
-#include "minecraft/block_info.h"
 #include "minecraft/item_info.h"
 #include "minecraft/entity_info.h"
 #include "minecraft/enchantment_info.h"
@@ -108,116 +107,6 @@ namespace mcpe_viz {
               , (int)cur->type
               , cur->content ? (char*)cur->content : "(NULL)"
               );
-    }
-    return 0;
-  }
-    
-  int32_t doParseXML_blocklist_blockvariant(xmlNodePtr cur, BlockInfo& block) {
-    cur = cur->xmlChildrenNode;
-    while (cur != NULL) {
-      if ( xmlStrcmp(cur->name, (const xmlChar *)"blockvariant") == 0 ) {
-
-        // example:
-        //   <blockvariant blockdata="0x0" name="Oak Leaves" />
-
-        bool blockDataValid, nameValid, unameValid, colorValid, dcolorValid, spawnableFlagValid;
-          
-        int32_t blockdata = xmlGetInt(cur, (const xmlChar*)"blockdata", blockDataValid);
-        std::string name = xmlGetString(cur, (const xmlChar*)"name", nameValid);
-        std::string uname = xmlGetString(cur, (const xmlChar*)"uname", unameValid);
-        int32_t color = xmlGetInt(cur, (const xmlChar*)"color", colorValid);
-        int32_t dcolor = xmlGetInt(cur, (const xmlChar*)"dcolor", dcolorValid);
-        bool spawnableFlag = xmlGetBool(cur, (const xmlChar*)"spawnable", true, spawnableFlagValid);
-        
-        // create data
-        if ( blockDataValid && nameValid ) {
-          BlockInfo& bv = block.addVariant(blockdata,name);
-          if ( colorValid ) {
-            if ( dcolorValid ) {
-              color += dcolor;
-            }
-            bv.setColor(color);
-          } else {
-            // no color specified, we increment the parent block's color w/ blockdata (to keep it unique)
-            color = local_be32toh(block.color);
-            color += blockdata;
-            bv.setColor(color);
-          }
-
-          if ( unameValid ) {
-            bv.setUname(uname);
-          }
-
-          if ( spawnableFlagValid ) {
-            bv.setSpawnableFlag(spawnableFlag);
-          } else {
-            bv.setSpawnableFlag(block.spawnableFlag);
-          }
-        } else {
-          // todo error
-          fprintf(stderr,"WARNING: Did not find valid blockdata and name for blockvariant of block: (%s)\n"
-                  , block.name.c_str()
-                  );
-        }
-      }
-      else {
-        doParseXml_Unknown(cur);
-      }
-        
-      cur = cur->next;
-    }
-    return 0;
-  }
-    
-  int32_t doParseXML_blocklist(xmlNodePtr cur) {
-    cur = cur->xmlChildrenNode;
-    while (cur != NULL) {
-      if ( xmlStrcmp(cur->name, (const xmlChar *)"block") == 0 ) {
-          
-        bool idValid, nameValid, unameValid, colorValid, solidFlagValid, opaqueFlagValid, liquidFlagValid, spawnableFlagValid;
-          
-        int32_t id = xmlGetInt(cur, (const xmlChar*)"id", idValid);
-        std::string name = xmlGetString(cur, (const xmlChar*)"name", nameValid);
-        std::string uname = xmlGetString(cur, (const xmlChar*)"uname", unameValid);
-        int32_t color = xmlGetInt(cur, (const xmlChar*)"color", colorValid);
-        bool solidFlag = xmlGetBool(cur, (const xmlChar*)"solid", true, solidFlagValid);
-        bool opaqueFlag = xmlGetBool(cur, (const xmlChar*)"opaque", true, opaqueFlagValid);
-        bool liquidFlag = xmlGetBool(cur, (const xmlChar*)"liquid", false, liquidFlagValid);
-        bool spawnableFlag = xmlGetBool(cur, (const xmlChar*)"spawnable", true, spawnableFlagValid);
-
-        // create data
-        if ( idValid && nameValid ) {
-          BlockInfo& b = blockInfoList[id].setName(name);
-          b.setId(id);
-          if ( colorValid ) {
-            b.setColor(color);
-          }
-          if ( unameValid ) {
-            b.setUname(uname);
-          }
-          
-          b.setSolidFlag(solidFlag);
-          b.setOpaqueFlag(opaqueFlag);
-          b.setLiquidFlag(liquidFlag);
-          b.setSpawnableFlag(spawnableFlag);
-
-          // debug
-          //fprintf(stderr, "DEBUG: block: %s\n", b.toString().c_str());
-          
-          doParseXML_blocklist_blockvariant(cur, b);
-        } else {
-          // todo error
-          fprintf(stderr,"WARNING: Did not find valid id and name for block: (0x%x) (%s) (0x%x)\n"
-                  , id
-                  , name.c_str()
-                  , color
-                  );
-        }
-      }
-      else {
-        doParseXml_Unknown(cur);
-      }
-      cur = cur->next;
     }
     return 0;
   }
@@ -359,11 +248,7 @@ namespace mcpe_viz {
     while (cur != NULL) {
 
       // todo - should count warning/errors and return this info
-
-      if ( false ) {
-      }
-      else if ( xmlStrcmp(cur->name, (const xmlChar *)"blocklist") == 0 ) {
-        doParseXML_blocklist(cur);
+      if ( xmlStrcmp(cur->name, (const xmlChar *)"blocklist") == 0 ) {
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"itemlist") == 0 ) {
         doParseXML_itemlist(cur);
@@ -372,7 +257,6 @@ namespace mcpe_viz {
         doParseXML_entitylist(cur);
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"biomelist") == 0 ) {
-//        doParseXML_biomelist(cur);
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"enchantmentlist") == 0 ) {
         doParseXML_enchantmentlist(cur);

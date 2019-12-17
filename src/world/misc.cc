@@ -3,7 +3,6 @@
 #include "../define.h"
 #include "../nbt.h"
 #include "../logger.h"
-#include "../minecraft/block_info.h"
 #include "../utils/unknown_recorder.h"
 #include "../minecraft/v2/block.h"
 

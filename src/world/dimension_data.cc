@@ -2,7 +2,6 @@
 
 #include <random>
 
-#include "../minecraft/block_info.h"
 #include "../control.h"
 #include "../utils/unknown_recorder.h"
 #include "common.h"

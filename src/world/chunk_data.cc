@@ -1,7 +1,6 @@
 #include "chunk_data.h"
 
 #include "../define.h"
-#include "../minecraft/block_info.h"
 #include "../global.h"
 #include "../nbt.h"
 #include "misc.h"

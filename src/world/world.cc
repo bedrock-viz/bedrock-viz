@@ -9,7 +9,6 @@
 #include "../control.h"
 #include "../nbt.h"
 #include "../global.h"
-#include "../minecraft/block_info.h"
 #include "../minecraft/conversion.h"
 #include "../utils/fs.h"
 #include "../asset.h"
