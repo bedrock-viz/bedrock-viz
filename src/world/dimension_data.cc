@@ -326,7 +326,7 @@ namespace mcpe_viz {
                                 }
                             }
                             else {
-                                record_unknow_id(blockid);
+                                record_unknown_block_id(blockid);
                                 color = kColorDefault;
                             }
                         }
@@ -611,7 +611,7 @@ namespace mcpe_viz {
                                         }
                                     }
                                     else {
-                                        record_unknow_id(blockid);
+                                        record_unknown_block_id(blockid);
                                         color = kColorDefault;
                                     }
 
@@ -766,7 +766,7 @@ namespace mcpe_viz {
                                                     }
                                                 }
                                                 else {
-                                                    record_unknow_id(blockid);
+                                                    record_unknown_block_id(blockid);
                                                     color = kColorDefault;
                                                 }
                                             }
@@ -984,7 +984,7 @@ namespace mcpe_viz {
                                     }
                                 }
                                 else {
-                                    record_unknow_id(blockid);
+                                    record_unknown_block_id(blockid);
                                     color = kColorDefault;
                                 }
 

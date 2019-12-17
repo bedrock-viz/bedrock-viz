@@ -11,7 +11,6 @@
 #include <cstdio>
 #include <libxml/xmlreader.h>
 #include "util.h"
-#include "minecraft/item_info.h"
 #include "minecraft/entity_info.h"
 #include "minecraft/enchantment_info.h"
 
@@ -111,71 +110,6 @@ namespace mcpe_viz {
     return 0;
   }
 
-  int32_t doParseXML_itemlist_itemvariant(xmlNodePtr cur, int32_t item_id) {
-    cur = cur->xmlChildrenNode;
-    while (cur != NULL) {
-      if ( xmlStrcmp(cur->name, (const xmlChar *)"itemvariant") == 0 ) {
-
-        // example:
-        //   <itemvariant extradata="0x0" name="Ink Sac" />
-        
-        bool extradataValid, nameValid, unameValid;
-          
-        int32_t extradata = xmlGetInt(cur, (const xmlChar*)"extradata", extradataValid);
-        std::string name = xmlGetString(cur, (const xmlChar*)"name", nameValid);
-        std::string uname = xmlGetString(cur, (const xmlChar*)"uname", unameValid);
-        
-        // create data
-        if ( extradataValid && nameValid && unameValid ) {
-          itemInfoList[item_id]->addVariant(extradata,name,uname);
-        } else {
-          // todo error
-          fprintf(stderr,"WARNING: Did not find valid extradata and name for blockvariant of block: (%s)\n"
-                  , itemInfoList[item_id]->name.c_str()
-                  );
-        }
-      }
-      else {
-        doParseXml_Unknown(cur);
-      }
-        
-      cur = cur->next;
-    }
-    return 0;
-  }
-
-  int32_t doParseXML_itemlist(xmlNodePtr cur) {
-    cur = cur->xmlChildrenNode;
-    while (cur != NULL) {
-      if ( xmlStrcmp(cur->name, (const xmlChar *)"item") == 0 ) {
-
-        bool idValid, nameValid, unameValid;
-          
-        int32_t id = xmlGetInt(cur, (const xmlChar*)"id", idValid);
-        std::string name = xmlGetString(cur, (const xmlChar*)"name", nameValid);
-        std::string uname = xmlGetString(cur, (const xmlChar*)"uname", unameValid);
-
-        // create data
-        if ( idValid && nameValid && unameValid ) {
-          itemInfoList.insert( std::make_pair(id, std::unique_ptr<ItemInfo>(new ItemInfo(name.c_str(), uname.c_str()))) );
-          
-          doParseXML_itemlist_itemvariant(cur, id);
-        } else {
-          // todo error
-          fprintf(stderr,"WARNING: Did not find valid id and name for item: (0x%x) (%s)\n"
-                  , id
-                  , name.c_str()
-                  );
-        }
-      }
-      else {
-        doParseXml_Unknown(cur);
-      }
-      cur = cur->next;
-    }
-    return 0;
-  }
-
   int32_t doParseXML_entitylist(xmlNodePtr cur) {
     cur = cur->xmlChildrenNode;
     while (cur != NULL) {
@@ -251,7 +185,6 @@ namespace mcpe_viz {
       if ( xmlStrcmp(cur->name, (const xmlChar *)"blocklist") == 0 ) {
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"itemlist") == 0 ) {
-        doParseXML_itemlist(cur);
       }
       else if ( xmlStrcmp(cur->name, (const xmlChar *)"entitylist") == 0 ) {
         doParseXML_entitylist(cur);

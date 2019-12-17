@@ -11,7 +11,7 @@ namespace
     using mcpe_viz::PointerArray;
     using Wrapper = PointerArray<mcpe_viz::Block, mcpe_viz::kMaxBlockCount>;
 
-    std::vector<mcpe_viz::Block*> sBlocks;
+    std::vector<const mcpe_viz::Block*> sBlocks;
     std::unordered_map<std::string, mcpe_viz::Block*> unameBlockMap;
 }
 
@@ -20,7 +20,14 @@ namespace mcpe_viz
 
     void Block::addUname(const std::string& uname)
     {
-        unameBlockMap[uname] = this;
+        if (unameBlockMap.find(uname) != unameBlockMap.end()) {
+            auto block = unameBlockMap[uname];
+            log::error("uname({}) already exists (id=0x{:x} name={})",
+                uname, block->id, block->name);
+        }
+        else {
+            unameBlockMap[uname] = this;
+        }
     }
 
     const Block* Block::get(IdType id)
@@ -44,13 +51,17 @@ namespace mcpe_viz
     Block* Block::add(IdType id, const std::string& name)
     {
         auto& instance = Wrapper::value();
+        if (instance[id] != nullptr) {
+            log::error("Block id={}(0x{:x} name={} already exists", id, id, name);
+            return nullptr;
+        }
         auto const block = new Block(id, name);
         instance[id] = block;
         sBlocks.emplace_back(block);
         return block;
     }
 
-    const std::vector<Block*>& Block::list()
+    const std::vector<const Block*>& Block::list()
     {
         return sBlocks;
     }
@@ -74,7 +85,7 @@ namespace mcpe_viz
             return block->getVariantName(data);
         }
         else {
-            record_unknow_id(id);
+            record_unknown_block_id(id);
             char buffer[256];
             sprintf(buffer, "(Unknown-block-id-%d-data-%d)", id, data);
             return std::string(buffer);
@@ -88,7 +99,7 @@ namespace mcpe_viz
             return block->name;
         }
         else {
-            record_unknow_id(id);
+            record_unknown_block_id(id);
             char buffer[256];
             sprintf(buffer, "(unknown-id-0x%02x)", id);
             return std::string(buffer);

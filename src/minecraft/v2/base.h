@@ -41,6 +41,17 @@ namespace mcpe_viz {
         }
     };
 
+    class WithData {
+    public:
+        using DataType = unsigned short;
+        DataType data;
+
+        explicit WithData(const DataType& data)
+            : data{data}
+        {
+        }
+    };
+
 
     class BaseObject: public Named, public Colored, public WithId {
     public:

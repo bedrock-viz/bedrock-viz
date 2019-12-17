@@ -18,7 +18,6 @@
 #include "define.h"
 #include "global.h"
 
-#include "minecraft/item_info.h"
 #include "minecraft/entity_info.h"
 #include "minecraft/enchantment_info.h"
 #include "minecraft/conversion.h"
@@ -27,6 +26,7 @@
 #include "utils/unknown_recorder.h"
 #include "asset.h"
 #include "minecraft/v2/block.h"
+#include "minecraft/v2/item.h"
 
 namespace mcpe_viz
 {
@@ -585,16 +585,23 @@ namespace mcpe_viz
                             id = block->id;
                         }
                         else {
-                            id = findIdByItemName(name);
-                            if (id >= 0) {
+                            auto item = Item::getByUname(name);
+                            if (item != nullptr) {
+                                id = item->id;
                                 blockFlag = false;
+                            }
+                            else {
+                                id = -1;
                             }
                         }
                     }
                     else {
                         // try item first
-                        id = findIdByItemName(name);
-                        if (id < 0) {
+                        auto item = Item::getByUname(name);
+                        if (item != nullptr) {
+                            id = item->id;
+                        }
+                        else {
                             auto block = Block::getByUname(name);
                             if (block != nullptr) {
                                 id = block->id;
@@ -669,7 +676,7 @@ namespace mcpe_viz
                     s += "\"" + Block::queryName(id, damage) + "\"";
                 }
                 else {
-                    std::string iname = getItemName(id, damage, nameBasedFlag);
+                    std::string iname = Item::queryName(id, damage);
                     s += "\"" + iname + "\"";
                 }
             }
@@ -678,25 +685,12 @@ namespace mcpe_viz
                     s += "\"" + Block::queryName(id, damage) + "\"";
                 }
                 else {
-                    std::string iname = getItemName(id, damage, nameBasedFlag);
+                    std::string iname = Item::queryName(id, damage);
                     s += "\"" + iname + "\"";
                 }
             }
             list.push_back(s);
 
-            // todo - not useful?
-#if 0
-
-            if (damage >= 0) {
-                sprintf(tmpstring, "\"Damage\":\"%d\"", damage);
-                list.push_back(std::string(tmpstring));
-            }
-            if (slot >= 0) {
-                sprintf(tmpstring, "\"Slot\":\"%d\"", slot);
-                list.push_back(std::string(tmpstring));
-            }
-
-#endif
             if (showCountFlag && count >= 0) {
                 sprintf(tmpstring, "\"Count\":\"%d\"", count);
                 list.push_back(std::string(tmpstring));
@@ -791,7 +785,7 @@ namespace mcpe_viz
                     s += "Block:" + Block::queryName(id, damage);
                 }
                 else {
-                    s += "Item:" + getItemName(id, damage, nameBasedFlag);
+                    s += "Item:" + Item::queryName(id, damage);
                 }
             }
             else {
@@ -799,7 +793,7 @@ namespace mcpe_viz
                     s += "Block:" + Block::queryName(id, damage);
                 }
                 else {
-                    s += "Item:" + getItemName(id, damage, nameBasedFlag);
+                    s += "Item:" + Item::queryName(id, damage);
                 }
             }
 

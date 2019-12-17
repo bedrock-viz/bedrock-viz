@@ -21,7 +21,7 @@ namespace mcpe_viz
             auto block = Block::add(id, name);
 
             if (block == nullptr) {
-                log::error("add block failed(name={}, id={}",
+                log::error("add block failed(name={}, id=0x{:x})",
                            name, id);
                 return -1;
             }
@@ -65,6 +65,11 @@ namespace mcpe_viz
                 }
 
                 auto variant = block->addVariant(var_data, var_name);
+                if (variant == nullptr) {
+                    log::error("add block variant failed(name={}, data={}",
+                        var_name, var_data);
+                    return -1;
+                }
                 if (var_color != -1) {
                     if (var_dcolor != -1) {
                         var_color += var_dcolor;

@@ -11,16 +11,12 @@
 namespace mcpe_viz {
     class Block final: public BaseObject {
     public:
-        using IdType = unsigned short;
-
-        class Variant: public Named {
+        class Variant: public Named, public WithData, public Colored {
         public:
-            using DataType = unsigned short;
-            DataType data;
             bool spawnable;
             Variant(DataType data, const std::string& name)
                 : Named{name}
-                , data{data}
+                , WithData{data}
                 , spawnable{false}
             {
             }
@@ -113,7 +109,7 @@ namespace mcpe_viz {
         static const Block* get(IdType id);
         static const Block* getByUname(const std::string& uname);
         static Block* add(IdType id, const std::string& name);
-        static const std::vector<Block*>& list();
+        static const std::vector<const Block*>& list();
 
         static std::string queryName(const IdType& id, const Variant::DataType& data);
         static std::string queryName(const IdType& id);
