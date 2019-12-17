@@ -60,7 +60,7 @@ namespace mcpe_viz {
                             "\"Block\": true, "
                             "\"Dimension\": \"%d\", "
                             "\"Pos\": [%d, %d, %d]"
-                            "} }", blockInfoList[blockId].name.c_str(), dimensionId,
+                            "} }", Block::queryName(blockId).c_str(), dimensionId,
                             chunkX * 16 + cx, cy, chunkZ * 16 + cz
                         );
                         std::string json = ""
@@ -86,14 +86,17 @@ namespace mcpe_viz {
 
                             // "the spawning block itself must be non-opaque and non-liquid"
                             // we add: non-solid
-                            if (!blockInfoList[blockId].isOpaque() &&
-                                !blockInfoList[blockId].isLiquid() &&
-                                !blockInfoList[blockId].isSolid()) {
+                            auto block = Block::get(blockId);
+                            if (block != nullptr &&
+                                !block->opaque &&
+                                !block->liquid &&
+                                !block->solid) {
 
                                 // "the block directly above it must be non-opaque"
 
                                 uint8_t aboveBlockId = getBlockId_LevelDB_v2(cdata, cx, cz, cy + 1);
-                                if (!blockInfoList[aboveBlockId].isOpaque()) {
+                                auto aboveBlock = Block::get(aboveBlockId);
+                                if (aboveBlock != nullptr && !aboveBlock->opaque) {
 
                                     // "the block directly below it must have a solid top surface (opaque, upside down slabs / stairs and others)"
                                     // "the block directly below it may not be bedrock or barrier" -- take care of with 'spawnable'
@@ -214,7 +217,10 @@ namespace mcpe_viz {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
                     blockId = getBlockId_LevelDB_v3(cdata, cx, cz, cy);
-
+                    auto block = Block::get(blockId);
+                    if (block == nullptr) {
+                        continue;
+                    }
                     // todobig - handle block variant?
                     if (fastBlockToGeoJSON[blockId]) {
                         double ix, iy;
@@ -225,7 +231,7 @@ namespace mcpe_viz {
                             "\"Block\": true, "
                             "\"Dimension\": \"%d\", "
                             "\"Pos\": [%d, %d, %d]"
-                            "} }", blockInfoList[blockId].name.c_str(), dimensionId,
+                            "} }", block->name.c_str(), dimensionId,
                             chunkX * 16 + cx, chunkY * 16 + cy, chunkZ * 16 + cz
                         );
                         std::string json = ""
@@ -257,7 +263,7 @@ namespace mcpe_viz {
 #if 1
                                 // todo - we are getting the block light ABOVE this block (correct?)
                                 // todo - this will break if we are using force-top stuff
-                            if (blockInfoList[blockId].isSolid()) {
+                            if (block->solid) {
                                 // move to block above this block
                                 cy2++;
                                 if (cy2 > MAX_BLOCK_HEIGHT) { cy2 = MAX_BLOCK_HEIGHT; }
@@ -383,7 +389,7 @@ namespace mcpe_viz {
                         blocksPerWord, bitsPerBlock, cx, cz, cy);
 
                     // look up blockId
-                    //todonow error checking
+                    // TODO error checking
                     if (paletteBlockId < chunkBlockPalette_BlockId.size()) {
                         blockId = chunkBlockPalette_BlockId[paletteBlockId];
                         blockData = chunkBlockPalette_BlockData[paletteBlockId];
@@ -393,6 +399,10 @@ namespace mcpe_viz {
                         blockData = 0;
                         log::warn("Found chunk palette id out of range {} (size={})",
                             paletteBlockId, chunkBlockPalette_BlockId.size());
+                    }
+                    auto block = Block::get(blockId);
+                    if (block == nullptr) {
+                        continue;
                     }
 
                     // todobig - handle block variant?
@@ -405,7 +415,7 @@ namespace mcpe_viz {
                             "\"Block\": true, "
                             "\"Dimension\": \"%d\", "
                             "\"Pos\": [%d, %d, %d]"
-                            "} }", blockInfoList[blockId].name.c_str(), dimensionId,
+                            "} }", block->name.c_str(), dimensionId,
                             chunkX * 16 + cx, chunkY * 16 + cy, chunkZ * 16 + cz
                         );
                         std::string json = ""
@@ -437,7 +447,7 @@ namespace mcpe_viz {
 #if 1
                                 // todo - we are getting the block light ABOVE this block (correct?)
                                 // todo - this will break if we are using force-top stuff
-                            if (blockInfoList[blockId].isSolid()) {
+                            if (block->solid) {
                                 // move to block above this block
                                 cy2++;
                                 if (cy2 > MAX_BLOCK_HEIGHT) { cy2 = MAX_BLOCK_HEIGHT; }
@@ -581,14 +591,17 @@ namespace mcpe_viz {
 
                             // "the spawning block itself must be non-opaque and non-liquid"
                             // we add: non-solid
-                            if (!blockInfoList[blockId].isOpaque() &&
-                                !blockInfoList[blockId].isLiquid() &&
-                                !blockInfoList[blockId].isSolid()) {
+                            auto block = Block::get(blockId);
+                            if (block != nullptr &&
+                                !block->opaque &&
+                                !block->liquid &&
+                                !block->solid) {
 
                                 // "the block directly above it must be non-opaque"
 
                                 uint8_t aboveBlockId = getData_LevelDB_v3_fullchunk(blockidData, cx, cz, cy + 1);
-                                if (!blockInfoList[aboveBlockId].isOpaque()) {
+                                auto aboveBlock = Block::get(aboveBlockId);
+                                if (aboveBlock != nullptr && !aboveBlock->opaque) {
 
                                     // "the block directly below it must have a solid top surface (opaque, upside down slabs / stairs and others)"
                                     // "the block directly below it may not be bedrock or barrier" -- take care of with 'spawnable'
