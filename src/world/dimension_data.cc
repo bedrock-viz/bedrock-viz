@@ -12,6 +12,7 @@
 #include "../nbt.h"
 #include "../utils/fs.h"
 #include "../minecraft/v2/biome.h"
+#include "../minecraft/v2/block.h"
 
 namespace
 {
@@ -299,32 +300,35 @@ namespace mcpe_viz {
                         else {
                             // regular image
                             int32_t blockid = it->blocks[cx][cz];
+                            auto block = Block::get(blockid);
+                            if (block != nullptr) {
 
-                            if (blockInfoList[blockid].hasVariants()) {
-                                // we need to get blockdata
-                                int32_t blockdata = it->data[cx][cz];
-                                bool vfound = false;
-                                for (const auto& itbv : blockInfoList[blockid].variantList) {
-                                    if (itbv->blockdata == blockdata) {
-                                        vfound = true;
-                                        color = itbv->color;
-                                        break;
+                                if (block->hasVariants()) {
+                                    // we need to get blockdata
+                                    int32_t blockdata = it->data[cx][cz];
+                                    auto variant = block->getVariantByBlockData(blockdata);
+                                    if (variant != nullptr) {
+                                        color = variant->color();
+                                    }
+                                    else {
+                                        record_unknown_block_variant(
+                                            blockid,
+                                            block->name,
+                                            blockdata);
+                                        // since we did not find the variant, use the parent block's color
+                                        color = block->color();
                                     }
                                 }
-                                if (!vfound) {
-                                    record_unknown_block_variant(
-                                        blockid,
-                                        blockInfoList[blockid].name,
-                                        blockdata);
-                                    // since we did not find the variant, use the parent block's color
-                                    color = blockInfoList[blockid].color;
+                                else {
+                                    color = block->color();
+                                    if (!block->is_color_set()) {
+                                        block->color_set_need_count += 1;
+                                    }
                                 }
                             }
                             else {
-                                color = blockInfoList[blockid].color;
-                                if (!blockInfoList[blockid].colorSetFlag) {
-                                    blockInfoList[blockid].colorSetNeedCount++;
-                                }
+                                record_unknow_id(blockid);
+                                color = kColorDefault;
                             }
                         }
 
@@ -377,10 +381,10 @@ namespace mcpe_viz {
 
         // report items that need to have their color set properly (in the XML file)
         if (imageMode == kImageModeTerrain) {
-            for (int32_t i = 0; i < 512; i++) {
-                if (blockInfoList[i].colorSetNeedCount) {
-                    log::info("    Need pixel color for: 0x{:x} '{}' ({})",
-                        i, blockInfoList[i].name, blockInfoList[i].colorSetNeedCount);
+            for(auto& i: Block::list()) {
+                if (i->color_set_need_count != 0) {
+                    log::info("    Need pixel color for: 0x{:x} '{}' (count={})",
+                        i->id, i->name, i->color_set_need_count);
                 }
             }
         }
@@ -586,31 +590,30 @@ namespace mcpe_viz {
 
                                 }
                                 else {
-
-                                    if (blockInfoList[blockid].hasVariants()) {
-                                        // we need to get blockdata
-
-                                        blockdata = getBlockData_LevelDB_v2(ochunk, cx, cz, cy);
-
-                                        bool vfound = false;
-                                        for (const auto& itbv : blockInfoList[blockid].variantList) {
-                                            if (itbv->blockdata == blockdata) {
-                                                vfound = true;
-                                                color = itbv->color;
-                                                break;
+                                    auto block = Block::get(blockid);
+                                    if (block != nullptr) {
+                                        if (block->hasVariants()) {
+                                            blockdata = getBlockData_LevelDB_v2(ochunk, cx, cz, cy);
+                                            auto variant = block->getVariantByBlockData(blockdata);
+                                            if (variant != nullptr) {
+                                                color = variant->color();
+                                            }
+                                            else {
+                                                record_unknown_block_variant(
+                                                    block->id,
+                                                    block->name,
+                                                    blockdata);
+                                                // since we did not find the variant, use the parent block's color
+                                                color = block->color();
                                             }
                                         }
-                                        if (!vfound) {
-                                            record_unknown_block_variant(
-                                                blockid,
-                                                blockInfoList[blockid].name,
-                                                blockdata);
-                                            // since we did not find the variant, use the parent block's color
-                                            color = blockInfoList[blockid].color;
+                                        else {
+                                            color = block->color();
                                         }
                                     }
                                     else {
-                                        color = blockInfoList[blockid].color;
+                                        record_unknow_id(blockid);
+                                        color = kColorDefault;
                                     }
 
 #ifdef PIXEL_COPY_MEMCPY
@@ -732,42 +735,40 @@ namespace mcpe_viz {
 
                                         }
                                         else {
-
+                                            // TODO not safe 
                                             if (blockid >= 0 && blockid < 512) {
-                                                if (blockInfoList[blockid].hasVariants()) {
-                                                    // we need to get blockdata
-
-                                                    if (wordModeFlag) {
-                                                        blockdata = getBlockData_LevelDB_v3__fake_v7(ochunk_word,
-                                                            ochunk_size,
-                                                            cx, cz, ccy);
-                                                    }
-                                                    else {
-                                                        blockdata = getBlockData_LevelDB_v3(ochunk_byte,
-                                                            ochunk_size, cx, cz,
-                                                            ccy);
-                                                    }
-
-                                                    bool vfound = false;
-                                                    for (const auto& itbv : blockInfoList[blockid].variantList) {
-                                                        if (itbv->blockdata == blockdata) {
-                                                            vfound = true;
-                                                            color = itbv->color;
-                                                            break;
+                                                auto block = Block::get(blockid);
+                                                if (block != nullptr) {
+                                                    if (block->hasVariants()) {
+                                                        if (wordModeFlag) {
+                                                            blockdata = getBlockData_LevelDB_v3__fake_v7(ochunk_word,
+                                                                ochunk_size,
+                                                                cx, cz, ccy);
+                                                        }
+                                                        else {
+                                                            blockdata = getBlockData_LevelDB_v3(ochunk_byte,
+                                                                ochunk_size, cx, cz,
+                                                                ccy);
+                                                        }
+                                                        auto variant = block->getVariantByBlockData(blockdata);
+                                                        if (variant != nullptr) {
+                                                            color = variant->color();
+                                                        }
+                                                        else {
+                                                            record_unknown_block_variant(
+                                                                block->id,
+                                                                block->name,
+                                                                blockdata);
+                                                            color = block->color();
                                                         }
                                                     }
-                                                    if (!vfound) {
-                                                        record_unknown_block_variant(
-                                                            blockid,
-                                                            blockInfoList[blockid].name,
-                                                            blockdata
-                                                        );
-                                                        // since we did not find the variant, use the parent block's color
-                                                        color = blockInfoList[blockid].color;
+                                                    else {
+                                                        color = block->color();
                                                     }
                                                 }
                                                 else {
-                                                    color = blockInfoList[blockid].color;
+                                                    record_unknow_id(blockid);
+                                                    color = kColorDefault;
                                                 }
                                             }
                                             else {
@@ -962,29 +963,30 @@ namespace mcpe_viz {
                                 // however, we do NOT do this for the nether. because: the nether
                             }
                             else {
+                                auto block = Block::get(blockid);
 
-                                if (blockInfoList[blockid].hasVariants()) {
-                                    // we need to get blockdata
-                                    int32_t blockdata = it.second->data[cx][cz];
-                                    bool vfound = false;
-                                    for (const auto& itbv : blockInfoList[blockid].variantList) {
-                                        if (itbv->blockdata == blockdata) {
-                                            vfound = true;
-                                            color = itbv->color;
-                                            break;
+                                if (block != nullptr) {
+                                    if (block->hasVariants()) {
+                                        int32_t blockdata = it.second->data[cx][cz];
+                                        auto variant = block->getVariantByBlockData(blockdata);
+                                        if (variant != nullptr) {
+                                            color = variant->color();
+                                        }
+                                        else {
+                                            color = block->color();
+                                            record_unknown_block_variant(
+                                                block->id,
+                                                block->name,
+                                                blockdata);
                                         }
                                     }
-                                    if (!vfound) {
-                                        record_unknown_block_variant(
-                                            blockid,
-                                            blockInfoList[blockid].name,
-                                            blockdata);
-                                        // since we did not find the variant, use the parent block's color
-                                        color = blockInfoList[blockid].color;
+                                    else {
+                                        color = block->color();
                                     }
                                 }
                                 else {
-                                    color = blockInfoList[blockid].color;
+                                    record_unknow_id(blockid);
+                                    color = kColorDefault;
                                 }
 
                                 // do grid lines
@@ -1282,8 +1284,8 @@ namespace mcpe_viz {
         doOutput_Schematic(db);
 
         // reset
-        for (int32_t i = 0; i < 512; i++) {
-            blockInfoList[i].colorSetNeedCount = 0;
+        for(auto& i: Block::list()) {
+            i->color_set_need_count = 0;
         }
 
         return 0;

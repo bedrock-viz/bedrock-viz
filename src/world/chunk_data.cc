@@ -104,8 +104,10 @@ namespace mcpe_viz {
                                     uint8_t belowBlockId = getBlockId_LevelDB_v2(cdata, cx, cz, cy - 1);
                                     uint8_t belowBlockData = getBlockData_LevelDB_v2(cdata, cx, cz, cy - 1);
 
+                                    auto belowBlock = Block::get(belowBlockId);
+                                    if (belowBlock != nullptr && belowBlock->isSpawnable(belowBlockData)) {
                                     //if ( blockInfoList[belowBlockId].isOpaque() && blockInfoList[belowBlockId].isSpawnable(belowBlockData) ) {
-                                    if (blockInfoList[belowBlockId].isSpawnable(belowBlockData)) {
+                                    //if (blockInfoList[belowBlockId].isSpawnable(belowBlockData)) {
 
                                         // check the light level
                                         uint8_t bl = getBlockBlockLight_LevelDB_v2(cdata, cx, cz, cy);
@@ -150,7 +152,9 @@ namespace mcpe_viz {
                             // todo - we are getting the block light ABOVE this block (correct?)
                             // todo - this will break if we are using force-top stuff
                             int32_t cy2 = cy;
-                            if (blockInfoList[blockId].isSolid()) {
+                            auto block = Block::get(blockId);
+                            if (block != nullptr && block->solid) {
+                            // if (blockInfoList[blockId].isSolid()) {
                                 // move to block above this block
                                 cy2++;
                                 if (cy2 > MAX_BLOCK_HEIGHT_127) { cy2 = MAX_BLOCK_HEIGHT_127; }
@@ -610,9 +614,10 @@ namespace mcpe_viz {
                                         cy - 1);
                                     uint8_t belowBlockData = getData_LevelDB_v3_fullchunk(blockdataData, cx, cz,
                                         cy - 1);
-
+                                    auto belowBlock = Block::get(belowBlockId);
+                                    if (belowBlock != nullptr && belowBlock->isSpawnable(belowBlockData)) {
                                     //if ( blockInfoList[belowBlockId].isOpaque() && blockInfoList[belowBlockId].isSpawnable(belowBlockData) ) {
-                                    if (blockInfoList[belowBlockId].isSpawnable(belowBlockData)) {
+                                    // if (blockInfoList[belowBlockId].isSpawnable(belowBlockData)) {
 
                                         // check the light level
                                         uint8_t bl = getData_LevelDB_v3_fullchunk(blocklightData, cx, cz, cy);

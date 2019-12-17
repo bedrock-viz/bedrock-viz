@@ -52,7 +52,7 @@ namespace mcpe_viz {
             this->variants_.clear();
         }
 
-        int color_set_need_count;
+        mutable int color_set_need_count;
 
         bool solid;
         bool opaque;
@@ -94,6 +94,20 @@ namespace mcpe_viz {
         auto getVariants() const
         {
             return this->variants_;
+        }
+
+        [[nodiscard]]
+        bool isSpawnable(const Variant::DataType& data) const
+        {
+            auto variant = this->getVariantByBlockData(data);
+            if (variant == nullptr) {
+                return this->spawnable;
+            }
+            
+            if (this->hasVariants() || data != 0) {
+                record_unknown_block_variant(this->id, this->name, data);
+            }
+            return variant->spawnable;
         }
 
         static const Block* get(IdType id);
