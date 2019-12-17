@@ -2,6 +2,7 @@
 #include "../logger.h"
 #include "load_block.h"
 #include "load_biome.h"
+#include "load_item.h"
 
 namespace mcpe_viz
 {
@@ -24,6 +25,10 @@ namespace mcpe_viz
         }
         if (load_block(root.child("blocklist")) != 0) {
             log::error("blocklist parse failed");
+            return -1;
+        }
+        if (load_item(root.child("itemlist")) != 0) {
+            log::error("itemlist parse failed");
             return -1;
         }
 

@@ -14,10 +14,10 @@ namespace mcpe_viz
         this->is_color_set_ = true;
     }
 
-    BaseObjectNoId::BaseObjectNoId(std::string  name)
-        : color_{local_htobe32(kColorDefault)}
+    BaseObjectNoId::BaseObjectNoId(std::string name)
+        : NamedObject(std::move(name))
+        , color_{local_htobe32(kColorDefault)}
         , is_color_set_{false}
-        , name{std::move(name)}
     {
     }
 }

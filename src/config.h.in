@@ -15,4 +15,6 @@ namespace mcpe_viz {
     const int kMaxBiomeCount = 256;
 
     const int kMaxBlockCount = 768;
+
+    const int kMaxItemCount = 768;
 }

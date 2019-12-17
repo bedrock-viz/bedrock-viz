@@ -5,14 +5,22 @@
 
 namespace mcpe_viz {
 
-    class BaseObjectNoId {
+    class NamedObject {
+    public:
+        std::string name;
+        NamedObject(std::string name)
+            : name{std::move(name)}
+        {
+        }
+    };
+
+    class BaseObjectNoId: public NamedObject {
     public:
         using ColorType = int32_t;
     protected:
         ColorType color_;
         bool is_color_set_;
     public:
-        std::string name;
 
         BaseObjectNoId(std::string name);
 
