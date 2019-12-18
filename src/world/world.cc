@@ -323,6 +323,7 @@ namespace mcpe_viz
             }
         }
 
+        // TODO parse when necessary
         log::info("Parse all leveldb records");
 
         MyNbtTagList tagList;

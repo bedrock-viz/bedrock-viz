@@ -406,9 +406,6 @@ namespace mcpe_viz {
                 {"force-top",          required_argument, nullptr, 'F'},
                 {"geojson-block",      required_argument, nullptr, '+'},
 
-                {"check-spawn",        required_argument, nullptr, 'C'},
-                {"check-spawnable",    required_argument, nullptr, 'C'},
-
                 {"schematic",          required_argument, nullptr, 'Z'},
                 {"schematic-get",      required_argument, nullptr, 'Z'},
 
@@ -564,37 +561,6 @@ namespace mcpe_viz {
                 }
             }
                     break;
-
-            case 'C': {
-                log::warn("--spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info");
-                errct++;
-
-                bool pass = false;
-                int32_t dimId, checkX, checkZ, checkDistance;
-                if (sscanf(optarg, "%d,%d,%d,%d", &dimId, &checkX, &checkZ, &checkDistance) == 4) {
-                    pass = true;
-                }
-
-                if (pass) {
-                    // todo - check params
-
-                    if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-                        pass = false;
-                    }
-
-                    if (pass) {
-                        world->dimDataList[dimId]->addCheckSpawn(checkX, checkZ, checkDistance);
-                    }
-                }
-
-                if (!pass) {
-                    log::error("Failed to parse --check-spawn {}", optarg);
-                    errct++;
-                }
-            }
-                    break;
-
-
             case 'Z': {
                 bool pass = false;
                 int32_t dimId = 0, x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;

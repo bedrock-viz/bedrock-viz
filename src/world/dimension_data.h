@@ -195,6 +195,7 @@ namespace mcpe_viz {
         bool checkDoForDim(int32_t v) const;
 
         // todolib - move this out?
+        [[deprecated]]
         int32_t addCheckSpawn(int32_t checkX, int32_t checkZ, int32_t distance) {
             listCheckSpawn.push_back(std::unique_ptr<CheckSpawn>(new CheckSpawn(checkX, checkZ, distance)));
             return 0;
