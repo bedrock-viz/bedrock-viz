@@ -47,7 +47,6 @@ namespace mcpe_viz {
         std::vector<int32_t> blockHideList;
         std::vector<int32_t> blockToGeoJSONList;
 
-        CheckSpawnList listCheckSpawn;
         SchematicList listSchematic;
 
         DimensionData_LevelDB() {
@@ -130,9 +129,7 @@ namespace mcpe_viz {
                 chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
                 return chunks[chunkKey]->_do_chunk_v2(chunkX, chunkZ, cdata, dimId, name,
                     fastBlockHideList, fastBlockForceTopList,
-                    fastBlockToGeoJSONList,
-                    listCheckSpawn);
-                return 0;
+                    fastBlockToGeoJSONList);
             case 3:
                 // 0.17 and later?
                 // we need to process all sub-chunks, not just blindy add them
@@ -143,8 +140,7 @@ namespace mcpe_viz {
 
                 return chunks[chunkKey]->_do_chunk_v3(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
                     fastBlockHideList, fastBlockForceTopList,
-                    fastBlockToGeoJSONList,
-                    listCheckSpawn);
+                    fastBlockToGeoJSONList);
             case 7:
                 // 1.2.x betas?
                 // we need to process all sub-chunks, not just blindy add them
@@ -155,8 +151,7 @@ namespace mcpe_viz {
 
                 return chunks[chunkKey]->_do_chunk_v7(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
                     fastBlockHideList, fastBlockForceTopList,
-                    fastBlockToGeoJSONList,
-                    listCheckSpawn);
+                    fastBlockToGeoJSONList);
             }
             log::error("Unknown chunk format ({})", tchunkFormatVersion);
             return -1;
@@ -184,22 +179,8 @@ namespace mcpe_viz {
             return -1;
         }
 
-        int32_t checkSpawnable(leveldb::DB* db) {
-            for (const auto& it : chunks) {
-                it.second->checkSpawnable(db, dimId, listCheckSpawn);
-            }
-            return 0;
-        }
-
         //todolib - move this out?
         bool checkDoForDim(int32_t v) const;
-
-        // todolib - move this out?
-        [[deprecated]]
-        int32_t addCheckSpawn(int32_t checkX, int32_t checkZ, int32_t distance) {
-            listCheckSpawn.push_back(std::unique_ptr<CheckSpawn>(new CheckSpawn(checkX, checkZ, distance)));
-            return 0;
-        }
 
         // todolib - move this out?
         int32_t addSchematic(int32_t x1, int32_t y1, int32_t z1,
@@ -737,9 +718,6 @@ namespace mcpe_viz {
 
         int32_t generateMovie(leveldb::DB* db, const std::string& fnBase, const std::string& fnOut, bool makeMovieFlag,
             bool useCropFlag);
-
-        int32_t doOutput_GeoJSON();
-            
 
         int32_t doOutput_Schematic(leveldb::DB* db);
 

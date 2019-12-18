@@ -803,7 +803,6 @@ int main(int argc, char** argv)
     // todobig - we could call this deepParseDb() and only do it if the user wanted it
     if (true || mcpe_viz::control.doDetailParseFlag) {
         world->dbParse();
-        world->checkSpawnable();
     }
     world->doOutput();
     world->dbClose();
