@@ -5,7 +5,6 @@
 #include "../nbt.h"
 #include "misc.h"
 #include "point_conversion.h"
-#include "common.h"
 #include "../utils/unknown_recorder.h"
 #include "../minecraft/v2/block.h"
 

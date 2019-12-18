@@ -6,8 +6,6 @@
 #include "../utils/unknown_recorder.h"
 #include "common.h"
 #include "misc.h"
-#include "point_conversion.h"
-#include "../global.h"
 #include "../nbt.h"
 #include "../utils/fs.h"
 #include "../minecraft/v2/biome.h"
@@ -478,7 +476,8 @@ namespace mcpe_viz {
         int16_t* emuchunk = new int16_t[NUM_BYTES_CHUNK_V3];
 
         // create png helpers
-        PngWriter png[MAX_BLOCK_HEIGHT + 1];
+        //PngWriter png[MAX_BLOCK_HEIGHT + 1];
+        auto png = new PngWriter[MAX_BLOCK_HEIGHT + 1];
         for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
             std::string fnameTmp = fnBase + ".mcpe_viz_slice.full.";
             fnameTmp += name;
@@ -851,10 +850,8 @@ namespace mcpe_viz {
         }
 
         delete[] tbuf;
-
-        // slogger.msg(kLogInfo1,"    Chunk Info: Found = %d / Not Found (our list) = %d / Not Found (leveldb) = %d\n", foundCt, notFoundCt1, notFoundCt2);
-
         delete[] emuchunk;
+        delete[] png;
         return 0;
     }
 

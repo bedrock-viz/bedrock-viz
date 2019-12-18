@@ -16,7 +16,6 @@
 #include <vector>
 #include <map>
 #include <algorithm>
-#include <memory>
 #include <cstring>
 #include <png.h>
 #include <cmath>

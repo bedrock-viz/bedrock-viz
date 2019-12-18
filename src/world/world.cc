@@ -148,12 +148,9 @@ namespace mcpe_viz
 
     int32_t MinecraftWorld_LevelDB::dbOpen(const std::string& dirDb)
     {
-        // todobig - leveldb read-only? snapshot?
-        // note: seems impossible, see <https://github.com/google/leveldb/issues/182>
         log::info("DB Open: dir={}", dirDb);
         leveldb::Status dstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
         log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", dstatus.ToString(), control.leveldbBlockSize, control.leveldbFilter);
-        fflush(stderr);
         if (!dstatus.ok()) {
             log::error("LevelDB operation returned status={}", dstatus.ToString());
             exit(-2);
@@ -846,13 +843,8 @@ namespace mcpe_viz
 
         log::info("Do Output: html viewer");
 
-        //sprintf(tmpstring, "%s/mcpe_viz.html.template", dirExec.c_str());
         const std::string fnHtmlSrc = static_path("mcpe_viz.html.template").generic_string();
-
-        //sprintf(tmpstring, "%s/mcpe_viz.js", dirExec.c_str());
         const std::string fnJsSrc = static_path("mcpe_viz.js").generic_string();
-
-        //sprintf(tmpstring, "%s/mcpe_viz.css", dirExec.c_str());
         const std::string fnCssSrc = static_path("mcpe_viz.css").generic_string();
 
         // create html file -- need to substitute one variable (extra js file)
@@ -1118,8 +1110,7 @@ namespace mcpe_viz
     {
         calcChunkBounds();
 
-        // todonow todobig todostopper -- how to handle worlds that are larger than png dimensional limits (see midgard world file)
-
+        // TODO -- how to handle worlds that are larger than png dimensional limits (see midgard world file)
         for (int32_t i = 0; i < kDimIdCount; i++) {
             dimDataList[i]->doOutput(db);
         }
