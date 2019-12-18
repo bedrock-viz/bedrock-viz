@@ -42,12 +42,10 @@ add_subdirectory(third_party/pugixml)
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
-find_package(LibXml2 REQUIRED)
 
 include_directories(
   ${PNG_INCLUDE_DIR} 
   ${ZLIB_INCLUDE_DIR} 
-  ${LIBXML2_INCLUDE_DIR} 
   ${PROJECT_SOURCE_DIR}/third_party/leveldb/include
   ${PROJECT_SOURCE_DIR}/third_party/libnbtplusplus/include
   ${PROJECT_SOURCE_DIR}/third_party/spdlog/include
@@ -65,8 +63,7 @@ target_link_libraries(bedrock-viz
   leveldb spdlog nbt++ pugixml::static
   ${PNG_LIBRARIES} 
   ${ZLIB_LIBRARIES} 
-  ${CMAKE_THREAD_LIBS_INIT}
-  ${LIBXML2_LIBRARIES})
+  ${CMAKE_THREAD_LIBS_INIT})
 
 file(COPY data
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
@@ -111,7 +108,6 @@ if(BEDROCK_VIZ_BUILD_TESTS)
       ${PNG_LIBRARIES} 
       ${ZLIB_LIBRARIES} 
       ${CMAKE_THREAD_LIBS_INIT}
-      ${LIBXML2_LIBRARIES}
     )
 
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")

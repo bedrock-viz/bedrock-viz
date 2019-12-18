@@ -4,6 +4,7 @@
 #include "load_biome.h"
 #include "load_item.h"
 #include "load_entity.h"
+#include "load_enchantment.h"
 
 namespace mcpe_viz
 {
@@ -34,6 +35,10 @@ namespace mcpe_viz
         }
         if (load_entity(root.child("entitylist")) != 0) {
             log::error("entity parse failed");
+            return -1;
+        }
+        if (load_enchantment(root.child("enchantmentlist")) != 0) {
+            log::error("enchantment parse failed");
             return -1;
         }
 

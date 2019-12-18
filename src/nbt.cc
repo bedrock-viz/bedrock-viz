@@ -18,8 +18,6 @@
 #include "define.h"
 #include "global.h"
 
-#include "minecraft/entity_info.h"
-#include "minecraft/enchantment_info.h"
 #include "minecraft/conversion.h"
 
 #include "utils/fs.h"
@@ -27,6 +25,8 @@
 #include "asset.h"
 #include "minecraft/v2/block.h"
 #include "minecraft/v2/item.h"
+#include "minecraft/v2/entity.h"
+#include "minecraft/v2/enchantment.h"
 
 namespace mcpe_viz
 {
@@ -482,8 +482,9 @@ namespace mcpe_viz
             std::string s = "";
             if (id.valid) {
                 s += "\"Name\":\"";
-                if (has_key(enchantmentInfoList, id.value)) {
-                    s += enchantmentInfoList[id.value]->name;
+                auto enchant = Enchantment::get(id.value);
+                if (enchant != nullptr){
+                    s += enchant->name;
                 }
                 else {
                     sprintf(tmpstring, "(UNKNOWN: id=%d 0x%x)", id.value, id.value);
@@ -503,8 +504,9 @@ namespace mcpe_viz
             char tmpstring[1025];
             std::string s = "";
             if (id.valid) {
-                if (has_key(enchantmentInfoList, id.value)) {
-                    s += enchantmentInfoList[id.value]->name;
+                auto enchant = Enchantment::get(id.value);
+                if (enchant != nullptr) {
+                    s += enchant->name;
                 }
                 else {
                     sprintf(tmpstring, "(UNKNOWN: id=%d 0x%x)", id.value, id.value);
@@ -1006,10 +1008,14 @@ namespace mcpe_viz
             worldPointToGeoJSONPoint(forceDimensionId, pos.x, pos.z, ix, iy);
             s += makeGeojsonHeader(ix, iy);
 
-            if (has_key(entityInfoList, idShort)) {
-                sprintf(tmpstring, "\"Name\":\"%s\"", entityInfoList[idShort]->name.c_str());
+            auto entity = Entity::get(idShort);
+            if (entity != nullptr) {
+                sprintf(tmpstring, "\"Name\":\"%s\"", entity->name.c_str());
                 list.push_back(std::string(tmpstring));
-                sprintf(tmpstring, "\"etype\":\"%s\"", entityInfoList[idShort]->etype.c_str());
+                std::string e = (entity->etype == Entity::EType::P ? "P" : (
+                    entity->etype == Entity::EType::H ? "H" : ""
+                    ));
+                sprintf(tmpstring, "\"etype\":\"%s\"", e.c_str());
                 list.push_back(std::string(tmpstring));
             }
             else {
@@ -1187,8 +1193,9 @@ namespace mcpe_viz
                 s += "Mob";
             }
 
-            if (has_key(entityInfoList, idShort)) {
-                s += " Name=" + entityInfoList[idShort]->name;
+            auto entity = Entity::get(idShort);
+            if (entity != nullptr) {
+                s += " Name=" + entity->name;
             }
             else {
                 sprintf(tmpstring, " Name=(UNKNOWN: id=%d 0x%x)", idShort, idShort);
@@ -1386,7 +1393,8 @@ namespace mcpe_viz
             }
             else if (tc.has_key("EntityIdentifier")) {
                 std::string entityName = tc["EntityIdentifier"].as<nbt::tag_string>().get();
-                entityId = findEntityByUname(entityInfoList, entityName);
+                auto entity = Entity::getByUname(entityName);
+                entityId = (entity == nullptr ? -1 : entity->id);
             }
             // todo - how to interpret entityId? (e.g. 0xb22 -- 0x22 is skeleton, what is 0xb?)
             // todo - any of these interesting?
@@ -1486,8 +1494,9 @@ namespace mcpe_viz
 
                 // todo - the entityid is weird.  lsb appears to be entity type; high bytes are ??
                 int32_t eid = entityId & 0xff;
-                if (has_key(entityInfoList, eid)) {
-                    ts += "\"Name\":\"" + entityInfoList[eid]->name + "\"";
+                auto entity = Entity::get(eid);
+                if (entity != nullptr) {
+                    ts += "\"Name\":\"" + entity->name + "\"";
                 }
                 else {
                     sprintf(tmpstring, "\"Name\":\"(UNKNOWN: id=%d 0x%x)\"", eid, eid);
@@ -1571,8 +1580,9 @@ namespace mcpe_viz
                 s += " MobSpawner=[";
                 // todo - the entityid is weird.  lsb appears to be entity type; high bytes are ??
                 int32_t eid = entityId & 0xff;
-                if (has_key(entityInfoList, eid)) {
-                    s += "Name=" + entityInfoList[eid]->name;
+                auto entity = Entity::get(eid);
+                if (entity != nullptr) {
+                    s += "Name=" + entity->name;
                 }
                 else {
                     sprintf(tmpstring, "Name=(UNKNOWN: id=%d 0x%x)", eid, eid);
@@ -1714,9 +1724,9 @@ namespace mcpe_viz
                 // as of (at least) v1.2.x some mobs have string id's... sigh
                 std::string ids = tc["id"].as<nbt::tag_string>().get();
                 // lookup ids in entityinfolist
-                int32_t idFind = findEntityByUname(entityInfoList, ids);
-                if (idFind >= 0) {
-                    entity->idFull = idFind;
+                auto e = Entity::getByUname(ids);
+                if (e != nullptr) {
+                    entity->idFull = e->id;
                     entity->idShort = entity->idFull & 0xFF;
                 }
                 else {
@@ -1725,7 +1735,8 @@ namespace mcpe_viz
             }
             else if (tc.has_key("identifier")) {
                 std::string identifier = tc["identifier"].as<nbt::tag_string>().get();
-                int32_t idFindFinally = findEntityByUname(entityInfoList, identifier);
+                auto e = Entity::getByUname(identifier);
+                int32_t idFindFinally = (e == nullptr ? -1 : e->id);
                 if (identifier != "minecraft:gravel") {
                     entity->idFull = idFindFinally;
                     entity->idShort = entity->idFull;

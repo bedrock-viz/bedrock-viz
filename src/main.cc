@@ -215,7 +215,6 @@
 
 #include "define.h"
 #include "util.h"
-#include "xml.h"
 #include "asset.h"
 #include "args.h"
 #include "control.h"
@@ -369,32 +368,6 @@ namespace mcpe_viz {
         if (doParseConfigFile(std::string("mcpe_viz.cfg")) == 0) {
             return 0;
         }
-        return -1;
-    }
-
-
-    int32_t loadXml() {
-        // parse xml file in this order:
-        // -- option specified on command-line
-        // -- asset dir(./data/ or /usr/local/share/bedrock-viz/data/, etc)
-        std::string fn;
-        int32_t ret;
-
-        // as specified on cmdline
-        if (control.fnXml.length() > 0) {
-            ret = doParseXml(control.fnXml);
-            if (ret >= 0) {
-                return ret;
-            }
-        }
-
-        // in asset folder
-        fn = xml_path().generic_string();
-        ret = doParseXml(fn);
-        if (ret >= 0) {
-            return ret;
-        }
-        log::error("Did not find a valid XML file");
         return -1;
     }
 
@@ -841,11 +814,6 @@ int main(int argc, char** argv)
     auto file_log_level = control.verboseFlag ? Level::Trace : Level::Debug;
 
     setup_logger_stage_2(control.logFile(), console_log_level, file_log_level);
-
-    if (loadXml() != 0) {
-        log::error("Failed to parse XML file");
-        return -1;
-    }
 
     {
         int ret = 0;
