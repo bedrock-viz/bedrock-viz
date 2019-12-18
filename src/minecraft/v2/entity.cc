@@ -43,6 +43,10 @@ namespace mcpe_viz
     const Entity* Entity::get(IdType id)
     {
         auto& instance = Wrapper::value();
+        if (id < 0 || id >= kMaxEntityCount) {
+            log::debug("Entity::Get out of range(id={}, length={})", id, kMaxEntityCount);
+            return nullptr;
+        }
         return instance[id];
     }
 

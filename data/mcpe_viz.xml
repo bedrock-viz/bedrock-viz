@@ -127,7 +127,8 @@
     <block id="0x18" name="Sandstone" uname="minecraft:sandstone" color="0xfbf8b4"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Sandstone" />
       <blockvariant blockdata="0x1" name="Sandstone, Chiseled" />
-      <blockvariant blockdata="0x2" name="Sandstone, Smooth" />
+      <blockvariant blockdata="0x2" name="Sandstone, Cut" />
+      <blockvariant blockdata="0x3" name="Smooth Sandstone" />
     </block>
     <block id="0x19" name="Note Block" uname="minecraft:noteblock" color="0xb5830a" /> <!-- *E 0.13 -->
     <block id="0x1A" name="Bed" uname="minecraft:bed" color="0xff0000" opaque="0" spawnable="0" /> <!-- *S -->
@@ -187,6 +188,8 @@
       <blockvariant blockdata="0x6" name="White Tulip" />
       <blockvariant blockdata="0x7" name="Pink Tulip" />
       <blockvariant blockdata="0x8" name="Oxeye Daisy" />
+      <blockvariant blockdata="0x9" name="Cornflower" />
+      <blockvariant blockdata="0xa" name="Lily of the Valley" />
     </block>
     <block id="0x27" name="Brown Mushroom" uname="minecraft:brown_mushroom" color="0xcaa762" solid="0" opaque="0" spawnable="0" />
     <block id="0x28" name="Red Mushroom" uname="minecraft:red_mushroom" color="0xfe9c9c" solid="0" opaque="0" spawnable="0" />
@@ -427,9 +430,21 @@
     <!-- todo not sure about 'command_block' -->
     <block id="0x89" name="Impulse Command Block" uname="minecraft:impulse_command_block;minecraft:command_block" color="0x759ba1" />
     <block id="0x8a" name="Beacon" uname="minecraft:beacon" color="0x8989ca" opaque="0" spawnable="0" /> <!-- 0.17 --> <!-- todo check opaque / spawn -->
-    <block id="0x8B" name="Cobblestone Wall" uname="minecraft:cobblestone_wall" color="0xb0b0b0" opaque="0" spawnable="0">
+    <block id="0x8B" name="Wall" uname="minecraft:cobblestone_wall" color="0xb0b0b0" opaque="0" spawnable="0">
       <blockvariant blockdata="0x0" name="Cobblestone Wall" />
-      <blockvariant blockdata="0x1" name="Cobblestone Wall, Mossy" />
+      <blockvariant blockdata="0x1" name="Mossy Cobblestone Wall" />
+      <blockvariant blockdata="0x2" name="Granite Wall" />
+      <blockvariant blockdata="0x3" name="Diorite Wall" />
+      <blockvariant blockdata="0x4" name="Andesite Wall" />
+      <blockvariant blockdata="0x5" name="Sandstone Wall" />
+      <blockvariant blockdata="0x6" name="Brick Wall" />
+      <blockvariant blockdata="0x7" name="Stone Brick Wall" />
+      <blockvariant blockdata="0x8" name="Mossy Stone Brick Wall" />
+      <blockvariant blockdata="0x9" name="End Stone Brick Wall" />
+      <blockvariant blockdata="0xa" name="Nether Brick Wall" />
+      <blockvariant blockdata="0xb" name="Prismarine Wall" />
+      <blockvariant blockdata="0xc" name="Red Sandstone Wall" />
+      <blockvariant blockdata="0xd" name="Red Nether Brick Wall" />
     </block>
     <block id="0x8C" name="Flower Pot" uname="minecraft:flower_pot" color="0xdd9924" solid="0" opaque="0" spawnable="0"> <!-- *I *E -->
       <blockvariant blockdata="0x0" name="Flower Pot, Empty" />
