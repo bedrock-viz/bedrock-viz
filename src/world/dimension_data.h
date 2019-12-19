@@ -5,6 +5,7 @@
 #include <utility>
 #include <map>
 #include <memory>
+#include <set>
 
 #include "chunk_data.h"
 #include "../minecraft/schematic.h"
@@ -43,9 +44,9 @@ namespace mcpe_viz {
 
     public:
         // todobig - move these to private?
-        std::vector<int32_t> blockForceTopList;
-        std::vector<int32_t> blockHideList;
-        std::vector<int32_t> blockToGeoJSONList;
+        std::set<int32_t> blockForceTopList;
+        std::set<int32_t> blockHideList;
+        std::set<int32_t> blockToGeoJSONList;
 
         SchematicList listSchematic;
 
@@ -144,7 +145,6 @@ namespace mcpe_viz {
             case 7:
                 // 1.2.x betas?
                 // we need to process all sub-chunks, not just blindy add them
-
                 if (!chunks_has_key(chunks, chunkKey)) {
                     chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
                 }
@@ -152,9 +152,10 @@ namespace mcpe_viz {
                 return chunks[chunkKey]->_do_chunk_v7(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
                     fastBlockHideList, fastBlockForceTopList,
                     fastBlockToGeoJSONList);
+            default:
+                log::error("Unknown chunk format ({})", tchunkFormatVersion);
+                return -1;
             }
-            log::error("Unknown chunk format ({})", tchunkFormatVersion);
-            return -1;
         }
 
         int32_t addChunkColumnData(int32_t tchunkFormatVersion, int32_t chunkX, int32_t chunkZ, const char* cdata,
@@ -174,9 +175,10 @@ namespace mcpe_viz {
                 }
 
                 return chunks[chunkKey]->_do_chunk_biome_v3(chunkX, chunkZ, cdata, cdatalen);
+            default:
+                log::error("Unknown chunk format ({})", tchunkFormatVersion);
+                return -1;
             }
-            log::error("Unknown chunk format ({})", tchunkFormatVersion);
-            return -1;
         }
 
         //todolib - move this out?
@@ -338,7 +340,7 @@ namespace mcpe_viz {
 
 
         // adapted from: https://gist.github.com/protolambda/00b85bf34a75fd8176342b1ad28bfccc
-        bool isSlimeChunk_MCPE(int32_t cX, int32_t cZ);
+        bool isSlimeChunk_MCPE(int32_t cX, int32_t cZ) const;
 
 
         int32_t generateImageSpecial(const std::string& fname, const ImageModeType imageMode) {

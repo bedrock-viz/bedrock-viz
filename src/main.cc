@@ -275,7 +275,7 @@ namespace mcpe_viz {
                 }
                 if (pass) {
                     // add to hide list
-                    world->dimDataList[dimId]->blockHideList.push_back(blockId);
+                    world->dimDataList[dimId]->blockHideList.insert(blockId);
                 }
                 else {
                     log::error("{}Failed to parse cfg item 'hide-top': [{}]", makeIndent(indent, hdr), buf);
@@ -297,7 +297,7 @@ namespace mcpe_viz {
                 }
                 if (pass) {
                     // add to hide list
-                    world->dimDataList[dimId]->blockForceTopList.push_back(blockId);
+                    world->dimDataList[dimId]->blockForceTopList.insert(blockId);
                 }
                 else {
                     log::error("{}Failed to parse cfg item 'force-top': [{}]", makeIndent(indent, hdr), buf);
@@ -319,7 +319,7 @@ namespace mcpe_viz {
                 }
                 if (pass) {
                     // add to list
-                    world->dimDataList[dimId]->blockToGeoJSONList.push_back(blockId);
+                    world->dimDataList[dimId]->blockToGeoJSONList.insert(blockId);
                 }
                 else {
                     log::error("{}Failed to parse cfg item 'geojson-block': [{}]", makeIndent(indent, hdr), buf);
@@ -497,7 +497,7 @@ namespace mcpe_viz {
                         pass = false;
                     }
                     if (pass) {
-                        world->dimDataList[dimId]->blockHideList.push_back(blockId);
+                        world->dimDataList[dimId]->blockHideList.insert(blockId);
                     }
                 }
 
@@ -524,7 +524,7 @@ namespace mcpe_viz {
                         pass = false;
                     }
                     if (pass) {
-                        world->dimDataList[dimId]->blockForceTopList.push_back(blockId);
+                        world->dimDataList[dimId]->blockForceTopList.insert(blockId);
                     }
                 }
 
@@ -551,7 +551,7 @@ namespace mcpe_viz {
                         pass = false;
                     }
                     if (pass) {
-                        world->dimDataList[dimId]->blockToGeoJSONList.push_back(blockId);
+                        world->dimDataList[dimId]->blockToGeoJSONList.insert(blockId);
                     }
                 }
 

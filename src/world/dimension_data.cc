@@ -13,14 +13,9 @@
 
 namespace
 {
-    bool vectorContains(const std::vector<int>& v, int32_t i)
+    bool vectorContains(const std::set<int>& v, int32_t i)
     {
-        for (const auto& iter : v) {
-            if (iter == i) {
-                return true;
-            }
-        }
-        return false;
+        return v.find(i) != v.end();
     }
 }
 
@@ -388,7 +383,7 @@ namespace mcpe_viz {
         return 0;
     }
 
-    bool DimensionData_LevelDB::isSlimeChunk_MCPE(int32_t cX, int32_t cZ)
+    bool DimensionData_LevelDB::isSlimeChunk_MCPE(int32_t cX, int32_t cZ) const
     {
         //
             // MCPE slime-chunk checker
@@ -476,7 +471,6 @@ namespace mcpe_viz {
         int16_t* emuchunk = new int16_t[NUM_BYTES_CHUNK_V3];
 
         // create png helpers
-        //PngWriter png[MAX_BLOCK_HEIGHT + 1];
         auto png = new PngWriter[MAX_BLOCK_HEIGHT + 1];
         for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
             std::string fnameTmp = fnBase + ".mcpe_viz_slice.full.";
