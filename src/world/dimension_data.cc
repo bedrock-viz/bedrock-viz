@@ -816,7 +816,6 @@ namespace mcpe_viz {
 
                         // FINALLY -- we did not find the chunk at all
                         notFoundCt2++;
-                        // slogger.msg(kLogInfo1,"WARNING: Did not find chunk in leveldb x=%d z=%d status=%s\n", chunkX, chunkZ, dstatus.ToString().c_str());
 
                         // we need to clear this area
                         for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
@@ -832,7 +831,7 @@ namespace mcpe_viz {
             }
 
             // put the png rows
-            // todo - png lib is SLOW - worth it to alloc a larger window (16-row increments) and write in batches?
+            // TODO - png lib is SLOW - worth it to alloc a larger window (16-row increments) and write in batches?
             for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
                 png_write_rows(png[cy].png, png[cy].row_pointers, 16);
             }

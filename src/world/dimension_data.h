@@ -127,7 +127,7 @@ namespace mcpe_viz {
             switch (tchunkFormatVersion) {
             case 2:
                 // pre-0.17
-                chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
+                chunks[chunkKey] = std::make_unique<ChunkData_LevelDB>();
                 return chunks[chunkKey]->_do_chunk_v2(chunkX, chunkZ, cdata, dimId, name,
                     fastBlockHideList, fastBlockForceTopList,
                     fastBlockToGeoJSONList);
@@ -136,7 +136,7 @@ namespace mcpe_viz {
                 // we need to process all sub-chunks, not just blindy add them
 
                 if (!chunks_has_key(chunks, chunkKey)) {
-                    chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
+                    chunks[chunkKey] = std::make_unique<ChunkData_LevelDB>();
                 }
 
                 return chunks[chunkKey]->_do_chunk_v3(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
@@ -146,7 +146,7 @@ namespace mcpe_viz {
                 // 1.2.x betas?
                 // we need to process all sub-chunks, not just blindy add them
                 if (!chunks_has_key(chunks, chunkKey)) {
-                    chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
+                    chunks[chunkKey] = std::make_unique<ChunkData_LevelDB>();
                 }
 
                 return chunks[chunkKey]->_do_chunk_v7(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
@@ -164,8 +164,9 @@ namespace mcpe_viz {
             case 2:
                 // pre-0.17
                 // column data is in the main record
-                break;
+                return 0;
             case 3:
+            {
                 // 0.17 and later?
                 // we need to process all sub-chunks, not just blindy add them
 
@@ -175,6 +176,7 @@ namespace mcpe_viz {
                 }
 
                 return chunks[chunkKey]->_do_chunk_biome_v3(chunkX, chunkZ, cdata, cdatalen);
+            }
             default:
                 log::error("Unknown chunk format ({})", tchunkFormatVersion);
                 return -1;
@@ -473,7 +475,7 @@ namespace mcpe_viz {
             }
             int32_t srcStride = srcW * bppSrc;
 
-            uint8_t* sbuf = new uint8_t[srcStride * 3];
+            auto sbuf = new uint8_t[3 * srcStride];
 
             // todobig - pngwriter support for 8-bit images (don't need RGBA for this)
             int32_t bppDest = 4;

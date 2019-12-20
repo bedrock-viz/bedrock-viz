@@ -195,9 +195,6 @@ namespace mcpe_viz {
         return tokens;
     }
 
-
-    // todolib - move to util?
-
     int32_t myParseInt32(const char* p, int32_t startByte) {
         int32_t ret;
         memcpy(&ret, &p[startByte], 4);

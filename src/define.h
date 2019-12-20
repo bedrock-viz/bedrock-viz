@@ -38,7 +38,7 @@ namespace mcpe_viz {
         kDimIdOverworld = 0,
         kDimIdNether = 1,
         kDimIdTheEnd = 2,
-        // todobig - this is very brittle - consider that add-ons may one day add custome dimensions
+        // TODO - this is very brittle - consider that add-ons may one day add custome dimensions
         kDimIdCount = 3
     };
 
