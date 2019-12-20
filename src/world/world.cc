@@ -14,21 +14,22 @@
 #include "../asset.h"
 #include "../minecraft/v2/biome.h"
 #include "../minecraft/v2/block.h"
+#include "../logger.h"
 
 namespace
 {
     // suggestion from mcpe_sample_setup.cpp
     class NullLogger : public leveldb::Logger {
     public:
-        void Logv(const char*, va_list) override
-        {
-        }
+        void Logv(const char*, va_list) override {}
     };
 
     // note: this is an attempt to remove "bad" chunks as seen in "nyan.zip" world
     bool legalChunkPos(int32_t chunkX, int32_t chunkZ)
     {
-        if ((uint32_t)chunkX == 0x80000000 && (uint32_t)chunkZ == 0x80000000) {
+        
+        if (uint32_t(chunkX) == 0x80000000 && uint32_t(chunkZ) == 0x80000000) {
+            mcpe_viz::log::warn("bad chunks");
             return false;
         }
         return true;
@@ -184,19 +185,11 @@ namespace mcpe_viz
 
         // todobig - is there a faster way to enumerate the keys?
         leveldb::Iterator* iter = db->NewIterator(levelDbReadOptions);
-        leveldb::Slice skey;
-        int32_t key_size;
-        const char* key;
         for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
-            skey = iter->key();
-            key_size = int32_t(skey.size());
-            key = skey.data();
+            auto key_size = iter->key().size();
+            auto key = iter->key().data();
 
             ++recordCt;
-            if (control.shortRunFlag && recordCt > 1000) {
-                break;
-            }
-
             if (key_size == 9) {
                 chunkX = myParseInt32(key, 0);
                 chunkZ = myParseInt32(key, 4);
@@ -344,9 +337,6 @@ namespace mcpe_viz
             cdata = svalue.data();
 
             ++recordCt;
-            if (control.shortRunFlag && recordCt > 1000) {
-                break;
-            }
             if ((recordCt % 10000) == 0) {
                 double pct = (double)recordCt / (double)totalRecordCt;
                 log::info("  Processing records: {} / {} ({:.1f}%)", recordCt, totalRecordCt, pct * 100.0);

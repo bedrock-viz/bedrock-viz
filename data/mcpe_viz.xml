@@ -925,6 +925,39 @@
     <block id="0x19f" name="Bubble Column" uname="minecraft:bubble_column" color="0xa4cccd" solid="0" liquid="1" opaque="0"/>
     <block id="0x1a0" name="Barrier" uname="minecraft:barrier" color="0xf80a31" />
 
+    <block id="0x1b6" name="Smooth Stone" uname="minecraft:smooth_stone">
+      <blockvariant blockdata="0x0" name="Smooth Stone" />
+      <blockvariant blockdata="0x1" name="Smooth Stone, Granite" />
+      <blockvariant blockdata="0x2" name="Smooth Stone, Polished Granite" />
+      <blockvariant blockdata="0x3" name="Smooth Stone, Diorite" />
+      <blockvariant blockdata="0x4" name="Smooth Stone, Polished Diorite" />
+      <blockvariant blockdata="0x5" name="Smooth Stone, Andesite" />
+      <blockvariant blockdata="0x6" name="Smooth Stone, Polished Andesite" />
+    </block>
+
+    <block id="0x1ca" name="Barrel" uname="minecraft:barrel" />
+    <block id="0x1cb" name="Loom" uname="minecraft:loom" />
+
+    <block id="0x1cd" name="Bell" uname="minecraft:bell" />
+    
+    <block id="0x1cf" name="Lantern" uname="minecraft:lantern" />
+    <block id="0x1d0" name="Campfire" uname="minecraft:campfire" />
+
+    <block id="0x1d3" name="Wood" uname="minecraft:wood">
+      <blockvariant blockdata="0x0" name="Oak Wood"/>
+      <blockvariant blockdata="0x1" name="Spruce Wood"/>
+      <blockvariant blockdata="0x2" name="Birch Wood"/>
+      <blockvariant blockdata="0x3" name="Jungle Wood"/>
+      <blockvariant blockdata="0x4" name="Acacia Wood"/>
+      <blockvariant blockdata="0x5" name="Dark Oak Wood"/>
+      <blockvariant blockdata="0x8" name="Stripped Oak Wood"/>
+      <blockvariant blockdata="0x9" name="Stripped Spruce Wood"/>
+      <blockvariant blockdata="0xa" name="Stripped Birch Wood"/>
+      <blockvariant blockdata="0xb" name="Stripped Jungle Wood"/>
+      <blockvariant blockdata="0xc" name="Stripped Acacia Wood"/>
+      <blockvariant blockdata="0xd" name="Stripped Dark Oak Wood"/>
+    </block>
+
     <!-- todo - **NOTE** totally invented block-id's follow - max allowed block id is 0x1ff -->
     <block id="0x1f0" name="Scaffolding" uname="minecraft:scaffolding" color="0xc5b023" />
   </blocklist>
@@ -1417,6 +1450,9 @@
     <!-- todo not sure about turtle_helmet -->
     <item id="0x1D5" name="Turtle Shell" uname="minecraft:turtle_shell;minecraft:turtle_shell_piece;minecraft:turtle_helmet" />
     <item id="0x1D6" name="Phantom Membrane" uname="minecraft:phantom_membrane" />
+    
+    <item id="0x1d9" name="Birch Sign" uname="minecraft:birch_sign"/>
+    
     <item id="0x1F3" name="Salt" uname="minecraft:compound" />
     <item id="0x1F2" name="Camera"  uname="minecraft:camera"/> <!-- EDU -->
     <item id="0x1F4" name="Record, 13" uname="minecraft:record_13" />

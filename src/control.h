@@ -34,7 +34,6 @@ namespace mcpe_viz {
         std::string fnLayerShadedRelief[kDimIdCount];
         std::string fnLayerRaw[kDimIdCount][MAX_BLOCK_HEIGHT + 1];
 
-        bool doDetailParseFlag;
         int32_t doMovie;
         int32_t doSlices;
         int32_t doGrid;
@@ -51,7 +50,6 @@ namespace mcpe_viz {
         int32_t doImageShadedRelief;
         bool autoTileFlag;
         bool noForceGeoJSONFlag;
-        bool shortRunFlag;
         bool verboseFlag;
         bool quietFlag;
         int32_t movieX, movieY, movieW, movieH;
@@ -74,7 +72,6 @@ namespace mcpe_viz {
             dirLeveldb = "";
             fnXml = "";
             outputDir = std::filesystem::path("output");
-            doDetailParseFlag = false;
 
             doMovie = kDoOutputNone;
             doSlices = kDoOutputNone;
@@ -97,7 +94,6 @@ namespace mcpe_viz {
             tileWidth = 1024;
             tileHeight = 1024;
 
-            shortRunFlag = false;
             verboseFlag = false;
             quietFlag = false;
             movieX = movieY = movieW = movieH = 0;

@@ -396,12 +396,7 @@ namespace mcpe_viz {
         static struct option longoptlist[] = {
                 {"db",                 required_argument, nullptr, 'D'},
                 {"outdir",             required_argument, nullptr, 'o'},
-                
-
                 {"xml",                required_argument, nullptr, 'X'},
-
-                {"detail",             no_argument,       nullptr, '@'},
-
                 {"hide-top",           required_argument, nullptr, 'H'},
                 {"force-top",          required_argument, nullptr, 'F'},
                 {"geojson-block",      required_argument, nullptr, '+'},
@@ -419,29 +414,18 @@ namespace mcpe_viz {
                 {"blocklight",         optional_argument, nullptr, 'b'},
                 {"skylight",           optional_argument, nullptr, 's'},
                 {"slime-chunk",        optional_argument, nullptr, '%'},
-
                 {"slices",             optional_argument, nullptr, '('},
-
                 {"movie",              optional_argument, nullptr, 'M'},
                 {"movie-dim",          required_argument, nullptr, '*'},
-
                 {"grid",               optional_argument, nullptr, 'G'},
-
                 {"html",               no_argument,       nullptr, ')'},
                 {"html-most",          no_argument,       nullptr, '='},
                 {"html-all",           no_argument,       nullptr, '_'},
                 {"no-force-geojson",   no_argument,       nullptr, ':'},
-
                 {"auto-tile",          no_argument,       nullptr, ']'},
                 {"tiles",              optional_argument, nullptr, '['},
-
-                {"shortrun",           no_argument,       nullptr, '$'}, // this is just for testing
-
-                {"flush",              no_argument,       nullptr, 'f'},
-
                 {"leveldb-filter",     required_argument, nullptr, '<'},
                 {"leveldb-block-size", required_argument, nullptr, '>'},
-
                 {"verbose",            no_argument,       nullptr, 'v'},
                 {"quiet",              no_argument,       nullptr, 'q'},
                 {"help",               no_argument,       nullptr, 'h'},
@@ -464,9 +448,6 @@ namespace mcpe_viz {
                 break;
             case 'D':
                 control.dirLeveldb = optarg;
-                break;
-            case '@':
-                control.doDetailParseFlag = true;
                 break;
 
             case '<':
@@ -710,10 +691,6 @@ namespace mcpe_viz {
                     errct++;
                 }
                 break;
-
-            case '$':
-                control.shortRunFlag = true;
-                break;
             case 'v':
                 control.verboseFlag = true;
                 break;
@@ -776,13 +753,15 @@ int main(int argc, char** argv)
     if (control.doHtml) {
         listGeoJSON.clear();
     }
-    auto console_log_level = control.quietFlag ? Level::Warn : (control.verboseFlag ? Level::Debug : Level::Info);
-    auto file_log_level = control.verboseFlag ? Level::Trace : Level::Debug;
-
-    setup_logger_stage_2(control.logFile(), console_log_level, file_log_level);
 
     {
-        int ret = 0;
+        auto console_log_level = control.quietFlag ? Level::Warn : (control.verboseFlag ? Level::Debug : Level::Info);
+        auto file_log_level = control.verboseFlag ? Level::Trace : Level::Debug;
+
+        setup_logger_stage_2(control.logFile(), console_log_level, file_log_level);
+    }
+    {
+        int ret;
         if (control.fnXml.empty()) {
             ret = load_xml(xml_path().generic_string());
         }
@@ -799,11 +778,7 @@ int main(int argc, char** argv)
     
     world->init();
     world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
-    // todobig - we must do this, for now - we could get clever about this later
-    // todobig - we could call this deepParseDb() and only do it if the user wanted it
-    if (true || mcpe_viz::control.doDetailParseFlag) {
-        world->dbParse();
-    }
+    world->dbParse();
     world->doOutput();
     world->dbClose();
 

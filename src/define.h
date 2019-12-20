@@ -43,4 +43,23 @@ namespace mcpe_viz {
     };
 
     const int32_t kColorDefault = 0xff00ff;
+
+    enum class TagType: int8_t {
+        Data2D          = 0x2D, // 45
+        Data2DLegacy    = 0x2E, // 46
+        SubChunkPrefix  = 0x2F, // 47
+        LegacyTerrain   = 0x30, // 48
+        BlockEntity     = 0x31, // 49
+        Entity          = 0x32, // 50
+        PendingTicks    = 0x33, // 51
+        BlockExtraData  = 0x34, // 52
+        BiomeState      = 0x35, // 53
+        FinalizedState  = 0x36, // 54
+        // unknown tags
+        UnknownTag_0x37 = 0x37, // 55
+        UnknownTag_0x38 = 0x38, // 56
+        UnknownTag_0x39 = 0x39, // 57
+
+        Version         = 0x76  // 118
+    };
 }

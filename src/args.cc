@@ -24,8 +24,8 @@ Options:
     --force-top=did,bid      Force a block to top block (did=dimension id, bid=block id)
     --geojson-block=did,bid  Add block to GeoJSON file for use in web app (did=dimension id, bid=block id)
 
-    --check-spawn did,x,z,dist  Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)
-    --schematic-get did,x1,y1,z1,x2,y2,z2,fnpart   Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)
+    --schematic-get did,x1,y1,z1,x2,y2,z2,fnpart
+                             Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)
         (note: [=did] is optional dimension-id - if not specified, do all dimensions; 0=Overworld; 1=Nether)\n"
     --grid[=did]             Display chunk grid on top of images
 
