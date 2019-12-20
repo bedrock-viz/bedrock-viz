@@ -69,69 +69,6 @@ namespace mcpe_viz {
         return 0;
     }
 
-
-    int32_t oversampleImage(const std::string& fnSrc, const std::string& fnDest, int32_t oversample) {
-        PngReader pngSrc;
-        if (pngSrc.init(fnSrc) != 0) {
-            log::error("Failed to open src png (fn={})", fnSrc);
-            return -1;
-        }
-        pngSrc.read();
-
-        int32_t srcW = pngSrc.getWidth();
-        int32_t srcH = pngSrc.getHeight();
-        int32_t colorType = pngSrc.getColorType();
-        int32_t bppSrc = 3;
-        if (colorType == PNG_COLOR_TYPE_RGB_ALPHA) {
-            bppSrc = 4;
-        }
-
-        int32_t bppDest = bppSrc;
-
-        int32_t destW = srcW * oversample;
-        int32_t destH = srcH * oversample;
-        uint8_t* buf = new uint8_t[destW * destH * bppDest];
-        memset(buf, 0, destW * destH * bppDest);
-
-        PngWriter pngOut;
-        if (pngOut.init(fnDest, "MCPE Viz Oversampled Image", destW, destH, destH, true, true) != 0) {
-            log::error("Failed to create dest png (fn={})", fnDest);
-            delete[] buf;
-            pngSrc.close();
-            return -2;
-        }
-
-        for (int32_t ty = 0; ty < destH; ty++) {
-            pngOut.row_pointers[ty] = &buf[ty * destW * bppDest];
-        }
-
-        for (int32_t sy = 0; sy < srcH; sy++) {
-            uint8_t* srcbuf = pngSrc.row_pointers[sy];
-
-            for (int32_t sx = 0; sx < srcW; sx++) {
-
-                for (int32_t oy = 0; oy < oversample; oy++) {
-                    int32_t dy = sy * oversample + oy;
-                    for (int32_t ox = 0; ox < oversample; ox++) {
-                        int32_t dx = sx * oversample + ox;
-                        // todo - optimize srcbuf val outside loops
-                        memcpy(&buf[(dy * destW + dx) * bppDest], &srcbuf[sx * bppSrc], bppDest);
-                    }
-                }
-
-            }
-        }
-
-        png_write_image(pngOut.png, pngOut.row_pointers);
-        pngOut.close();
-
-        delete[] buf;
-
-        pngSrc.close();
-
-        return 0;
-    }
-
     std::string makeIndent(int32_t indent, const char* hdr) {
         std::string s;
         s.append(hdr);

@@ -43,7 +43,7 @@ namespace mcpe_viz
 
         levelDbReadOptions.fill_cache = false;
         // suggestion from leveldb/mcpe_sample_setup.cpp
-        levelDbReadOptions.decompress_allocator = new leveldb::DecompressAllocator();
+        // levelDbReadOptions.decompress_allocator = new Allocator();
 
 
         dbOptions = std::make_unique<leveldb::Options>();
@@ -272,8 +272,6 @@ namespace mcpe_viz
 
     int32_t MinecraftWorld_LevelDB::dbParse()
     {
-        char tmpstring[256];
-
         int32_t chunkX = -1, chunkZ = -1, chunkDimId = -1, chunkType = -1, chunkTypeSub = -1;
         int32_t chunkFormatVersion = 2; //todonow - get properly
 
@@ -331,14 +329,14 @@ namespace mcpe_viz
         size_t cdata_size;
         const char* key;
         const char* cdata;
-        std::string dimName, chunkstr;
+        std::string dimName;
 
         leveldb::Iterator* iter = db->NewIterator(levelDbReadOptions);
         for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
 
             // note: we get the raw buffer early to avoid overhead (maybe?)
             skey = iter->key();
-            key_size = (int)skey.size();
+            key_size = skey.size();
             key = skey.data();
 
             svalue = iter->value();
@@ -545,22 +543,7 @@ namespace mcpe_viz
                     log::warn("Found a chunk with invalid chunk coordinates cx={} cz={}", chunkX, chunkZ);
                     continue;
                 }
-
-                // report info about the chunk
-                chunkstr = dimName + "-chunk: ";
-                sprintf(tmpstring, "%d %d (type=0x%02x) (subtype=0x%02x) (size=%d)", chunkX, chunkZ, chunkType,
-                    chunkTypeSub, (int32_t)cdata_size);
-                chunkstr += tmpstring;
-                if (true) {
-                    // show approximate image coordinates for chunk
-                    double tix, tiy;
-                    dimDataList[chunkDimId]->worldPointToImagePoint(chunkX * 16, chunkZ * 16, tix, tiy, false);
-                    int32_t imageX = int32_t(tix);
-                    int32_t imageZ = int32_t(tiy);
-                    sprintf(tmpstring, " (image %d %d)", (int32_t)imageX, (int32_t)imageZ);
-                    chunkstr += tmpstring;
-                }
-                log::trace("{}", chunkstr);
+                
 
                 // see what kind of chunk we have
                 // tommo posted useful info about the various record types here (around 0.17 beta):
@@ -570,7 +553,7 @@ namespace mcpe_viz
                     // "LegacyTerrain"
                     // chunk block data
                     // we do the parsing in the destination object to save memcpy's
-                    // todonow - would be better to get the version # from the proper chunk record (0x76)
+                    // TODO - would be better to get the version # from the proper chunk record (0x76)
                     dimDataList[chunkDimId]->addChunk(2, chunkX, 0, chunkZ, cdata, cdata_size);
                     break;
 

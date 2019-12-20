@@ -265,8 +265,7 @@ namespace mcpe_viz {
             if (!info) {
                 log::error("Failed png_create_info_struct (info)");
                 fclose(fp);
-                png_destroy_read_struct(&png,
-                    (png_infopp)NULL, (png_infopp)NULL);
+                png_destroy_read_struct(&png, nullptr, nullptr);
                 return -3;
             }
 
@@ -274,7 +273,7 @@ namespace mcpe_viz {
             if (!end_info) {
                 log::error("Failed png_create_info_struct (end_info)");
                 fclose(fp);
-                png_destroy_read_struct(&png, &info, (png_infopp)NULL);
+                png_destroy_read_struct(&png, &info, nullptr);
                 return -4;
             }
 
@@ -345,9 +344,6 @@ namespace mcpe_viz {
         int32_t doTile();
 
     };
-
-
-    int32_t oversampleImage(const std::string& fnSrc, const std::string& fnDest, int32_t oversample);
 
     // quick-n-dirty emulation of java random number generator
     // details from: https://docs.oracle.com/javase/8/docs/api/java/util/Random.html
