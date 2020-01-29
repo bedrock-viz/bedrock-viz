@@ -50,7 +50,7 @@ For linux and macOS users:
 
 **MAKE A BACKUP COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY**
 
-Use the app to select the MCPE world file, the output directory, output name, and mode.  Press "Go!".  Watch the progress of mcpe_viz.  If it completes successfully, you can click the "Launch Web App" button.  If there was a problem, you should look in the "Progress" window for details that might help you resolve the issue.
+Use the app to select the MCPE world file, the output directory, output name, and mode.  Press "Go!".  Watch the progress of bedrock-viz.  If it completes successfully, you can click the "Launch Web App" button.  If there was a problem, you should look in the "Progress" window for details that might help you resolve the issue.
 
 See below for Web App usage notes.
 
@@ -62,7 +62,7 @@ See below for Web App usage notes.
 * Open a command prompt and run it something like this:
 
 ```
-mcpe_viz.exe --db path-to-your-world-file-dir/ --out out1 --html-most
+bedrock-viz.exe --db path-to-your-world-file-dir/ --out out1 --html-most
 ```
 
 Note: Replace "path-to-your-world-file-dir/" with the actual directory which contains your world files -- it wants the directory that has level.dat in it.
@@ -79,13 +79,13 @@ You can create a browser-based viewer for your world files.  It will allow you t
 To make a quick viewer (with all regular images, but without indvidual layers), do something like this:
 
 ```
-> ./mcpe_viz --db ./mcpe/another1/ --out ./mcpe/output/out1 --html-most
+> ./bedrock-viz --db ./mcpe/another1/ --out ./mcpe/output/out1 --html-most
 ```
 
 To make a complete viewer (with all images and all layers), do something like this:
 
 ```
-> ./mcpe_viz --db ./mcpe/another1/ --out ./mcpe/output/out1 --html-all
+> ./bedrock-viz --db ./mcpe/another1/ --out ./mcpe/output/out1 --html-all
 ```
 
 This will create a LOT of images -- individual images for each layer of the overworld and nether, as well as all the regular images.  It will also create "./mcpe/output/out1.html".  Load this file in your browser and you will have an Openlayers-based viewer for your world!  Openlayers (http://openlayers.org/) is a powerful javascript library for mapping.
@@ -105,26 +105,26 @@ Web App Usage Notes:
   * Enable elevation overlay (shaded relief)
   * Enable chunk grid overlay
 
-You can visualize areas that are mob spawnable using the mcpe_viz command-line switch '--check-spawn'.  For example, '--check-spawn=0,-1,-152,180' will find all spawnable blocks in the overworld centered at -1,-152 with a radius of 180.  In the web app, you can toggle the "Spawnable" blocks on using the option on the "Blocks" menu.  The icons for the spawnable area are purple dots by default.  You can click on these dots to see the details.  You can then click on the "Pos" element to go to that layer (if you ran mcpe_viz with --html-all).  When you are viewing a raw layer (e.g. layer 12) as opposed to "Overview", the icons will change into green up arrows (indicating the spwanable block is above this layer), red down arrows (indicating the spawnable block is below this layer), or white squares (indicating the spawnable block is on this layer).  Keep in mind that the spawnable block is *above* the solid block the mob could spawn on.
+You can visualize areas that are mob spawnable using the bedrock-viz command-line switch '--check-spawn'.  For example, '--check-spawn=0,-1,-152,180' will find all spawnable blocks in the overworld centered at -1,-152 with a radius of 180.  In the web app, you can toggle the "Spawnable" blocks on using the option on the "Blocks" menu.  The icons for the spawnable area are purple dots by default.  You can click on these dots to see the details.  You can then click on the "Pos" element to go to that layer (if you ran bedrock-viz with --html-all).  When you are viewing a raw layer (e.g. layer 12) as opposed to "Overview", the icons will change into green up arrows (indicating the spwanable block is above this layer), red down arrows (indicating the spawnable block is below this layer), or white squares (indicating the spawnable block is on this layer).  Keep in mind that the spawnable block is *above* the solid block the mob could spawn on.
 
 
 ## Web App Notes
 
 If you are loading the web app from a local file -- that is, not accessing it from a web server -- your browser may impose restrictions on image loading and access to image pixels which makes it very difficult for the web app to deliver the best experience.  Currently, Firefox appears to be the browser most willing to play nicely.  The web app will let you know if you are impacted by this issue.  For example, on Chrome, you will not see block information on mouse over, or be able to see the elevation overlay -- both of which are totally cool :)
 
-If you are running Firefox or serving the files from a web server, you can make the web app load a little bit faster by adding the option "--no-force-geojson" to your command line.  This prevents mcpe_viz from using a workaround for the above issue.
+If you are running Firefox or serving the files from a web server, you can make the web app load a little bit faster by adding the option "--no-force-geojson" to your command line.  This prevents bedrock-viz from using a workaround for the above issue.
 
 
 ## Usage
 
 **MAKE A COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY!**
 
-See "./mcpe_viz --help" for the most up-to-date usage info
+See "./bedrock-viz --help" for the most up-to-date usage info
 
 Here's an example invocation:
 
 ```
-> ./mcpe_viz --grid --db ./mcpe/another1/ --out ./mcpe/output/out1
+> ./bedrock-viz --grid --db ./mcpe/another1/ --out ./mcpe/output/out1
 ```
 
 This will read the leveldb from "./mcpe/another1" and name output files starting with "./mcpe/output/out1", and it will draw chunk boundaries on your output image.  This also dumps the *voluminous* output to "out1.log".  The log file has a *ton* of interesting information about your world.  "grep" is your friend.
@@ -153,7 +153,7 @@ This program uses a lot of file handles and depending on your OS's defaults (OS 
   ERROR: Failed to open output file (../worlds/output/images/kYQJAGOeAQA=.mcpe_viz_slice.full.overworld.247.png) errno=Too many open files(24)
   libpng error: No IDATs written into file
   ERROR: PngWriter setjmp triggered -- image might be too large (2672 x 1600)
-  zsh: segmentation fault  ../mcpe_viz/build/mcpe_viz --db ../worlds/kYQJAGOeAQA= --out  --html-all
+  zsh: segmentation fault  ../bedrock-viz/build/bedrock-viz --db ../worlds/kYQJAGOeAQA= --out  --html-all
 ```
 
 You can check your limits and temporarily set file descriptors with the following:
