@@ -1669,7 +1669,7 @@
     <entity id="0x0C" uname="minecraft:pig" name="Pig" etype="P" />
     <entity id="0x0D" uname="minecraft:sheep" name="Sheep" etype="P" />
     <entity id="0x0E" uname="minecraft:wolf" name="Wolf" etype="P" />
-    <entity id="0x0F" uname="minecraft:villager" name="Villager" etype="P" />
+    <entity id="0x0f" uname="minecraft:villager" name="Villager" etype="P" />
     <entity id="0x10" uname="minecraft:mooshroom" name="Mooshroom" etype="P" />
     <entity id="0x11" uname="minecraft:squid" name="Squid" etype="P" />
     <entity id="0x12" uname="minecraft:rabbit" name="Rabbit" etype="P" />  <!-- 0.13 todo correct? -->
@@ -1790,9 +1790,9 @@
     <entity id="0x70" uname="minecraft:cod" name="Cod" etype="P" />
     <entity id="0x7A" uname="minecraft:cat" name="Cat" etype="P" />
     <entity id="0x7B" uname="minecraft:panda" name="Panda" etype="P" />
-	<entity id="0x3b" uname="minecraft:Illager Beast" name="illager_beast" etype="H" />
+	<entity id="0x3b" uname="minecraft:ravager" name="Ravager" etype="H" />
 	<entity id="0x72" uname="minecraft:Pillager" name="pillager" etype="H" />
-	<entity id="0x76" uname="minecraft:Wandering Trader" name="wandering_trader" etype="P" />
+	<entity id="0x76" uname="minecraft:wandering_trader" name="Wandering Trader" etype="P" />
 	<entity id="0x74" uname="minecraft:zombie_villager_v2" name="Zombie Villager" etype="H" />
 	<entity id="0x73" uname="minecraft:villager_v2" name="Villager" etype="H" />
   </entitylist>
@@ -1848,8 +1848,8 @@
     <biome id="0x27" name="Badlands Plateau" color="0xb87474" />
     <biome id="0x28" name="Small End Islands" color="0xd2cf7d" />
     <biome id="0x29" name="End Midlands" color="0xaaa750" />
-    <biome id="0x2a" name="End Highlands" color="0xe0dd93" />
-    <biome id="0x2b" name="End Barrens" color="0xaaa761" />
+    <biome id="0x2a" name="Ocean" color="0x3644d9" />
+    <biome id="0x2b" name="Legacy Frozen Ocean" color="0x3644da" />
     <biome id="0x2c" name="Warm Ocean" color="0x838ade" />
     <biome id="0x2d" name="Lukewarm Ocean" color="0x6770cb" />
     <biome id="0x2e" name="Cold Ocean" color="0xa1a6d1" />
