@@ -345,7 +345,7 @@ namespace mcpe_viz {
         // parse cfg files in this order:
         // -- option specified on command-line
         // -- home dir
-        // -- local dir
+        // -- data dir
 
         // as specified on cmdline
         if (!control.fnCfg.empty()) {
@@ -364,8 +364,8 @@ namespace mcpe_viz {
             }
         }
 
-        // local dir
-        if (doParseConfigFile(std::string("mcpe_viz.cfg")) == 0) {
+        // data folder
+        if (doParseConfigFile(std::string("./data/mcpe_viz.cfg")) == 0) {
             return 0;
         }
         return -1;
