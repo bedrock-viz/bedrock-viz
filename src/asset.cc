@@ -25,8 +25,9 @@ namespace mcpe_viz {
         return use_argv_0 ? argv_0 : prefix;
     }
 
-    path xml_path() {
-        return get_prefix() / "data" / "mcpe_viz.xml";
+    path data_path(const std::string& filename)
+    {
+        return get_prefix() / "data" / filename;
     }
 
     path static_path(const std::string& filename)

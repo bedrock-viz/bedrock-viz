@@ -4,6 +4,7 @@
 #include <filesystem>
 
 #include "define.h"
+#include "global.h"
 
 namespace mcpe_viz {
 
@@ -54,6 +55,7 @@ namespace mcpe_viz {
         bool shortRunFlag;
         bool verboseFlag;
         bool quietFlag;
+        char helpFlags;
         int32_t movieX, movieY, movieW, movieH;
 
         int32_t heightMode;
@@ -100,6 +102,7 @@ namespace mcpe_viz {
             shortRunFlag = false;
             verboseFlag = false;
             quietFlag = false;
+            helpFlags = HelpFlags::Basic;
             movieX = movieY = movieW = movieH = 0;
 
             leveldbFilter = 10;

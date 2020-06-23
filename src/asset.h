@@ -5,7 +5,7 @@
 #include <string>
 
 namespace mcpe_viz {
-    std::filesystem::path xml_path();
+    std::filesystem::path data_path(const std::string& filename);
 
     std::filesystem::path static_path(const std::string& filename);
 

@@ -536,7 +536,7 @@ diff -ruN leveldb/table/format.cc leveldb-mcpe/table/format.cc
  void BlockHandle::EncodeTo(std::string* dst) const {
    // Sanity check that all fields have been set
    assert(offset_ != ~static_cast<uint64_t>(0));
-@@ -130,6 +158,45 @@
+@@ -130,6 +158,48 @@
        result->cachable = true;
        break;
      }
