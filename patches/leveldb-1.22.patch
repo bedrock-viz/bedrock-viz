@@ -562,6 +562,9 @@ diff -ruN leveldb/table/format.cc leveldb-mcpe/table/format.cc
 +    }
 +    case kZlibRawCompression: {
 +      std::string output;
++      if (options.decompress_allocator) {
++				output = options.decompress_allocator->get();
++      }
 +      if (!ZlibRaw_Uncompress(data, n, output)) {
 +        delete[] buf;
 +        return Status::Corruption("corrupted compressed block contents");
