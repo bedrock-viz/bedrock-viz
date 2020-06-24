@@ -241,7 +241,7 @@ namespace mcpe_viz {
             log::error("Failed to open file ({}) error={} ({})", fn, strerror(errno), errno);
             return 1;
         }
-        log::info("Reading config from {}", fn);
+        log::info("Loading config from ({})", fn);
 
         char buf[1025], * p;
         while (!feof(fp)) {
@@ -345,30 +345,44 @@ namespace mcpe_viz {
         // parse cfg files in this order:
         // -- option specified on command-line
         // -- home dir
+        // -- userprofile dir
         // -- local dir
+        std::string configFile;
 
         // as specified on cmdline
-        if (!control.fnCfg.empty()) {
-            if (doParseConfigFile(control.fnCfg) == 0) {
-                return 0;
-            }
+        if (!control.fnCfg.empty())
+        {
+            if (doParseConfigFile(control.fnCfg) == 0)
+                configFile = control.fnCfg;
         }
 
-        // default config file
-        // todo - how to support on win32? %HOMEPATH%?
-        if (getenv("HOME")) {
+        // default config file from home
+        if (configFile.empty() && getenv("HOME")) {
             std::string fnHome = getenv("HOME");
             fnHome += "/.mcpe_viz.cfg";
-            if (doParseConfigFile(fnHome) == 0) {
-                return 0;
-            }
+            if (doParseConfigFile(fnHome) == 0)
+                configFile = fnHome;
         }
 
-        // local dir
-        if (doParseConfigFile(std::string("mcpe_viz.cfg")) == 0) {
-            return 0;
+        // default config file from profile directory
+        if (configFile.empty() && getenv("USERPROFILE")) {
+            std::string fnHome = getenv("USERPROFILE");
+            fnHome += "/.mcpe_viz.cfg";
+            if (doParseConfigFile(fnHome) == 0)
+                configFile = fnHome;
         }
-        return -1;
+
+        // local data dir
+        if (configFile.empty() && doParseConfigFile(data_path("mcpe_viz.cfg").generic_string()) == 0)
+            configFile = data_path("mcpe_viz.cfg").generic_string();
+
+        if (configFile.empty())
+        {
+            log::error("Could not find a valid config file to load");
+            return -1;
+        }
+        else
+            return 0;
     }
 
     int32_t parseDimIdOptArg(const char* arg) {
@@ -399,6 +413,7 @@ namespace mcpe_viz {
                 
 
                 {"xml",                required_argument, nullptr, 'X'},
+                {"cfg",                required_argument, nullptr, 'c'},
 
                 {"detail",             no_argument,       nullptr, '@'},
 
@@ -440,14 +455,14 @@ namespace mcpe_viz {
 
                 {"shortrun",           no_argument,       nullptr, '$'}, // this is just for testing
 
-                {"flush",              no_argument,       nullptr, 'f'},
-
                 {"leveldb-filter",     required_argument, nullptr, '<'},
                 {"leveldb-block-size", required_argument, nullptr, '>'},
 
                 {"verbose",            no_argument,       nullptr, 'v'},
                 {"quiet",              no_argument,       nullptr, 'q'},
                 {"help",               no_argument,       nullptr, 'h'},
+                {"help-extended",      no_argument,       nullptr, 'u'},
+                {"help-experimental",  no_argument,       nullptr, 'i'},
                 {nullptr,              no_argument,       nullptr, 0}
         };
 
@@ -459,31 +474,48 @@ namespace mcpe_viz {
 
         while ((optc = getopt_long_only(argc, argv, "", longoptlist, &option_index)) != -1) {
             switch (optc) {
-            case 'o':
+            // --outdir dir
+            case 'o': {
                 control.outputDir = optarg;
                 break;
-            case 'X':
+            }
+            // --xml fn
+            case 'X': {
                 control.fnXml = optarg;
                 break;
-            case 'D':
+            }
+            // --cfg fn
+            case 'c': {
+                control.fnCfg = optarg;
+                break;
+            }
+            // --db dir
+            case 'D': {
                 control.dirLeveldb = optarg;
                 break;
-            case '@':
+            }
+            // --detail
+            case '@': {
                 control.doDetailParseFlag = true;
                 break;
-
-            case '<':
+            }
+            // --leveldb-filter i
+            case '<': {
                 control.leveldbFilter = atoi(optarg);
                 if (control.leveldbFilter < 0) {
                     control.leveldbFilter = 0;
                 }
                 break;
-            case '>':
+            }
+            // --leveldb-block-size i
+            case '>': {
                 control.leveldbBlockSize = atoi(optarg);
                 if (control.leveldbBlockSize < 0) {
                     control.leveldbBlockSize = 4096;
                 }
                 break;
+            }
+            // --hide-top=did,bid
             case 'H': {
                 bool pass = false;
                 int32_t dimId, blockId;
@@ -508,9 +540,9 @@ namespace mcpe_viz {
                     log::error("Failed to parse --hide-top {}", optarg);
                     errct++;
                 }
+                break;
             }
-                    break;
-
+            // --force-top=did,bid
             case 'F': {
                 bool pass = false;
                 int32_t dimId, blockId;
@@ -535,9 +567,9 @@ namespace mcpe_viz {
                     log::error("Failed to parse --force-top {}", optarg);
                     errct++;
                 }
+                break;
             }
-                    break;
-
+            // --geojson-block=did,bid
             case '+': {
                 bool pass = false;
                 int32_t dimId, blockId;
@@ -562,9 +594,10 @@ namespace mcpe_viz {
                     log::error("Failed to parse --geojson-block {}", optarg);
                     errct++;
                 }
+                break;
             }
-                    break;
-
+            // --check-spawn did,x,z,dist
+            // --check-spawnable did,x,z,dist
             case 'C': {
                 log::warn("--spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info");
                 errct++;
@@ -591,10 +624,10 @@ namespace mcpe_viz {
                     log::error("Failed to parse --check-spawn {}", optarg);
                     errct++;
                 }
+                break;
             }
-                    break;
-
-
+            // --schematic did,x1,y1,z1,x2,y2,z2,fnpart
+            // --schematic-get did,x1,y1,z1,x2,y2,z2,fnpart
             case 'Z': {
                 bool pass = false;
                 int32_t dimId = 0, x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
@@ -622,37 +655,44 @@ namespace mcpe_viz {
                     log::error("Failed to parse --schematic {}", optarg);
                     errct++;
                 }
+                break;
             }
-                    break;
-
-
-            case 'G':
+            // --grid[=did]
+            case 'G': {
                 control.doGrid = parseDimIdOptArg(optarg);
                 break;
-
-            case ')':
+            }
+            // --html
+            case ')': {
                 control.doHtml = true;
                 break;
-
-            case '[':
+            }
+            // --tiles[=tilew,tileh]
+            case '[': {
                 control.doTiles = true;
+                if (optarg)
                 {
                     int32_t tw, th;
-                    if (optarg) {
-                        if (sscanf(optarg, "%d,%d", &tw, &th) == 2) {
-                            control.tileWidth = tw;
-                            control.tileHeight = th;
-                            log::info("Overriding tile dimensions: %d x %d", tw, th);
-                        }
+
+                    if (sscanf(optarg, "%d,%d", &tw, &th) == 2) {
+                        control.tileWidth = tw;
+                        control.tileHeight = th;
+                        log::info("Overriding tile dimensions: {} x {}", tw, th);
+                    }
+                    else {
+                        log::error("Failed to parse --tiles ({})", optarg ? optarg : "null");
+                        errct++;
                     }
                 }
                 break;
-            case ']':
+            }
+            // --auto-tile
+            case ']': {
                 control.autoTileFlag = true;
                 break;
-
-            case '=':
-                // html most
+            }
+            // --html-most
+            case '=': {
                 control.doHtml = true;
                 control.doImageBiome =
                     control.doImageGrass =
@@ -665,9 +705,9 @@ namespace mcpe_viz {
                     control.doImageSlimeChunks =
                     kDoOutputAll;
                 break;
-
-            case '_':
-                // html all
+            }
+            // --html-all
+            case '_': {
                 control.doHtml = true;
                 control.doImageBiome =
                     control.doImageGrass =
@@ -681,40 +721,59 @@ namespace mcpe_viz {
                     kDoOutputAll;
                 control.doSlices = kDoOutputAll;
                 break;
-
-            case ':':
+            }
+            // --no-force-geojson
+            case ':': {
                 control.noForceGeoJSONFlag = true;
                 break;
-
-            case 'B':
+            }
+            // --biome[=did]
+            case 'B': {
                 control.doImageBiome = parseDimIdOptArg(optarg);
                 break;
-            case 'g':
+            }
+            // --grass[=did]
+            case 'g': {
                 control.doImageGrass = parseDimIdOptArg(optarg);
                 break;
-            case 'd':
+            }
+            // --height-col[=did]
+            case 'd': {
                 control.doImageHeightCol = parseDimIdOptArg(optarg);
                 break;
-            case '#':
+            }
+            // --height-col-gs[=did]
+            case '#': {
                 control.doImageHeightColGrayscale = parseDimIdOptArg(optarg);
                 break;
-            case 'a':
+            }
+            // --height-col-alpha[=did]
+            case 'a': {
                 control.doImageHeightColAlpha = parseDimIdOptArg(optarg);
                 break;
-            case 'S':
+            }
+            // --shaded-relief[=did]
+            case 'S': {
                 control.doImageShadedRelief = parseDimIdOptArg(optarg);
                 break;
-            case 'b':
+            }
+            // --blocklight[=did]
+            case 'b': {
                 control.doImageLightBlock = parseDimIdOptArg(optarg);
                 break;
-            case 's':
+            }
+            // --skylight[=did]
+            case 's': {
                 control.doImageLightSky = parseDimIdOptArg(optarg);
                 break;
-            case '%':
+            }
+            // --slime-chunk[=did]
+            case '%': {
                 control.doImageSlimeChunks = parseDimIdOptArg(optarg);
                 break;
-
-            case 'A':
+            }
+            // --all-image[=did]
+            case 'A': {
                 control.doImageBiome =
                     control.doImageGrass =
                     control.doImageHeightCol =
@@ -726,14 +785,19 @@ namespace mcpe_viz {
                     control.doImageSlimeChunks =
                     parseDimIdOptArg(optarg);
                 break;
-
-            case '(':
+            }
+            // --slices[=did]
+            case '(': {
                 control.doSlices = parseDimIdOptArg(optarg);
                 break;
-            case 'M':
+            }
+            // --movie[=did]
+            case 'M': {
                 control.doMovie = parseDimIdOptArg(optarg);
                 break;
-            case '*':
+            }
+            // --movie-dim x,y,w,h
+            case '*': {
                 // movie dimensions
                 if (sscanf(optarg, "%d,%d,%d,%d", &control.movieX, &control.movieY, &control.movieW,
                     &control.movieH) == 4) {
@@ -744,22 +808,42 @@ namespace mcpe_viz {
                     errct++;
                 }
                 break;
-
-            case '$':
+            }
+            // --shortrun
+            case '$': {
                 control.shortRunFlag = true;
                 break;
-            case 'v':
+            }
+            // --verbose
+            case 'v': {
                 control.verboseFlag = true;
                 break;
-            case 'q':
+            }
+            // --quiet
+            case 'q': {
                 control.quietFlag = true;
                 break;
-            default:
+            }
+            // --help
+            case 'h': {
+                control.helpFlags = HelpFlags::Basic;
+                return -1;
+            }
+            // --help-extended
+            case 'u': {
+                control.helpFlags = HelpFlags::Basic | HelpFlags::Extended;
+                return -1;
+            }
+            // --help-experimental
+            case 'i': {
+                control.helpFlags = HelpFlags::Basic | HelpFlags::Extended | HelpFlags::Experimental;
+                return -1;
+            }
+            // unknown option
+            default: {
                 log::error("Unrecognized option: '{}'", optc);
                 return -1;
-
-            case 'h':
-                return -1;
+            }
             }
         }
 
@@ -804,7 +888,7 @@ int main(int argc, char** argv)
     world = std::make_unique<MinecraftWorld_LevelDB>();
 
     if (parse_args(argc, argv) != 0) {
-        mcpe_viz::print_usage();
+        mcpe_viz::print_usage(control.helpFlags);
         return -1;
     }
     if (control.doHtml) {
@@ -818,7 +902,7 @@ int main(int argc, char** argv)
     {
         int ret = 0;
         if (control.fnXml.empty()) {
-            ret = load_xml(xml_path().generic_string());
+            ret = load_xml(data_path("mcpe_viz.xml").generic_string());
         }
         else {
             ret = load_xml(control.fnXml);

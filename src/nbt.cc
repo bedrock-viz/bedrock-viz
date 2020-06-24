@@ -220,7 +220,7 @@ namespace mcpe_viz
             catch (std::exception & e) {
                 // check for eof which means all is well
                 if (!pis.eof()) {
-                    fprintf(stderr, "NBT exception: (%s) (eof=%s) (is=%s) (tc=%d) (pos=%d) (buflen=%d) (parseNbt)\n"
+                    log::error("NBT exception: ({}) (eof={}) (is={}) (tc={}) (pos={}) (buflen={}) (parseNbt)"
                         , e.what()
                         , pis.eof() ? "true" : "false"
                         , (pis) ? "true" : "false"
@@ -269,7 +269,7 @@ namespace mcpe_viz
             catch (std::exception & e) {
                 // check for eof which means all is well
                 if (!pis.eof()) {
-                    fprintf(stderr, "NBT exception: (%s) (eof=%s) (is=%s) (tc=%d) (pos=%d) (buflen=%d) (parseNbtQuiet)\n"
+                    log::error("NBT exception: ({}) (eof={}) (is={}) (tc={}) (pos={}) (buflen={}) (parseNbtQuiet)"
                         , e.what()
                         , pis.eof() ? "true" : "false"
                         , (pis) ? "true" : "false"
@@ -985,7 +985,7 @@ namespace mcpe_viz
                     //List = 9,
                     //Compound = 10,
                     //Int_Array = 11,
-                    fprintf(stderr, "WARNING: Unable to capture entity other prop key=%s\n", key.c_str());
+                    log::warn("Unable to capture entity other prop key={}", key.c_str());
                     break;
                 }
             }
@@ -1226,7 +1226,12 @@ namespace mcpe_viz
                 worldPointToGeoJSONPoint(actualDimensionId, pos.x, pos.z, playerPositionImageX, playerPositionImageY);
                 playerPositionDimensionId = actualDimensionId;
 
-                fprintf(stderr, "Player Position: Dimension=%d Pos=%s Rotation=(%lf, %lf)\n", actualDimensionId, pos.toStringWithImageCoords(actualDimensionId).c_str(), rotation.x, rotation.y);
+                log::info("Player Position: Dimension={} Pos={} Rotation=({}, {})"
+                    , actualDimensionId
+                    , pos.toStringWithImageCoords(actualDimensionId).c_str()
+                    , rotation.x
+                    , rotation.y
+                );
             }
 
             if (playerLocalFlag || playerRemoteFlag) {
@@ -1618,7 +1623,7 @@ namespace mcpe_viz
                 // all is good
             }
             else {
-                fprintf(stderr, "ERROR: parseNbt_entity() called with invalid tagList (loop=%d)\n", (int)i);
+                log::error("ERROR: parseNbt_entity() called with invalid tagList (loop={})", (int)i);
                 return -1;
             }
 
@@ -2006,7 +2011,7 @@ namespace mcpe_viz
                 // all is good
             }
             else {
-                fprintf(stderr, "ERROR: parseNbt_tileEntity() called with invalid tagList (loop=%d)\n", (int)i);
+                log::error("parseNbt_tileEntity() called with invalid tagList (loop={})", (int)i);
                 return -1;
             }
 

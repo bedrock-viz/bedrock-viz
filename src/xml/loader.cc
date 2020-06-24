@@ -10,6 +10,7 @@ namespace mcpe_viz
 {
     int load_xml(const std::string& filepath)
     {
+        log::info("Loading config from ({})", filepath);
         pugi::xml_document doc;
         auto result = doc.load_file(filepath.c_str());
 
