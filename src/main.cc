@@ -670,16 +670,19 @@ namespace mcpe_viz {
             // --tiles[=tilew,tileh]
             case '[': {
                 control.doTiles = true;
-                int32_t tw, th;
+                if (optarg)
+                {
+                    int32_t tw, th;
 
-                if (sscanf(optarg, "%d,%d", &tw, &th) == 2) {
-                    control.tileWidth = tw;
-                    control.tileHeight = th;
-                    log::info("Overriding tile dimensions: {} x {}", tw, th);
-                }
-                else {
-                    log::error("Failed to parse --tiles ({})", optarg ? optarg : "null");
-                    errct++;
+                    if (sscanf(optarg, "%d,%d", &tw, &th) == 2) {
+                        control.tileWidth = tw;
+                        control.tileHeight = th;
+                        log::info("Overriding tile dimensions: {} x {}", tw, th);
+                    }
+                    else {
+                        log::error("Failed to parse --tiles ({})", optarg ? optarg : "null");
+                        errct++;
+                    }
                 }
                 break;
             }

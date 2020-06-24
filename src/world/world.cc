@@ -311,7 +311,7 @@ namespace mcpe_viz
 
                 for (const auto& iter : dimDataList[dimId]->blockToGeoJSONList) {
                     blockId = iter;
-                    log::info("  'genjson' block: {} - {} (dimId={} blockId={} (0x{:x}))",
+                    log::info("  'geojson' block: {} - {} (dimId={} blockId={} (0x{:x}))",
                         dimDataList[dimId]->getName(),
                               Block::queryName(blockId),
                         dimId, blockId, blockId);
