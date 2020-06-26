@@ -1,6 +1,9 @@
 /*
-  mcpe_viz openlayers viewer
-  by Plethora777 - 2015.10.08
+  bedrock_viz openlayers viewer
+    maintained by   : https://github.com/jasper-wan
+    contributions by: https://github.com/paulgrahek, https://github.com/tomnolan, https://github.com/bazfp, https://github.com/DazWorrall
+    forked from     : https://github.com/Plethora777/mcpe_viz
+  
 
   todobig
 
@@ -8,7 +11,7 @@
   -- it appears that since we fake the Z in tiles that we always get resolution=1 data in the shade() function.  Sigh.
 
   * introduce layers -- e.g. rail; leaves; water -- that can be toggled on/off.  could be quite cool.  
-  -- requires re-think of mcpe_viz program -- need to produce a base layer (solid blocks) and then overlay layers with other things (e.g. rail; leaves; water; torches: etc)
+  -- requires re-think of bedrock_viz program -- need to produce a base layer (solid blocks) and then overlay layers with other things (e.g. rail; leaves; water; torches: etc)
   -- how to prioritize layers? hmmm... 
   -- ideas for layers:
   - trees: leaves; saplings; vines; cocoa; wood that is up/down?
@@ -109,7 +112,7 @@ var listTileEntityToggle = [];
 var listBlockToggle = [];
 var spawnableEnableFlag = false;
 
-var globalCORSWarning = 'MCPE Viz Hint: If you are loading files from the local filesystem, your browser might not be allowing us to load additional files or examine pixels in maps.  Firefox does not have this limitation.  See README for more info...';
+var globalCORSWarning = 'Bedrock Viz Hint: If you are loading files from the local filesystem, your browser might not be allowing us to load additional files or examine pixels in maps.  Firefox does not have this limitation.  See README for more info...';
 var globalCORSWarningFlag = false;
 
 var globalItemStyleSelector = null;
@@ -951,7 +954,7 @@ function doFeaturePopover(features, id, coordinate) {
         
         if ( !globalWarnVillage ) {
             doModal('Villages',
-                    '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run mcpe_viz.');
+                    '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
             globalWarnVillage = true;
         }
 
@@ -1623,9 +1626,9 @@ function doShadedRelief(enableFlag) {
             var fn = dimensionInfo[globalDimensionId].fnLayerHeightGrayscale;
             if (fn === undefined || fn.length <= 1) {
                 doModal('CORS Error',
-                        'Data for elevation image is not available -- see README and re-run mcpe_viz<br/>' +
+                        'Data for elevation image is not available -- see README and re-run bedrock_viz<br/>' +
                         '<br/>' +
-                        'Hint: You need to run mcpe_viz with --html-most (or --html-all)');
+                        'Hint: You need to run bedrock_viz with --html-most (or --html-all)');
                 return -1;
             }
             var doInitFlag = false;
@@ -1798,8 +1801,6 @@ function doChunkGrid(enableFlag) {
 function doSlimeChunks(enabled) {
     if ( enabled ) {
         if ( !globalWarnSlimeChunks ) {
-            // doModal('Slime Chunks',
-            //'<i>Warning:</i> MCPE Viz uses the Minecraft PC (MCPC) slime chunk calculation.  It is not clear if MCPE uses the same calculation method...');
             globalWarnSlimeChunks = true;
         }
         var fn = dimensionInfo[globalDimensionId].fnLayerSlimeChunks;
@@ -1854,7 +1855,7 @@ function setLayer(fn, extraHelp) {
         } else {
             extraHelp = '<br/><br/>Hint: ' + extraHelp;
         }
-        doModal('Error', 'That image is not available -- see README and re-run mcpe_viz.' + extraHelp);
+        doModal('Error', 'That image is not available -- see README and re-run bedrock_viz.' + extraHelp);
         return -1;
     }
     
@@ -1863,7 +1864,7 @@ function setLayer(fn, extraHelp) {
         srcLayerMain = new ol.source.XYZ({
             attributions: [
                 new ol.Attribution({
-                    html: 'Created by <a href="https://github.com/Plethora777/mcpe_viz" target="_blank">mcpe_viz</a>'
+                    html: 'Created by <a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">bedrock_viz</a>'
                 })
             ],
             url: fn,
@@ -1888,7 +1889,7 @@ function setLayer(fn, extraHelp) {
         srcLayerMain = new ol.source.ImageStatic({
             attributions: [
                 new ol.Attribution({
-                    html: 'Created by <a href="https://github.com/Plethora777/mcpe_viz" target="_blank">mcpe_viz</a>'
+                    html: 'Created by <a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">bedrock_viz</a>'
                 })
             ],
             url: fn,
@@ -2000,7 +2001,7 @@ function setLayer(fn, extraHelp) {
 
 
 function setLayerById(id) {
-    var extraHelp = 'You need to run mcpe_viz with --html-most (or --html-all)';
+    var extraHelp = 'You need to run bedrock_viz with --html-most (or --html-all)';
     if (0) {
     } else if (id === 1) {
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerBiome, extraHelp) === 0) {
@@ -2074,7 +2075,7 @@ function initDimension() {
                );
     
     projection = new ol.proj.Projection({
-        code: 'mcpe_viz-image',
+        code: 'bedrock_viz-image',
         // todobig - this appears to break loading geojson
         // code: 'EPSG:3857',
 
@@ -2588,7 +2589,7 @@ function layerGoto(layer) {
     layer = Math.floor(layer);
     if (layer < 0) { layer = 0; }
     if (layer > 255) { layer = 255; }
-    if (setLayer(dimensionInfo[globalDimensionId].listLayers[layer], 'You need to run mcpe_viz with --html-all') === 0) {
+    if (setLayer(dimensionInfo[globalDimensionId].listLayers[layer], 'You need to run bedrock_viz with --html-all') === 0) {
         globalLayerMode = 1;
         layerRawIndex = layer;
         $('#layerNumber').html('' + layer);
@@ -2671,8 +2672,8 @@ function doTour(aboutFlag) {
         
         steps: [
             {
-                title: 'Welcome to MCPE Viz!',
-                content: 'This tour will show you the features of the <span class="nobreak"><b>MCPE Viz Viewer</b></span> web app.<br/>' +
+                title: 'Welcome to Bedrock Viz!',
+                content: 'This tour will show you the features of the <span class="nobreak"><b>Bedrock Viz Viewer</b></span> web app.<br/>' +
                     '<br/>' +
                     'You can naviate the steps of this tour with your arrow keys (<kbd>&larr;</kbd> and <kbd>&rarr;</kbd>).  You can stop it by pressing <kbd>ESC</kbd>.'
             },
@@ -2730,7 +2731,7 @@ function doTour(aboutFlag) {
                 element: '#layerNumber',
                 placement: 'top',
                 title: 'Select Raw Layer',
-                content: 'You can view individual layers of your world, if you ran MCPE Viz in "html-all" mode.'
+                content: 'You can view individual layers of your world, if you ran Bedrock Viz in "html-all" mode.'
             },
             {
                 element: '#imageSelectName',
@@ -2773,7 +2774,7 @@ function doTour(aboutFlag) {
                 title: 'Blocks',
                 content: 'You can display the location of blocks here.<br/><br/>' +
                     'Please note that to improve performance labels are not shown.  Click on a dot to get information about the block.<br/><br/>' +
-                    'You can change which blocks are available by using the command-line switch <i>--geojson-block</i>, or you can add <i>geojson-block</i> items to your config file.  See <i>mcpe_viz.cfg</i> for more details.'
+                    'You can change which blocks are available by using the command-line switch <i>--geojson-block</i>, or you can add <i>geojson-block</i> items to your config file.  See <i>bedrock_viz.cfg</i> for more details.'
             },
             {
                 element: '#menuOptions',
@@ -2784,28 +2785,29 @@ function doTour(aboutFlag) {
                     '<li><b>Show Chunk Grid</b> overlays a grid showing the chunk boundaries in your world.</li>' +
                     '<li><b>Show Slime Chunks</b> overlays green on slime chunks.  <i>Note: we\'re currently using the MCPC slime chunk calculation.  It is not known if this is accurate for MCPE.</i></li>' +
                     '<li><b>Show Height Shading</b> overlays a shading based on height.  Higher blocks are brighter than lower blocks.</li>' +
-                    '<li><b>Show Shaded Relief</b> overlays a shaded relief elevation map.  <i>Pre-generated</i> is generated when mcpe_viz runs.  <i>Dynamic</i> is generated in the web app.  You can alter the settings to change the display.  Note that due to bugs in one of the support libraries, <i>Dynamic</i> is not available when in tiled image mode.</li>' +
-                    '<li><b>Check for update</b> checks for an <b>MCPE Viz</b> update on GitHub.</li>' +
+                    '<li><b>Show Shaded Relief</b> overlays a shaded relief elevation map.  <i>Pre-generated</i> is generated when bedrock_viz runs.  <i>Dynamic</i> is generated in the web app.  You can alter the settings to change the display.  Note that due to bugs in one of the support libraries, <i>Dynamic</i> is not available when in tiled image mode.</li>' +
+                    '<li><b>Check for update</b> checks for an <b>Bedrock Viz</b> update on GitHub.</li>' +
                     '</ul>'
             },
             {
                 element: '#worldName',
                 placement: 'top',
                 title: 'World Name',
-                content: 'The name of your world, and the date/time that you ran MCPE Viz on it.'
+                content: 'The name of your world, and the date/time that you ran Bedrock Viz on it.'
             },
             {
-                title: 'About MCPE Viz',
+                title: 'About Bedrock Viz',
                 content: '' +
-                    '<a href="https://github.com/Plethora777/mcpe_viz" target="_blank">MCPE Viz by Plethora777<br/>' +
-                    'Version ' + creationMcpeVizVersion + '<br/>' +
+                    '<a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">Bedrock Viz on github<br/>' +
+                    'Version ' + creationBedrockVizVersion + '<br/>' +
                     'Please be sure to check back often for updates!</a><br/>' +
                     '<br/>' +
-                    '<b>MCPE Viz Viewer</b> is built using these fine javascript libraries:<br/><ul>' +
+                    '<b>Bedrock Viz Viewer</b> is built using these other fine projects and libraries:<br/><ul>' +
                     '<li><a href="http://openlayers.org/" target="_blank">OpenLayers 3</a></li>' +
                     '<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>' +
                     '<li><a href="http://bootstraptour.com/" target="_blank">Bootstrap Tour</a></li>' +
                     '<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>' +
+                    '<li><a href="https://github.com/Plethora777/mcpe_viz" target="_blank">Fork of MCPE Viz by Plethora777</li?' +
                     '</ul>' +
                     'Block and Item images are borrowed from the <a href="http://minecraft.gamepedia.com/" target="_blank">Minecraft Wiki</a>.  The textures themselves are copyright Mojang.'
             }
@@ -2831,9 +2833,11 @@ function doModal(title, body) {
 }
 
 function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
+    // todo - make the update checks come from https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest for the latest version info.
+    // todo - make a source update version check from the changelog raw content
     // todobig - make this a bootstrap dialog box that has a clickable link
     doModal('New Update Available!',
-            'You are running <b>v' + creationMcpeVizVersion + '</b> and <b>v' + newVersion + '</b> is available on GitHub.<br/><br/>' +
+            'You are running <b>v' + creationBedrockVizVersion + '</b> and <b>v' + newVersion + '</b> is available on GitHub.<br/><br/>' +
             'New Version Highlight:<br/><b>' + newVersionHighlight + '</b><br/><br/>' +
 
             // show changelog
@@ -2850,13 +2854,13 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
             '<div class="panel-body"><pre class="pre-scrollable">' + changeLog + '</pre></div>' +
             '</div></div>' +
 
-            '<a target="_blank" href="https://github.com/Plethora777/mcpe_viz">Click here to go to GitHub and grab the update</a>'
+            '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>'
            );
 }
 
 function doCheckUpdate_getChangeLog(newVersion) {
     // get data from github
-    var url = 'https://raw.githubusercontent.com/Plethora777/mcpe_viz/master/ChangeLog';
+    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
 
     $.ajax({
         type: 'GET',
@@ -2865,9 +2869,9 @@ function doCheckUpdate_getChangeLog(newVersion) {
         cache: false,
         success: function(result, textStatus, jqxhr) {
             
-            // parse this: mcpe_viz_version_short("X.Y.Z");
+            // parse this: Latest Highlight: New stuff added");
             var newVersionHighlight = '(See ChangeLog on GitHub)';
-            var res = result.match(/\nHighlight:\s*(.+?)\s*\n/);
+            var res = result.match(/\nLatest highlight:\s*(.+?)\s*\n/);
             if ( res ) {
                 newVersionHighlight = res[1];
             }
@@ -2882,7 +2886,7 @@ function doCheckUpdate_getChangeLog(newVersion) {
 
 function doCheckUpdate() {
     // get data from github
-    var url = 'https://raw.githubusercontent.com/Plethora777/mcpe_viz/master/mcpe_viz.version.h';
+    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
 
     $.ajax({
         type: 'GET',
@@ -2891,10 +2895,10 @@ function doCheckUpdate() {
         cache: false,
         success: function(result, textStatus, jqxhr) {
             
-            // parse this: mcpe_viz_version_short("X.Y.Z");
-            var res = result.match(/mcpe_viz_version_short\("(.+?)"\)\;/);
+            // parse this: Latest release: X.Y.Z
+            var res = result.match(/Latest release: (.+)/);
             if ( res ) {
-                if ( res[1] === creationMcpeVizVersion ) {
+                if ( res[1] === creationBedrockVizVersion ) {
                     doModal('No Update', 'No update available.<br/><br/>You are running the most current version.');
                 } else {
                     doCheckUpdate_getChangeLog(res[1]);

@@ -359,7 +359,7 @@ namespace mcpe_viz {
         // default config file from home
         if (configFile.empty() && getenv("HOME")) {
             std::string fnHome = getenv("HOME");
-            fnHome += "/.mcpe_viz.cfg";
+            fnHome += "/.bedrock_viz.cfg";
             if (doParseConfigFile(fnHome) == 0)
                 configFile = fnHome;
         }
@@ -367,14 +367,14 @@ namespace mcpe_viz {
         // default config file from profile directory
         if (configFile.empty() && getenv("USERPROFILE")) {
             std::string fnHome = getenv("USERPROFILE");
-            fnHome += "/.mcpe_viz.cfg";
+            fnHome += "/.bedrock_viz.cfg";
             if (doParseConfigFile(fnHome) == 0)
                 configFile = fnHome;
         }
 
         // local data dir
-        if (configFile.empty() && doParseConfigFile(data_path("mcpe_viz.cfg").generic_string()) == 0)
-            configFile = data_path("mcpe_viz.cfg").generic_string();
+        if (configFile.empty() && doParseConfigFile(data_path("bedrock_viz.cfg").generic_string()) == 0)
+            configFile = data_path("bedrock_viz.cfg").generic_string();
 
         if (configFile.empty())
         {
@@ -913,7 +913,7 @@ int main(int argc, char** argv)
     {
         int ret = 0;
         if (control.fnXml.empty()) {
-            ret = load_xml(data_path("mcpe_viz.xml").generic_string());
+            ret = load_xml(data_path("bedrock_viz.xml").generic_string());
         }
         else {
             ret = load_xml(control.fnXml);

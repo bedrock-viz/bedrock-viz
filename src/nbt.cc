@@ -716,22 +716,22 @@ namespace mcpe_viz
             char urlImageGeneric[1025];
             if (nameBasedFlag) {
                 if (blockFlag) {
-                    sprintf(urlImage, "images/mcpe_viz.block.%d.%d.png", id, damage);
-                    sprintf(urlImageGeneric, "images/mcpe_viz.block.%d.%d.png", id, 0);
+                    sprintf(urlImage, "images/bedrock_viz.block.%d.%d.png", id, damage);
+                    sprintf(urlImageGeneric, "images/bedrock_viz.block.%d.%d.png", id, 0);
                 }
                 else {
-                    sprintf(urlImage, "images/mcpe_viz.item.%d.%d.png", id, damage);
-                    sprintf(urlImageGeneric, "images/mcpe_viz.item.%d.%d.png", id, 0);
+                    sprintf(urlImage, "images/bedrock_viz.item.%d.%d.png", id, damage);
+                    sprintf(urlImageGeneric, "images/bedrock_viz.item.%d.%d.png", id, 0);
                 }
             }
             else {
                 if (id < 256) {
-                    sprintf(urlImage, "images/mcpe_viz.block.%d.%d.png", id, damage);
-                    sprintf(urlImageGeneric, "images/mcpe_viz.block.%d.%d.png", id, 0);
+                    sprintf(urlImage, "images/bedrock_viz.block.%d.%d.png", id, damage);
+                    sprintf(urlImageGeneric, "images/bedrock_viz.block.%d.%d.png", id, 0);
                 }
                 else {
-                    sprintf(urlImage, "images/mcpe_viz.item.%d.%d.png", id, damage);
-                    sprintf(urlImageGeneric, "images/mcpe_viz.item.%d.%d.png", id, 0);
+                    sprintf(urlImage, "images/bedrock_viz.item.%d.%d.png", id, damage);
+                    sprintf(urlImageGeneric, "images/bedrock_viz.item.%d.%d.png", id, 0);
                 }
             }
 

@@ -875,14 +875,14 @@ namespace mcpe_viz
 
         log::info("Do Output: html viewer");
 
-        //sprintf(tmpstring, "%s/mcpe_viz.html.template", dirExec.c_str());
-        const std::string fnHtmlSrc = static_path("mcpe_viz.html.template").generic_string();
+        //sprintf(tmpstring, "%s/bedrock_viz.html.template", dirExec.c_str());
+        const std::string fnHtmlSrc = static_path("bedrock_viz.html.template").generic_string();
 
-        //sprintf(tmpstring, "%s/mcpe_viz.js", dirExec.c_str());
-        const std::string fnJsSrc = static_path("mcpe_viz.js").generic_string();
+        //sprintf(tmpstring, "%s/bedrock_viz.js", dirExec.c_str());
+        const std::string fnJsSrc = static_path("bedrock_viz.js").generic_string();
 
-        //sprintf(tmpstring, "%s/mcpe_viz.css", dirExec.c_str());
-        const std::string fnCssSrc = static_path("mcpe_viz.css").generic_string();
+        //sprintf(tmpstring, "%s/bedrock_viz.css", dirExec.c_str());
+        const std::string fnCssSrc = static_path("bedrock_viz.css").generic_string();
 
         // create html file -- need to substitute one variable (extra js file)
         StringReplacementList replaceStrings;
@@ -914,11 +914,11 @@ namespace mcpe_viz
             if (p) { *p = 0; }
 
             fprintf(fp,
-                "// mcpe_viz javascript helper file -- created by mcpe_viz program\n"
+                "// mcpe_viz javascript helper file -- created by bedrock_viz program\n"
                 "var worldName = '%s';\n"
                 "var worldSeed = %lld;\n"
                 "var creationTime = '%s';\n"
-                "var creationMcpeVizVersion = '%s';\n"
+                "var creationBedrockVizVersion = '%s';\n"
                 "var loadGeoJSONFlag = %s;\n"
                 "var fnGeoJSON = '%s';\n"
                 "var useTilesFlag = %s;\n"

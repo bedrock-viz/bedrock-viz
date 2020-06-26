@@ -1,10 +1,17 @@
-# MCPE Viz Changelog
+# Bedrock Viz Changelog
 
-by Plethora777
-  Twitter: [@Plethora777](https://twitter.com/Plethora777)
-  Reddit: [/u/Plethora777](https://www.reddit.com/user/Plethora777/)
+Repository   : https://github.com/bedrock-viz/bedrock-viz/
+Maintained by: [jasper-wan](https://github.com/jasper-wan)
+Contributions: [Contributors](./CONTRIBUTORS.md)
 
-Highlight: Fixes for new betas
+Latest highlight: Forked from https://github.com/Plethora777/mcpe_viz
+Latest release: 0.1.1
+
+v0.1.1 - 2019.12.11
+Many fixes and cleanup of code
+
+v0.1-alpha - 2019.12.07
+Initial release from fork of https://github.com/Plethora777/mcpe_viz
 
 v0.0.48 - 2018.12.30
 More fixes for crashing on --html-all
