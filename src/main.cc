@@ -408,6 +408,11 @@ namespace mcpe_viz {
     int32_t parse_args(int argc, char** argv) {
 
         static struct option longoptlist[] = {
+                // It's a huge pain to try to keep track of the optlist so this will help a bit.
+                //
+                // Unused chars:     E   IJKL NOPQ  TUVW Y     ef   jklmn p  st  wxyz0123456789!    ^&   `~-       |; '",.  /?
+                // Used Chars  : ABCD FGH    M    RS    X Zabcd  ghi     o qr  uv               @#$%  *()   _=+[]{}  :    <>  
+
                 {"db",                 required_argument, nullptr, 'D'},
                 {"outdir",             required_argument, nullptr, 'o'},
                 
@@ -457,6 +462,7 @@ namespace mcpe_viz {
 
                 {"leveldb-filter",     required_argument, nullptr, '<'},
                 {"leveldb-block-size", required_argument, nullptr, '>'},
+                {"leveldb-try-repair", no_argument,       nullptr, 'R'},
 
                 {"verbose",            no_argument,       nullptr, 'v'},
                 {"quiet",              no_argument,       nullptr, 'q'},
@@ -513,6 +519,11 @@ namespace mcpe_viz {
                 if (control.leveldbBlockSize < 0) {
                     control.leveldbBlockSize = 4096;
                 }
+                break;
+            }
+            // --leveldb-try-repair
+            case 'R': {
+                control.tryDbRepair = true;
                 break;
             }
             // --hide-top=did,bid

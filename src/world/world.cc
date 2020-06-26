@@ -151,12 +151,26 @@ namespace mcpe_viz
         // todobig - leveldb read-only? snapshot?
         // note: seems impossible, see <https://github.com/google/leveldb/issues/182>
         log::info("DB Open: dir={}", dirDb);
-        leveldb::Status dstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
-        log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", dstatus.ToString(), control.leveldbBlockSize, control.leveldbFilter);
+        leveldb::Status openstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
+        log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", openstatus.ToString(), control.leveldbBlockSize, control.leveldbFilter);
         fflush(stderr);
-        if (!dstatus.ok()) {
-            log::error("LevelDB operation returned status={}", dstatus.ToString());
-            exit(-2);
+        if (!openstatus.ok()) {
+            log::error("LevelDB operation returned status={}", openstatus.ToString());
+            
+            if (control.tryDbRepair)
+            {
+                log::info("Attempting leveldb repair due to failed open");
+                leveldb::Options options_;
+                leveldb::Status repairstatus = leveldb::RepairDB(std::string(dirDb + "/db"), options_);
+
+                if (repairstatus.ok())
+                    log::info("LevelDB repair completed");
+                else {
+                    log::error("LevelDB repair failed");
+                    exit(-2);
+                }
+            }
+
         }
         return 0;
     }
