@@ -28,9 +28,9 @@ namespace mcpe_viz {
         int32_t minChunkZ, maxChunkZ;
         bool chunkBoundsValid;
 
-        bool fastBlockForceTopList[512];
-        bool fastBlockHideList[512];
-        bool fastBlockToGeoJSONList[512];
+        bool fastBlockForceTopList[1024];
+        bool fastBlockHideList[1024];
+        bool fastBlockToGeoJSONList[1024];
 
         // convenience vars from world object
         std::string worldName;

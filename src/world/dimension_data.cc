@@ -128,7 +128,7 @@ namespace
 namespace mcpe_viz {
     void DimensionData_LevelDB::updateFastLists()
     {
-        for (int32_t bid = 0; bid < 512; bid++) {
+        for (int32_t bid = 0; bid < 1024; bid++) {
             fastBlockHideList[bid] = vectorContains(blockHideList, bid);
             fastBlockForceTopList[bid] = vectorContains(blockForceTopList, bid);
             fastBlockToGeoJSONList[bid] = vectorContains(blockToGeoJSONList, bid);
@@ -241,7 +241,8 @@ namespace mcpe_viz {
                                 color = biome->color();
                             }
                             else {
-                                log::error("Unknown biome {} 0x{:x}", biomeId, biomeId);
+                                log::trace("Unknown biome {} 0x{:x}", biomeId, biomeId);
+                                record_unknown_biome_id(biomeId);
                                 color = local_htobe32(0xff2020);
                             }
                         }
@@ -735,7 +736,7 @@ namespace mcpe_viz {
                                         }
                                         else {
                                             // TODO not safe 
-                                            if (blockid >= 0 && blockid < 512) {
+                                            if (blockid >= 0 && blockid < 1024) {
                                                 auto block = Block::get(blockid);
                                                 if (block != nullptr) {
                                                     if (block->hasVariants()) {
@@ -773,8 +774,9 @@ namespace mcpe_viz {
                                             else {
                                                 // bad blockid
                                                 //todozooz todostopper - we get a lot of these w/ negative blockid around row 4800 of world 'another1'
-                                                log::error("Invalid blockid={} (image {} {}) (cc {} {} {})",
+                                                log::trace("Invalid blockid={} (image {} {}) (cc {} {} {})",
                                                     blockid, imageX, imageZ, cx, cz, cy);
+                                                record_unknown_block_id(blockid);
                                                 // set an unused color
                                                 color = local_htobe32(0xf010d0);
                                             }
