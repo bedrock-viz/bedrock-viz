@@ -1,12 +1,13 @@
-# Bedrock Viz Changelog  
+# Changelog
 
-Repository      : https://github.com/bedrock-viz/bedrock-viz/
-Maintained by   : [jasper-wan](https://github.com/jasper-wan)
-Contributions   : [Contributors](./CONTRIBUTORS.md)
-Latest highlight: Nether update (1.16) support and numerous bug fixes
-Latest release  : 0.1.2
+## Repo Info
+- Repository      : https://github.com/bedrock-viz/bedrock-viz/
+- Maintained by   : [jasper-wan](https://github.com/jasper-wan)
+- Contributions   : [Contributors](./CONTRIBUTORS.md)
+- Latest highlight: Nether update (1.16) support and numerous bug fixes
+- Latest release  : 0.1.2
 
-# Version History
+## bedrock_viz changelog
 
 v0.1.2 - 2020.06.27
 
@@ -26,7 +27,7 @@ v0.1-alpha - 2019.12.07
 - Initial release from fork of https://github.com/Plethora777/mcpe_viz
 
 
-# mcpe_viz changelog
+## mcpe_viz changelog
 
 v0.0.48 - 2018.12.30  
 More fixes for crashing on --html-all  
