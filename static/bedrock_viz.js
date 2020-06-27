@@ -2835,10 +2835,10 @@ function doModal(title, body) {
 function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
     // todo - make the update checks come from https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest for the latest version info.
     // todobig - make this a bootstrap dialog box that has a clickable link
-    var isNew = newVersion === creationBedrockVizVersion;
+    var isCurrent = newVersion == creationBedrockVizVersion;
     var title;
     var msg;
-    if (isNew)
+    if (!isCurrent)
     {
         title = 'New Update Available!';
         msg = 'You are running <b>v' + creationBedrockVizVersion + '</b> and <b>v' + newVersion + '</b> is available on GitHub.<br/><br/>' +
@@ -2857,9 +2857,9 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
            'View Changelog' +
            '</a></h4></div>' +
            '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">' +
-           '<div class="panel-body"><pre class="pre-scrollable">' + changeLog + '</pre></div>' +
+           '<div class="panel-body"><div class="pre-scrollable">' + changeLog + '</div></div>' +
            '</div></div>' + 
-           (isNew ? '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>' : '');
+           (!isCurrent ? '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>' : '');
 
     doModal( title, msg);
 }
@@ -2878,7 +2878,7 @@ function doCheckUpdate_getChangeLog(newVersion) {
             
             // parse this: Latest Highlight: New stuff added");
             var newVersionHighlight = '(See ChangeLog on GitHub)';
-            var res = result.match(/\nLatest highlight\s*:\s*(.+)\s*\n/);
+            var res = result.match(/Latest highlight\s*:\s*(.+)/);
             if ( res ) {
                 newVersionHighlight = res[1];
             }
@@ -2904,7 +2904,7 @@ function doCheckUpdate() {
         success: function(result, textStatus, jqxhr) {
             
             // parse this: Latest release: X.Y.Z
-            var res = result.match(/Latest release\s*:\s*(\w)/);
+            var res = result.match(/Latest release\s*:\s*(\S+)/);
             if ( res ) {
                 doCheckUpdate_getChangeLog(res[1]);
             } else {
