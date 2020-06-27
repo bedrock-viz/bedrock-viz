@@ -1,33 +1,33 @@
 # Bedrock Viz Changelog  
 
-Repository      : https://github.com/bedrock-viz/bedrock-viz/  
+Repository      : https://github.com/bedrock-viz/bedrock-viz/
 
-Maintained by   : [jasper-wan](https://github.com/jasper-wan)  
+Maintained by   : [jasper-wan](https://github.com/jasper-wan)
 
-Contributions   : [Contributors](./CONTRIBUTORS.md)  
+Contributions   : [Contributors](./CONTRIBUTORS.md)
 
 Latest highlight: Nether update (1.16) support and numerous bug fixes
 
-Latest release  : 0.1.2  
+Latest release  : 0.1.2
 
 # Version History
 
-v0.1.2 - 2020.06.27  
+v0.1.2 - 2020.06.27
 
-- Nether update support  
-- bedrock-viz rebranding in viewer  
-- New version checking routine in viewer  
-- Documentation updates  
-- Code cleanup  
+- Nether update support
+- bedrock-viz rebranding in viewer
+- New version checking routine in viewer
+- Documentation updates
+- Code cleanup
 - Removed unnecessary nbt processing. massive speed increase to parsing maps.
-   
-v0.1.1 - 2019.12.11  
 
-- Many fixes and cleanup of code  
+v0.1.1 - 2019.12.11
 
-v0.1-alpha - 2019.12.07  
+- Many fixes and cleanup of code
 
-- Initial release from fork of https://github.com/Plethora777/mcpe_viz  
+v0.1-alpha - 2019.12.07
+
+- Initial release from fork of https://github.com/Plethora777/mcpe_viz
 
 
 # mcpe_viz changelog
