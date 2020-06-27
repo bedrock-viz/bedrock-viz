@@ -1,13 +1,9 @@
 # Bedrock Viz Changelog  
 
 Repository      : https://github.com/bedrock-viz/bedrock-viz/
-
 Maintained by   : [jasper-wan](https://github.com/jasper-wan)
-
 Contributions   : [Contributors](./CONTRIBUTORS.md)
-
 Latest highlight: Nether update (1.16) support and numerous bug fixes
-
 Latest release  : 0.1.2
 
 # Version History
