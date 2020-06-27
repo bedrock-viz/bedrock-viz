@@ -2860,7 +2860,8 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
 
 function doCheckUpdate_getChangeLog(newVersion) {
     // get data from github
-    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+    //var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+    var url = 'https://raw.githubusercontent.com/tomnolan/bedrock-viz/master/CHANGELOG.md';
 
     $.ajax({
         type: 'GET',
@@ -2886,7 +2887,8 @@ function doCheckUpdate_getChangeLog(newVersion) {
 
 function doCheckUpdate() {
     // get data from github
-    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+    //var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+    var url = 'https://raw.githubusercontent.com/tomnolan/bedrock-viz/master/CHANGELOG.md';
 
     $.ajax({
         type: 'GET',

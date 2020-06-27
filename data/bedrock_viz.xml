@@ -2102,16 +2102,19 @@
     <biome id="0xa7" name="Modified Badlands Plateau" color="0xb87e7e" />
     <biome id="0xa8" name="Bamboo Jungle" color="0x58d0a4" />
     <biome id="0xa9" name="Bamboo Jungle Hills" color="0x20a776" />
-    <biome id="0xaa" name="Soul Sand Valley" color="0x20a776" />
-    <biome id="0xab" name="Crimson Forest" color="0x60a776" />
-    <biome id="0xac" name="Warped Forest" color="0x90a776" />
-    <biome id="0xad" name="Basalt Deltas" color="0xd0a776" />
+
+<!-- these are the ids according to the wiki -->
+    <biome id="0xaa" name="Soul Sand Valley" color="0x49372C" />
+    <biome id="0xab" name="Crimson Forest" color="0x521810" />
+    <biome id="0xac" name="Warped Forest" color="0x113835" />
+    <biome id="0xad" name="Basalt Deltas" color="0x1B2632" />
 
 <!-- ids on wiki seem incorrect -->
-    <biome id="0xb2" name="Soul Sand Valley x" color="0x20a776" />
-    <biome id="0xb3" name="Crimson Forest x" color="0x60a776" />
-    <biome id="0xb4" name="Warped Forest x" color="0x90a776" />
-    <biome id="0xb5" name="Basalt Deltas x" color="0xd0a776" />
+<!-- these are the ids that we actually find when parsing levels -->
+    <biome id="0xb2" name="Soul Sand Valley x" color="0x49372C" />
+    <biome id="0xb3" name="Crimson Forest x" color="0x521810" />
+    <biome id="0xb4" name="Warped Forest x" color="0x113835" />
+    <biome id="0xb5" name="Basalt Deltas x" color="0x1B2632" />
   </biomelist>
 
   <!--
