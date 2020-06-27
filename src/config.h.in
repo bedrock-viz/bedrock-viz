@@ -8,7 +8,7 @@
 
 namespace mcpe_viz {
     const char * const version = R"(${PROJECT_VERSION})";
-    const char * const version_full = R"(bedrock-viz v${PROJECT_VERSION} by Plethora777)";
+    const char * const version_full = R"(bedrock-viz v${PROJECT_VERSION})";
 
     const char * const cmake_install_prefix = R"(${CMAKE_INSTALL_PREFIX})";
 

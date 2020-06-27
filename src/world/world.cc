@@ -1118,7 +1118,7 @@ namespace mcpe_viz
         fprintf(fpGeoJSON,
             "{ \"type\": \"FeatureCollection\",\n"
             // todo - correct way to specify this?
-            "\"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"mcpe_viz-image\" } },\n"
+            "\"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"bedrock_viz-image\" } },\n"
             "\"features\": [\n"
         );
 

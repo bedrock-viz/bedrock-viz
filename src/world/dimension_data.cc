@@ -481,7 +481,7 @@ namespace mcpe_viz {
         // create png helpers
         PngWriter png[MAX_BLOCK_HEIGHT + 1];
         for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
-            std::string fnameTmp = fnBase + ".mcpe_viz_slice.full.";
+            std::string fnameTmp = fnBase + ".slice.full.";
             fnameTmp += name;
             fnameTmp += ".";
             sprintf(keybuf, "%03d", cy);

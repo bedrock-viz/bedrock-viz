@@ -1237,89 +1237,84 @@
     <block id="0x1DD" name="Lodestone" uname="minecraft:lodestone" color="0xD7D7D8" />
     <block id="0x1DE" name="Crimson Roots" uname="minecraft:crimson_roots" color="0x006802" />
     <block id="0x1DF" name="Warped Roots" uname="minecraft:warped_roots" color="0x006805" />
-    <block id="0x1E0" name="Crimson Stem" uname="minecraft:crimson_stem" color="0x5E010E" />
-    <block id="0x1E1" name="Warped Stem" uname="minecraft:warped_stem" color="0x406B8D" />
-    <block id="0x1E2" name="Warped Wart Block" uname="minecraft:warped_wart_block" color="0x406B8F" />
+    <block id="0x1E0" name="Crimson Stem" uname="minecraft:crimson_stem" color="0x52181E" />
+    <block id="0x1E1" name="Warped Stem" uname="minecraft:warped_stem" color="0x11383D" />
+    <block id="0x1E2" name="Warped Wart Block" uname="minecraft:warped_wart_block" color="0x11383F" />
     <block id="0x1E3" name="Crimson Fungus" uname="minecraft:crimson_fungus" color="0x006801" />
     <block id="0x1E4" name="Warped Fungus" uname="minecraft:warped_fungus" color="0x006804" />
     <block id="0x1E5" name="Shroomlight" uname="minecraft:shroomlight" color="0xD78101" />
     <block id="0x1E6" name="Weeping Vines" uname="minecraft:weeping_vines" color="0x006803" />
     <block id="0x1E7" name="Crimson Nylium" uname="minecraft:crimson_nylium" color="0x911A1A" />
     <block id="0x1E8" name="Warped Nylium" uname="minecraft:warped_nylium" color="0x0E826F" />
-    <block id="0x1E9" name="Basalt" uname="minecraft:basalt" color="0x4D4D60" />
-    <block id="0x1EA" name="Polished Basalt" uname="minecraft:polished_basalt" color="0x4D4D61" />
+    <block id="0x1E9" name="Basalt" uname="minecraft:basalt" color="0x1B2640" />
+    <block id="0x1EA" name="Polished Basalt" uname="minecraft:polished_basalt" color="0x1B2641" />
     <block id="0x1EB" name="Soul Soil" uname="minecraft:soul_soil" color="0x5C332B" />
     <block id="0x1EC" name="Soul Fire" uname="minecraft:soul_fire" color="0x11976F" />
     <block id="0x1ED" name="Nether Sprouts" uname="minecraft:nether_sprouts" color="0x11976F" />
     <block id="0x1EE" name="Target" uname="minecraft:target" color="0xD7D7D9" />
-    <block id="0x1EF" name="Stripped Crimson Stem" uname="minecraft:stripped_crimson_stem" color="0x5E010F" />
-    <block id="0x1F0" name="Stripped Warped Stem" uname="minecraft:stripped_warped_stem" color="0x406B82" />
-    <block id="0x1F1" name="Crimson Planks" uname="minecraft:crimson_planks" color="0x5E0105" />
-    <block id="0x1F2" name="Warped Planks" uname="minecraft:warped_planks" color="0x406B88" />
-    <block id="0x1F3" name="Crimson Door" uname="minecraft:crimson_door" color="0x5E0102" />
-    <block id="0x1F4" name="Warped Door" uname="minecraft:warped_door" color="0x406B84" />
-    <block id="0x1F5" name="Crimson Trapdoor" uname="minecraft:crimson_trapdoor" color="0x5E010B" />
-    <block id="0x1F6" name="Warped Trapdoor" uname="minecraft:warped_trapdoor" color="0x406B8E" />
-    <block id="0x1F9" name="Crimson Standing Sign" uname="minecraft:crimson_standing_sign;minecraft:crimson_sign" color="0x5E010A" />
-    <block id="0x1FA" name="Warped Standing Sign" uname="minecraft:warped_standing_sign;minecraft:warped_sign" color="0x406B8C" />
-    <block id="0x1FB" name="Crimson Wall Sign" uname="minecraft:crimson_wall_sign" color="0x5E0109" />
-    <block id="0x1FC" name="Warped Wall Sign" uname="minecraft:warped_wall_sign" color="0x406B91" />
-    <block id="0x1FD" name="Crimson Stairs" uname="minecraft:crimson_stairs" color="0x5E0108" />
-    <block id="0x1FE" name="Warped Stairs" uname="minecraft:warped_stairs" color="0x406B8B" />
-    <block id="0x1FF" name="Crimson Fence" uname="minecraft:crimson_fence" color="0x5E0103" />
-    <block id="0x200" name="Warped Fence" uname="minecraft:warped_fence" color="0x406B85" />
-    <block id="0x201" name="Crimson Fence Gate" uname="minecraft:crimson_fence_gate" color="0x5E0104" />
-    <block id="0x202" name="Warped Fence Gate" uname="minecraft:warped_fence_gate" color="0x406B86" />
-    <block id="0x203" name="Crimson Button" uname="minecraft:crimson_button" color="0x5E0101" />
-    <block id="0x204" name="Warped Button" uname="minecraft:warped_button" color="0x406B83" />
-    <block id="0x205" name="Crimson Pressure Plate" uname="minecraft:crimson_pressure_plate" color="0x5E0106" />
-    <block id="0x206" name="Warped Pressure Plate" uname="minecraft:warped_pressure_plate" color="0x406B89" />
-    <block id="0x207" name="Crimson Slab" uname="minecraft:crimson_slab" color="0x5E0107" />
-    <block id="0x208" name="Warped Slab" uname="minecraft:warped_slab" color="0x406B8A" />
-    <block id="0x209" name="Crimson Double Slab" uname="minecraft:crimson_double_slab" color="0x5E0110" />
-    <block id="0x20A" name="Warped Double Slab" uname="minecraft:warped_double_slab" color="0x406B90" />
+    <block id="0x1EF" name="Stripped Crimson Stem" uname="minecraft:stripped_crimson_stem" color="0x52181F" />
+    <block id="0x1F0" name="Stripped Warped Stem" uname="minecraft:stripped_warped_stem" color="0x113832" />
+    <block id="0x1F1" name="Crimson Planks" uname="minecraft:crimson_planks" color="0x521815" />
+    <block id="0x1F2" name="Warped Planks" uname="minecraft:warped_planks" color="0x113838" />
+    <block id="0x1F3" name="Crimson Door" uname="minecraft:crimson_door" color="0x521812" />
+    <block id="0x1F4" name="Warped Door" uname="minecraft:warped_door" color="0x113834" />
+    <block id="0x1F5" name="Crimson Trapdoor" uname="minecraft:crimson_trapdoor" color="0x52181B" />
+    <block id="0x1F6" name="Warped Trapdoor" uname="minecraft:warped_trapdoor" color="0x11383E" />
+    <block id="0x1F9" name="Crimson Standing Sign" uname="minecraft:crimson_standing_sign;minecraft:crimson_sign" color="0x52181A" />
+    <block id="0x1FA" name="Warped Standing Sign" uname="minecraft:warped_standing_sign;minecraft:warped_sign" color="0x11383C" />
+    <block id="0x1FB" name="Crimson Wall Sign" uname="minecraft:crimson_wall_sign" color="0x521819" />
+    <block id="0x1FC" name="Warped Wall Sign" uname="minecraft:warped_wall_sign" color="0x113841" />
+    <block id="0x1FD" name="Crimson Stairs" uname="minecraft:crimson_stairs" color="0x521818" />
+    <block id="0x1FE" name="Warped Stairs" uname="minecraft:warped_stairs" color="0x11383B" />
+    <block id="0x1FF" name="Crimson Fence" uname="minecraft:crimson_fence" color="0x521813" />
+    <block id="0x200" name="Warped Fence" uname="minecraft:warped_fence" color="0x113835" />
+    <block id="0x201" name="Crimson Fence Gate" uname="minecraft:crimson_fence_gate" color="0x521814" />
+    <block id="0x202" name="Warped Fence Gate" uname="minecraft:warped_fence_gate" color="0x113836" />
+    <block id="0x203" name="Crimson Button" uname="minecraft:crimson_button" color="0x521811" />
+    <block id="0x204" name="Warped Button" uname="minecraft:warped_button" color="0x113833" />
+    <block id="0x205" name="Crimson Pressure Plate" uname="minecraft:crimson_pressure_plate" color="0x521816" />
+    <block id="0x206" name="Warped Pressure Plate" uname="minecraft:warped_pressure_plate" color="0x113839" />
+    <block id="0x207" name="Crimson Slab" uname="minecraft:crimson_slab" color="0x521817" />
+    <block id="0x208" name="Warped Slab" uname="minecraft:warped_slab" color="0x11383A" />
+    <block id="0x209" name="Crimson Double Slab" uname="minecraft:crimson_double_slab" color="0x521820" />
+    <block id="0x20A" name="Warped Double Slab" uname="minecraft:warped_double_slab" color="0x113840" />
     <block id="0x20B" name="Soul Torch" uname="minecraft:soul_torch" color="0x11976C" />
     <block id="0x20C" name="Soul Lantern" uname="minecraft:soul_lantern" color="0x11976D" />
-    <block id="0x20D" name="Netherite Block" uname="minecraft:netherite_block" color="0x4D4D62" />
+    <block id="0x20D" name="Netherite Block" uname="minecraft:netherite_block" color="0x1B2642" />
     <block id="0x20E" name="Ancient Debris" uname="minecraft:ancient_debris" color="0x4DB8B3" />
     <block id="0x20F" name="Respawn Anchor" uname="minecraft:respawn_anchor" color="0x34254C" />
-    <block id="0x210" name="Blackstone" uname="minecraft:blackstone" color="0x4D4D66" />
-    <block id="0x211" name="Polished Blackstone Bricks" uname="minecraft:polished_blackstone_bricks" color="0x4D4D54" />
-    <block id="0x212" name="Polished Blackstone Brick Stairs" uname="minecraft:polished_blackstone_brick_stairs" color="0x4D4D52" />
-    <block id="0x213" name="Blackstone Stairs" uname="minecraft:blackstone_stairs" color="0x4D4D5D" />
-    <block id="0x214" name="Blackstone Wall" uname="minecraft:blackstone_wall" color="0x4D4D5E" />
-    <block id="0x215" name="Polished Blackstone Brick Wall" uname="minecraft:polished_blackstone_brick_wall" color="0x4D4D53" />
-    <block id="0x216" name="Chiseled Polished Blackstone" uname="minecraft:chiseled_polished_blackstone" color="0x4D4D5A" />
-    <block id="0x217" name="Cracked Polished Blackstone Bricks" uname="minecraft:cracked_polished_blackstone_bricks" color="0x4D4D5B" />
-    <block id="0x218" name="Gilded Blackstone" uname="minecraft:gilded_blackstone" color="0x4D4D5F" />
-    <block id="0x219" name="Blackstone Slab" uname="minecraft:blackstone_slab" color="0x4D4D5C" />
-    <block id="0x21A" name="Blackstone Double Slab" uname="minecraft:blackstone_double_slab" color="0x4D4D67" />
-    <block id="0x21B" name="Polished Blackstone Brick Slab" uname="minecraft:polished_blackstone_brick_slab" color="0x4D4D51" />
-    <block id="0x21C" name="Polished Blackstone Brick Double Slab" uname="minecraft:polished_blackstone_brick_double_slab" color="0x4D4D64" />
-    <block id="0x21D" name="Chain" uname="minecraft:chain" color="0x4D4D50" />
+    <block id="0x210" name="Blackstone" uname="minecraft:blackstone" color="0x1B2646" />
+    <block id="0x211" name="Polished Blackstone Bricks" uname="minecraft:polished_blackstone_bricks" color="0x1B2634" />
+    <block id="0x212" name="Polished Blackstone Brick Stairs" uname="minecraft:polished_blackstone_brick_stairs" color="0x1B2632" />
+    <block id="0x213" name="Blackstone Stairs" uname="minecraft:blackstone_stairs" color="0x1B263D" />
+    <block id="0x214" name="Blackstone Wall" uname="minecraft:blackstone_wall" color="0x1B263E" />
+    <block id="0x215" name="Polished Blackstone Brick Wall" uname="minecraft:polished_blackstone_brick_wall" color="0x1B2633" />
+    <block id="0x216" name="Chiseled Polished Blackstone" uname="minecraft:chiseled_polished_blackstone" color="0x1B263A" />
+    <block id="0x217" name="Cracked Polished Blackstone Bricks" uname="minecraft:cracked_polished_blackstone_bricks" color="0x1B263B" />
+    <block id="0x218" name="Gilded Blackstone" uname="minecraft:gilded_blackstone" color="0x1B263F" />
+    <block id="0x219" name="Blackstone Slab" uname="minecraft:blackstone_slab" color="0x1B263C" />
+    <block id="0x21A" name="Blackstone Double Slab" uname="minecraft:blackstone_double_slab" color="0x1B2647" />
+    <block id="0x21B" name="Polished Blackstone Brick Slab" uname="minecraft:polished_blackstone_brick_slab" color="0x1B2631" />
+    <block id="0x21C" name="Polished Blackstone Brick Double Slab" uname="minecraft:polished_blackstone_brick_double_slab" color="0x1B2644" />
+    <block id="0x21D" name="Chain" uname="minecraft:chain" color="0x1B2630" />
     <block id="0x21E" name="Twisting Vines" uname="minecraft:twisting_vines" color="0x006806" />
     <block id="0x21F" name="Nether Gold Ore" uname="minecraft:nether_gold_ore" color="0xD78102" />
     <block id="0x220" name="Crying Obsidian" uname="minecraft:crying_obsidian" color="0x34254B" />
     <block id="0x221" name="Soul Campfire" uname="minecraft:soul_campfire" color="0x11976E" />
-    <block id="0x222" name="Polished Blackstone" uname="minecraft:polished_blackstone" color="0x4D4D63" />
-    <block id="0x223" name="Polished Blackstone Stairs" uname="minecraft:polished_blackstone_stairs" color="0x4D4D58" />
-    <block id="0x224" name="Polished Blackstone Slab" uname="minecraft:polished_blackstone_slab" color="0x4D4D57" />
-    <block id="0x225" name="Polished Blackstone Double Slab" uname="minecraft:polished_blackstone_double_slab" color="0x4D4D65" />
-    <block id="0x226" name="Polished Blackstone Pressure Plate" uname="minecraft:polished_blackstone_pressure_plate" color="0x4D4D56" />
-    <block id="0x227" name="Polished Blackstone Button" uname="minecraft:polished_blackstone_button" color="0x4D4D55" />
-    <block id="0x228" name="Polished Blackstone Wall" uname="minecraft:polished_blackstone_wall" color="0x4D4D59" />
-    <block id="0x229" name="Warped Hyphae" uname="minecraft:warped_hyphae" color="0x406B87" />
-    <block id="0x22A" name="Crimson Hyphae" uname="minecraft:crimson_hyphae" color="0x5E010C" />
-    <block id="0x22B" name="Stripped Crimson Hyphae" uname="minecraft:stripped_crimson_hyphae" color="0x5E010D" />
-    <block id="0x22C" name="Stripped Warped Hyphae" uname="minecraft:stripped_warped_hyphae" color="0x406B81" />
+    <block id="0x222" name="Polished Blackstone" uname="minecraft:polished_blackstone" color="0x1B2643" />
+    <block id="0x223" name="Polished Blackstone Stairs" uname="minecraft:polished_blackstone_stairs" color="0x1B2638" />
+    <block id="0x224" name="Polished Blackstone Slab" uname="minecraft:polished_blackstone_slab" color="0x1B2637" />
+    <block id="0x225" name="Polished Blackstone Double Slab" uname="minecraft:polished_blackstone_double_slab" color="0x1B2645" />
+    <block id="0x226" name="Polished Blackstone Pressure Plate" uname="minecraft:polished_blackstone_pressure_plate" color="0x1B2636" />
+    <block id="0x227" name="Polished Blackstone Button" uname="minecraft:polished_blackstone_button" color="0x1B2635" />
+    <block id="0x228" name="Polished Blackstone Wall" uname="minecraft:polished_blackstone_wall" color="0x1B2639" />
+    <block id="0x229" name="Warped Hyphae" uname="minecraft:warped_hyphae" color="0x113837" />
+    <block id="0x22A" name="Crimson Hyphae" uname="minecraft:crimson_hyphae" color="0x52181C" />
+    <block id="0x22B" name="Stripped Crimson Hyphae" uname="minecraft:stripped_crimson_hyphae" color="0x52181D" />
+    <block id="0x22C" name="Stripped Warped Hyphae" uname="minecraft:stripped_warped_hyphae" color="0x113831" />
     <block id="0x22D" name="Chiseled Nether Bricks" uname="minecraft:chiseled_nether_bricks" color="0x230213" />
     <block id="0x22E" name="Cracked Nether Bricks" uname="minecraft:cracked_nether_bricks" color="0x230214" />
     <block id="0x22F" name="Quartz Bricks" uname="minecraft:quartz_bricks" color="0xE8E7E8" />
-
-
-
-
-
 
   </blocklist>
 

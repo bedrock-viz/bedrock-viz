@@ -6,6 +6,7 @@
     <script src="js/jquery-1.11.2.min.js"></script>
     <link rel="stylesheet" href="js/bootstrap.min.css" />
     <script src="js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="js/ol.css" type="text/css" />
     <script src="js/ol.js"></script>
     <link rel="stylesheet" href="js/bootstrap-tour.min.css" />

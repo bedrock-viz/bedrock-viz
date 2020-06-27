@@ -2807,7 +2807,7 @@ function doTour(aboutFlag) {
                     '<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>' +
                     '<li><a href="http://bootstraptour.com/" target="_blank">Bootstrap Tour</a></li>' +
                     '<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>' +
-                    '<li><a href="https://github.com/Plethora777/mcpe_viz" target="_blank">Fork of MCPE Viz by Plethora777</li?' +
+                    '<li><a href="https://github.com/Plethora777/mcpe_viz" target="_blank">Fork of MCPE Viz by Plethora777</li>' +
                     '</ul>' +
                     'Block and Item images are borrowed from the <a href="http://minecraft.gamepedia.com/" target="_blank">Minecraft Wiki</a>.  The textures themselves are copyright Mojang.'
             }
@@ -2834,28 +2834,34 @@ function doModal(title, body) {
 
 function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
     // todo - make the update checks come from https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest for the latest version info.
-    // todo - make a source update version check from the changelog raw content
     // todobig - make this a bootstrap dialog box that has a clickable link
-    doModal('New Update Available!',
-            'You are running <b>v' + creationBedrockVizVersion + '</b> and <b>v' + newVersion + '</b> is available on GitHub.<br/><br/>' +
-            'New Version Highlight:<br/><b>' + newVersionHighlight + '</b><br/><br/>' +
+    var isNew = newVersion === creationBedrockVizVersion;
+    var title;
+    var msg;
+    if (isNew)
+    {
+        title = 'New Update Available!';
+        msg = 'You are running <b>v' + creationBedrockVizVersion + '</b> and <b>v' + newVersion + '</b> is available on GitHub.<br/><br/>' +
+              'New Version Highlight:<br/><b>' + newVersionHighlight + '</b><br/><br/>';
+    }
+    else
+    {
+        title = 'You are running the latest version';
+        msg = 'You are running the latest version: <b>v' + creationBedrockVizVersion + '</b><br/><br/>';
+    }
 
-            // show changelog
-            '<div class="panel panel-default">' +
-            // todo - make this a clickable panel/button instead of a clickable label
-            '<div class="panel-heading" role="tab" id="headingOne">' +
-            '<h4 class="panel-title">' +
-            '<a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' +
-            'View Changelog' +
-            '</a></h4></div>' +
-            '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">' +
-            // todo - ugly hard coded height here!
-            // todo - escape html in changeLog?
-            '<div class="panel-body"><pre class="pre-scrollable">' + changeLog + '</pre></div>' +
-            '</div></div>' +
+    msg = msg + '<div class="panel panel-default">' +
+           '<div class="panel-heading" role="tab" id="headingOne">' +
+           '<h4 class="panel-title">' +
+           '<a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' +
+           'View Changelog' +
+           '</a></h4></div>' +
+           '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">' +
+           '<div class="panel-body"><pre class="pre-scrollable">' + changeLog + '</pre></div>' +
+           '</div></div>' + 
+           (isNew ? '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>' : '');
 
-            '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>'
-           );
+    doModal( title, msg);
 }
 
 function doCheckUpdate_getChangeLog(newVersion) {
@@ -2872,12 +2878,12 @@ function doCheckUpdate_getChangeLog(newVersion) {
             
             // parse this: Latest Highlight: New stuff added");
             var newVersionHighlight = '(See ChangeLog on GitHub)';
-            var res = result.match(/\nLatest highlight:\s*(.+?)\s*\n/);
+            var res = result.match(/\nLatest highlight\s*:\s*(.+)\s*\n/);
             if ( res ) {
                 newVersionHighlight = res[1];
             }
 
-            showUpdateInfo(newVersion, newVersionHighlight, result);
+            showUpdateInfo(newVersion, newVersionHighlight, marked(result));
         },
         error: function(jqXHR, textStatus, errorThrown, execptionObject) {
             showUpdateInfo(newVersion, '(Sorry, we had a problem checking the ChangeLog -- See ChangeLog on GitHub)', '(See ChangeLog on GitHub)');
@@ -2898,13 +2904,9 @@ function doCheckUpdate() {
         success: function(result, textStatus, jqxhr) {
             
             // parse this: Latest release: X.Y.Z
-            var res = result.match(/Latest release: (.+)/);
+            var res = result.match(/Latest release\s*:\s*(\w)/);
             if ( res ) {
-                if ( res[1] === creationBedrockVizVersion ) {
-                    doModal('No Update', 'No update available.<br/><br/>You are running the most current version.');
-                } else {
-                    doCheckUpdate_getChangeLog(res[1]);
-                }
+                doCheckUpdate_getChangeLog(res[1]);
             } else {
                 doModal('Error', 'Sorry, failed to find version info on GitHub.');
             }
