@@ -16,6 +16,7 @@ namespace
     std::set<std::string> unknown_uname;
 
     std::set<int32_t> sUnknownBlockId;
+    std::set<int32_t> sUnknownBiomeId;
     std::set<int32_t> sUnknownItemId;
     std::set<int32_t> sUnknownEntityId;
 }
@@ -39,6 +40,11 @@ namespace mcpe_viz {
     void record_unknown_block_id(int32_t id)
     {
         sUnknownBlockId.insert(id);
+    }
+
+    void record_unknown_biome_id(int32_t id)
+    {
+        sUnknownBiomeId.insert(id);
     }
 
     void record_unknown_item_id(int32_t itemId)
@@ -98,6 +104,10 @@ namespace mcpe_viz {
         }
         for (auto& i : sUnknownBlockId) {
             log::warn("Unknown block id: {} (0x{:x})", i, i);
+        }
+
+        for (auto& i : sUnknownBiomeId) {
+            log::warn("Unknown biome id: {} (0x{:x})", i, i);
         }
 
         for (auto& i: sUnknownItemId) {

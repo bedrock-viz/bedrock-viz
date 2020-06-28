@@ -35,6 +35,8 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 * libxml2: `sudo apt install libxml2-dev`
 
+* libpng: `sudo apt install libpng++-dev`
+
 * we use C++ 17 filesystem library, so we need g++-8: `sudo apt install g++-8`
 
 ### How to compile
@@ -59,9 +61,11 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 ### Requirements
 
-* vcpkg and cmake
+* Visual Studio 2019: https://visualstudio.microsoft.com/vs/ - Community edition is free
 
-* Visual Studio 2019
+* vcpkg: https://github.com/Microsoft/vcpkg
+
+* cmake: https://cmake.org/download/
 
 * patch for windows: <http://gnuwin32.sourceforge.net/packages/patch.htm>
 

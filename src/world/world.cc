@@ -151,12 +151,26 @@ namespace mcpe_viz
         // todobig - leveldb read-only? snapshot?
         // note: seems impossible, see <https://github.com/google/leveldb/issues/182>
         log::info("DB Open: dir={}", dirDb);
-        leveldb::Status dstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
-        log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", dstatus.ToString(), control.leveldbBlockSize, control.leveldbFilter);
+        leveldb::Status openstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
+        log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", openstatus.ToString(), control.leveldbBlockSize, control.leveldbFilter);
         fflush(stderr);
-        if (!dstatus.ok()) {
-            log::error("LevelDB operation returned status={}", dstatus.ToString());
-            exit(-2);
+        if (!openstatus.ok()) {
+            log::error("LevelDB operation returned status={}", openstatus.ToString());
+            
+            if (control.tryDbRepair)
+            {
+                log::info("Attempting leveldb repair due to failed open");
+                leveldb::Options options_;
+                leveldb::Status repairstatus = leveldb::RepairDB(std::string(dirDb + "/db"), options_);
+
+                if (repairstatus.ok())
+                    log::info("LevelDB repair completed");
+                else {
+                    log::error("LevelDB repair failed");
+                    exit(-2);
+                }
+            }
+
         }
         return 0;
     }
@@ -599,8 +613,9 @@ namespace mcpe_viz
                 case 0x33:
                     // "PendingTicks"
                     // todo - this appears to be info on blocks that can move: water + lava + fire + sand + gravel
-                    log::debug("{} 0x33 chunk (tick-list):", dimName);
-                    parseNbt("0x33-tick: ", cdata, int32_t(cdata_size), tagList);
+                    // todo - new nether has slowed things down quite a bit
+                    log::trace("{} 0x33 chunk (tick-list):", dimName);
+                    //parseNbt("0x33-tick: ", cdata, int32_t(cdata_size), tagList);
                     // todo - parse tagList?
                     // todobig - could show location of active fires
                     break;
@@ -615,17 +630,17 @@ namespace mcpe_viz
                     // according to tommo (https://www.reddit.com/r/MCPE/comments/5cw2tm/level_format_changes_in_mcpe_0171_100/)
                     // "BlockExtraData"
                     /*
-       0x34 ?? does not appear to be NBT data -- overworld only? -- perhaps: b0..3 (count); for each: (int32_t) (int16_t)
-       -- there are 206 of these in "another1" world
-       -- something to do with snow?
-       -- to examine data:
-       cat (logfile) | grep "WARNING: Unknown key size" | grep " 34\]" | cut -b75- | sort | nl
-    */
+                       0x34 ?? does not appear to be NBT data -- overworld only? -- perhaps: b0..3 (count); for each: (int32_t) (int16_t)
+                       -- there are 206 of these in "another1" world
+                       -- something to do with snow?
+                       -- to examine data:
+                       cat (logfile) | grep "WARNING: Unknown key size" | grep " 34\]" | cut -b75- | sort | nl
+                    */
                     break;
 
                 case 0x35:
                     // "BiomeState"
-                    log::debug("{} 0x35 chunk (TODO - MYSTERY RECORD - BiomeState)",
+                    log::debug("{} 0x35 chunk (BiomeState)",
                         dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
@@ -633,16 +648,16 @@ namespace mcpe_viz
                     // according to tommo (https://www.reddit.com/r/MCPE/comments/5cw2tm/level_format_changes_in_mcpe_0171_100/)
                     // "BiomeState"
                     /*
-      0x35 ?? -- both dimensions -- length 3,5,7,9,11 -- appears to be: b0 (count of items) b1..bn (2-byte ints)
-      -- there are 2907 in "another1"
-      -- to examine data:
-      cat (logfile) | grep "WARNING: Unknown key size" | grep " 35\]" | cut -b75- | sort | nl
-    */
+                      0x35 ?? -- both dimensions -- length 3,5,7,9,11 -- appears to be: b0 (count of items) b1..bn (2-byte ints)
+                      -- there are 2907 in "another1"
+                      -- to examine data:
+                      cat (logfile) | grep "WARNING: Unknown key size" | grep " 35\]" | cut -b75- | sort | nl
+                    */
                     break;
 
                 case 0x36:
                     // new for v1.2?
-                    log::debug("{} 0x36 chunk (TODO - MYSTERY RECORD - TBD)", dimName);
+                    log::trace("{} 0x36 chunk (FinalizedState)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -651,20 +666,34 @@ namespace mcpe_viz
                     break;
 
                 case 0x39:
-                    // new for v1.2?
-                    log::debug("{} 0x39 chunk (TODO - MYSTERY RECORD - TBD)", dimName);
+                    // Bounding boxes for structure spawns stored in binary format
+                    log::debug("{} 0x39 chunk (HardCodedSpawnAreas)", dimName);
+                    if (control.verboseFlag) {
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                    }
+                    // todo - probably used for outposts and things of that nature
+                    break;
+
+                case 0x3b:
+                    // Appears to be a list of checksums for chunk data. Upcoming in 1.16
+                    log::trace("{} 0x3b chunk (checksum?)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - what is this?
-                    break;
 
                 case 0x76:
                     // "Version"
-                    // todo - this is chunk version information?
                 {
                     // this record is not very interesting, we usually hide it
                     // note: it would be interesting if this is not == 2 (as of MCPE 0.12.x it is always 2)
+                    
+                    // chunk versions have changed many times since this was originally included. 
+                    // it seems unnecessary to keep track of this for anything other than trace information
+                    log::trace("{} 0x76 chunk (world format version): v={}"
+                        ,dimName
+                        ,int(cdata[0]));
+                    /*
                     if (control.verboseFlag || ((cdata[0] != 2) && (cdata[0] != 3) && (cdata[0] != 9))) {
                         if (cdata[0] != 2 && cdata[0] != 9) {
                             log::debug("UNKNOWN CHUNK VERSION!  {} 0x76 chunk (world format version): v={}",
@@ -675,6 +704,7 @@ namespace mcpe_viz
                                 dimName, int(cdata[0]));
                         }
                     }
+                    */
                 }
                 break;
 
@@ -845,14 +875,14 @@ namespace mcpe_viz
 
         log::info("Do Output: html viewer");
 
-        //sprintf(tmpstring, "%s/mcpe_viz.html.template", dirExec.c_str());
-        const std::string fnHtmlSrc = static_path("mcpe_viz.html.template").generic_string();
+        //sprintf(tmpstring, "%s/bedrock_viz.html.template", dirExec.c_str());
+        const std::string fnHtmlSrc = static_path("bedrock_viz.html.template").generic_string();
 
-        //sprintf(tmpstring, "%s/mcpe_viz.js", dirExec.c_str());
-        const std::string fnJsSrc = static_path("mcpe_viz.js").generic_string();
+        //sprintf(tmpstring, "%s/bedrock_viz.js", dirExec.c_str());
+        const std::string fnJsSrc = static_path("bedrock_viz.js").generic_string();
 
-        //sprintf(tmpstring, "%s/mcpe_viz.css", dirExec.c_str());
-        const std::string fnCssSrc = static_path("mcpe_viz.css").generic_string();
+        //sprintf(tmpstring, "%s/bedrock_viz.css", dirExec.c_str());
+        const std::string fnCssSrc = static_path("bedrock_viz.css").generic_string();
 
         // create html file -- need to substitute one variable (extra js file)
         StringReplacementList replaceStrings;
@@ -884,11 +914,11 @@ namespace mcpe_viz
             if (p) { *p = 0; }
 
             fprintf(fp,
-                "// mcpe_viz javascript helper file -- created by mcpe_viz program\n"
+                "// mcpe_viz javascript helper file -- created by bedrock_viz program\n"
                 "var worldName = '%s';\n"
                 "var worldSeed = %lld;\n"
                 "var creationTime = '%s';\n"
-                "var creationMcpeVizVersion = '%s';\n"
+                "var creationBedrockVizVersion = '%s';\n"
                 "var loadGeoJSONFlag = %s;\n"
                 "var fnGeoJSON = '%s';\n"
                 "var useTilesFlag = %s;\n"
@@ -911,6 +941,24 @@ namespace mcpe_viz
                 double px = playerPositionImageX;
                 double py = playerPositionImageY;
 
+                /* 
+                tomnolan: I'm of the opinion that we should be setting the default position to 0,0 
+                          for any dimensions the player is not located. If the player is in the nether, 
+                          we shouldn't be setting the map position to x/8,z/8 in the overworld because 
+                          this position has no relevance. They may have never traveled to that position
+                          in the overworld ever and a user will see a mass of white space on their screen
+                          when they load the map by default. This is very confusing.
+
+                          I'm removing this for now and setting the default to 0,0 for dimensions the
+                          player is not present.
+                */
+                // set default position to 0
+                if (did != playerPositionDimensionId)
+                {
+                    px = 0;
+                    py = 0;
+                }
+                /*
                 // auto-adjust player position based on where they actually are
                 if (did == kDimIdNether) {
                     if (playerPositionDimensionId != kDimIdNether) {
@@ -924,6 +972,7 @@ namespace mcpe_viz
                         py *= 8;
                     }
                 }
+                */
                 fprintf(fp, "  playerPosX: %lf,\n", px);
                 fprintf(fp, "  playerPosY: %lf,\n", py);
 
@@ -1088,7 +1137,7 @@ namespace mcpe_viz
         fprintf(fpGeoJSON,
             "{ \"type\": \"FeatureCollection\",\n"
             // todo - correct way to specify this?
-            "\"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"mcpe_viz-image\" } },\n"
+            "\"crs\": { \"type\": \"name\", \"properties\": { \"name\": \"bedrock_viz-image\" } },\n"
             "\"features\": [\n"
         );
 

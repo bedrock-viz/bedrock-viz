@@ -359,7 +359,7 @@ namespace mcpe_viz {
         // default config file from home
         if (configFile.empty() && getenv("HOME")) {
             std::string fnHome = getenv("HOME");
-            fnHome += "/.mcpe_viz.cfg";
+            fnHome += "/.bedrock_viz.cfg";
             if (doParseConfigFile(fnHome) == 0)
                 configFile = fnHome;
         }
@@ -367,14 +367,14 @@ namespace mcpe_viz {
         // default config file from profile directory
         if (configFile.empty() && getenv("USERPROFILE")) {
             std::string fnHome = getenv("USERPROFILE");
-            fnHome += "/.mcpe_viz.cfg";
+            fnHome += "/.bedrock_viz.cfg";
             if (doParseConfigFile(fnHome) == 0)
                 configFile = fnHome;
         }
 
         // local data dir
-        if (configFile.empty() && doParseConfigFile(data_path("mcpe_viz.cfg").generic_string()) == 0)
-            configFile = data_path("mcpe_viz.cfg").generic_string();
+        if (configFile.empty() && doParseConfigFile(data_path("bedrock_viz.cfg").generic_string()) == 0)
+            configFile = data_path("bedrock_viz.cfg").generic_string();
 
         if (configFile.empty())
         {
@@ -408,6 +408,11 @@ namespace mcpe_viz {
     int32_t parse_args(int argc, char** argv) {
 
         static struct option longoptlist[] = {
+                // It's a huge pain to try to keep track of the optlist so this will help a bit.
+                //
+                // Unused chars:     E   IJKL NOPQ  TUVW Y     ef   jklmn p  st  wxyz0123456789!    ^&   `~-       |; '",.  /?
+                // Used Chars  : ABCD FGH    M    RS    X Zabcd  ghi     o qr  uv               @#$%  *()   _=+[]{}  :    <>  
+
                 {"db",                 required_argument, nullptr, 'D'},
                 {"outdir",             required_argument, nullptr, 'o'},
                 
@@ -457,6 +462,7 @@ namespace mcpe_viz {
 
                 {"leveldb-filter",     required_argument, nullptr, '<'},
                 {"leveldb-block-size", required_argument, nullptr, '>'},
+                {"leveldb-try-repair", no_argument,       nullptr, 'R'},
 
                 {"verbose",            no_argument,       nullptr, 'v'},
                 {"quiet",              no_argument,       nullptr, 'q'},
@@ -513,6 +519,11 @@ namespace mcpe_viz {
                 if (control.leveldbBlockSize < 0) {
                     control.leveldbBlockSize = 4096;
                 }
+                break;
+            }
+            // --leveldb-try-repair
+            case 'R': {
+                control.tryDbRepair = true;
                 break;
             }
             // --hide-top=did,bid
@@ -902,7 +913,7 @@ int main(int argc, char** argv)
     {
         int ret = 0;
         if (control.fnXml.empty()) {
-            ret = load_xml(data_path("mcpe_viz.xml").generic_string());
+            ret = load_xml(data_path("bedrock_viz.xml").generic_string());
         }
         else {
             ret = load_xml(control.fnXml);

@@ -11,6 +11,8 @@ namespace mcpe_viz {
 
     void record_unknown_block_id(int32_t blockId);
 
+    void record_unknown_biome_id(int32_t blockId);
+
     void record_unknown_item_id(int32_t itemId);
 
     void record_unknown_entity_id(int32_t entityId);

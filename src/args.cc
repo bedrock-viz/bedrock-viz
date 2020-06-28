@@ -68,6 +68,7 @@ Experimental Options:
     --shortrun               Debug testing parameter - process only first 1000 records
     --leveldb-filter=i       Bloom filter supposed to improve disk performance (default: 10)
     --leveldb-block-size=i   The block size of leveldb (default: 4096)
+    --leveldb-try-repair     If the leveldb fails to open, this will attempt to repair the database. Data loss is possible, use carefully.
 )";
 }
 

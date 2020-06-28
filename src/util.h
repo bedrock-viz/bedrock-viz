@@ -159,7 +159,7 @@ namespace mcpe_viz {
             // add text comments to png
             addText("Program", version_full);
             addText("Description", imageDescription);
-            addText("URL", "https://github.com/Plethora777/mcpe_viz");
+            addText("URL", "https://github.com/bedrock-viz/bedrock-viz");
             // todo - other text?
 
             png_write_info(png, info);

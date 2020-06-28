@@ -56,6 +56,7 @@ namespace mcpe_viz {
         bool verboseFlag;
         bool quietFlag;
         char helpFlags;
+        bool tryDbRepair;
         int32_t movieX, movieY, movieW, movieH;
 
         int32_t heightMode;
@@ -103,6 +104,7 @@ namespace mcpe_viz {
             verboseFlag = false;
             quietFlag = false;
             helpFlags = HelpFlags::Basic;
+            tryDbRepair = false;
             movieX = movieY = movieW = movieH = 0;
 
             leveldbFilter = 10;

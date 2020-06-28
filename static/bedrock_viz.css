@@ -186,3 +186,7 @@ div.ol-attribution.ol-unselectable.ol-control.ol-uncollapsible {
 .my-indent {
     padding-left: 1.5em;
 }
+
+.pre-scrollable {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
