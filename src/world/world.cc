@@ -941,6 +941,24 @@ namespace mcpe_viz
                 double px = playerPositionImageX;
                 double py = playerPositionImageY;
 
+                /* 
+                tomnolan: I'm of the opinion that we should be setting the default position to 0,0 
+                          for any dimensions the player is not located. If the player is in the nether, 
+                          we shouldn't be setting the map position to x/8,z/8 in the overworld because 
+                          this position has no relevance. They may have never traveled to that position
+                          in the overworld ever and a user will see a mass of white space on their screen
+                          when they load the map by default. This is very confusing.
+
+                          I'm removing this for now and setting the default to 0,0 for dimensions the
+                          player is not present.
+                */
+                // set default position to 0
+                if (did != playerPositionDimensionId)
+                {
+                    px = 0;
+                    py = 0;
+                }
+                /*
                 // auto-adjust player position based on where they actually are
                 if (did == kDimIdNether) {
                     if (playerPositionDimensionId != kDimIdNether) {
@@ -954,6 +972,7 @@ namespace mcpe_viz
                         py *= 8;
                     }
                 }
+                */
                 fprintf(fp, "  playerPosX: %lf,\n", px);
                 fprintf(fp, "  playerPosY: %lf,\n", py);
 

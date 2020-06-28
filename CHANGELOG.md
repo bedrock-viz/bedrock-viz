@@ -9,14 +9,27 @@
 
 ## bedrock_viz changelog
 
-v0.1.2 - 2020.06.27
+v0.1.2 - 2020.06.28
 
-- Nether update support
-- bedrock-viz rebranding in viewer
-- New version checking routine in viewer
+- Viewer changes
+  - bedrock-viz rebranding
+  - new version checking routine
+  - updated default map position
+  - added marked.js to version view for changelog display
+- Parser changes
+  - Code cleanup / bedrock-viz rebranding
+  - Block-id changes (special thanks to [picotazo](https://github.com/picotazo) for starting this)
+  - Nether update (1.16) support
+  - Removed some nbt processing that was a massive performance hit on parsing.
+  - Memory leak fix
+  - --help changes to make for a better user experience
+  - data/static paths are used properly now
+  - more logging cleanup
+  - leveldb repair option
 - Documentation updates
-- Code cleanup
-- Removed unnecessary nbt processing. massive speed increase to parsing maps.
+  - Build updated
+  - Changelog updated
+  - Contributors updated
 
 v0.1.1 - 2019.12.11
 

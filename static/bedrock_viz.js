@@ -2128,15 +2128,21 @@ function initDimension() {
             target: 'map',
             view: new ol.View({
                 projection: projection,
-                center: [dimensionInfo[globalDimensionId].playerPosX, dimensionInfo[globalDimensionId].playerPosY],
+                center: [
+                    dimensionInfo[globalDimensionId].playerPosX + Math.floor(dimensionInfo[globalDimensionId].worldWidth / 2)
+                   ,dimensionInfo[globalDimensionId].playerPosY + Math.floor(dimensionInfo[globalDimensionId].worldHeight / 2)
+                ],
                 resolution: 1
             })
         });
     } else {
         var view = new ol.View({
             projection: projection,
-            center: [dimensionInfo[globalDimensionId].playerPosX, dimensionInfo[globalDimensionId].playerPosY],
-            resolution: 1
+            center: [
+                dimensionInfo[globalDimensionId].playerPosX + Math.floor(dimensionInfo[globalDimensionId].worldWidth / 2)
+               ,dimensionInfo[globalDimensionId].playerPosY + Math.floor(dimensionInfo[globalDimensionId].worldHeight / 2)
+            ],
+        resolution: 1
         });
         map.setView(view);
     }
@@ -2850,7 +2856,7 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
         msg = 'You are running the latest version: <b>v' + creationBedrockVizVersion + '</b><br/><br/>';
     }
 
-    msg = msg + '<div class="panel panel-default">' +
+    msg += '<div class="panel panel-default">' +
            '<div class="panel-heading" role="tab" id="headingOne">' +
            '<h4 class="panel-title">' +
            '<a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' +
@@ -2866,8 +2872,7 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
 
 function doCheckUpdate_getChangeLog(newVersion) {
     // get data from github
-    //var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
-    var url = 'https://raw.githubusercontent.com/tomnolan/bedrock-viz/master/CHANGELOG.md';
+    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
 
     $.ajax({
         type: 'GET',
@@ -2893,8 +2898,7 @@ function doCheckUpdate_getChangeLog(newVersion) {
 
 function doCheckUpdate() {
     // get data from github
-    //var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
-    var url = 'https://raw.githubusercontent.com/tomnolan/bedrock-viz/master/CHANGELOG.md';
+    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
 
     $.ajax({
         type: 'GET',

@@ -1,9 +1,4 @@
-# Bedrock Viz Contributors
-
-* [jasper-wan](https://github.com/jasper-wan)
-
-  * Maintainer and primary contributor
-  * New features development
+# Bedrock Viz Contributors - alphabetical
 
 * [bazfp](https://github.com/bazfp)
 
@@ -15,12 +10,21 @@
   * Primary contributor
   * dockerfile
   
+* [jasper-wan](https://github.com/jasper-wan)
+
+  * Maintainer and primary contributor
+  * New features development
+
 * [PaulGrahek](https://github.com/paulgrahek)
 
   * Primary contributor
   * CLI updates
   * new blocks
   
+* [picotazo](https://github.com/picotazo)  
+
+  * new blocks and entities xml
+
 * [tomnolan](http://github.com/tomnolan)
 
   * Primary contributor
@@ -28,7 +32,4 @@
   * code cleanup
   * help docs
   * bug fixes
-
-* [picotazo](https://github.com/picotazo)  
-
-  * new blocks and entities xml
+  * viewer updates
