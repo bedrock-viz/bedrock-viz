@@ -1,0 +1,88 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  Ubuntu_18_04:
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Install requirements
+      run: |
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq install libpng++-dev zlib1g-dev g++-8
+    
+    - name: Patch libraries
+      run: |
+        git apply -p0 patches/leveldb-1.22.patch
+        git apply -p0 patches/pugixml-disable-install.patch
+
+    - name: Build
+      run: |
+        mkdir build && cd build
+        export CC=/usr/bin/gcc-8
+        export CXX=/usr/bin/g++-8
+        cmake ..
+        make
+
+  macOS_10_15:
+    runs-on: macos-10.15
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Install requirements
+      run: |
+        brew install libpng
+    
+    - name: Patch libraries
+      run: |
+        git apply -p0 patches/leveldb-1.22.patch
+        git apply -p0 patches/pugixml-disable-install.patch
+
+    - name: Build
+      run: |
+        mkdir build && cd build
+        cmake ..
+        make
+  
+  Windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Set git to use LF
+      run: |
+        git config --global core.autocrlf false
+        git config --global core.eol lf
+        
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.0
+
+    - name: Install requirements
+      run: |
+        vcpkg install zlib:x64-windows libpng:x64-windows
+    
+    - name: Patch libraries
+      run: |
+        git apply -p0 patches/leveldb-1.22.patch
+        git apply -p0 patches/pugixml-disable-install.patch
+    
+    - name: Build
+      run: |
+        mkdir build && cd build
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -G "Visual Studio 16 2019" -A x64
+        msbuild bedrock-viz.sln

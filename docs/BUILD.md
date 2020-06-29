@@ -16,10 +16,10 @@ Installing `zlib` through homebrew is not necessary because macOS already provid
 
 ```sh
 git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
-# patch leveldb and pugixml
+# patch
 cd bedrock-viz
-patch -p0 < patches/leveldb-1.22.patch
-patch -p0 < patches/pugixml-disable-install.patch
+git apply -p0 patches/leveldb-1.22.patch
+git apply -p0 patches/pugixml-disable-install.patch
 # make
 mkdir build && cd build
 cmake ..
@@ -42,10 +42,10 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 ```sh
 git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
-# patch leveldb
+# patch
 cd bedrock-viz
-patch -p0 < patches/leveldb-1.22.patch
-patch -p0 < patches/pugixml-disable-install.patch
+git apply -p0 patches/leveldb-1.22.patch
+git apply -p0 patches/pugixml-disable-install.patch
 # make
 mkdir build && cd build
 # switch gcc-7 to gcc-8
@@ -67,8 +67,6 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 * cmake: https://cmake.org/download/
 
-* patch for windows: <http://gnuwin32.sourceforge.net/packages/patch.htm>
-
 * libpng: `vcpkg install libpng:x64-windows`
 
 * zlib: `vcpkg install zlib:x64-windows`
@@ -76,13 +74,16 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 ### How to compile
 
 ```sh
+# turn off autocrlf
+git config --global core.autocrlf false
+git config --global core.eol lf
+
 git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
 cd bedrock-viz
 
-# patch leveldb
-# !!! change line ending of patch file to CRLF first
-patch -p0 -i patches/leveldb-1.22.patch
-patch -p0 -i patches/pugixml-disable-install.patch
+# patch
+git apply -p0 patches/leveldb-1.22.patch
+git apply -p0 patches/pugixml-disable-install.patch
 # make
 mkdir build
 cd build

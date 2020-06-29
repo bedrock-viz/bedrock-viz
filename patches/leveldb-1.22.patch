@@ -243,8 +243,8 @@ diff -ruN leveldb/include/leveldb/c.h leveldb-mcpe/include/leveldb/c.h
                                                        size_t);
  
 -enum { leveldb_no_compression = 0, leveldb_snappy_compression = 1 };
-+enum { 
-+    leveldb_no_compression = 0, 
++enum {
++    leveldb_no_compression = 0,
 +    leveldb_snappy_compression = 1,
 +    leveldb_zlib_compression = 2,
 +    leveldb_zlib_raw_compression = 4
