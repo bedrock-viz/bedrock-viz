@@ -1,0 +1,18 @@
+--- third_party/pugixml/CMakeLists.txt
++++ third_party/pugixml/CMakeLists.txt
+@@ -159,6 +159,7 @@ write_basic_package_version_file(
+
+ configure_file(scripts/pugixml.pc.in pugixml.pc @ONLY)
+
++if(FALSE)
+ install(TARGETS ${install-targets}
+   EXPORT pugixml-targets
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+@@ -184,6 +185,7 @@ install(
+     "${PROJECT_SOURCE_DIR}/src/pugixml.hpp"
+   DESTINATION
+     ${CMAKE_INSTALL_INCLUDEDIR}${versioned-dir})
++endif()
+
+ if (BUILD_TESTS)
+   set(fuzz-pattern "tests/fuzz_*.cpp")

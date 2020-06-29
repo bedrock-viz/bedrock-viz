@@ -10,15 +10,16 @@
 
 * cmake: `brew install cmake`
 
-Installing `zlib` and `libxml2` through homebrew is not necessary because macOS already provides these libraries.
+Installing `zlib` through homebrew is not necessary because macOS already provides these libraries.
 
 ### How to compile
 
 ```sh
 git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
-# patch leveldb
+# patch leveldb and pugixml
 cd bedrock-viz
 patch -p0 < patches/leveldb-1.22.patch
+patch -p0 < patches/pugixml-disable-install.patch
 # make
 mkdir build && cd build
 cmake ..
@@ -33,9 +34,7 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 * cmake: `sudo apt install cmake`
 
-* libxml2: `sudo apt install libxml2-dev`
-
-* libpng: `sudo apt install libpng++-dev`
+* libpng and zlib: `sudo apt install libpng++-dev zlib1g-dev`
 
 * we use C++ 17 filesystem library, so we need g++-8: `sudo apt install g++-8`
 
@@ -46,6 +45,7 @@ git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
 # patch leveldb
 cd bedrock-viz
 patch -p0 < patches/leveldb-1.22.patch
+patch -p0 < patches/pugixml-disable-install.patch
 # make
 mkdir build && cd build
 # switch gcc-7 to gcc-8
@@ -73,8 +73,6 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 * zlib: `vcpkg install zlib:x64-windows`
 
-* libxml2: `vcpkg install libxml2:x64-windows`
-
 ### How to compile
 
 ```sh
@@ -84,7 +82,7 @@ cd bedrock-viz
 # patch leveldb
 # !!! change line ending of patch file to CRLF first
 patch -p0 -i patches/leveldb-1.22.patch
-
+patch -p0 -i patches/pugixml-disable-install.patch
 # make
 mkdir build
 cd build

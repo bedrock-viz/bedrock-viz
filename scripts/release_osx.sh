@@ -10,7 +10,6 @@ mkdir -p "${BUILDROOT}"
 tar --exclude='./cmake-*' \
     --exclude=".git" \
     --exclude="./release" \
-    --exclude="./scripts" \
     --exclude=".DS_Store" \
     --exclude="./.idea" \
     --exclude="./.vscode" \
