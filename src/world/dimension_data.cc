@@ -1035,34 +1035,6 @@ namespace mcpe_viz {
         return 0;
     }
 
-
-    int32_t DimensionData_LevelDB::doOutput_GeoJSON()
-    {
-        // put spawnable info
-        for (const auto& it : listCheckSpawn) {
-            // spwawnable! add it to the list
-            double ix, iy;
-            char tmpstring[512];
-            worldPointToGeoJSONPoint(dimId, it->x, it->z, ix, iy);
-            sprintf(tmpstring, ""
-                "\"Spawnable\":true,"
-                "\"Name\":\"SpawnableBoundingCircle\","
-                "\"BoundingCircle\":\"1\","
-                "\"Clickable\":\"0\","
-                "\"Dimension\":\"%d\","
-                "\"Radius\":\"%d\","
-                "\"Pos\":[%d,%d,%d]"
-                "}}", dimId, it->distance, it->x, 0, it->z
-            );
-            std::string json = ""
-                + makeGeojsonHeader(ix, iy)
-                + tmpstring;
-            listGeoJSON.push_back(json);
-        }
-
-        return 0;
-    }
-
     int32_t DimensionData_LevelDB::doOutput_Schematic(leveldb::DB* db)
     {
         for (const auto& schematic : listSchematic) {
@@ -1173,8 +1145,6 @@ namespace mcpe_viz {
     int32_t DimensionData_LevelDB::doOutput(leveldb::DB* db)
     {
         log::info("Do Output: {}", name);
-
-        doOutput_GeoJSON();
 
         // we put images in subdir
         std::string fnBase = "bedrock_viz";

@@ -611,30 +611,6 @@ namespace mcpe_viz {
             // --check-spawnable did,x,z,dist
             case 'C': {
                 log::warn("--spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info");
-                errct++;
-
-                bool pass = false;
-                int32_t dimId, checkX, checkZ, checkDistance;
-                if (sscanf(optarg, "%d,%d,%d,%d", &dimId, &checkX, &checkZ, &checkDistance) == 4) {
-                    pass = true;
-                }
-
-                if (pass) {
-                    // todo - check params
-
-                    if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-                        pass = false;
-                    }
-
-                    if (pass) {
-                        world->dimDataList[dimId]->addCheckSpawn(checkX, checkZ, checkDistance);
-                    }
-                }
-
-                if (!pass) {
-                    log::error("Failed to parse --check-spawn {}", optarg);
-                    errct++;
-                }
                 break;
             }
             // --schematic did,x1,y1,z1,x2,y2,z2,fnpart
@@ -947,7 +923,6 @@ int main(int argc, char** argv)
     // todobig - we could call this deepParseDb() and only do it if the user wanted it
     if (true || control.doDetailParseFlag) {
         world->dbParse();
-        world->checkSpawnable();
     }
     world->doOutput();
     world->dbClose();

@@ -988,8 +988,7 @@ namespace mcpe_viz
                 }
                 fprintf(fp, " ],\n");
 
-                fprintf(fp, "  spawnableFlag: %s,\n",
-                    (dimDataList[did]->listCheckSpawn.size() > 0) ? "true" : "false");
+                fprintf(fp, "  spawnableFlag: %s,\n", "false");
 
                 fprintf(fp, "  fnLayerTop: '%s',\n", makeTileURL(this->control->fnLayerTop[did]).c_str());
                 fprintf(fp, "  fnLayerBiome: '%s',\n", makeTileURL(this->control->fnLayerBiome[did]).c_str());

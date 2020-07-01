@@ -109,18 +109,6 @@ namespace mcpe_viz {
         // this is where we go through every item in the leveldb, we parse interesting things as we go
         int32_t dbParse();
 
-        int32_t checkSpawnable() {
-            // for cubic chunks we need to first know that a chunk needs to be checked for spawnable,
-            // then we collect all of that chunk's data and do the spawn checking
-
-            for (int did = 0; did < kDimIdCount; did++) {
-                log::info("Check Spawnable: Dimension '{}' ({})", dimDataList[did]->getName(), did);
-                dimDataList[did]->checkSpawnable(db);
-            }
-
-            return 0;
-        }
-
         int32_t doOutput_Tile_image(const std::string& fn);
 
         int32_t doOutput_Tile();
