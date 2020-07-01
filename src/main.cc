@@ -203,6 +203,7 @@
 #include <filesystem>
 #include <string>
 #include <cstdint>
+#include <iostream>
 
 #include <leveldb/db.h>
 #include <leveldb/cache.h>
@@ -416,10 +417,10 @@ namespace mcpe_viz {
 			("force-top", "Force a block to top block (did=dimension id, bid=block id)")
 			("geojson-block", "Add block to GeoJSON file for use in web app (did=dimension id, bid=block id)")
 			("check-spawn", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
-			("checks-spawnable", "")
+			("checks-spawnable", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
-			("schematic-git", "")
-			("render-dimension", "")
+			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
+			("render-dimension", "Render images for specific dimensions")
 			("all-image", "Create all image types")
 			("biome", "Create a biome map image")
 			("grass", "Create a grass color map image")
@@ -822,7 +823,7 @@ namespace mcpe_viz {
 				return -1;
 			}
 			// --help-experimental
-			if (vm.count("help-extended")) {
+			if (vm.count("help-experimental")) {
 				control.helpFlags = HelpFlags::Basic | HelpFlags::Extended | HelpFlags::Experimental;
 				return -1;
 			}
