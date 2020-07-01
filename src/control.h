@@ -57,6 +57,8 @@ namespace mcpe_viz {
         bool quietFlag;
         char helpFlags;
         bool tryDbRepair;
+        bool useV2Generator;
+        int32_t v2TileSize;
         int32_t movieX, movieY, movieW, movieH;
 
         int32_t heightMode;
@@ -105,6 +107,8 @@ namespace mcpe_viz {
             quietFlag = false;
             helpFlags = HelpFlags::Basic;
             tryDbRepair = false;
+            useV2Generator = false;
+            v2TileSize = 1024;
             movieX = movieY = movieW = movieH = 0;
 
             leveldbFilter = 10;

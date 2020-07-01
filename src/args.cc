@@ -69,6 +69,7 @@ Experimental Options:
     --leveldb-filter=i       Bloom filter supposed to improve disk performance (default: 10)
     --leveldb-block-size=i   The block size of leveldb (default: 4096)
     --leveldb-try-repair     If the leveldb fails to open, this will attempt to repair the database. Data loss is possible, use carefully.
+    --v2=i                   Use experimental image generator with tile size i (default: 1024). i Must be a multiple of 16
 )";
 }
 
