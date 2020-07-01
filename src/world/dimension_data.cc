@@ -2,12 +2,10 @@
 
 #include <random>
 
-#include "../control.h"
 #include "../utils/unknown_recorder.h"
 #include "common.h"
 #include "misc.h"
 #include "point_conversion.h"
-#include "../global.h"
 #include "../nbt.h"
 #include "../utils/fs.h"
 #include "../minecraft/v2/biome.h"
@@ -233,7 +231,7 @@ namespace mcpe_viz {
                         }
                         else if (imageMode == kImageModeHeightCol) {
                             // get height value and use red-black-green palette
-                            if (control.heightMode == kHeightModeTop) {
+                            if (this->control->heightMode == kHeightModeTop) {
                                 uint8_t c = it->topBlockY[cx][cz];
                                 //color = palRedBlackGreen[c];
                                 color = get_palette().value[c];
@@ -245,7 +243,7 @@ namespace mcpe_viz {
                         }
                         else if (imageMode == kImageModeHeightColGrayscale) {
                             // get height value and make it grayscale
-                            if (control.heightMode == kHeightModeTop) {
+                            if (this->control->heightMode == kHeightModeTop) {
                                 uint8_t c = it->topBlockY[cx][cz];
                                 color = (c << 24) | (c << 16) | (c << 8);
                             }
@@ -257,7 +255,7 @@ namespace mcpe_viz {
                         else if (imageMode == kImageModeHeightColAlpha) {
                             // get height value and make it alpha
                             uint8_t c;
-                            if (control.heightMode == kHeightModeTop) {
+                            if (this->control->heightMode == kHeightModeTop) {
                                 c = it->topBlockY[cx][cz];
                             }
                             else {
@@ -313,7 +311,7 @@ namespace mcpe_viz {
                         }
 
                         // do grid lines
-                        if (checkDoForDim(control.doGrid) && (cx == 0 || cz == 0)) {
+                        if (checkDoForDim(this->control->doGrid) && (cx == 0 || cz == 0)) {
                             if ((it->chunkX == 0) && (it->chunkZ == 0) && (cx == 0) && (cz == 0)) {
                                 color = local_htobe32(0xeb3333);
                             }
@@ -468,7 +466,7 @@ namespace mcpe_viz {
             fnameTmp += keybuf;
             fnameTmp += ".png";
 
-            control.fnLayerRaw[dimId][cy] = fnameTmp;
+            this->control->fnLayerRaw[dimId][cy] = fnameTmp;
 
             if (png[cy].init(fnameTmp, makeImageDescription(-1, cy), imageW, imageH, 16, false, true) != 0) {
                 delete[] emuchunk;
@@ -859,10 +857,10 @@ namespace mcpe_viz {
         int32_t cropX, cropZ, cropW, cropH;
 
         if (useCropFlag) {
-            cropX = control.movieX / divisor;
-            cropZ = control.movieY / divisor;
-            cropW = control.movieW / divisor;
-            cropH = control.movieH / divisor;
+            cropX = this->control->movieX / divisor;
+            cropZ = this->control->movieY / divisor;
+            cropW = this->control->movieW / divisor;
+            cropH = this->control->movieH / divisor;
         }
         else {
             cropX = cropZ = 0;
@@ -971,7 +969,7 @@ namespace mcpe_viz {
                                 }
 
                                 // do grid lines
-                                if (checkDoForDim(control.doGrid) && (cx == 0 || cz == 0)) {
+                                if (checkDoForDim(this->control->doGrid) && (cx == 0 || cz == 0)) {
                                     if ((it.second->chunkX == 0) && (it.second->chunkZ == 0) && (cx == 0) &&
                                         (cz == 0)) {
                                         // highlight (0,0)
@@ -1009,7 +1007,7 @@ namespace mcpe_viz {
             fnameTmp += xtmp;
             fnameTmp += ".png";
 
-            control.fnLayerRaw[dimId][cy] = fnameTmp;
+            this->control->fnLayerRaw[dimId][cy] = fnameTmp;
 
             outputPNG(fnameTmp, makeImageDescription(-1, cy), buf, cropW, cropH, false);
         }
@@ -1163,7 +1161,7 @@ namespace mcpe_viz {
                 }
             }
 
-            std::string fnOut = (control.outputDir / ("bedrock_viz.schematic." + schematic->fn + ".nbt")).generic_string();
+            std::string fnOut = (this->control->outputDir / ("bedrock_viz.schematic." + schematic->fn + ".nbt")).generic_string();
 
             writeSchematicFile(fnOut, sizex, sizey, sizez, blockArray, blockDataArray);
 
@@ -1180,84 +1178,84 @@ namespace mcpe_viz {
 
         // we put images in subdir
         std::string fnBase = "bedrock_viz";
-        std::string dirOut = (control.outputDir / "images").generic_string();
+        std::string dirOut = (this->control->outputDir / "images").generic_string();
         local_mkdir(dirOut);
 
         log::info("  Generate Image");
-        control.fnLayerTop[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".map.png");
-        generateImage(control.fnLayerTop[dimId], kImageModeTerrain);
+        this->control->fnLayerTop[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".map.png");
+        generateImage(this->control->fnLayerTop[dimId], kImageModeTerrain);
 
-        if (checkDoForDim(control.doImageBiome)) {
+        if (checkDoForDim(this->control->doImageBiome)) {
             log::info("  Generate Biome Image");
-            control.fnLayerBiome[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".biome.png");
-            generateImage(control.fnLayerBiome[dimId], kImageModeBiome);
+            this->control->fnLayerBiome[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".biome.png");
+            generateImage(this->control->fnLayerBiome[dimId], kImageModeBiome);
         }
-        if (checkDoForDim(control.doImageGrass)) {
+        if (checkDoForDim(this->control->doImageGrass)) {
             log::info("  Generate Grass Image");
-            control.fnLayerGrass[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".grass.png");
-            generateImage(control.fnLayerGrass[dimId], kImageModeGrass);
+            this->control->fnLayerGrass[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".grass.png");
+            generateImage(this->control->fnLayerGrass[dimId], kImageModeGrass);
         }
-        if (checkDoForDim(control.doImageHeightCol)) {
+        if (checkDoForDim(this->control->doImageHeightCol)) {
             log::info("  Generate Height Column Image");
-            control.fnLayerHeight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".height_col.png");
-            generateImage(control.fnLayerHeight[dimId], kImageModeHeightCol);
+            this->control->fnLayerHeight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".height_col.png");
+            generateImage(this->control->fnLayerHeight[dimId], kImageModeHeightCol);
         }
-        if (checkDoForDim(control.doImageHeightColGrayscale)) {
+        if (checkDoForDim(this->control->doImageHeightColGrayscale)) {
             log::info("  Generate Height Column (grayscale) Image");
-            control.fnLayerHeightGrayscale[dimId] = std::string(
+            this->control->fnLayerHeightGrayscale[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".height_col_grayscale.png");
-            generateImage(control.fnLayerHeightGrayscale[dimId], kImageModeHeightColGrayscale);
+            generateImage(this->control->fnLayerHeightGrayscale[dimId], kImageModeHeightColGrayscale);
         }
-        if (checkDoForDim(control.doImageHeightColAlpha)) {
+        if (checkDoForDim(this->control->doImageHeightColAlpha)) {
             log::info("  Generate Height Column (alpha) Image");
-            control.fnLayerHeightAlpha[dimId] = std::string(
+            this->control->fnLayerHeightAlpha[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".height_col_alpha.png");
-            generateImage(control.fnLayerHeightAlpha[dimId], kImageModeHeightColAlpha);
+            generateImage(this->control->fnLayerHeightAlpha[dimId], kImageModeHeightColAlpha);
         }
-        if (checkDoForDim(control.doImageLightBlock)) {
+        if (checkDoForDim(this->control->doImageLightBlock)) {
             log::info("  Generate Block Light Image");
-            control.fnLayerBlockLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_block.png");
-            generateImage(control.fnLayerBlockLight[dimId], kImageModeBlockLight);
+            this->control->fnLayerBlockLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_block.png");
+            generateImage(this->control->fnLayerBlockLight[dimId], kImageModeBlockLight);
         }
-        if (checkDoForDim(control.doImageLightSky)) {
+        if (checkDoForDim(this->control->doImageLightSky)) {
             log::info("  Generate Sky Light Image");
-            control.fnLayerSkyLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_sky.png");
-            generateImage(control.fnLayerSkyLight[dimId], kImageModeSkyLight);
+            this->control->fnLayerSkyLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_sky.png");
+            generateImage(this->control->fnLayerSkyLight[dimId], kImageModeSkyLight);
         }
-        if (checkDoForDim(control.doImageSlimeChunks)) {
+        if (checkDoForDim(this->control->doImageSlimeChunks)) {
             log::info("  Generate Slime Chunks Image");
-            control.fnLayerSlimeChunks[dimId] = std::string(
+            this->control->fnLayerSlimeChunks[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".slime_chunks.png");
-            generateImageSpecial(control.fnLayerSlimeChunks[dimId], kImageModeSlimeChunksMCPE);
+            generateImageSpecial(this->control->fnLayerSlimeChunks[dimId], kImageModeSlimeChunksMCPE);
         }
 
-        if (checkDoForDim(control.doImageShadedRelief)) {
+        if (checkDoForDim(this->control->doImageShadedRelief)) {
             log::info("  Generate Shaded Relief Image");
-            control.fnLayerShadedRelief[dimId] = std::string(
+            this->control->fnLayerShadedRelief[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".shaded_relief.png");
 #if 0
 
             // todobig - idea is to oversample the src image and then get higher resolution shaded relief - but, openlayers does not cooperate with this idea :) -- could fiddle with it later
             // todo - param for oversample
             std::string fnTemp = std::string(dirOut + "/" + fnBase + "." + name + ".shaded_relief.temp.png");
-            if (oversampleImage(control.fnLayerHeightGrayscale[dimId], fnTemp, 2) == 0) {
-                generateShadedRelief(fnTemp, control.fnLayerShadedRelief[dimId]);
+            if (oversampleImage(this->control->fnLayerHeightGrayscale[dimId], fnTemp, 2) == 0) {
+                generateShadedRelief(fnTemp, this->control->fnLayerShadedRelief[dimId]);
                 // remove temporary file
                 deleteFile(fnTemp);
             }
 
 #else
-            generateShadedRelief(control.fnLayerHeightGrayscale[dimId], control.fnLayerShadedRelief[dimId]);
+            generateShadedRelief(this->control->fnLayerHeightGrayscale[dimId], this->control->fnLayerShadedRelief[dimId]);
 #endif
         }
 
-        if (checkDoForDim(control.doMovie)) {
+        if (checkDoForDim(this->control->doMovie)) {
             log::info("  Generate movie");
-            const std::string movieName = (control.outputDir / ("bedrock_viz." + name + ".mp4")).generic_string();
+            const std::string movieName = (this->control->outputDir / ("bedrock_viz." + name + ".mp4")).generic_string();
             generateMovie(db, dirOut + "/" + fnBase, movieName, true, true);
         }
 
-        if (checkDoForDim(control.doSlices)) {
+        if (checkDoForDim(this->control->doSlices)) {
             log::info("  Generate full-size slices");
             generateSlices(db, dirOut + "/" + fnBase);
         }

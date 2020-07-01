@@ -342,7 +342,7 @@ namespace mcpe_viz {
     }
 
 
-    int32_t loadConfigFile() {
+    int32_t loadConfigFile(Control& control) {
         // parse cfg files in this order:
         // -- option specified on command-line
         // -- home dir
@@ -406,7 +406,7 @@ namespace mcpe_viz {
         return did;
     }
 
-    int32_t parse_args(int argc, char** argv) {
+    int32_t parse_args(int argc, char** argv, Control& control) {
 
         static struct option longoptlist[] = {
                 // It's a huge pain to try to keep track of the optlist so this will help a bit.
@@ -477,8 +477,6 @@ namespace mcpe_viz {
         int32_t option_index = 0;
         int32_t optc;
         int32_t errct = 0;
-
-        control.init();
 
         while ((optc = getopt_long_only(argc, argv, "", longoptlist, &option_index)) != -1) {
             switch (optc) {
@@ -904,16 +902,15 @@ int main(int argc, char** argv)
     setup_logger_stage_1();
     // steps:
     // 1. load args from argv
-    // 2. check args, exit and print usage if any error found
+    // 2. check args, exit and print usage if any errors found
     // 3. load xml and cfg
-    // 4. create then world
-    // 5. parse world
-    // 6. generate output
-    // 7. print warning of unknown blocks/items
-    
-    world = std::make_unique<MinecraftWorld_LevelDB>();
+    // 4. create and parse the world
+    // 5. generate output
+    // 6. print warnings of unknown blocks/items/unames
 
-    if (parse_args(argc, argv) != 0) {
+
+    Control control;
+    if (parse_args(argc, argv, control) != 0) {
         mcpe_viz::print_usage(control.helpFlags);
         return -1;
     }
@@ -939,13 +936,16 @@ int main(int argc, char** argv)
         }
     }
     
-    loadConfigFile();
-    
+    if (loadConfigFile(control) != 0) {
+        return -1;
+    }
+
+    world = std::make_unique<MinecraftWorld_LevelDB>(&control);
     world->init();
-    world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
+    world->dbOpen();
     // todobig - we must do this, for now - we could get clever about this later
     // todobig - we could call this deepParseDb() and only do it if the user wanted it
-    if (true || mcpe_viz::control.doDetailParseFlag) {
+    if (true || control.doDetailParseFlag) {
         world->dbParse();
         world->checkSpawnable();
     }

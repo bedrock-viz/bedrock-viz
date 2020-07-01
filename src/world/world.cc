@@ -37,7 +37,8 @@ namespace
 
 namespace mcpe_viz
 {
-    MinecraftWorld_LevelDB::MinecraftWorld_LevelDB()
+    MinecraftWorld_LevelDB::MinecraftWorld_LevelDB(Control* ctrl)
+        : control(ctrl)
     {
         db = nullptr;
 
@@ -51,11 +52,11 @@ namespace mcpe_viz
         dbOptions->create_if_missing = false;
 
         // this filter is supposed to reduce disk reads - light testing indicates that it is faster when doing 'html-all'
-        if (control.leveldbFilter > 0) {
-            dbOptions->filter_policy = leveldb::NewBloomFilterPolicy(control.leveldbFilter);
+        if (this->control->leveldbFilter > 0) {
+            dbOptions->filter_policy = leveldb::NewBloomFilterPolicy(this->control->leveldbFilter);
         }
 
-        dbOptions->block_size = control.leveldbBlockSize;
+        dbOptions->block_size = this->control->leveldbBlockSize;
 
         //create a 40 mb cache (we use this on ~1gb devices)
         dbOptions->block_cache = leveldb::NewLRUCache(40 * 1024 * 1024);
@@ -66,7 +67,7 @@ namespace mcpe_viz
         dbOptions->compression = leveldb::kZlibRawCompression;
 
         for (int32_t i = 0; i < kDimIdCount; i++) {
-            dimDataList[i] = std::make_unique<DimensionData_LevelDB>();
+            dimDataList[i] = std::make_unique<DimensionData_LevelDB>(this->control);
             dimDataList[i]->setDimId(i);
             dimDataList[i]->unsetChunkBoundsValid();
         }
@@ -125,14 +126,14 @@ namespace mcpe_viz
 
     int32_t MinecraftWorld_LevelDB::init()
     {
-        int32_t ret = parseLevelFile(std::string(control.dirLeveldb + "/level.dat"));
+        int32_t ret = parseLevelFile(std::string(this->control->dirLeveldb + "/level.dat"));
         if (ret != 0) {
             log::error("Failed to parse level.dat file.  Exiting...");
             log::error("** Hint: --db must point to the dir which contains level.dat");
             return -1;
         }
 
-        ret = parseLevelName(std::string(control.dirLeveldb + "/levelname.txt"));
+        ret = parseLevelName(std::string(this->control->dirLeveldb + "/levelname.txt"));
         if (ret != 0) {
             log::warn("WARNING: Failed to parse levelname.txt file.");
             log::warn("** Hint: --db must point to the dir which contains levelname.txt");
@@ -146,18 +147,19 @@ namespace mcpe_viz
         return 0;
     }
 
-    int32_t MinecraftWorld_LevelDB::dbOpen(const std::string& dirDb)
+    int32_t MinecraftWorld_LevelDB::dbOpen()
     {
         // todobig - leveldb read-only? snapshot?
         // note: seems impossible, see <https://github.com/google/leveldb/issues/182>
+        const auto& dirDb = this->control->dirLeveldb;
         log::info("DB Open: dir={}", dirDb);
         leveldb::Status openstatus = leveldb::DB::Open(*dbOptions, std::string(dirDb + "/db"), &db);
-        log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", openstatus.ToString(), control.leveldbBlockSize, control.leveldbFilter);
+        log::info("DB Open Status: {} (block_size={} bloom_filter_bits={})", openstatus.ToString(), this->control->leveldbBlockSize, this->control->leveldbFilter);
         fflush(stderr);
         if (!openstatus.ok()) {
             log::error("LevelDB operation returned status={}", openstatus.ToString());
             
-            if (control.tryDbRepair)
+            if (this->control->tryDbRepair)
             {
                 log::info("Attempting leveldb repair due to failed open");
                 leveldb::Options options_;
@@ -210,7 +212,7 @@ namespace mcpe_viz
             key = skey.data();
 
             ++recordCt;
-            if (control.shortRunFlag && recordCt > 1000) {
+            if (this->control->shortRunFlag && recordCt > 1000) {
                 break;
             }
 
@@ -361,7 +363,7 @@ namespace mcpe_viz
             cdata = svalue.data();
 
             ++recordCt;
-            if (control.shortRunFlag && recordCt > 1000) {
+            if (this->control->shortRunFlag && recordCt > 1000) {
                 break;
             }
             if ((recordCt % 10000) == 0) {
@@ -623,7 +625,7 @@ namespace mcpe_viz
                     // "BlockExtraData"
                     log::debug("{} 0x34 chunk (TODO - MYSTERY RECORD - BlockExtraData)",
                         dimName.c_str());
-                    if (control.verboseFlag) {
+                    if (this->control->verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // according to tommo (https://www.reddit.com/r/MCPE/comments/5cw2tm/level_format_changes_in_mcpe_0171_100/)
@@ -641,7 +643,7 @@ namespace mcpe_viz
                     // "BiomeState"
                     log::debug("{} 0x35 chunk (BiomeState)",
                         dimName);
-                    if (control.verboseFlag) {
+                    if (this->control->verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // according to tommo (https://www.reddit.com/r/MCPE/comments/5cw2tm/level_format_changes_in_mcpe_0171_100/)
@@ -657,7 +659,7 @@ namespace mcpe_viz
                 case 0x36:
                     // new for v1.2?
                     log::trace("{} 0x36 chunk (FinalizedState)", dimName);
-                    if (control.verboseFlag) {
+                    if (this->control->verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - what is this?
@@ -667,7 +669,7 @@ namespace mcpe_viz
                 case 0x39:
                     // Bounding boxes for structure spawns stored in binary format
                     log::debug("{} 0x39 chunk (HardCodedSpawnAreas)", dimName);
-                    if (control.verboseFlag) {
+                    if (this->control->verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - probably used for outposts and things of that nature
@@ -676,7 +678,7 @@ namespace mcpe_viz
                 case 0x3b:
                     // Appears to be a list of checksums for chunk data. Upcoming in 1.16
                     log::trace("{} 0x3b chunk (checksum?)", dimName);
-                    if (control.verboseFlag) {
+                    if (this->control->verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - what is this?
@@ -693,7 +695,7 @@ namespace mcpe_viz
                         ,dimName
                         ,int(cdata[0]));
                     /*
-                    if (control.verboseFlag || ((cdata[0] != 2) && (cdata[0] != 3) && (cdata[0] != 9))) {
+                    if (this->control->verboseFlag || ((cdata[0] != 2) && (cdata[0] != 3) && (cdata[0] != 9))) {
                         if (cdata[0] != 2 && cdata[0] != 9) {
                             log::debug("UNKNOWN CHUNK VERSION!  {} 0x76 chunk (world format version): v={}",
                                 dimName, int(cdata[0]));
@@ -816,10 +818,10 @@ namespace mcpe_viz
             return -1;
         }
 
-        std::string dirOut = (control.outputDir / "tiles").generic_string();
+        std::string dirOut = (this->control->outputDir / "tiles").generic_string();
         local_mkdir(dirOut);
         log::info("Creating tiles for {}...", mybasename(fn));
-        PngTiler pngTiler(fn, control.tileWidth, control.tileHeight, dirOut);
+        PngTiler pngTiler(fn, this->control->tileWidth, this->control->tileHeight, dirOut);
         if (pngTiler.doTile() == 0) {
             // all is good
         }
@@ -833,23 +835,23 @@ namespace mcpe_viz
 
     int32_t MinecraftWorld_LevelDB::doOutput_Tile()
     {
-        if (!control.doTiles) {
+        if (!this->control->doTiles) {
             return 0;
         }
 
         for (int32_t dimid = 0; dimid < kDimIdCount; dimid++) {
-            doOutput_Tile_image(control.fnLayerTop[dimid]);
-            doOutput_Tile_image(control.fnLayerBiome[dimid]);
-            doOutput_Tile_image(control.fnLayerHeight[dimid]);
-            doOutput_Tile_image(control.fnLayerHeightGrayscale[dimid]);
-            doOutput_Tile_image(control.fnLayerHeightAlpha[dimid]);
-            doOutput_Tile_image(control.fnLayerBlockLight[dimid]);
-            doOutput_Tile_image(control.fnLayerSkyLight[dimid]);
-            doOutput_Tile_image(control.fnLayerSlimeChunks[dimid]);
-            doOutput_Tile_image(control.fnLayerGrass[dimid]);
-            doOutput_Tile_image(control.fnLayerShadedRelief[dimid]);
+            doOutput_Tile_image(this->control->fnLayerTop[dimid]);
+            doOutput_Tile_image(this->control->fnLayerBiome[dimid]);
+            doOutput_Tile_image(this->control->fnLayerHeight[dimid]);
+            doOutput_Tile_image(this->control->fnLayerHeightGrayscale[dimid]);
+            doOutput_Tile_image(this->control->fnLayerHeightAlpha[dimid]);
+            doOutput_Tile_image(this->control->fnLayerBlockLight[dimid]);
+            doOutput_Tile_image(this->control->fnLayerSkyLight[dimid]);
+            doOutput_Tile_image(this->control->fnLayerSlimeChunks[dimid]);
+            doOutput_Tile_image(this->control->fnLayerGrass[dimid]);
+            doOutput_Tile_image(this->control->fnLayerShadedRelief[dimid]);
             for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
-                doOutput_Tile_image(control.fnLayerRaw[dimid][cy]);
+                doOutput_Tile_image(this->control->fnLayerRaw[dimid][cy]);
             }
         }
 
@@ -859,7 +861,7 @@ namespace mcpe_viz
     std::string MinecraftWorld_LevelDB::makeTileURL(const std::string& fn)
     {
         std::string ret = mybasename(fn);
-        if (!control.doTiles) {
+        if (!this->control->doTiles) {
             return "images/" + ret;
         }
         if (ret.size() > 1) {
@@ -886,19 +888,19 @@ namespace mcpe_viz
         // create html file -- need to substitute one variable (extra js file)
         StringReplacementList replaceStrings;
 
-        if (!control.noForceGeoJSONFlag) {
+        if (!this->control->noForceGeoJSONFlag) {
             // we do include the geojson file
             replaceStrings.push_back(std::make_pair(std::string("%JSFILE%"),
                 "<script src=\"" +
-                std::string(mybasename(control.fnGeoJSON().generic_string().c_str())) +
+                std::string(mybasename(this->control->fnGeoJSON().generic_string().c_str())) +
                 "\"></script>"
             )
             );
         }
-        copyFileWithStringReplacement(fnHtmlSrc, control.fnHtml().generic_string(), replaceStrings);
+        copyFileWithStringReplacement(fnHtmlSrc, this->control->fnHtml().generic_string(), replaceStrings);
 
         // create javascript file w/ filenames etc
-        FILE* fp = fopen(control.fnJs().generic_string().c_str(), "w");
+        FILE* fp = fopen(this->control->fnJs().generic_string().c_str(), "w");
         if (fp) {
             time_t xtime = time(NULL);
             char timebuf[256];
@@ -925,10 +927,10 @@ namespace mcpe_viz
                 "var tileH = %d;\n"
                 "var dimensionInfo = {\n", escapeString(getWorldName().c_str(), "'").c_str(),
                 (long long int) getWorldSeed(), escapeString(timebuf, "'").c_str(),
-                version, control.noForceGeoJSONFlag ? "true" : "false",
-                mybasename(control.fnGeoJSON().generic_string()).c_str(),
-                control.doTiles ? "true" : "false", control.tileWidth,
-                control.tileHeight
+                version, this->control->noForceGeoJSONFlag ? "true" : "false",
+                mybasename(this->control->fnGeoJSON().generic_string()).c_str(),
+                this->control->doTiles ? "true" : "false", this->control->tileWidth,
+                this->control->tileHeight
             );
             for (int32_t did = 0; did < kDimIdCount; did++) {
                 fprintf(fp, "'%d': {\n", did);
@@ -989,21 +991,21 @@ namespace mcpe_viz
                 fprintf(fp, "  spawnableFlag: %s,\n",
                     (dimDataList[did]->listCheckSpawn.size() > 0) ? "true" : "false");
 
-                fprintf(fp, "  fnLayerTop: '%s',\n", makeTileURL(control.fnLayerTop[did]).c_str());
-                fprintf(fp, "  fnLayerBiome: '%s',\n", makeTileURL(control.fnLayerBiome[did]).c_str());
-                fprintf(fp, "  fnLayerHeight: '%s',\n", makeTileURL(control.fnLayerHeight[did]).c_str());
+                fprintf(fp, "  fnLayerTop: '%s',\n", makeTileURL(this->control->fnLayerTop[did]).c_str());
+                fprintf(fp, "  fnLayerBiome: '%s',\n", makeTileURL(this->control->fnLayerBiome[did]).c_str());
+                fprintf(fp, "  fnLayerHeight: '%s',\n", makeTileURL(this->control->fnLayerHeight[did]).c_str());
                 fprintf(fp, "  fnLayerHeightGrayscale: '%s',\n",
-                    makeTileURL(control.fnLayerHeightGrayscale[did]).c_str());
-                fprintf(fp, "  fnLayerHeightAlpha: '%s',\n", makeTileURL(control.fnLayerHeightAlpha[did]).c_str());
+                    makeTileURL(this->control->fnLayerHeightGrayscale[did]).c_str());
+                fprintf(fp, "  fnLayerHeightAlpha: '%s',\n", makeTileURL(this->control->fnLayerHeightAlpha[did]).c_str());
                 fprintf(fp, "  fnLayerShadedRelief: '%s',\n",
-                    makeTileURL(control.fnLayerShadedRelief[did]).c_str());
-                fprintf(fp, "  fnLayerBlockLight: '%s',\n", makeTileURL(control.fnLayerBlockLight[did]).c_str());
-                fprintf(fp, "  fnLayerSlimeChunks: '%s',\n", makeTileURL(control.fnLayerSlimeChunks[did]).c_str());
-                fprintf(fp, "  fnLayerGrass: '%s',\n", makeTileURL(control.fnLayerGrass[did]).c_str());
+                    makeTileURL(this->control->fnLayerShadedRelief[did]).c_str());
+                fprintf(fp, "  fnLayerBlockLight: '%s',\n", makeTileURL(this->control->fnLayerBlockLight[did]).c_str());
+                fprintf(fp, "  fnLayerSlimeChunks: '%s',\n", makeTileURL(this->control->fnLayerSlimeChunks[did]).c_str());
+                fprintf(fp, "  fnLayerGrass: '%s',\n", makeTileURL(this->control->fnLayerGrass[did]).c_str());
 
                 fprintf(fp, "  listLayers: [\n");
                 for (int32_t i = 0; i <= MAX_BLOCK_HEIGHT; i++) {
-                    fprintf(fp, "    '%s',\n", makeTileURL(control.fnLayerRaw[did][i]).c_str());
+                    fprintf(fp, "    '%s',\n", makeTileURL(this->control->fnLayerRaw[did][i]).c_str());
                 }
                 fprintf(fp, "  ]\n");
                 if ((did + 1) < kDimIdCount) {
@@ -1079,11 +1081,11 @@ namespace mcpe_viz
         }
         else {
             log::error("Failed to open javascript output file (fn={} error={} ({}))",
-                control.fnJs().generic_string(), strerror(errno), errno);
+                this->control->fnJs().generic_string(), strerror(errno), errno);
         }
 
         // copy helper files to destination directory
-        std::string dirDest = control.outputDir.generic_string();
+        std::string dirDest = this->control->outputDir.generic_string();
 
         if (dirDest.size() > 0 && dirDest != ".") {
             // todo - how to be sure that this is a diff dir?
@@ -1122,15 +1124,15 @@ namespace mcpe_viz
     {
         // plain text file version
 
-        FILE* fpGeoJSON = fopen(control.fnGeoJSON().generic_string().c_str(), "w");
+        FILE* fpGeoJSON = fopen(this->control->fnGeoJSON().generic_string().c_str(), "w");
         if (!fpGeoJSON) {
             log::error("Failed to create GeoJSON output file ({} error={} ({}))",
-                control.fnGeoJSON().generic_string(), strerror(errno), errno);
+                this->control->fnGeoJSON().generic_string(), strerror(errno), errno);
             return -1;
         }
 
         // put the geojson preamble stuff
-        if (!control.noForceGeoJSONFlag) {
+        if (!this->control->noForceGeoJSONFlag) {
             fprintf(fpGeoJSON, "var geojson =\n");
         }
         fprintf(fpGeoJSON,
@@ -1151,7 +1153,7 @@ namespace mcpe_viz
         }
 
         // close out the geojson properly
-        if (control.noForceGeoJSONFlag) {
+        if (this->control->noForceGeoJSONFlag) {
             fprintf(fpGeoJSON, "] }\n");
         }
         else {
@@ -1172,9 +1174,9 @@ namespace mcpe_viz
             dimDataList[i]->doOutput(db);
         }
 
-        if (control.doHtml) {
+        if (this->control->doHtml) {
 
-            if (control.autoTileFlag) {
+            if (this->control->autoTileFlag) {
                 int32_t xdimId = kDimIdOverworld;
                 const int32_t chunkW = (dimDataList[xdimId]->getMaxChunkX() - dimDataList[xdimId]->getMinChunkX() +
                     1);
@@ -1187,7 +1189,7 @@ namespace mcpe_viz
                 int32_t maxImageSize = 5000;
                 if (imageW > maxImageSize || imageH > maxImageSize) {
                     log::info("Detected large images and 'auto-tile' is enabled, enabling tiles");
-                    control.doTiles = true;
+                    this->control->doTiles = true;
                 }
             }
 

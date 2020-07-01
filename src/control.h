@@ -74,7 +74,7 @@ namespace mcpe_viz {
         Control() {
             init();
         }
-
+    private:
         void init() {
             dirLeveldb = "";
             fnXml = "";
@@ -134,6 +134,4 @@ namespace mcpe_viz {
             }
         }
     };
-
-    extern Control control;
 }

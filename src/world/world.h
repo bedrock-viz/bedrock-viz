@@ -9,6 +9,7 @@
 
 #include "dimension_data.h"
 #include "common.h"
+#include "../control.h"
 
 namespace mcpe_viz {
 
@@ -57,12 +58,13 @@ namespace mcpe_viz {
         leveldb::DB* db;
         std::unique_ptr<leveldb::Options> dbOptions;
         int32_t totalRecordCt;
+        Control* control;
 
     public:
         // todobig - move to private?
         std::unique_ptr<DimensionData_LevelDB> dimDataList[kDimIdCount];
 
-        MinecraftWorld_LevelDB();
+        MinecraftWorld_LevelDB(Control* ctrl);
 
         ~MinecraftWorld_LevelDB() {
             dbClose();
@@ -92,7 +94,7 @@ namespace mcpe_viz {
 
         int32_t init();
 
-        int32_t dbOpen(const std::string& dirDb);
+        int32_t dbOpen();
 
         int32_t dbClose() {
             if (db != nullptr) {

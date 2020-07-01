@@ -10,6 +10,7 @@
 #include "../minecraft/schematic.h"
 #include "../define.h"
 #include "block_list.h"
+#include "../control.h"
 
 // define this to use memcpy instead of manual copy of individual pixel values
  // memcpy appears to be approx 1.3% faster for another1 --html-all
@@ -34,6 +35,8 @@ namespace mcpe_viz {
         int32_t worldSpawnX, worldSpawnZ;
         int64_t worldSeed;
 
+        Control* control;
+
         bool chunks_has_key(const ChunkData_LevelDB_Map& m, const ChunkKey& k) {
             return m.find(k) != m.end();
         }
@@ -42,7 +45,9 @@ namespace mcpe_viz {
         CheckSpawnList listCheckSpawn;
         SchematicList listSchematic;
 
-        DimensionData_LevelDB() {
+        explicit DimensionData_LevelDB(Control* ctrl)
+            : control{ctrl}
+        {
             name = "(UNKNOWN)";
             dimId = -1;
             chunkBoundsValid = false;
