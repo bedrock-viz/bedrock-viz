@@ -304,8 +304,7 @@ namespace mcpe_viz
             int32_t itemCt = 0;
             int32_t blockId;
             for (int32_t dimId = 0; dimId < kDimIdCount; dimId++) {
-                dimDataList[dimId]->updateFastLists();
-                for (const auto& iter : dimDataList[dimId]->blockHideList) {
+                for (const auto& iter : BlockList::Hide.set(dimId)) {
                     blockId = iter;
                     log::info("  'hide-top' block: {} - {} (dimId={} blockId={} (0x{:x}))",
                         dimDataList[dimId]->getName(),
@@ -314,7 +313,7 @@ namespace mcpe_viz
                     itemCt++;
                 }
 
-                for (const auto& iter : dimDataList[dimId]->blockForceTopList) {
+                for (const auto& iter : BlockList::ForceTop.set(dimId)) {
                     blockId = iter;
                     log::info("  'force-top' block: {} - {} (dimId={} blockId={} (0x{:x}))",
                         dimDataList[dimId]->getName(),
@@ -323,7 +322,7 @@ namespace mcpe_viz
                     itemCt++;
                 }
 
-                for (const auto& iter : dimDataList[dimId]->blockToGeoJSONList) {
+                for (const auto& iter : BlockList::ToGeoJSON.set(dimId)) {
                     blockId = iter;
                     log::info("  'geojson' block: {} - {} (dimId={} blockId={} (0x{:x}))",
                         dimDataList[dimId]->getName(),
@@ -978,8 +977,8 @@ namespace mcpe_viz
 
                 // list of blocks that were added to geojson
                 fprintf(fp, "  geojsonBlocks: [ ");
-                int32_t llen = int32_t(dimDataList[did]->blockToGeoJSONList.size());
-                for (const auto& it : dimDataList[did]->blockToGeoJSONList) {
+                auto llen = int32_t(BlockList::ToGeoJSON.set(did).size());
+                for (const auto& it : BlockList::ToGeoJSON.set(did)) {
                     fprintf(fp, "'%s'", Block::queryName(it).c_str());
                     if (--llen > 0) {
                         fprintf(fp, ", ");

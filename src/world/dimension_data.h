@@ -9,6 +9,7 @@
 #include "chunk_data.h"
 #include "../minecraft/schematic.h"
 #include "../define.h"
+#include "block_list.h"
 
 // define this to use memcpy instead of manual copy of individual pixel values
  // memcpy appears to be approx 1.3% faster for another1 --html-all
@@ -28,10 +29,6 @@ namespace mcpe_viz {
         int32_t minChunkZ, maxChunkZ;
         bool chunkBoundsValid;
 
-        bool fastBlockForceTopList[1024];
-        bool fastBlockHideList[1024];
-        bool fastBlockToGeoJSONList[1024];
-
         // convenience vars from world object
         std::string worldName;
         int32_t worldSpawnX, worldSpawnZ;
@@ -42,11 +39,6 @@ namespace mcpe_viz {
         }
 
     public:
-        // todobig - move these to private?
-        std::vector<int32_t> blockForceTopList;
-        std::vector<int32_t> blockHideList;
-        std::vector<int32_t> blockToGeoJSONList;
-
         CheckSpawnList listCheckSpawn;
         SchematicList listSchematic;
 
@@ -70,7 +62,6 @@ namespace mcpe_viz {
             worldSeed = wSeed;
         }
 
-        void updateFastLists();
 
         void setName(const std::string& s) {
             name = s;
@@ -129,8 +120,9 @@ namespace mcpe_viz {
                 // pre-0.17
                 chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
                 return chunks[chunkKey]->_do_chunk_v2(chunkX, chunkZ, cdata, dimId, name,
-                    fastBlockHideList, fastBlockForceTopList,
-                    fastBlockToGeoJSONList,
+                                                      BlockList::Hide.list(this->dimId),
+                                                      BlockList::ForceTop.list(this->dimId),
+                                                      BlockList::ToGeoJSON.list(this->dimId),
                     listCheckSpawn);
                 return 0;
             case 3:
@@ -142,9 +134,10 @@ namespace mcpe_viz {
                 }
 
                 return chunks[chunkKey]->_do_chunk_v3(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
-                    fastBlockHideList, fastBlockForceTopList,
-                    fastBlockToGeoJSONList,
-                    listCheckSpawn);
+                                                      BlockList::Hide.list(this->dimId),
+                                                      BlockList::ForceTop.list(this->dimId),
+                                                      BlockList::ToGeoJSON.list(this->dimId),
+                                                      listCheckSpawn);
             case 7:
                 // 1.2.x betas?
                 // we need to process all sub-chunks, not just blindy add them
@@ -154,9 +147,10 @@ namespace mcpe_viz {
                 }
 
                 return chunks[chunkKey]->_do_chunk_v7(chunkX, chunkY, chunkZ, cdata, cdata_size, dimId, name,
-                    fastBlockHideList, fastBlockForceTopList,
-                    fastBlockToGeoJSONList,
-                    listCheckSpawn);
+                                                      BlockList::Hide.list(this->dimId),
+                                                      BlockList::ForceTop.list(this->dimId),
+                                                      BlockList::ToGeoJSON.list(this->dimId),
+                                                      listCheckSpawn);
             }
             log::error("Unknown chunk format ({})", tchunkFormatVersion);
             return -1;

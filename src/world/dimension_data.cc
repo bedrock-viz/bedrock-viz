@@ -13,18 +13,6 @@
 #include "../minecraft/v2/biome.h"
 #include "../minecraft/v2/block.h"
 
-namespace
-{
-    bool vectorContains(const std::vector<int>& v, int32_t i)
-    {
-        for (const auto& iter : v) {
-            if (iter == i) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
 
 namespace
 {
@@ -126,14 +114,6 @@ namespace
 }
 
 namespace mcpe_viz {
-    void DimensionData_LevelDB::updateFastLists()
-    {
-        for (int32_t bid = 0; bid < 1024; bid++) {
-            fastBlockHideList[bid] = vectorContains(blockHideList, bid);
-            fastBlockForceTopList[bid] = vectorContains(blockForceTopList, bid);
-            fastBlockToGeoJSONList[bid] = vectorContains(blockToGeoJSONList, bid);
-        }
-    }
 
     bool DimensionData_LevelDB::checkDoForDim(int32_t v) const
     {
