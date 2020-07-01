@@ -410,8 +410,8 @@ namespace mcpe_viz {
         static struct option longoptlist[] = {
                 // It's a huge pain to try to keep track of the optlist so this will help a bit.
                 //
-                // Unused chars:     E   IJKL NOPQ  TUVW Y     ef   jklmn p  st  wxyz0123456789!    ^&   `~-       |; '",.  /?
-                // Used Chars  : ABCD FGH    M    RS    X Zabcd  ghi     o qr  uv               @#$%  *()   _=+[]{}  :    <>  
+                // Unused chars:     E   IJKL NOPQ  TUVW Y     ef   jklmn p  st  wxyz01 3456789!    ^&   `~-       |; '",.  /?
+                // Used Chars  : ABCD FGH    M    RS    X Zabcd  ghi     o qr  uv      2        @#$%  *()   _=+[]{}  :    <>
 
                 {"db",                 required_argument, nullptr, 'D'},
                 {"outdir",             required_argument, nullptr, 'o'},
@@ -469,6 +469,7 @@ namespace mcpe_viz {
                 {"help",               no_argument,       nullptr, 'h'},
                 {"help-extended",      no_argument,       nullptr, 'u'},
                 {"help-experimental",  no_argument,       nullptr, 'i'},
+                {"v2",                 no_argument,       nullptr, '2'},
                 {nullptr,              no_argument,       nullptr, 0}
         };
 
@@ -849,6 +850,19 @@ namespace mcpe_viz {
             case 'i': {
                 control.helpFlags = HelpFlags::Basic | HelpFlags::Extended | HelpFlags::Experimental;
                 return -1;
+            }
+            // --v2=i
+            case '2': {
+                control.useV2Generator = true;
+                int32_t tileSize = atoi(optarg);
+                if (tileSize % 16 != 0) {
+                    log::warn("Invalid tile size supplied ({}), defaulting to {}",
+                            tileSize, control.v2TileSize);
+                }
+                else {
+                    control.v2TileSize = tileSize;
+                }
+                break;
             }
             // unknown option
             default: {
