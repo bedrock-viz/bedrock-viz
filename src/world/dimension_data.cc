@@ -1037,7 +1037,7 @@ namespace mcpe_viz {
 
     int32_t DimensionData_LevelDB::doOutput_Schematic(leveldb::DB* db)
     {
-        for (const auto& schematic : listSchematic) {
+        for (const auto& schematic : control->schematicList[this->dimId]) {
             int32_t sizex = schematic->x2 - schematic->x1 + 1;
             int32_t sizey = schematic->y2 - schematic->y1 + 1;
             int32_t sizez = schematic->z2 - schematic->z1 + 1;

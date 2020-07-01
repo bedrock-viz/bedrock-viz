@@ -1,10 +1,13 @@
 #pragma once
 
+#include <memory>
 #include <string>
 #include <filesystem>
+#include <vector>
 
 #include "define.h"
 #include "global.h"
+#include "minecraft/schematic.h"
 
 namespace mcpe_viz {
 
@@ -71,6 +74,8 @@ namespace mcpe_viz {
         // this is the block_size used by leveldb
         int32_t leveldbBlockSize = 4096;
 
+        std::vector<SchematicList> schematicList;
+
         Control() {
             init();
         }
@@ -131,7 +136,15 @@ namespace mcpe_viz {
                 for (int32_t i = 0; i <= MAX_BLOCK_HEIGHT; i++) {
                     fnLayerRaw[did][i] = "";
                 }
+                this->schematicList.emplace_back(SchematicList());
             }
+        }
+    public:
+        int32_t addSchematic(int32_t dimId, int32_t x1, int32_t y1, int32_t z1,
+                             int32_t x2, int32_t y2, int32_t z2,
+                             const char* fnSchematic) {
+            this->schematicList[dimId].push_back(std::make_unique<Schematic>(x1, y1, z1, x2, y2, z2, fnSchematic));
+            return 0;
         }
     };
 }

@@ -634,7 +634,7 @@ namespace mcpe_viz {
                     }
 
                     if (pass) {
-                        world->dimDataList[dimId]->addSchematic(x1, y1, z1, x2, y2, z2, fnSchematic);
+                        control.addSchematic(dimId, x1, y1, z1, x2, y2, z2, fnSchematic);
                     }
                 }
 
@@ -925,7 +925,6 @@ int main(int argc, char** argv)
         world->dbParse();
     }
     world->doOutput();
-    world->dbClose();
 
     print_unknown_warnings();
     log::info("Done.");

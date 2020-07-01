@@ -182,18 +182,6 @@ namespace mcpe_viz {
         //todolib - move this out?
         bool checkDoForDim(int32_t v) const;
 
-        // todolib - move this out?
-        int32_t addSchematic(int32_t x1, int32_t y1, int32_t z1,
-            int32_t x2, int32_t y2, int32_t z2,
-            const char* fnSchematic) {
-            listSchematic.push_back(std::unique_ptr<Schematic>(new Schematic(x1, y1, z1, x2, y2, z2, fnSchematic)));
-            return 0;
-        }
-
-        int32_t addSchematic(const Schematic& sc) {
-            listSchematic.push_back(std::unique_ptr<Schematic>(new Schematic(sc)));
-            return 0;
-        }
 
         void worldPointToImagePoint(double wx, double wz, double& ix, double& iy, bool geoJsonFlag) {
             const int32_t chunkOffsetX = -minChunkX;

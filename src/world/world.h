@@ -54,22 +54,19 @@ namespace mcpe_viz {
 
 
     class MinecraftWorld_LevelDB : public MinecraftWorld {
-    private:
         leveldb::DB* db;
         std::unique_ptr<leveldb::Options> dbOptions;
-        int32_t totalRecordCt;
-        Control* control;
-
-    public:
-        // todobig - move to private?
+        int32_t totalRecordCt = 0;
+        Control* const control;
         std::unique_ptr<DimensionData_LevelDB> dimDataList[kDimIdCount];
-
-        MinecraftWorld_LevelDB(Control* ctrl);
+    public:
+        explicit MinecraftWorld_LevelDB(Control* ctrl);
 
         ~MinecraftWorld_LevelDB() {
-            dbClose();
+            delete this->db;
+            this->db = nullptr;
         }
-
+    private:
         int32_t parseLevelFile(const std::string& fname);
 
         int32_t parseLevelName(const std::string& fname) {
@@ -92,37 +89,27 @@ namespace mcpe_viz {
             return 0;
         }
 
-        int32_t init();
-
-        int32_t dbOpen();
-
-        int32_t dbClose() {
-            if (db != nullptr) {
-                delete db;
-                db = nullptr;
-            }
-            return 0;
-        }
-
         int32_t calcChunkBounds();
-
-        // this is where we go through every item in the leveldb, we parse interesting things as we go
-        int32_t dbParse();
 
         int32_t doOutput_Tile_image(const std::string& fn);
 
         int32_t doOutput_Tile();
 
-
         std::string makeTileURL(const std::string& fn);
-
 
         int32_t doOutput_html();
 
         int32_t doOutput_GeoJSON();
 
+    public:
+        int32_t init();
+
+        int32_t dbOpen();
 
         int32_t doOutput();
+
+        // this is where we go through every item in the leveldb, we parse interesting things as we go
+        int32_t dbParse();
 
         void worldPointToImagePoint(int32_t dimId, double wx, double wz, double& ix, double& iy, bool geoJsonFlag) {
             // hack to avoid using wrong dim on pre-0.12 worlds
