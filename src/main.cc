@@ -505,10 +505,11 @@ namespace mcpe_viz {
 			if (vm.count("hide-top")) {
 				bool pass = false;
 				int32_t dimId, blockId;
-				if (sscanf(optarg, "%d,0x%x", &dimId, &blockId) == 2) {
+				std::string optarg = vm["hide-top"].as<std::string>();
+				if (sscanf(optarg.c_str(), "%d,0x%x", &dimId, &blockId) == 2) {
 					pass = true;
 				}
-				else if (sscanf(optarg, "%d,%d", &dimId, &blockId) == 2) {
+				else if (sscanf(optarg.c_str(), "%d,%d", &dimId, &blockId) == 2) {
 					pass = true;
 				}
 
@@ -523,7 +524,7 @@ namespace mcpe_viz {
 				}
 
 				if (!pass) {
-					log::error("Failed to parse --hide-top {}", optarg);
+					log::error("Failed to parse --hide-top {}", optarg.c_str());
 					errct++;
 				}
 			}	
@@ -531,10 +532,11 @@ namespace mcpe_viz {
 			if (vm.count("force-top")) {
 				bool pass = false;
 				int32_t dimId, blockId;
-				if (sscanf(optarg, "%d,0x%x", &dimId, &blockId) == 2) {
+				std::string optarg = vm["force-top"].as<std::string>();
+				if (sscanf(optarg.c_str(), "%d,0x%x", &dimId, &blockId) == 2) {
 					pass = true;
 				}
-				else if (sscanf(optarg, "%d,%d", &dimId, &blockId) == 2) {
+				else if (sscanf(optarg.c_str(), "%d,%d", &dimId, &blockId) == 2) {
 					pass = true;
 				}
 
@@ -549,7 +551,7 @@ namespace mcpe_viz {
 				}
 
 				if (!pass) {
-					log::error("Failed to parse --force-top {}", optarg);
+					log::error("Failed to parse --force-top {}", optarg.c_str());
 					errct++;
 				}
 			}
@@ -557,10 +559,11 @@ namespace mcpe_viz {
 			if (vm.count("geojson-block")) {
 				bool pass = false;
 				int32_t dimId, blockId;
-				if (sscanf(optarg, "%d,0x%x", &dimId, &blockId) == 2) {
+				std::string optarg = vm["geojson-block"].as<std::string>();
+				if (sscanf(optarg.c_str(), "%d,0x%x", &dimId, &blockId) == 2) {
 					pass = true;
 				}
-				else if (sscanf(optarg, "%d,%d", &dimId, &blockId) == 2) {
+				else if (sscanf(optarg.c_str(), "%d,%d", &dimId, &blockId) == 2) {
 					pass = true;
 				}
 
@@ -575,7 +578,7 @@ namespace mcpe_viz {
 				}
 
 				if (!pass) {
-					log::error("Failed to parse --geojson-block {}", optarg);
+					log::error("Failed to parse --geojson-block {}", optarg.c_str());
 					errct++;
 				}
 			}
@@ -587,7 +590,14 @@ namespace mcpe_viz {
 
 				bool pass = false;
 				int32_t dimId, checkX, checkZ, checkDistance;
-				if (sscanf(optarg, "%d,%d,%d,%d", &dimId, &checkX, &checkZ, &checkDistance) == 4) {
+				std::string optarg;
+				if (vm.count("check-spawn")) {
+					optarg = vm["check-spawn"].as<std::string>();
+				}
+				if (vm.count("check-spawnable")) {
+					optarg = vm["check-spawnable"].as<std::string>();
+				}
+				if (sscanf(optarg.c_str(), "%d,%d,%d,%d", &dimId, &checkX, &checkZ, &checkDistance) == 4) {
 					pass = true;
 				}
 
@@ -604,7 +614,7 @@ namespace mcpe_viz {
 				}
 
 				if (!pass) {
-					log::error("Failed to parse --check-spawn {}", optarg);
+					log::error("Failed to parse --check-spawn {}", optarg.c_str());
 					errct++;
 				}
 			}
@@ -615,8 +625,15 @@ namespace mcpe_viz {
 				int32_t dimId = 0, x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
 				char fnSchematic[2048];
 				memset(fnSchematic, 0, 2048);
+				std::string optarg;
+				if (vm.count("schematic")) {
+					optarg = vm["schematic"].as<std::string>();
+				}
+				if (vm.count("schematic-get")) {
+					optarg = vm["schematic-get"].as<std::string>();
+				}
 				// todo - ugly sscanf for a string
-				if (sscanf(optarg, "%d,%d,%d,%d,%d,%d,%d,%s", &dimId, &x1, &y1, &z1, &x2, &y2, &z2, fnSchematic) ==
+				if (sscanf(optarg.c_str(), "%d,%d,%d,%d,%d,%d,%d,%s", &dimId, &x1, &y1, &z1, &x2, &y2, &z2, fnSchematic) ==
 					8) {
 					pass = true;
 				}
@@ -633,13 +650,14 @@ namespace mcpe_viz {
 				}
 
 				if (!pass) {
-					log::error("Failed to parse --schematic {}", optarg);
+					log::error("Failed to parse --schematic {}", optarg.c_str());
 					errct++;
 				}
 			}
 			// --grid[=did]
 			if (vm.count("grid")) {
-				control.doGrid = parseDimIdOptArg(optarg);
+				std::string optarg = vm["grid"].as<std::string>();
+				control.doGrid = parseDimIdOptArg(optarg.c_str());
 			}
 			// --html
 			if (vm.count("html")) {
@@ -648,15 +666,16 @@ namespace mcpe_viz {
 			// --tiles[=tilew,tileh]
 			if (vm.count("tiles")) {
 				control.doTiles = true;
-				if (optarg) {
+				std::string optarg = vm["tiles"].as<std::string>();
+				if (!optarg.empty()) {
 					int32_t tw, th;
-					if (sscanf(optarg, "%d,%d", &tw, &th) == 2) {
+					if (sscanf(optarg.c_str(), "%d,%d", &tw, &th) == 2) {
 						control.tileWidth = tw;
 						control.tileHeight = th;
 						log::info("Overriding tile dimensions: {} x {}", tw, th);
 					}
 					else {
-						log::error("Failed to parse --tiles ({})", optarg ? optarg : "null");
+						log::error("Failed to parse --tiles ({})", !optarg.empty() ? optarg : "null");
 						errct++;
 					}
 				}
@@ -769,13 +788,14 @@ namespace mcpe_viz {
 			}
 			// --movie-dim x,y,w,h
 			if (vm.count("movie-dim")) {
+				std::string optarg = vm["movie-dim"].as<std::string>();
 				// movie dimensions
-				if (sscanf(optarg, "%d,%d,%d,%d", &control.movieX, &control.movieY, &control.movieW,
+				if (sscanf(optarg.c_str(), "%d,%d,%d,%d", &control.movieX, &control.movieY, &control.movieW,
 					&control.movieH) == 4) {
 					// good
 				}
 				else {
-					log::error("Failed to parse --movie-dim ({})", optarg);
+					log::error("Failed to parse --movie-dim ({})", optarg.c_str());
 					errct++;
 				}
 			}
