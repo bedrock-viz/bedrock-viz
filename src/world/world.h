@@ -69,25 +69,7 @@ namespace mcpe_viz {
     private:
         int32_t parseLevelFile(const std::string& fname);
 
-        int32_t parseLevelName(const std::string& fname) {
-            FILE* fp = fopen(fname.c_str(), "r");
-            if (!fp) {
-                log::error("Failed to open input file (fn={} error={} ({}))", fname, strerror(errno), errno);
-                return -1;
-            }
-
-            char buf[1025];
-            memset(buf, 0, 1025);
-            fgets(buf, 1024, fp);
-
-            setWorldName(buf);
-
-            log::info("levelname.txt: Level name is '{}'", strlen(buf) > 0 ? buf : "(UNKNOWN)");
-            
-            fclose(fp);
-
-            return 0;
-        }
+        int32_t parseLevelName(const std::string& fname);
 
         int32_t calcChunkBounds();
 
@@ -101,10 +83,10 @@ namespace mcpe_viz {
 
         int32_t doOutput_GeoJSON();
 
+        int32_t dbOpen();
+
     public:
         int32_t init();
-
-        int32_t dbOpen();
 
         int32_t doOutput();
 
@@ -117,6 +99,12 @@ namespace mcpe_viz {
 
             return dimDataList[dimId]->worldPointToImagePoint(wx, wz, ix, iy, geoJsonFlag);
         }
+
+        // the old way of image generation
+        void doProcessV1();
+
+        // the new way
+        void doProcessV2();
 
     };
 

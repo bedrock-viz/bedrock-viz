@@ -124,6 +124,27 @@ namespace mcpe_viz
         return ret;
     }
 
+    int32_t MinecraftWorld_LevelDB::parseLevelName(const std::string &fname)
+    {
+        FILE* fp = fopen(fname.c_str(), "r");
+        if (!fp) {
+            log::error("Failed to open input file (fn={} error={} ({}))", fname, strerror(errno), errno);
+            return -1;
+        }
+
+        char buf[1025];
+        memset(buf, 0, 1025);
+        fgets(buf, 1024, fp);
+
+        setWorldName(buf);
+
+        log::info("levelname.txt: Level name is '{}'", strlen(buf) > 0 ? buf : "(UNKNOWN)");
+
+        fclose(fp);
+
+        return 0;
+    }
+
     int32_t MinecraftWorld_LevelDB::init()
     {
         int32_t ret = parseLevelFile(std::string(this->control->dirLeveldb + "/level.dat"));
@@ -144,7 +165,7 @@ namespace mcpe_viz
             dimDataList[i]->setWorldInfo(getWorldName(), getWorldSpawnX(), getWorldSpawnZ(), getWorldSeed());
         }
 
-        return 0;
+        return this->dbOpen();
     }
 
     int32_t MinecraftWorld_LevelDB::dbOpen()
@@ -1198,6 +1219,23 @@ namespace mcpe_viz
         }
 
         return 0;
+    }
+
+    void MinecraftWorld_LevelDB::doProcessV1()
+    {
+        // todobig - we must do this, for now - we could get clever about this later
+        // todobig - we could call this deepParseDb() and only do it if the user wanted it
+        if (true || this->control->doDetailParseFlag) {
+            world->dbParse();
+        }
+        world->doOutput();
+    }
+
+    void MinecraftWorld_LevelDB::doProcessV2()
+    {
+        log::warn("Using Image Generator V2 with tile size: {}", this->control->v2TileSize);
+        world->dbParse();
+        world->doOutput();
     }
 
     std::unique_ptr<MinecraftWorld_LevelDB> world;

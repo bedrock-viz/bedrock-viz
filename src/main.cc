@@ -470,7 +470,7 @@ namespace mcpe_viz {
                 {"help",               no_argument,       nullptr, 'h'},
                 {"help-extended",      no_argument,       nullptr, 'u'},
                 {"help-experimental",  no_argument,       nullptr, 'i'},
-                {"v2",                 no_argument,       nullptr, '2'},
+                {"v2",                 optional_argument, nullptr, '2'},
                 {nullptr,              no_argument,       nullptr, 0}
         };
 
@@ -863,7 +863,7 @@ namespace mcpe_viz {
         std::string fnTest = (control.outputDir / "level.dat").generic_string();
         if (file_exists(fnTest)) {
             errct++;
-            log::error("You cannot send mcpe_viz output to a world file data directory");
+            log::error("You cannot send bedrock_viz output to a world file data directory");
         }
 
         return errct;
@@ -917,14 +917,18 @@ int main(int argc, char** argv)
     }
 
     world = std::make_unique<MinecraftWorld_LevelDB>(&control);
-    world->init();
-    world->dbOpen();
-    // todobig - we must do this, for now - we could get clever about this later
-    // todobig - we could call this deepParseDb() and only do it if the user wanted it
-    if (true || control.doDetailParseFlag) {
-        world->dbParse();
+
+    if (world->init() != 0) {
+        log::error("Failed to init world");
+        return -1;
     }
-    world->doOutput();
+    if (control.useV2Generator) {
+        world->doProcessV2();
+    }
+    else {
+        world->doProcessV1();
+    }
+
 
     print_unknown_warnings();
     log::info("Done.");
