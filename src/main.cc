@@ -388,7 +388,7 @@ namespace mcpe_viz {
 	std::vector<int> parseDimIdOptArgs(std::vector<std::string> dimIdStrings) {
 		std::vector<int> dimIds;
 		for (auto dimIdStr : dimIdStrings) {
-			int32_t did = atoi(dimIdStr);
+			int32_t did = std::stoi(dimIdStr);
 			if (did < kDimIdOverworld && did >= kDimIdCount) {
 				// Invalid ID
 				log::warn("Invalid dimension-id supplied ({}), skipping", did); 
@@ -413,17 +413,26 @@ namespace mcpe_viz {
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("render-dimension", "Render images for specific dimensions")
-			("all-image", value<std::vector<std::string>>()->multitoken()
-			 	->default_value(std::vector<std::string>({"0","1","2"})), "Create all image types")
-			("biome", value<std::vector<std::string>>(), "Create a biome map image")
-			("grass", value<std::vector<std::string>>(), "Create a grass color map image")
-			("height-col", value<std::vector<std::string>>(), "Create a height column map image (red is below sea; gray is sea; green is above sea)")
-			("height-col-gs", value<std::vector<std::string>>(), "Create a height column map image (grayscale)")
-			("height-col-alpha", value<std::vector<std::string>>(), "Create a height column map image (alpha)")
-			("shaded-relief", value<std::vector<std::string>>(), "Create a shaded relief image")
-			("blocklight", value<std::vector<std::string>>(), "Create a block light map image")
-			("skylight", value<std::vector<std::string>>(), "Create a sky light map image")
-			("slime-chunk", value<std::vector<std::string>>(), "Create a slime chunk map image")
+			("all-image", value<std::vector<std::string>>()->multitoken(), 
+				"Create all image types")
+			("biome", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a biome map image")
+			("grass", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a grass color map image")
+			("height-col", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a height column map image (red is below sea; gray is sea; green is above sea)")
+			("height-col-gs", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a height column map image (grayscale)")
+			("height-col-alpha", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a height column map image (alpha)")
+			("shaded-relief", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a shaded relief image")
+			("blocklight", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a block light map image")
+			("skylight", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a sky light map image")
+			("slime-chunk", value<std::vector<std::string>>()->multitoken(),
+			 	"Create a slime chunk map image")
 			("slices", "Create slices (one image for each layer)")
 			("movie", "Create movie of layers")
 			("movie-dim", "Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)")
@@ -689,7 +698,7 @@ namespace mcpe_viz {
 					control.doImageLightBlock =
 					control.doImageLightSky =
 					control.doImageSlimeChunks =
-						kDoOutputAll;
+						kDimIdAll;
 			}
 			// --html-all
 			if (vm.count("html-all")) {
@@ -703,8 +712,8 @@ namespace mcpe_viz {
 					control.doImageLightBlock =
 					control.doImageLightSky =
 					control.doImageSlimeChunks =
-						kDoOutputAll;
-					control.doSlices = kDoOutputAll;
+						kDimIdAll;
+					control.doSlices = kDimIdAll;
 			}
 			// --no-force-geojson
 			if (vm.count("no-force-geojson")) {
