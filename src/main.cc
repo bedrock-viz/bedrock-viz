@@ -385,25 +385,17 @@ namespace mcpe_viz {
             return 0;
     }
 
-    int32_t parseDimIdOptArg(const char* arg) {
-        int32_t did = kDoOutputAll;
-        if (arg) {
-            did = atoi(arg);
-
-            // sanity check
-            if (did >= kDimIdOverworld && did < kDimIdCount) {
-                // all is good
-            }
-            else {
-                log::warn("Invalid dimension-id supplied ({}), defaulting to Overworld only", did);
-                did = kDimIdOverworld;
-            }
-        }
-        else {
-            // if no arg, we want output for all dimensions
-        }
-        return did;
-    }
+	std::vector<int> parseDimIdOptArgs(std::vector<std::string> dimIdStrings) {
+		std::vector<int> dimIds;
+		for (auto dimIdStr : dimIdStrings) {
+			int32_t did = atoi(dimIdStr);
+			if (did < kDimIdOverworld && did >= kDimIdCount) {
+				// Invalid ID
+				log::warn("Invalid dimension-id supplied ({}), skipping", did); 
+			}
+		}
+		return dimIds;
+	}
 
     int32_t parse_args(int argc, char** argv) {
 		options_description desc{"Options"};
@@ -421,16 +413,17 @@ namespace mcpe_viz {
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("render-dimension", "Render images for specific dimensions")
-			("all-image", "Create all image types")
-			("biome", "Create a biome map image")
-			("grass", "Create a grass color map image")
-			("height-col", "Create a height column map image (red is below sea; gray is sea; green is above sea)")
-			("height-col-gs", "Create a height column map image (grayscale)")
-			("height-col-alpha", "Create a height column map image (alpha)")
-			("shaded-relief", "Create a shaded relief image")
-			("blocklight", "Create a block light map image")
-			("skylight", "Create a sky light map image")
-			("slime-chunk", "Create a slime chunk map image")
+			("all-image", value<std::vector<std::string>>()->multitoken()
+			 	->default_value(std::vector<std::string>({"0","1","2"})), "Create all image types")
+			("biome", value<std::vector<std::string>>(), "Create a biome map image")
+			("grass", value<std::vector<std::string>>(), "Create a grass color map image")
+			("height-col", value<std::vector<std::string>>(), "Create a height column map image (red is below sea; gray is sea; green is above sea)")
+			("height-col-gs", value<std::vector<std::string>>(), "Create a height column map image (grayscale)")
+			("height-col-alpha", value<std::vector<std::string>>(), "Create a height column map image (alpha)")
+			("shaded-relief", value<std::vector<std::string>>(), "Create a shaded relief image")
+			("blocklight", value<std::vector<std::string>>(), "Create a block light map image")
+			("skylight", value<std::vector<std::string>>(), "Create a sky light map image")
+			("slime-chunk", value<std::vector<std::string>>(), "Create a slime chunk map image")
 			("slices", "Create slices (one image for each layer)")
 			("movie", "Create movie of layers")
 			("movie-dim", "Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)")
@@ -657,8 +650,7 @@ namespace mcpe_viz {
 			}
 			// --grid[=did]
 			if (vm.count("grid")) {
-				std::string optarg = vm["grid"].as<std::string>();
-				control.doGrid = parseDimIdOptArg(optarg.c_str());
+				control.doGrid = parseDimIdOptArgs(vm["grid"].as<std::vector<std::string>>());
 			}
 			// --html
 			if (vm.count("html")) {
@@ -720,52 +712,42 @@ namespace mcpe_viz {
 			}
 			// --biome[=did]
 			if (vm.count("biome")) {
-				std::string optarg = vm["biome"].as<std::string>(); 
-				control.doImageBiome = parseDimIdOptArg(optarg.c_str());
+				control.doImageBiome = parseDimIdOptArgs(vm["biome"].as<std::vector<std::string>>());
 			}
 			// --grass[=did]
 			if (vm.count("grass")) {
-				std::string optarg = vm["grass"].as<std::string>(); 
-				control.doImageGrass = parseDimIdOptArg(optarg.c_str());
+				control.doImageGrass = parseDimIdOptArgs(vm["grass"].as<std::vector<std::string>>());
 			}
 			// --height-col[=did]
 			if (vm.count("height-col")) {
-				std::string optarg = vm["height-col"].as<std::string>(); 
-				control.doImageHeightCol = parseDimIdOptArg(optarg.c_str());
+				control.doImageHeightCol = parseDimIdOptArgs(vm["height-col"].as<std::vector<std::string>>());
 			}
 			// --height-col-gs[=did]
 			if (vm.count("height-col-gs")) {
-				std::string optarg = vm["height-col-gs"].as<std::string>(); 
-				control.doImageHeightColGrayscale = parseDimIdOptArg(optarg.c_str());
+				control.doImageHeightColGrayscale = parseDimIdOptArgs(vm["height-col-gs"].as<std::vector<std::string>>());
 			}
 			// --height-col-alpha[=did]
 			if (vm.count("height-col-alpha")) {
-				std::string optarg = vm["height-col-alpha"].as<std::string>(); 
-				control.doImageHeightColAlpha = parseDimIdOptArg(optarg.c_str());
+				control.doImageHeightColAlpha = parseDimIdOptArgs(vm["height-col-alpha"].as<std::vector<std::string>>());
 			}
 			// --shaded-relief[=did]
 			if (vm.count("shaded-relief")) {
-				std::string optarg = vm["shaded-relief"].as<std::string>(); 
-				control.doImageShadedRelief = parseDimIdOptArg(optarg.c_str());
+				control.doImageShadedRelief = parseDimIdOptArgs(vm["shaded-relief"].as<std::vector<std::string>>());
 			}
 			// --blocklight[=did]
 			if (vm.count("blocklight")) {
-				std::string optarg = vm["blocklight"].as<std::string>(); 
-				control.doImageLightBlock = parseDimIdOptArg(optarg.c_str());
+				control.doImageLightBlock = parseDimIdOptArgs(vm["blocklight"].as<std::vector<std::string>>());
 			}
 			// --skylight[=did]
 			if (vm.count("skylight")) {
-				std::string optarg = vm["skylight"].as<std::string>(); 
-				control.doImageLightSky = parseDimIdOptArg(optarg.c_str());
+				control.doImageLightSky = parseDimIdOptArgs(vm["skylight"].as<std::vector<std::string>>());
 			}
 			// --slime-chunk[=did]
 			if (vm.count("slime-chunk")) {
-				std::string optarg = vm["slime-chunk"].as<std::string>(); 
-				control.doImageSlimeChunks = parseDimIdOptArg(optarg.c_str());
+				control.doImageSlimeChunks = parseDimIdOptArgs(vm["slime-chunk"].as<std::vector<std::string>>());
 			}
 			// --all-image[=did]
 			if (vm.count("all-image")) {
-				std::string optarg = vm["all-image"].as<std::string>();
 				control.doImageBiome =
 					control.doImageGrass =
 					control.doImageHeightCol =
@@ -775,17 +757,15 @@ namespace mcpe_viz {
 					control.doImageLightBlock =
 					control.doImageLightSky =
 					control.doImageSlimeChunks =
-					parseDimIdOptArg(optarg.c_str());
+					parseDimIdOptArgs(vm["all-image"].as<std::vector<std::string>>());
 			}
 			// --slices[=did]
 			if (vm.count("slices")) {
-				std::string optarg = vm["slices"].as<std::string>();
-				control.doSlices = parseDimIdOptArg(optarg.c_str());
+				control.doSlices = parseDimIdOptArgs(vm["slices"].as<std::vector<std::string>>());
 			}
 			// --movie[=did]
 			if (vm.count("movie")) {
-				std::string optarg = vm["movie"].as<std::string>();
-				control.doMovie = parseDimIdOptArg(optarg.c_str());
+				control.doMovie = parseDimIdOptArgs(vm["movie"].as<std::vector<std::string>>());
 			}
 			// --movie-dim x,y,w,h
 			if (vm.count("movie-dim")) {
