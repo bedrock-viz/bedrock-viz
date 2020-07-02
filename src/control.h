@@ -40,7 +40,7 @@ namespace mcpe_viz {
 		std::vector<int> doSlices;
 		std::vector<int> doGrid;
 		int doHtml;
-		int doTiles;
+		bool doTiles;
 		std::vector<int> doImageBiome;
 		std::vector<int> doImageGrass;
 		std::vector<int> doImageHeightCol;
@@ -97,8 +97,8 @@ namespace mcpe_viz {
 
             autoTileFlag = false;
             // todobig - reasonable default? strike a balance between speed/# of files
-            tileWidth = 1024;
-            tileHeight = 1024;
+            tileWidth = 2048;
+            tileHeight = 2048;
 
             shortRunFlag = false;
             verboseFlag = false;

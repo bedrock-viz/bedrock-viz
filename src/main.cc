@@ -412,7 +412,7 @@ namespace mcpe_viz {
 			("checks-spawnable", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
-			("render-dimension", "Render images for specific dimensions")
+			//("render-dimension", "Render all images for specific dimensions")
 			("all-image", value<std::vector<std::string>>()->multitoken(), 
 				"Create all image types")
 			("biome", value<std::vector<std::string>>()->multitoken(),

@@ -1184,8 +1184,8 @@ namespace mcpe_viz
                     1);
                 const int32_t imageH = chunkH * 16;
 
-                // todobig - 5000 a reasonable default max image size before we auto-tile?
-                int32_t maxImageSize = 5000;
+                // todobig - 2048 a reasonable default max image size before we auto-tile?
+                int32_t maxImageSize = 2048;
                 if (imageW > maxImageSize || imageH > maxImageSize) {
                     log::info("Detected large images and 'auto-tile' is enabled, enabling tiles");
                     control.doTiles = true;
