@@ -414,7 +414,7 @@ namespace mcpe_viz {
 			("checks-spawnable", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
-			("map-dimension", "Render map images for specific dimensions")
+			("render-dimension", "Render map images for specified dimensions")
 			("all-image", value<std::vector<std::string>>()->multitoken(), 
 				"Create all image types")
 			("biome", value<std::vector<std::string>>()->multitoken(),
@@ -457,8 +457,16 @@ namespace mcpe_viz {
 		
 
 		command_line_parser parser{argc,argv};
-		parser.options(desc);
+		parser.options(desc).allow_unregistered();
 		parsed_options parsed_options = parser.run();
+		std::vector<std::string> unrecognized_opts = collect_unrecognized(parsed_options.options,exclude_positional);
+		if(unrecognized_opts.size()){
+			log::error("Invalid parameters detected:");
+			for(auto param : unrecognized_opts){
+				log::error(param);
+			}
+			return -1;
+		}
 		variables_map vm;
 		store(parsed_options, vm);
 		notify(vm);
