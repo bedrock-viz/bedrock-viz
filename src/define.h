@@ -45,6 +45,7 @@ namespace mcpe_viz {
     };
 
 	const std::vector<int> kDimIdAll{kDimIdOverworld, kDimIdNether, kDimIdTheEnd};
+    const std::vector<int> kDimIdNone{};
 
     const int32_t kColorDefault = 0xff00ff;
 }

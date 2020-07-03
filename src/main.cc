@@ -389,10 +389,12 @@ namespace mcpe_viz {
 		std::vector<int> dimIds;
 		for (auto dimIdStr : dimIdStrings) {
 			int32_t did = std::stoi(dimIdStr);
-			if (did < kDimIdOverworld && did >= kDimIdCount) {
+			if (did < kDimIdOverworld || did >= kDimIdCount) {
 				// Invalid ID
 				log::warn("Invalid dimension-id supplied ({}), skipping", did); 
+				continue;
 			}
+			dimIds.push_back(did);
 		}
 		return dimIds;
 	}
@@ -412,7 +414,7 @@ namespace mcpe_viz {
 			("checks-spawnable", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
-			//("render-dimension", "Render all images for specific dimensions")
+			("map-dimension", "Render map images for specific dimensions")
 			("all-image", value<std::vector<std::string>>()->multitoken(), 
 				"Create all image types")
 			("biome", value<std::vector<std::string>>()->multitoken(),

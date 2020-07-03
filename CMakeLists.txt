@@ -23,7 +23,6 @@ add_executable(bedrock-viz
 )
 
 if(MSVC)
-  target_sources(bedrock-viz PRIVATE "src/getopt/getopt.c")
   # TODO remove all insecure c functions
   add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif(MSVC)
@@ -101,7 +100,6 @@ if(BEDROCK_VIZ_BUILD_TESTS)
     )
 
     if(MSVC)
-      target_sources("${test_target_name}" PRIVATE "src/getopt/getopt.c")
       # TODO remove all insecure c functions
       add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
     endif(MSVC)

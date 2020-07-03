@@ -79,20 +79,20 @@ namespace mcpe_viz {
             outputDir = std::filesystem::path("output");
             doDetailParseFlag = false;
 
-            doMovie = kDimIdAll;
-            doSlices = kDimIdAll;
-            doGrid = kDimIdAll;
+            doMovie = kDimIdNone;
+            doSlices = kDimIdNone;
+            doGrid = kDimIdNone;
             doHtml = 0;
             doTiles = 0;
-            doImageBiome = kDimIdAll;
-            doImageGrass = kDimIdAll;
-            doImageHeightCol = kDimIdAll;
-            doImageHeightColGrayscale = kDimIdAll;
-            doImageHeightColAlpha = kDimIdAll;
-            doImageLightBlock = kDimIdAll;
-            doImageLightSky = kDimIdAll;
-            doImageSlimeChunks = kDimIdAll;
-            doImageShadedRelief = kDimIdAll;
+            doImageBiome = kDimIdNone;
+            doImageGrass = kDimIdNone;
+            doImageHeightCol = kDimIdNone;
+            doImageHeightColGrayscale = kDimIdNone;
+            doImageHeightColAlpha = kDimIdNone;
+            doImageLightBlock = kDimIdNone;
+            doImageLightSky = kDimIdNone;
+            doImageSlimeChunks = kDimIdNone;
+            doImageShadedRelief = kDimIdNone;
             noForceGeoJSONFlag = false;
 
             autoTileFlag = false;
