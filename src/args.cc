@@ -16,8 +16,9 @@ Options:
     --html                   Create html and javascript files to use as a fancy viewer
     --html-most              Create html, javascript, and most image files to use as a fancy viewer
     --html-all               Create html, javascript, and *all* image files to use as a fancy viewer
-    --auto-tile              Automatically tile the images if they are very large
-    --tiles[=tilew,tileh]    Create tiles in subdirectory tiles/ (useful for LARGE worlds)
+    --no-tile                Generates single images instead of tiling output into smaller images. May cause loading problems if image size is > 4096px by 4096px
+    --tile-size=[width,height] 
+                             Changes tile sizes to specified dimensions (Default: 2048px by 2048px)
 
     --slices[=did]           Create slices (one image for each layer)
     --movie[=did]            Create movie of layers

@@ -1174,23 +1174,24 @@ namespace mcpe_viz
         }
 
         if (control.doHtml) {
+            
+            // TODO: Remove this whole block?
+            // if (control.autoTileFlag) {
+            //     int32_t xdimId = kDimIdOverworld;
+            //     const int32_t chunkW = (dimDataList[xdimId]->getMaxChunkX() - dimDataList[xdimId]->getMinChunkX() +
+            //         1);
+            //     const int32_t imageW = chunkW * 16;
+            //     const int32_t chunkH = (dimDataList[xdimId]->getMaxChunkZ() - dimDataList[xdimId]->getMinChunkZ() +
+            //         1);
+            //     const int32_t imageH = chunkH * 16;
 
-            if (control.autoTileFlag) {
-                int32_t xdimId = kDimIdOverworld;
-                const int32_t chunkW = (dimDataList[xdimId]->getMaxChunkX() - dimDataList[xdimId]->getMinChunkX() +
-                    1);
-                const int32_t imageW = chunkW * 16;
-                const int32_t chunkH = (dimDataList[xdimId]->getMaxChunkZ() - dimDataList[xdimId]->getMinChunkZ() +
-                    1);
-                const int32_t imageH = chunkH * 16;
-
-                // todobig - 2048 a reasonable default max image size before we auto-tile?
-                int32_t maxImageSize = 2048;
-                if (imageW > maxImageSize || imageH > maxImageSize) {
-                    log::info("Detected large images and 'auto-tile' is enabled, enabling tiles");
-                    control.doTiles = true;
-                }
-            }
+            //     // todobig - 2048 a reasonable default max image size before we auto-tile?
+            //     int32_t maxImageSize = 2048;
+            //     if (imageW > maxImageSize || imageH > maxImageSize) {
+            //         log::info("Detected large images and 'auto-tile' is enabled, enabling tiles");
+            //         control.doTiles = true;
+            //     }
+            // }
 
             doOutput_Tile();
             doOutput_html();

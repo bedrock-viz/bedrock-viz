@@ -83,7 +83,7 @@ namespace mcpe_viz {
             doSlices = kDimIdNone;
             doGrid = kDimIdNone;
             doHtml = 0;
-            doTiles = 0;
+            doTiles = false;
             doImageBiome = kDimIdNone;
             doImageGrass = kDimIdNone;
             doImageHeightCol = kDimIdNone;
@@ -94,8 +94,7 @@ namespace mcpe_viz {
             doImageSlimeChunks = kDimIdNone;
             doImageShadedRelief = kDimIdNone;
             noForceGeoJSONFlag = false;
-
-            autoTileFlag = false;
+ 
             // todobig - reasonable default? strike a balance between speed/# of files
             tileWidth = 2048;
             tileHeight = 2048;

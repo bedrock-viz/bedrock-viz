@@ -443,8 +443,8 @@ namespace mcpe_viz {
 			("html-most", "Create html, javascript, and most image files to use as a fancy viewer")
 			("html-all", "Create html, javascript, and *all* image files to use as a fancy viewer")
 			("no-force-geojson", "Don't load geojson in html because we are going to use a web server (or Firefox)")
-			("auto-tile", "Automatically tile the images if they are very large")
-			("tiles", "Create tiles in subdirectory tiles/ (useful for LARGE worlds)")
+			("no-tile", "Generates single images instead of tiling output into smaller images. May cause loading problems if image size is > 4096px by 4096px")
+			("tile-size", "Changes tile sizes to specified dimensions (Default: 2048px by 2048px)")
 			("shortrun", "Debug testing parameter - process only first 1000 records")
 			("leveldb-filer", "Bloom filter supposed to improve disk performance (default: 10)")
 			("leveldb-block-size", "The block size of leveldb (default: 4096)")
@@ -675,10 +675,9 @@ namespace mcpe_viz {
 			if (vm.count("html")) {
 				control.doHtml = true;
 			}
-			// --tiles[=tilew,tileh]
-			if (vm.count("tiles")) {
-				control.doTiles = true;
-				std::string optarg = vm["tiles"].as<std::string>();
+			// --tile-size[=tilew,tileh]
+			if (vm.count("tile-size")) {
+				std::string optarg = vm["tile-size"].as<std::string>();
 				if (!optarg.empty()) {
 					int32_t tw, th;
 					if (sscanf(optarg.c_str(), "%d,%d", &tw, &th) == 2) {
@@ -687,14 +686,14 @@ namespace mcpe_viz {
 						log::info("Overriding tile dimensions: {} x {}", tw, th);
 					}
 					else {
-						log::error("Failed to parse --tiles ({})", !optarg.empty() ? optarg : "null");
+						log::error("Failed to parse --tile-size ({})", !optarg.empty() ? optarg : "null");
 						errct++;
 					}
 				}
 			}
-			// --auto-tile
-			if (vm.count("auto-tile")) {
-				control.autoTileFlag = true;
+			// --no-tile
+			if (vm.count("no-tile")) {
+				control.doTiles = false;
 			}
 			// --html-most
 			if (vm.count("html-most")) {

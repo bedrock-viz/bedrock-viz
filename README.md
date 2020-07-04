@@ -147,6 +147,7 @@ This will read the leveldb from "./mcpe/another1" and name output files starting
 
 Please note that --db expects the directory which contains "level.dat".
 
+For extended usage instructions, see [USAGE.md](https://github.com/bedrock-viz/bedrock-viz/blob/master/docs/USAGE.md)
 
 ## How to backup your MCPE world files
 
