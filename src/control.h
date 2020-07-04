@@ -83,7 +83,7 @@ namespace mcpe_viz {
             doSlices = kDimIdNone;
             doGrid = kDimIdNone;
             doHtml = 0;
-            doTiles = false;
+            doTiles = true;
             doImageBiome = kDimIdNone;
             doImageGrass = kDimIdNone;
             doImageHeightCol = kDimIdNone;

@@ -444,7 +444,7 @@ namespace mcpe_viz {
 			("html-all", "Create html, javascript, and *all* image files to use as a fancy viewer")
 			("no-force-geojson", "Don't load geojson in html because we are going to use a web server (or Firefox)")
 			("no-tile", "Generates single images instead of tiling output into smaller images. May cause loading problems if image size is > 4096px by 4096px")
-			("tile-size", "Changes tile sizes to specified dimensions (Default: 2048px by 2048px)")
+			("tile-size", value<std::string>(), "Changes tile sizes to specified dimensions (Default: 2048px by 2048px)")
 			("shortrun", "Debug testing parameter - process only first 1000 records")
 			("leveldb-filer", "Bloom filter supposed to improve disk performance (default: 10)")
 			("leveldb-block-size", "The block size of leveldb (default: 4096)")
