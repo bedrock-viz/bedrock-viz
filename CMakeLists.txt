@@ -41,7 +41,7 @@ add_subdirectory(third_party/pugixml)
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
-find_package(Boost 1.67 COMPONENTS program_options REQUIRED)
+find_package(Boost COMPONENTS program_options REQUIRED)
 
 
 include_directories(
