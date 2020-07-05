@@ -10,6 +10,8 @@
 
 * cmake: `brew install cmake`
 
+* boost: `brew install boost`
+
 Installing `zlib` through homebrew is not necessary because macOS already provides these libraries.
 
 ### How to compile
@@ -35,6 +37,8 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 * cmake: `sudo apt install cmake`
 
 * libpng and zlib: `sudo apt install libpng++-dev zlib1g-dev`
+
+* boost `sudo apt install libboost-program-options-dev`
 
 * we use C++ 17 filesystem library, so we need g++-8: `sudo apt install g++-8`
 
@@ -70,6 +74,8 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 * libpng: `vcpkg install libpng:x64-windows`
 
 * zlib: `vcpkg install zlib:x64-windows`
+
+* boost-program-options: `vcpkg install boost-program-options:x64-windows`
 
 ### How to compile
 
