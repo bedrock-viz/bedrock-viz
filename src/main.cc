@@ -396,8 +396,13 @@ namespace mcpe_viz {
 			}
 			dimIds.push_back(did);
 		}
+		// If no dims, render all
+		if(dimIds.empty()){
+			return kDimIdAll;
+		}
 		return dimIds;
 	}
+
 
     int32_t parse_args(int argc, char** argv) {
 		options_description desc{"Options"};
@@ -414,31 +419,34 @@ namespace mcpe_viz {
 			("checks-spawnable", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
-			("render-dimension", "Render map images for specified dimensions")
-			("all-image", value<std::vector<std::string>>()->multitoken(), 
-				"Create all image types")
-			("biome", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a biome map image")
-			("grass", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a grass color map image")
-			("height-col", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a height column map image (red is below sea; gray is sea; green is above sea)")
-			("height-col-gs", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a height column map image (grayscale)")
-			("height-col-alpha", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a height column map image (alpha)")
-			("shaded-relief", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a shaded relief image")
-			("blocklight", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a block light map image")
-			("skylight", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a sky light map image")
-			("slime-chunk", value<std::vector<std::string>>()->multitoken(),
-			 	"Create a slime chunk map image")
-			("slices", "Create slices (one image for each layer)")
-			("movie", "Create movie of layers")
+			// ("render-dimension", "Render map images for specified dimensions")
+			("all-image", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create all image types")
+			("biome", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a biome map image")
+			("grass", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a grass color map image")
+			("height-col", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a height column map image (red is below sea; gray is sea; green is above sea)")
+			("height-col-gs", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a height column map image (grayscale)")
+			("height-col-alpha", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a height column map image (alpha)")
+			("shaded-relief", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a shaded relief image")
+			("blocklight", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a block light map image")
+			("skylight", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a sky light map image")
+			("slime-chunk", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a slime chunk map image")
+			("slices", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(),"Create slices (one image for each layer)")
+			("movie", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create movie of layers")
 			("movie-dim", "Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)")
-			("grid", "Display chunk grid on top of images")
+			("grid", value<std::vector<std::string>>()->default_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Display chunk grid on top of images")
 			("html", "Create html and javascript files to use as a fancy viewer")
 			("html-most", "Create html, javascript, and most image files to use as a fancy viewer")
 			("html-all", "Create html, javascript, and *all* image files to use as a fancy viewer")
@@ -833,6 +841,7 @@ namespace mcpe_viz {
 		//            }
 		}
 		catch (const error &ex) {
+			log::error(ex.what());
 			return -1;
 		}
 

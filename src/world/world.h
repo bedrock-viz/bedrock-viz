@@ -60,7 +60,7 @@ namespace mcpe_viz {
 
     public:
         // todobig - move to private?
-        std::unique_ptr<DimensionData_LevelDB> dimDataList[kDimIdCount];
+        std::vector<std::unique_ptr<DimensionData_LevelDB>> dimDataList;
 
         MinecraftWorld_LevelDB();
 

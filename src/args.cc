@@ -20,6 +20,9 @@ Options:
     --tile-size=[width,height] 
                              Changes tile sizes to specified dimensions (Default: 2048px by 2048px)
 
+    Note: [=did] are optional dimension-ids - if not specified, do all dimensions 
+    Dimension IDs: 0=Overworld; 1=Nether, 2=End
+    Example: --biome=0 1, --biome 0 --biome 1
     --slices[=did]           Create slices (one image for each layer)
     --movie[=did]            Create movie of layers
     --movie-dim x,y,w,h      Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)
@@ -46,8 +49,9 @@ Extended Options:
                              Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)
     --schematic[-get] did,x1,y1,z1,x2,y2,z2,fnpart
                              Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)
-
-    (note: [=did] is optional dimension-id - if not specified, do all dimensions; 0=Overworld; 1=Nether)\n"
+    Note: [=did] are optional dimension-ids - if not specified, do all dimensions 
+    Dimension IDs: 0=Overworld; 1=Nether, 2=End
+    Example: --biome=0 1, --biome 0 --biome 1
     --grid[=did]             Display chunk grid on top of images
     --all-image[=did]        Create all image types
     --biome[=did]            Create a biome map image

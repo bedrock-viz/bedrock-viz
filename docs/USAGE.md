@@ -1,7 +1,8 @@
 # Program Usage 
 
 ## Program Options
-**(note: [=did] is optional dimension-id - if not specified, do all dimensions; 0=Overworld; 1=Nether)**
+**Note: [=did] are optional dimension-ids - if not specified, do all dimensions; 0=Overworld; 1=Nether, 2=End)**
+**Example: `--biome=0 1`, `--biome 0 --biome 1`**
 | Parameter                                      | Description                                                  |
 |------------------------------------------------|--------------------------------------------------------------|
 | `db` (Required)                                | Directory which holds world files (level.dat is in this dir) |

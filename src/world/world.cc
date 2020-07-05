@@ -66,13 +66,11 @@ namespace mcpe_viz
         dbOptions->compression = leveldb::kZlibRawCompression;
 
         for (int32_t i = 0; i < kDimIdCount; i++) {
-            dimDataList[i] = std::make_unique<DimensionData_LevelDB>();
+            dimDataList.push_back(std::make_unique<DimensionData_LevelDB>());
             dimDataList[i]->setDimId(i);
             dimDataList[i]->unsetChunkBoundsValid();
+            dimDataList[i]->setName(kDimIdNames[i]);
         }
-        dimDataList[kDimIdOverworld]->setName("overworld");
-        dimDataList[kDimIdNether]->setName("nether");
-        dimDataList[kDimIdTheEnd]->setName("the-end");
     }
 
     int32_t MinecraftWorld_LevelDB::parseLevelFile(const std::string& fname)

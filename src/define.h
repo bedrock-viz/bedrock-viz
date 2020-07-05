@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 namespace mcpe_viz {
     // maximum build height -- as of MCPE 0.13 it is 127
@@ -45,6 +46,9 @@ namespace mcpe_viz {
     };
 
 	const std::vector<int> kDimIdAll{kDimIdOverworld, kDimIdNether, kDimIdTheEnd};
+    const std::vector<std::string> kDimIdAllStrings {"0","1","2"};
+    const std::string kDimIdAllStr = "0 1 2";
+    const std::vector<std::string> kDimIdNames {"overworld","nether","the-end"};
     const std::vector<int> kDimIdNone{};
 
     const int32_t kColorDefault = 0xff00ff;
