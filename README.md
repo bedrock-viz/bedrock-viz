@@ -31,20 +31,17 @@ Additional Features:
 
 For Windows 10 users:
 
-* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.1/bedrock-viz_v0.1.1_win64.zip) and unzip that file
-
+* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.2/bedrock-viz_v0.1.2_win64.zip) and unzip that file
 * Inside you will find `bedrock-viz.exe`
 
 For macOS users(requires macOS 10.15 and above):
-
 * Install via homeberw:
   ```
   brew tap bedrock-viz/homebrew-tap && brew install bedrock-viz
   ```
 
-For linux and macOS users:
-
-* [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.1/bedrock-viz_v0.1.1.tar.gz) and compiling from source
+For Linux users:
+* [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.2/bedrock-viz_v0.1.2_linux.tar.gz) and compiling from source
 
 **DO NOT RUN THIS ON YOUR ORIGINAL WORLD SAVES**
 
@@ -58,7 +55,6 @@ See below for Web App usage notes.
 ## Quick Start -- How to run it on Windows from the command-line
 
 * Same as above to get the files.
-
 * Open a command prompt and run it something like this:
 
 ```
@@ -99,7 +95,7 @@ Web App Usage Notes:
 * You can go full-screen (button under mouse position window)
 * Tool bar at the bottom of the screen:
   * Choose Overworld or Nether
-  * Scroll through the layers from 0 (bedrock) to 127 (build limit)
+  * Scroll through the layers from 0 (bedrock) to 255 (build limit)
   * Choose Overview, Biome etc
   * Show Mobs and Objects -- click on an entry and the map will be updated with labeled points.  You can toggle on as many different types as you like.  Click on the points or labels to get more info on the item.  Note that labels are not drawn when you are zoomed out.
   * Enable elevation overlay (shaded relief)
@@ -135,18 +131,22 @@ docker volume rm bedrock-viz-http
 
 **MAKE A COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY!**
 
-See "./bedrock-viz --help" for the most up-to-date usage info
-
 Here's an example invocation:
 
 ```
 > ./bedrock-viz --grid --db ./mcpe/another1/ --out ./mcpe/output/out1
 ```
 
-This will read the leveldb from "./mcpe/another1" and name output files starting with "./mcpe/output/out1", and it will draw chunk boundaries on your output image.  This also dumps the *voluminous* output to "out1.log".  The log file has a *ton* of interesting information about your world.  "grep" is your friend.
+This will read the leveldb from the "./mcpe/another1" folder and name output files starting with "./mcpe/output/out1", and it will draw chunk boundaries on your output image.  This also dumps the *voluminous* output to "out1.log".  The log file has a *ton* of interesting information about your world.  "grep" is your friend.
 
 Please note that --db expects the directory which contains "level.dat".
 
+To view all command line options, run
+```
+"./bedrock-viz --help"
+```
+
+For extended usage instructions, see [USAGE.md](docs/USAGE.md)
 
 ## How to backup your MCPE world files
 
@@ -180,4 +180,4 @@ ulimit -n 8192
 
 ### Compiling from source
 
-see [BUILD.md](https://github.com/bedrock-viz/bedrock-viz/blob/master/docs/BUILD.md)
+see [BUILD.md](docs/BUILD.md)

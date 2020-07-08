@@ -23,7 +23,6 @@ add_executable(bedrock-viz
 )
 
 if(MSVC)
-  target_sources(bedrock-viz PRIVATE "src/getopt/getopt.c")
   # TODO remove all insecure c functions
   add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 endif(MSVC)
@@ -42,10 +41,13 @@ add_subdirectory(third_party/pugixml)
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
+find_package(Boost COMPONENTS program_options REQUIRED)
+
 
 include_directories(
   ${PNG_INCLUDE_DIR} 
   ${ZLIB_INCLUDE_DIR} 
+  ${Boost_INCLUDE_DIR}
   ${PROJECT_SOURCE_DIR}/third_party/leveldb/include
   ${PROJECT_SOURCE_DIR}/third_party/libnbtplusplus/include
   ${PROJECT_SOURCE_DIR}/third_party/spdlog/include
@@ -63,6 +65,7 @@ target_link_libraries(bedrock-viz
   leveldb spdlog nbt++ pugixml::static
   ${PNG_LIBRARIES} 
   ${ZLIB_LIBRARIES} 
+  ${Boost_LIBRARIES}
   ${CMAKE_THREAD_LIBS_INIT})
 
 file(COPY data
@@ -97,7 +100,6 @@ if(BEDROCK_VIZ_BUILD_TESTS)
     )
 
     if(MSVC)
-      target_sources("${test_target_name}" PRIVATE "src/getopt/getopt.c")
       # TODO remove all insecure c functions
       add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
     endif(MSVC)

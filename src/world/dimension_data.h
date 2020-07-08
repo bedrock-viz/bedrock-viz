@@ -192,7 +192,7 @@ namespace mcpe_viz {
         }
 
         //todolib - move this out?
-        bool checkDoForDim(int32_t v) const;
+        bool checkDoForDim(const std::vector<int>& v) const;
 
         // todolib - move this out?
         int32_t addCheckSpawn(int32_t checkX, int32_t checkZ, int32_t distance) {

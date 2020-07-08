@@ -203,15 +203,12 @@
 #include <filesystem>
 #include <string>
 #include <cstdint>
+#include <iostream>
 
 #include <leveldb/db.h>
 #include <leveldb/cache.h>
 
-#ifndef _MSC_VER
-#include <getopt.h>
-#else
-#include "getopt/getopt.h"
-#endif
+#include <boost/program_options.hpp>
 
 #include "define.h"
 #include "util.h"
@@ -223,6 +220,9 @@
 #include "utils/fs.h"
 #include "global.h"
 #include "xml/loader.h"
+
+
+using namespace boost::program_options;
 
 namespace mcpe_viz {
 
@@ -385,483 +385,470 @@ namespace mcpe_viz {
             return 0;
     }
 
-    int32_t parseDimIdOptArg(const char* arg) {
-        int32_t did = kDoOutputAll;
-        if (arg) {
-            did = atoi(arg);
+	std::vector<int> parseDimIdOptArgs(const std::vector<std::string>& dimIdStrings) {
+		std::vector<int> dimIds;
+		for (auto dimIdStr : dimIdStrings) {
+			int32_t did = std::stoi(dimIdStr);
+			if (did < kDimIdOverworld || did >= kDimIdCount) {
+				// Invalid ID
+				log::warn("Invalid dimension-id supplied ({}), skipping", did); 
+				continue;
+			}
+			dimIds.push_back(did);
+		}
+		// If no dims, render all
+		if(dimIds.empty()){
+			return kDimIdAll;
+		}
+		return dimIds;
+	}
 
-            // sanity check
-            if (did >= kDimIdOverworld && did < kDimIdCount) {
-                // all is good
-            }
-            else {
-                log::warn("Invalid dimension-id supplied ({}), defaulting to Overworld only", did);
-                did = kDimIdOverworld;
-            }
-        }
-        else {
-            // if no arg, we want output for all dimensions
-        }
-        return did;
-    }
 
     int32_t parse_args(int argc, char** argv) {
+		options_description desc{"Options"};
+		desc.add_options()
+			("db", value<std::string>(), "Directory which holds world files (level.dat is in this dir)")
+			("outdir", value<std::string>(), "Directory for output files. Defaults to \"./output/\"")
+			("xml", value<std::string>(), "XML file containing data definitions")
+			("cfg", value<std::string>(), "CFG file containing parsing configuration")
+			("detail", "Log extensive details about the world to the log file")
+			("hide-top", "Hide a block from top block (did=dimension id, bid=block id)")
+			("force-top", "Force a block to top block (did=dimension id, bid=block id)")
+			("geojson-block", "Add block to GeoJSON file for use in web app (did=dimension id, bid=block id)")
+			("check-spawn", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
+			("checks-spawnable", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
+			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
+			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
+			// ("render-dimension", "Render map images for specified dimensions")
+			("all-image", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create all image types")
+			("biome", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a biome map image")
+			("grass", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a grass color map image")
+			("height-col", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a height column map image (red is below sea; gray is sea; green is above sea)")
+			("height-col-gs", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a height column map image (grayscale)")
+			("height-col-alpha", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a height column map image (alpha)")
+			("shaded-relief", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a shaded relief image")
+			("blocklight", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a block light map image")
+			("skylight", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a sky light map image")
+			("slime-chunk", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create a slime chunk map image")
+			("slices", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(),"Create slices (one image for each layer)")
+			("movie", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Create movie of layers")
+			("movie-dim", "Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)")
+			("grid", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
+				->multitoken()->zero_tokens(), "Display chunk grid on top of images")
+			("html", "Create html and javascript files to use as a fancy viewer")
+			("html-most", "Create html, javascript, and most image files to use as a fancy viewer")
+			("html-all", "Create html, javascript, and *all* image files to use as a fancy viewer")
+			("no-force-geojson", "Don't load geojson in html because we are going to use a web server (or Firefox)")
+			("no-tile", "Generates single images instead of tiling output into smaller images. May cause loading problems if image size is > 4096px by 4096px")
+			("tile-size", value<std::string>(), "Changes tile sizes to specified dimensions (Default: 2048px by 2048px)")
+			("shortrun", "Debug testing parameter - process only first 1000 records")
+			("leveldb-filer", "Bloom filter supposed to improve disk performance (default: 10)")
+			("leveldb-block-size", "The block size of leveldb (default: 4096)")
+			("leveldb-try-repair", "If the leveldb fails to open, this will attempt to repair the database. Data loss is possible, use carefully.")
+			("verbose", "verbose output")
+			("quiet", "supress normal output, continue to output warning and error messages")
+			("help", "show basic help info")
+			("help-extended", "show extended help info")
+			("help-experimental", "show experimental help info");
+		
 
-        static struct option longoptlist[] = {
-                // It's a huge pain to try to keep track of the optlist so this will help a bit.
-                //
-                // Unused chars:     E   IJKL NOPQ  TUVW Y     ef   jklmn p  st  wxyz0123456789!    ^&   `~-       |; '",.  /?
-                // Used Chars  : ABCD FGH    M    RS    X Zabcd  ghi     o qr  uv               @#$%  *()   _=+[]{}  :    <>  
+		command_line_parser parser{argc,argv};
+		parser.options(desc).allow_unregistered();
+		parsed_options parsed_options = parser.run();
+		std::vector<std::string> unrecognized_opts = collect_unrecognized(parsed_options.options,exclude_positional);
+		if(unrecognized_opts.size()){
+			log::error("Invalid parameters detected:");
+			for(auto param : unrecognized_opts){
+				log::error(param);
+			}
+			return -1;
+		}
+		variables_map vm;
+		store(parsed_options, vm);
+		notify(vm);
 
-                {"db",                 required_argument, nullptr, 'D'},
-                {"outdir",             required_argument, nullptr, 'o'},
-                
+		int32_t errct = 0;
 
-                {"xml",                required_argument, nullptr, 'X'},
-                {"cfg",                required_argument, nullptr, 'c'},
+		control.init();
+		
+		try {
+			//--outdir dir
+			if (vm.count("outdir")) {
+				control.outputDir = vm["outdir"].as<std::string>();
+			}
+			// --xml fn
+			if (vm.count("xml")) {
+				control.fnXml = vm["xml"].as<std::string>();
+			}
+			// --cfg fn
+			if (vm.count("cfg")) {
+				control.fnCfg = vm["cfg"].as<std::string>();
+			}
+			// --db dir
+			if (vm.count("db")) {
+				control.dirLeveldb = vm["db"].as<std::string>();
+			}
+			// --detail
+			if (vm.count("detail")) { 
+				control.doDetailParseFlag = true;
+			}
+			// --leveldb-filter i
+			if (vm.count("leveldb-filter")) {
+				control.leveldbFilter = vm["leveldb-filter"].as<int>();
+				if (control.leveldbFilter < 0) {
+					control.leveldbFilter = 0;
+				}
+			}
+			// --leveldb-block-size i
+			if (vm.count("leveldb-block-size")) {
+				control.leveldbBlockSize = vm["leveldb-block-size"].as<int>();
+				if (control.leveldbBlockSize < 0) {
+					control.leveldbBlockSize = 4096;
+				}
+			}
+			// --leveldb-try-repair
+			if (vm.count("leveldb-try-repair")) {
+				control.tryDbRepair = true;
+			}
+			// --hide-top=did,bid
+			if (vm.count("hide-top")) {
+				bool pass = false;
+				int32_t dimId, blockId;
+				std::string optarg = vm["hide-top"].as<std::string>();
+				if (sscanf(optarg.c_str(), "%d,0x%x", &dimId, &blockId) == 2) {
+					pass = true;
+				}
+				else if (sscanf(optarg.c_str(), "%d,%d", &dimId, &blockId) == 2) {
+					pass = true;
+				}
 
-                {"detail",             no_argument,       nullptr, '@'},
+				if (pass) {
+					// check dimId
+					if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
+						pass = false;
+					}
+					if (pass) {
+						world->dimDataList[dimId]->blockHideList.push_back(blockId);
+					}
+				}
 
-                {"hide-top",           required_argument, nullptr, 'H'},
-                {"force-top",          required_argument, nullptr, 'F'},
-                {"geojson-block",      required_argument, nullptr, '+'},
+				if (!pass) {
+					log::error("Failed to parse --hide-top {}", optarg.c_str());
+					errct++;
+				}
+			}	
+			// --force-top=did,bid
+			if (vm.count("force-top")) {
+				bool pass = false;
+				int32_t dimId, blockId;
+				std::string optarg = vm["force-top"].as<std::string>();
+				if (sscanf(optarg.c_str(), "%d,0x%x", &dimId, &blockId) == 2) {
+					pass = true;
+				}
+				else if (sscanf(optarg.c_str(), "%d,%d", &dimId, &blockId) == 2) {
+					pass = true;
+				}
 
-                {"check-spawn",        required_argument, nullptr, 'C'},
-                {"check-spawnable",    required_argument, nullptr, 'C'},
+				if (pass) {
+					// check dimId
+					if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
+						pass = false;
+					}
+					if (pass) {
+						world->dimDataList[dimId]->blockForceTopList.push_back(blockId);
+					}
+				}
 
-                {"schematic",          required_argument, nullptr, 'Z'},
-                {"schematic-get",      required_argument, nullptr, 'Z'},
+				if (!pass) {
+					log::error("Failed to parse --force-top {}", optarg.c_str());
+					errct++;
+				}
+			}
+			// --geojson-block=did,bid
+			if (vm.count("geojson-block")) {
+				bool pass = false;
+				int32_t dimId, blockId;
+				std::string optarg = vm["geojson-block"].as<std::string>();
+				if (sscanf(optarg.c_str(), "%d,0x%x", &dimId, &blockId) == 2) {
+					pass = true;
+				}
+				else if (sscanf(optarg.c_str(), "%d,%d", &dimId, &blockId) == 2) {
+					pass = true;
+				}
 
-                {"all-image",          optional_argument, nullptr, 'A'},
-                {"biome",              optional_argument, nullptr, 'B'},
-                {"grass",              optional_argument, nullptr, 'g'},
-                {"height-col",         optional_argument, nullptr, 'd'},
-                {"height-col-gs",      optional_argument, nullptr, '#'},
-                {"height-col-alpha",   optional_argument, nullptr, 'a'},
-                {"shaded-relief",      optional_argument, nullptr, 'S'},
-                {"blocklight",         optional_argument, nullptr, 'b'},
-                {"skylight",           optional_argument, nullptr, 's'},
-                {"slime-chunk",        optional_argument, nullptr, '%'},
+				if (pass) {
+					// check dimId
+					if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
+						pass = false;
+					}
+					if (pass) {
+						world->dimDataList[dimId]->blockToGeoJSONList.push_back(blockId);
+					}
+				}
 
-                {"slices",             optional_argument, nullptr, '('},
+				if (!pass) {
+					log::error("Failed to parse --geojson-block {}", optarg.c_str());
+					errct++;
+				}
+			}
+			// --check-spawn did,x,z,dist
+			// --check-spawnable did,x,z,dist
+			if (vm.count("check-spawn") || vm.count("check-spawnable")) {
+				log::warn("--spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info");
+				errct++;
 
-                {"movie",              optional_argument, nullptr, 'M'},
-                {"movie-dim",          required_argument, nullptr, '*'},
+				bool pass = false;
+				int32_t dimId, checkX, checkZ, checkDistance;
+				std::string optarg;
+				if (vm.count("check-spawn")) {
+					optarg = vm["check-spawn"].as<std::string>();
+				}
+				if (vm.count("check-spawnable")) {
+					optarg = vm["check-spawnable"].as<std::string>();
+				}
+				if (sscanf(optarg.c_str(), "%d,%d,%d,%d", &dimId, &checkX, &checkZ, &checkDistance) == 4) {
+					pass = true;
+				}
 
-                {"grid",               optional_argument, nullptr, 'G'},
+				if (pass) {
+					// todo - check params
 
-                {"html",               no_argument,       nullptr, ')'},
-                {"html-most",          no_argument,       nullptr, '='},
-                {"html-all",           no_argument,       nullptr, '_'},
-                {"no-force-geojson",   no_argument,       nullptr, ':'},
+					if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
+						pass = false;
+					}
 
-                {"auto-tile",          no_argument,       nullptr, ']'},
-                {"tiles",              optional_argument, nullptr, '['},
+					if (pass) {
+						world->dimDataList[dimId]->addCheckSpawn(checkX, checkZ, checkDistance);
+					}
+				}
 
-                {"shortrun",           no_argument,       nullptr, '$'}, // this is just for testing
+				if (!pass) {
+					log::error("Failed to parse --check-spawn {}", optarg.c_str());
+					errct++;
+				}
+			}
+			// --schematic did,x1,y1,z1,x2,y2,z2,fnpart
+			// --schematic-get did,x1,y1,z1,x2,y2,z2,fnpart
+			if (vm.count("schematic") || vm.count("schematic-get")) {
+				bool pass = false;
+				int32_t dimId = 0, x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
+				char fnSchematic[2048];
+				memset(fnSchematic, 0, 2048);
+				std::string optarg;
+				if (vm.count("schematic")) {
+					optarg = vm["schematic"].as<std::string>();
+				}
+				if (vm.count("schematic-get")) {
+					optarg = vm["schematic-get"].as<std::string>();
+				}
+				// todo - ugly sscanf for a string
+				if (sscanf(optarg.c_str(), "%d,%d,%d,%d,%d,%d,%d,%s", &dimId, &x1, &y1, &z1, &x2, &y2, &z2, fnSchematic) ==
+					8) {
+					pass = true;
+				}
 
-                {"leveldb-filter",     required_argument, nullptr, '<'},
-                {"leveldb-block-size", required_argument, nullptr, '>'},
-                {"leveldb-try-repair", no_argument,       nullptr, 'R'},
+				if (pass) {
+					// todo - check params
+					if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
+						pass = false;
+					}
 
-                {"verbose",            no_argument,       nullptr, 'v'},
-                {"quiet",              no_argument,       nullptr, 'q'},
-                {"help",               no_argument,       nullptr, 'h'},
-                {"help-extended",      no_argument,       nullptr, 'u'},
-                {"help-experimental",  no_argument,       nullptr, 'i'},
-                {nullptr,              no_argument,       nullptr, 0}
-        };
+					if (pass) {
+						world->dimDataList[dimId]->addSchematic(x1, y1, z1, x2, y2, z2, fnSchematic);
+					}
+				}
 
-        int32_t option_index = 0;
-        int32_t optc;
-        int32_t errct = 0;
-
-        control.init();
-
-        while ((optc = getopt_long_only(argc, argv, "", longoptlist, &option_index)) != -1) {
-            switch (optc) {
-            // --outdir dir
-            case 'o': {
-                control.outputDir = optarg;
-                break;
-            }
-            // --xml fn
-            case 'X': {
-                control.fnXml = optarg;
-                break;
-            }
-            // --cfg fn
-            case 'c': {
-                control.fnCfg = optarg;
-                break;
-            }
-            // --db dir
-            case 'D': {
-                control.dirLeveldb = optarg;
-                break;
-            }
-            // --detail
-            case '@': {
-                control.doDetailParseFlag = true;
-                break;
-            }
-            // --leveldb-filter i
-            case '<': {
-                control.leveldbFilter = atoi(optarg);
-                if (control.leveldbFilter < 0) {
-                    control.leveldbFilter = 0;
-                }
-                break;
-            }
-            // --leveldb-block-size i
-            case '>': {
-                control.leveldbBlockSize = atoi(optarg);
-                if (control.leveldbBlockSize < 0) {
-                    control.leveldbBlockSize = 4096;
-                }
-                break;
-            }
-            // --leveldb-try-repair
-            case 'R': {
-                control.tryDbRepair = true;
-                break;
-            }
-            // --hide-top=did,bid
-            case 'H': {
-                bool pass = false;
-                int32_t dimId, blockId;
-                if (sscanf(optarg, "%d,0x%x", &dimId, &blockId) == 2) {
-                    pass = true;
-                }
-                else if (sscanf(optarg, "%d,%d", &dimId, &blockId) == 2) {
-                    pass = true;
-                }
-
-                if (pass) {
-                    // check dimId
-                    if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-                        pass = false;
-                    }
-                    if (pass) {
-                        world->dimDataList[dimId]->blockHideList.push_back(blockId);
-                    }
-                }
-
-                if (!pass) {
-                    log::error("Failed to parse --hide-top {}", optarg);
-                    errct++;
-                }
-                break;
-            }
-            // --force-top=did,bid
-            case 'F': {
-                bool pass = false;
-                int32_t dimId, blockId;
-                if (sscanf(optarg, "%d,0x%x", &dimId, &blockId) == 2) {
-                    pass = true;
-                }
-                else if (sscanf(optarg, "%d,%d", &dimId, &blockId) == 2) {
-                    pass = true;
-                }
-
-                if (pass) {
-                    // check dimId
-                    if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-                        pass = false;
-                    }
-                    if (pass) {
-                        world->dimDataList[dimId]->blockForceTopList.push_back(blockId);
-                    }
-                }
-
-                if (!pass) {
-                    log::error("Failed to parse --force-top {}", optarg);
-                    errct++;
-                }
-                break;
-            }
-            // --geojson-block=did,bid
-            case '+': {
-                bool pass = false;
-                int32_t dimId, blockId;
-                if (sscanf(optarg, "%d,0x%x", &dimId, &blockId) == 2) {
-                    pass = true;
-                }
-                else if (sscanf(optarg, "%d,%d", &dimId, &blockId) == 2) {
-                    pass = true;
-                }
-
-                if (pass) {
-                    // check dimId
-                    if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-                        pass = false;
-                    }
-                    if (pass) {
-                        world->dimDataList[dimId]->blockToGeoJSONList.push_back(blockId);
-                    }
-                }
-
-                if (!pass) {
-                    log::error("Failed to parse --geojson-block {}", optarg);
-                    errct++;
-                }
-                break;
-            }
-            // --check-spawn did,x,z,dist
-            // --check-spawnable did,x,z,dist
-            case 'C': {
-                log::warn("--spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info");
-                errct++;
-
-                bool pass = false;
-                int32_t dimId, checkX, checkZ, checkDistance;
-                if (sscanf(optarg, "%d,%d,%d,%d", &dimId, &checkX, &checkZ, &checkDistance) == 4) {
-                    pass = true;
-                }
-
-                if (pass) {
-                    // todo - check params
-
-                    if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-                        pass = false;
-                    }
-
-                    if (pass) {
-                        world->dimDataList[dimId]->addCheckSpawn(checkX, checkZ, checkDistance);
-                    }
-                }
-
-                if (!pass) {
-                    log::error("Failed to parse --check-spawn {}", optarg);
-                    errct++;
-                }
-                break;
-            }
-            // --schematic did,x1,y1,z1,x2,y2,z2,fnpart
-            // --schematic-get did,x1,y1,z1,x2,y2,z2,fnpart
-            case 'Z': {
-                bool pass = false;
-                int32_t dimId = 0, x1 = 0, y1 = 0, z1 = 0, x2 = 0, y2 = 0, z2 = 0;
-                char fnSchematic[2048];
-                memset(fnSchematic, 0, 2048);
-                // todo - ugly sscanf for a string
-                if (sscanf(optarg, "%d,%d,%d,%d,%d,%d,%d,%s", &dimId, &x1, &y1, &z1, &x2, &y2, &z2, fnSchematic) ==
-                    8) {
-                    pass = true;
-                }
-
-                if (pass) {
-                    // todo - check params
-
-                    if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-                        pass = false;
-                    }
-
-                    if (pass) {
-                        world->dimDataList[dimId]->addSchematic(x1, y1, z1, x2, y2, z2, fnSchematic);
-                    }
-                }
-
-                if (!pass) {
-                    log::error("Failed to parse --schematic {}", optarg);
-                    errct++;
-                }
-                break;
-            }
-            // --grid[=did]
-            case 'G': {
-                control.doGrid = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --html
-            case ')': {
-                control.doHtml = true;
-                break;
-            }
-            // --tiles[=tilew,tileh]
-            case '[': {
-                control.doTiles = true;
-                if (optarg)
-                {
-                    int32_t tw, th;
-
-                    if (sscanf(optarg, "%d,%d", &tw, &th) == 2) {
-                        control.tileWidth = tw;
-                        control.tileHeight = th;
-                        log::info("Overriding tile dimensions: {} x {}", tw, th);
-                    }
-                    else {
-                        log::error("Failed to parse --tiles ({})", optarg ? optarg : "null");
-                        errct++;
-                    }
-                }
-                break;
-            }
-            // --auto-tile
-            case ']': {
-                control.autoTileFlag = true;
-                break;
-            }
-            // --html-most
-            case '=': {
-                control.doHtml = true;
-                control.doImageBiome =
-                    control.doImageGrass =
-                    control.doImageHeightCol =
-                    control.doImageHeightColGrayscale =
-                    control.doImageHeightColAlpha =
-                    control.doImageShadedRelief =
-                    control.doImageLightBlock =
-                    control.doImageLightSky =
-                    control.doImageSlimeChunks =
-                    kDoOutputAll;
-                break;
-            }
-            // --html-all
-            case '_': {
-                control.doHtml = true;
-                control.doImageBiome =
-                    control.doImageGrass =
-                    control.doImageHeightCol =
-                    control.doImageHeightColGrayscale =
-                    control.doImageHeightColAlpha =
-                    control.doImageShadedRelief =
-                    control.doImageLightBlock =
-                    control.doImageLightSky =
-                    control.doImageSlimeChunks =
-                    kDoOutputAll;
-                control.doSlices = kDoOutputAll;
-                break;
-            }
-            // --no-force-geojson
-            case ':': {
-                control.noForceGeoJSONFlag = true;
-                break;
-            }
-            // --biome[=did]
-            case 'B': {
-                control.doImageBiome = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --grass[=did]
-            case 'g': {
-                control.doImageGrass = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --height-col[=did]
-            case 'd': {
-                control.doImageHeightCol = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --height-col-gs[=did]
-            case '#': {
-                control.doImageHeightColGrayscale = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --height-col-alpha[=did]
-            case 'a': {
-                control.doImageHeightColAlpha = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --shaded-relief[=did]
-            case 'S': {
-                control.doImageShadedRelief = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --blocklight[=did]
-            case 'b': {
-                control.doImageLightBlock = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --skylight[=did]
-            case 's': {
-                control.doImageLightSky = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --slime-chunk[=did]
-            case '%': {
-                control.doImageSlimeChunks = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --all-image[=did]
-            case 'A': {
-                control.doImageBiome =
-                    control.doImageGrass =
-                    control.doImageHeightCol =
-                    control.doImageHeightColGrayscale =
-                    control.doImageHeightColAlpha =
-                    control.doImageShadedRelief =
-                    control.doImageLightBlock =
-                    control.doImageLightSky =
-                    control.doImageSlimeChunks =
-                    parseDimIdOptArg(optarg);
-                break;
-            }
-            // --slices[=did]
-            case '(': {
-                control.doSlices = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --movie[=did]
-            case 'M': {
-                control.doMovie = parseDimIdOptArg(optarg);
-                break;
-            }
-            // --movie-dim x,y,w,h
-            case '*': {
-                // movie dimensions
-                if (sscanf(optarg, "%d,%d,%d,%d", &control.movieX, &control.movieY, &control.movieW,
-                    &control.movieH) == 4) {
-                    // good
-                }
-                else {
-                    log::error("Failed to parse --movie-dim ({})", optarg);
-                    errct++;
-                }
-                break;
-            }
-            // --shortrun
-            case '$': {
-                control.shortRunFlag = true;
-                break;
-            }
-            // --verbose
-            case 'v': {
-                control.verboseFlag = true;
-                break;
-            }
-            // --quiet
-            case 'q': {
-                control.quietFlag = true;
-                break;
-            }
-            // --help
-            case 'h': {
-                control.helpFlags = HelpFlags::Basic;
-                return -1;
-            }
-            // --help-extended
-            case 'u': {
-                control.helpFlags = HelpFlags::Basic | HelpFlags::Extended;
-                return -1;
-            }
-            // --help-experimental
-            case 'i': {
-                control.helpFlags = HelpFlags::Basic | HelpFlags::Extended | HelpFlags::Experimental;
-                return -1;
-            }
-            // unknown option
-            default: {
-                log::error("Unrecognized option: '{}'", optc);
-                return -1;
-            }
-            }
-        }
+				if (!pass) {
+					log::error("Failed to parse --schematic {}", optarg.c_str());
+					errct++;
+				}
+			}
+			// --grid[=did]
+			if (vm.count("grid")) {
+				control.doGrid = parseDimIdOptArgs(vm["grid"].as<std::vector<std::string>>());
+			}
+			// --html
+			if (vm.count("html")) {
+				control.doHtml = true;
+			}
+			// --tile-size[=tilew,tileh]
+			if (vm.count("tile-size")) {
+				std::string optarg = vm["tile-size"].as<std::string>();
+				if (!optarg.empty()) {
+					int32_t tw, th;
+					if (sscanf(optarg.c_str(), "%d,%d", &tw, &th) == 2) {
+						control.tileWidth = tw;
+						control.tileHeight = th;
+						log::info("Overriding tile dimensions: {} x {}", tw, th);
+					}
+					else {
+						log::error("Failed to parse --tile-size ({})", !optarg.empty() ? optarg : "null");
+						errct++;
+					}
+				}
+			}
+			// --no-tile
+			if (vm.count("no-tile")) {
+				control.doTiles = false;
+			}
+			// --html-most
+			if (vm.count("html-most")) {
+				control.doHtml = true;
+				control.doImageBiome =
+					control.doImageGrass =
+					control.doImageHeightCol =
+					control.doImageHeightColGrayscale =
+					control.doImageHeightColAlpha =
+					control.doImageShadedRelief =
+					control.doImageLightBlock =
+					control.doImageLightSky =
+					control.doImageSlimeChunks =
+						kDimIdAll;
+			}
+			// --html-all
+			if (vm.count("html-all")) {
+				control.doHtml = true;
+				control.doImageBiome =
+					control.doImageGrass =
+					control.doImageHeightCol =
+					control.doImageHeightColGrayscale =
+					control.doImageHeightColAlpha =
+					control.doImageShadedRelief =
+					control.doImageLightBlock =
+					control.doImageLightSky =
+					control.doImageSlimeChunks =
+						kDimIdAll;
+					control.doSlices = kDimIdAll;
+			}
+			// --no-force-geojson
+			if (vm.count("no-force-geojson")) {
+				control.noForceGeoJSONFlag = true;
+			}
+			// --biome[=did]
+			if (vm.count("biome")) {
+				control.doImageBiome = parseDimIdOptArgs(vm["biome"].as<std::vector<std::string>>());
+			}
+			// --grass[=did]
+			if (vm.count("grass")) {
+				control.doImageGrass = parseDimIdOptArgs(vm["grass"].as<std::vector<std::string>>());
+			}
+			// --height-col[=did]
+			if (vm.count("height-col")) {
+				control.doImageHeightCol = parseDimIdOptArgs(vm["height-col"].as<std::vector<std::string>>());
+			}
+			// --height-col-gs[=did]
+			if (vm.count("height-col-gs")) {
+				control.doImageHeightColGrayscale = parseDimIdOptArgs(vm["height-col-gs"].as<std::vector<std::string>>());
+			}
+			// --height-col-alpha[=did]
+			if (vm.count("height-col-alpha")) {
+				control.doImageHeightColAlpha = parseDimIdOptArgs(vm["height-col-alpha"].as<std::vector<std::string>>());
+			}
+			// --shaded-relief[=did]
+			if (vm.count("shaded-relief")) {
+				control.doImageShadedRelief = parseDimIdOptArgs(vm["shaded-relief"].as<std::vector<std::string>>());
+			}
+			// --blocklight[=did]
+			if (vm.count("blocklight")) {
+				control.doImageLightBlock = parseDimIdOptArgs(vm["blocklight"].as<std::vector<std::string>>());
+			}
+			// --skylight[=did]
+			if (vm.count("skylight")) {
+				control.doImageLightSky = parseDimIdOptArgs(vm["skylight"].as<std::vector<std::string>>());
+			}
+			// --slime-chunk[=did]
+			if (vm.count("slime-chunk")) {
+				control.doImageSlimeChunks = parseDimIdOptArgs(vm["slime-chunk"].as<std::vector<std::string>>());
+			}
+			// --all-image[=did]
+			if (vm.count("all-image")) {
+				control.doImageBiome =
+					control.doImageGrass =
+					control.doImageHeightCol =
+					control.doImageHeightColGrayscale =
+					control.doImageHeightColAlpha =
+					control.doImageShadedRelief =
+					control.doImageLightBlock =
+					control.doImageLightSky =
+					control.doImageSlimeChunks =
+					parseDimIdOptArgs(vm["all-image"].as<std::vector<std::string>>());
+			}
+			// --slices[=did]
+			if (vm.count("slices")) {
+				control.doSlices = parseDimIdOptArgs(vm["slices"].as<std::vector<std::string>>());
+			}
+			// --movie[=did]
+			if (vm.count("movie")) {
+				control.doMovie = parseDimIdOptArgs(vm["movie"].as<std::vector<std::string>>());
+			}
+			// --movie-dim x,y,w,h
+			if (vm.count("movie-dim")) {
+				std::string optarg = vm["movie-dim"].as<std::string>();
+				// movie dimensions
+				if (sscanf(optarg.c_str(), "%d,%d,%d,%d", &control.movieX, &control.movieY, &control.movieW,
+					&control.movieH) == 4) {
+					// good
+				}
+				else {
+					log::error("Failed to parse --movie-dim ({})", optarg.c_str());
+					errct++;
+				}
+			}
+			// --shortrun
+			if (vm.count("shortrun")) {
+				control.shortRunFlag = true;
+			}
+			// --verbose
+			if (vm.count("verbose")) {
+				control.verboseFlag = true;
+			}
+			// --quiet
+			if (vm.count("quiet")) {
+				control.quietFlag = true;
+			}
+			// --help
+			if (vm.count("help")) {
+				control.helpFlags = HelpFlags::Basic;
+				return -1;
+			}
+			// --help-extended
+			if (vm.count("help-extended")) {
+				control.helpFlags = HelpFlags::Basic | HelpFlags:: Extended;
+				return -1;
+			}
+			// --help-experimental
+			if (vm.count("help-experimental")) {
+				control.helpFlags = HelpFlags::Basic | HelpFlags::Extended | HelpFlags::Experimental;
+				return -1;
+			}
+			// unknown option
+		//            default: {
+		//                log::error("Unrecognized option: '{}'", optc);
+		//                return -1;
+		//            }
+		//            }
+		}
+		catch (const error &ex) {
+			log::error(ex.what());
+			return -1;
+		}
 
         // todobig - be more clever about dirLeveldb -- allow it to be the dir or the level.dat file
 
         // verify/test args
-        if (control.dirLeveldb.length() <= 0) {
+	    if (control.dirLeveldb.length() <= 0) {
             errct++;
             log::error("Must specify --db");
         }
@@ -869,14 +856,13 @@ namespace mcpe_viz {
         if (!file_exists(control.outputDir.generic_string())) {
             local_mkdir(control.outputDir.generic_string());
         }
-        
+     
         // make sure that output directory is NOT world data directory
         std::string fnTest = (control.outputDir / "level.dat").generic_string();
         if (file_exists(fnTest)) {
             errct++;
             log::error("You cannot send mcpe_viz output to a world file data directory");
         }
-
         return errct;
     }
 

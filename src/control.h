@@ -36,20 +36,20 @@ namespace mcpe_viz {
         std::string fnLayerRaw[kDimIdCount][MAX_BLOCK_HEIGHT + 1];
 
         bool doDetailParseFlag;
-        int32_t doMovie;
-        int32_t doSlices;
-        int32_t doGrid;
-        int32_t doHtml;
-        int32_t doTiles;
-        int32_t doImageBiome;
-        int32_t doImageGrass;
-        int32_t doImageHeightCol;
-        int32_t doImageHeightColGrayscale;
-        int32_t doImageHeightColAlpha;
-        int32_t doImageLightBlock;
-        int32_t doImageLightSky;
-        int32_t doImageSlimeChunks;
-        int32_t doImageShadedRelief;
+		std::vector<int> doMovie;
+		std::vector<int> doSlices;
+		std::vector<int> doGrid;
+		int doHtml;
+		bool doTiles;
+		std::vector<int> doImageBiome;
+		std::vector<int> doImageGrass;
+		std::vector<int> doImageHeightCol;
+		std::vector<int> doImageHeightColGrayscale;
+		std::vector<int> doImageHeightColAlpha;
+		std::vector<int> doImageLightBlock;
+		std::vector<int> doImageLightSky;
+		std::vector<int> doImageSlimeChunks;
+		std::vector<int> doImageShadedRelief;
         bool autoTileFlag;
         bool noForceGeoJSONFlag;
         bool shortRunFlag;
@@ -79,26 +79,25 @@ namespace mcpe_viz {
             outputDir = std::filesystem::path("output");
             doDetailParseFlag = false;
 
-            doMovie = kDoOutputNone;
-            doSlices = kDoOutputNone;
-            doGrid = kDoOutputNone;
+            doMovie = kDimIdNone;
+            doSlices = kDimIdNone;
+            doGrid = kDimIdNone;
             doHtml = 0;
-            doTiles = 0;
-            doImageBiome = kDoOutputNone;
-            doImageGrass = kDoOutputNone;
-            doImageHeightCol = kDoOutputNone;
-            doImageHeightColGrayscale = kDoOutputNone;
-            doImageHeightColAlpha = kDoOutputNone;
-            doImageLightBlock = kDoOutputNone;
-            doImageLightSky = kDoOutputNone;
-            doImageSlimeChunks = kDoOutputNone;
-            doImageShadedRelief = kDoOutputNone;
+            doTiles = true;
+            doImageBiome = kDimIdNone;
+            doImageGrass = kDimIdNone;
+            doImageHeightCol = kDimIdNone;
+            doImageHeightColGrayscale = kDimIdNone;
+            doImageHeightColAlpha = kDimIdNone;
+            doImageLightBlock = kDimIdNone;
+            doImageLightSky = kDimIdNone;
+            doImageSlimeChunks = kDimIdNone;
+            doImageShadedRelief = kDimIdNone;
             noForceGeoJSONFlag = false;
-
-            autoTileFlag = false;
+ 
             // todobig - reasonable default? strike a balance between speed/# of files
-            tileWidth = 1024;
-            tileHeight = 1024;
+            tileWidth = 2048;
+            tileHeight = 2048;
 
             shortRunFlag = false;
             verboseFlag = false;

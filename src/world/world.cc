@@ -66,13 +66,11 @@ namespace mcpe_viz
         dbOptions->compression = leveldb::kZlibRawCompression;
 
         for (int32_t i = 0; i < kDimIdCount; i++) {
-            dimDataList[i] = std::make_unique<DimensionData_LevelDB>();
+            dimDataList.push_back(std::make_unique<DimensionData_LevelDB>());
             dimDataList[i]->setDimId(i);
             dimDataList[i]->unsetChunkBoundsValid();
+            dimDataList[i]->setName(kDimIdNames[i]);
         }
-        dimDataList[kDimIdOverworld]->setName("overworld");
-        dimDataList[kDimIdNether]->setName("nether");
-        dimDataList[kDimIdTheEnd]->setName("the-end");
     }
 
     int32_t MinecraftWorld_LevelDB::parseLevelFile(const std::string& fname)
@@ -1174,23 +1172,24 @@ namespace mcpe_viz
         }
 
         if (control.doHtml) {
+            
+            // TODO: Remove this whole block?
+            // if (control.autoTileFlag) {
+            //     int32_t xdimId = kDimIdOverworld;
+            //     const int32_t chunkW = (dimDataList[xdimId]->getMaxChunkX() - dimDataList[xdimId]->getMinChunkX() +
+            //         1);
+            //     const int32_t imageW = chunkW * 16;
+            //     const int32_t chunkH = (dimDataList[xdimId]->getMaxChunkZ() - dimDataList[xdimId]->getMinChunkZ() +
+            //         1);
+            //     const int32_t imageH = chunkH * 16;
 
-            if (control.autoTileFlag) {
-                int32_t xdimId = kDimIdOverworld;
-                const int32_t chunkW = (dimDataList[xdimId]->getMaxChunkX() - dimDataList[xdimId]->getMinChunkX() +
-                    1);
-                const int32_t imageW = chunkW * 16;
-                const int32_t chunkH = (dimDataList[xdimId]->getMaxChunkZ() - dimDataList[xdimId]->getMinChunkZ() +
-                    1);
-                const int32_t imageH = chunkH * 16;
-
-                // todobig - 5000 a reasonable default max image size before we auto-tile?
-                int32_t maxImageSize = 5000;
-                if (imageW > maxImageSize || imageH > maxImageSize) {
-                    log::info("Detected large images and 'auto-tile' is enabled, enabling tiles");
-                    control.doTiles = true;
-                }
-            }
+            //     // todobig - 2048 a reasonable default max image size before we auto-tile?
+            //     int32_t maxImageSize = 2048;
+            //     if (imageW > maxImageSize || imageH > maxImageSize) {
+            //         log::info("Detected large images and 'auto-tile' is enabled, enabling tiles");
+            //         control.doTiles = true;
+            //     }
+            // }
 
             doOutput_Tile();
             doOutput_html();

@@ -135,12 +135,9 @@ namespace mcpe_viz {
         }
     }
 
-    bool DimensionData_LevelDB::checkDoForDim(int32_t v) const
+    bool DimensionData_LevelDB::checkDoForDim(const std::vector<int>& v) const
     {
-        if (v == kDoOutputAll) {
-            return true;
-        }
-        if (v == dimId) {
+        if (std::find(v.begin(), v.end(), dimId) != v.end()){
             return true;
         }
         return false;
