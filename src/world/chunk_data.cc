@@ -1,13 +1,12 @@
-#include "chunk_data.h"
-
-#include "../define.h"
-#include "../global.h"
-#include "../nbt.h"
-#include "misc.h"
-#include "point_conversion.h"
-#include "common.h"
-#include "../utils/unknown_recorder.h"
-#include "../minecraft/v2/block.h"
+#include "world/chunk_data.h"
+#include "define.h"
+#include "global.h"
+#include "nbt.h"
+#include "world/misc.h"
+#include "world/point_conversion.h"
+#include "world/common.h"
+#include "utils/unknown_recorder.h"
+#include "minecraft/v2/block.h"
 
 namespace mcpe_viz {
     int32_t ChunkData_LevelDB::_do_chunk_v2(int32_t tchunkX, int32_t tchunkZ, const char* cdata,

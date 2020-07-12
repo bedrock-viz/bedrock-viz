@@ -1,7 +1,7 @@
-#include "load_block.h"
-#include "../minecraft/v2/item.h"
-#include "../logger.h"
-#include "../util.h"
+#include "xml/load_block.h"
+#include "minecraft/v2/item.h"
+#include "logger.h"
+#include "util.h"
 
 namespace mcpe_viz
 {

@@ -1,6 +1,6 @@
-#include "load_biome.h"
-#include "../logger.h"
-#include "../minecraft/v2/enchantment.h"
+#include "xml/load_biome.h"
+#include "logger.h"
+#include "minecraft/v2/enchantment.h"
 
 namespace mcpe_viz
 {

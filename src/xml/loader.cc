@@ -1,10 +1,10 @@
-#include "loader.h"
-#include "../logger.h"
-#include "load_block.h"
-#include "load_biome.h"
-#include "load_item.h"
-#include "load_entity.h"
-#include "load_enchantment.h"
+#include "xml/loader.h"
+#include "logger.h"
+#include "xml/load_block.h"
+#include "xml/load_biome.h"
+#include "xml/load_item.h"
+#include "xml/load_entity.h"
+#include "xml/load_enchantment.h"
 
 namespace mcpe_viz
 {

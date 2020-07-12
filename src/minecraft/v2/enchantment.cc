@@ -1,10 +1,9 @@
-#include "enchantment.h"
+#include "minecraft/v2/enchantment.h"
+#include "config.h"
+#include "logger.h"
+#include "utils/pointer_array.h"
 
 #include <map>
-
-#include "config.h"
-#include "../../logger.h"
-#include "../../utils/pointer_array.h"
 
 namespace
 {

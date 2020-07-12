@@ -1,7 +1,7 @@
-#include "load_entity.h"
-#include "../minecraft/v2/entity.h"
-#include "../logger.h"
-#include "../util.h"
+#include "xml/load_entity.h"
+#include "minecraft/v2/entity.h"
+#include "logger.h"
+#include "util.h"
 
 namespace mcpe_viz
 {

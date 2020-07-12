@@ -1,10 +1,10 @@
-#include "item.h"
+#include "minecraft/v2/item.h"
+#include "config.h"
+#include "util.h"
+#include "utils/pointer_array.h"
+#include "utils/unknown_recorder.h"
 
 #include <unordered_map>
-#include "config.h"
-#include "../../util.h"
-#include "../../utils/pointer_array.h"
-#include "../../utils/unknown_recorder.h"
 
 namespace
 {

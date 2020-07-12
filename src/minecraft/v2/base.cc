@@ -1,7 +1,6 @@
-#include "base.h"
-
-#include "../../define.h"
-#include "../../util.h"
+#include "minecraft/v2/base.h"
+#include "define.h"
+#include "util.h"
 
 namespace mcpe_viz
 {

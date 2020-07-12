@@ -1,17 +1,16 @@
-#include "dimension_data.h"
+#include "world/dimension_data.h"
+#include "control.h"
+#include "utils/unknown_recorder.h"
+#include "world/common.h"
+#include "world/misc.h"
+#include "world/point_conversion.h"
+#include "global.h"
+#include "nbt.h"
+#include "utils/fs.h"
+#include "minecraft/v2/biome.h"
+#include "minecraft/v2/block.h"
 
 #include <random>
-
-#include "../control.h"
-#include "../utils/unknown_recorder.h"
-#include "common.h"
-#include "misc.h"
-#include "point_conversion.h"
-#include "../global.h"
-#include "../nbt.h"
-#include "../utils/fs.h"
-#include "../minecraft/v2/biome.h"
-#include "../minecraft/v2/block.h"
 
 namespace
 {
