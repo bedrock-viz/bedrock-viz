@@ -1,10 +1,11 @@
-#include "block.h"
+#include "minecraft/v2/block.h"
+#include "config.h"
+#include "util.h"
+#include "utils/pointer_array.h"
 
 #include <unordered_map>
 #include <vector>
-#include "config.h"
-#include "../../util.h"
-#include "../../utils/pointer_array.h"
+
 
 namespace
 {

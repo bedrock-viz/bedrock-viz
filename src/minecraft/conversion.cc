@@ -1,4 +1,4 @@
-#include "conversion.h"
+#include "minecraft/conversion.h"
 
 namespace mcpe_viz {
 

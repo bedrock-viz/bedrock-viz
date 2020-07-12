@@ -1,7 +1,7 @@
-#include "fs.h"
-#include <filesystem>
+#include "utils/fs.h"
+#include "logger.h"
 
-#include "../logger.h"
+#include <filesystem>
 
 namespace mcpe_viz {
     // these hacks work around "const char*" problems

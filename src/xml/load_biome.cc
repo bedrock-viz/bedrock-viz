@@ -1,6 +1,6 @@
-#include "load_biome.h"
-#include "../minecraft/v2/biome.h"
-#include "../logger.h"
+#include "xml/load_biome.h"
+#include "minecraft/v2/biome.h"
+#include "logger.h"
 namespace mcpe_viz
 {
     int load_biome(const pugi::xml_node& node)

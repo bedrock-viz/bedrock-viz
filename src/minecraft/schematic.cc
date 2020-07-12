@@ -1,4 +1,4 @@
-#include "schematic.h"
+#include "minecraft/schematic.h"
 
 #include <cstdio>
 #include <algorithm>

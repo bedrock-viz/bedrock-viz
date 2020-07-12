@@ -1,4 +1,4 @@
-#include "check_spawn.h"
+#include "world/check_spawn.h"
 
 namespace mcpe_viz {
 

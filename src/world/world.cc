@@ -1,19 +1,18 @@
-#include "world.h"
+#include "world/world.h"
+#include "control.h"
+#include "nbt.h"
+#include "global.h"
+#include "minecraft/conversion.h"
+#include "utils/fs.h"
+#include "asset.h"
+#include "minecraft/v2/biome.h"
+#include "minecraft/v2/block.h"
 
 #include <ctime>
-
 #include <leveldb/filter_policy.h>
 #include <leveldb/cache.h>
 #include <leveldb/env.h>
 
-#include "../control.h"
-#include "../nbt.h"
-#include "../global.h"
-#include "../minecraft/conversion.h"
-#include "../utils/fs.h"
-#include "../asset.h"
-#include "../minecraft/v2/biome.h"
-#include "../minecraft/v2/block.h"
 
 namespace
 {
