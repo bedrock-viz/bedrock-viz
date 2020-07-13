@@ -4,20 +4,31 @@ project(bedrock-viz VERSION 0.1.2)
 set(CMAKE_CXX_STANDARD 17)
 
 option(BUILD_TESTS "Build unit tests" OFF)
+option(CODE_COVERAGE "Enable coverage reporting" OFF)
+
+set(BIN_NAME bedrock-viz)
+set(LIB_NAME libbedrock-viz)
 
 if (CMAKE_BUILD_TYPE STREQUAL Debug)
   add_compile_definitions(BEDROCK_VIZ_DEBUG)
 endif(CMAKE_BUILD_TYPE STREQUAL Debug)
 
+add_library(coverage_config INTERFACE)
+
+if(CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  message("Code Coverage Enabled")
+  target_compile_options(coverage_config INTERFACE -O0 -g --coverage)
+  target_link_libraries(coverage_config INTERFACE --coverage)
+endif()
+
 configure_file(include/config.h.in config.h)
 
 file(GLOB_RECURSE SRC_FILES src/*.cc)
+list(FILTER SRC_FILES EXCLUDE REGEX ".*/main.cc$")
 file(GLOB_RECURSE HEADER_FILES include/*.h)
 file(GLOB_RECURSE TEST_FILES tests/*.cc)
 
-add_executable(bedrock-viz
-  ${SRC_FILES}
-)
+add_library(${LIB_NAME} OBJECT ${SRC_FILES})
 
 if(MSVC)
   # TODO remove all insecure c functions
@@ -40,7 +51,6 @@ find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Boost COMPONENTS program_options REQUIRED)
 
-
 include_directories(
   ${PNG_INCLUDE_DIR} 
   ${ZLIB_INCLUDE_DIR} 
@@ -51,28 +61,30 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/third_party/pugixml/include
 )
 
-target_include_directories(bedrock-viz PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-target_include_directories(bedrock-viz PUBLIC ${PROJECT_SOURCE_DIR}/include)
+target_include_directories(${LIB_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(${LIB_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/include)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   # GCC requires -lstdc++fs to use <filesystem>
-  target_link_libraries(bedrock-viz stdc++fs)
+  target_link_libraries(${LIB_NAME} stdc++fs)
 endif()
 
-target_link_libraries(bedrock-viz 
+target_link_libraries(${LIB_NAME} 
+  coverage_config
   leveldb spdlog nbt++ pugixml::static
   ${PNG_LIBRARIES} 
   ${ZLIB_LIBRARIES} 
   ${Boost_LIBRARIES}
   ${CMAKE_THREAD_LIBS_INIT})
 
-file(COPY data
-     DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY static DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-file(COPY static
-        DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+add_executable(${BIN_NAME} src/main.cc)
+target_link_libraries(${BIN_NAME} PRIVATE ${LIB_NAME})
+target_include_directories(${BIN_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-install(TARGETS bedrock-viz DESTINATION bin)
+install(TARGETS ${BIN_NAME} DESTINATION bin)
 install(DIRECTORY data/ DESTINATION share/bedrock-viz/data)
 install(DIRECTORY static/ DESTINATION share/bedrock-viz/static)
 
@@ -85,13 +97,9 @@ if(BUILD_TESTS)
   # This project is tested using GoogleTest.
   add_subdirectory("third_party/googletest")
 
-  file(GLOB_RECURSE SRC_FILES_NO_MAIN src/*.cc)
-  list(FILTER SRC_FILES_NO_MAIN EXCLUDE REGEX ".*/main.cc$")
-
   function(viz_test test_file)
     get_filename_component(test_target_name "${test_file}" NAME_WE)
     add_executable("${test_target_name}" 
-      ${SRC_FILES_NO_MAIN}
       "${test_file}"
     )
 
@@ -101,20 +109,20 @@ if(BUILD_TESTS)
     endif(MSVC)
 
     target_link_libraries("${test_target_name}" 
-      gtest 
+      gtest
       leveldb spdlog nbt++ pugixml::static
       ${PNG_LIBRARIES} 
       ${ZLIB_LIBRARIES} 
       ${CMAKE_THREAD_LIBS_INIT}
+      ${LIB_NAME}
     )
-
+    
     if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
       # GCC requires -lstdc++fs to use <filesystem>
       target_link_libraries("${test_target_name}" stdc++fs)
     endif()
 
-    target_include_directories("${test_target_name}" PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-    target_include_directories("${test_target_name}" PUBLIC ${PROJECT_SOURCE_DIR}/include)
+    target_include_directories(${test_target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
     add_test(NAME "${test_target_name}" COMMAND "${test_target_name}")
   endfunction(viz_test)
