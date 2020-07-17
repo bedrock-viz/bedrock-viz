@@ -892,6 +892,14 @@ namespace mcpe_viz
                 "\"></script>"
             )
             );
+        } else {
+            // remove the placeholder it would have gone to
+            replaceStrings.push_back(
+                std::make_pair(
+                    std::string("%JSFILE%"),
+                    ""
+                )
+            );
         }
         copyFileWithStringReplacement(fnHtmlSrc, control.fnHtml().generic_string(), replaceStrings);
 
