@@ -52,7 +52,7 @@ jobs:
       env:
         REPORT_CI_TOKEN: ${{secrets.REPORT_CI_TOKEN}}
       run: | 
-        curl -s https://report.ci/upload.py | python3 - --include='*.xml' --framework=gtest
+        curl -s https://report.ci/upload.py | python3 - --include='*.xml' --framework=gtest 
     
     - name: Generate Coverage Report
       run: | 
