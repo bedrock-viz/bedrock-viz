@@ -42,7 +42,6 @@ jobs:
         make
 
     - name: Test (PR)
-      continue-on-error: true
       if: github.event_name == 'pull_request'
       run: |
         ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
@@ -51,6 +50,7 @@ jobs:
 
     - name: Test
       if: github.event_name != 'pull_request'
+      continue-on-error: true
       run: |
         ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
         ./build/bedrock-viz-test --gtest_output="xml:integrationtests.xml" --gtest_filter="Integration*:*.Integration*"
