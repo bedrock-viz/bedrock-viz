@@ -35,7 +35,7 @@ TEST_F(LoadEnchantmentTest, UnitTryAddNoName){
 
     int ret = load_enchantment(enchantmentList);
     
-    ASSERT_EQ(ret,0);
+    ASSERT_EQ(ret,-1);
 }
 
 TEST_F(LoadEnchantmentTest, UnitTryAddNoId){
