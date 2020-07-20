@@ -85,6 +85,7 @@ namespace mcpe_viz
         static const Entity* get(IdType id);
         static const Entity* getByUname(const std::string& uname);
         static Entity* add(IdType id, const std::string& name);
+        static void clearList();
         static const std::vector<const Entity*>& list();
 
         static std::string queryName(const IdType& id, const Variant::DataType& data);

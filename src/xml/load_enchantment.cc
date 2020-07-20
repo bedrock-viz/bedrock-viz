@@ -11,13 +11,13 @@ namespace mcpe_viz
             std::string offName{i.attribute("officialName").as_string()};
             auto id = i.attribute("id").as_int(-1);
             if (name.empty() || id == -1 || offName.empty()) {
-                log::error("add enchantment failed(name={}, id={}",
+                log::error("add enchantment failed(name={}, id={})",
                            name, id);
                 return -1;
             }
             auto enchant = Enchantment::add(id, name, offName);
             if (enchant == nullptr) {
-                log::error("add enchantment failed(name={}, id={}",
+                log::error("add enchantment failed(name={}, id={})",
                            name, id);
                 return -1;
             }

@@ -97,35 +97,63 @@ if(BUILD_TESTS)
   # This project is tested using GoogleTest.
   add_subdirectory("third_party/googletest")
 
-  function(viz_test test_file)
-    get_filename_component(test_target_name "${test_file}" NAME_WE)
-    add_executable("${test_target_name}" 
-      "${test_file}"
+  set(test_target_name "bedrock-viz-test")
+  add_executable("${test_target_name}" 
+      "${TEST_FILES}"
     )
 
-    if(MSVC)
-      # TODO remove all insecure c functions
-      add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
-    endif(MSVC)
+  if(MSVC)
+    # TODO remove all insecure c functions
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+  endif(MSVC)
 
-    target_link_libraries("${test_target_name}" 
-      gtest
-      leveldb spdlog nbt++ pugixml::static
-      ${PNG_LIBRARIES} 
-      ${ZLIB_LIBRARIES} 
-      ${CMAKE_THREAD_LIBS_INIT}
-      ${LIB_NAME}
-    )
+  target_link_libraries("${test_target_name}" 
+    gtest
+    leveldb spdlog nbt++ pugixml::static
+    ${PNG_LIBRARIES} 
+    ${ZLIB_LIBRARIES} 
+    ${CMAKE_THREAD_LIBS_INIT}
+    ${LIB_NAME}
+  )
+  
+  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    # GCC requires -lstdc++fs to use <filesystem>
+    target_link_libraries("${test_target_name}" stdc++fs)
+  endif()
+
+  target_include_directories(${test_target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  add_test(NAME "UnitTests" COMMAND "${test_target_name}")
+  add_test(NAME "IntegrationTests" COMMAND "${test_target_name}")
+  add_test(NAME "MiscTests" COMMAND "${test_target_name}")
+
+  # function(viz_test test_name test_files)
+  #   get_filename_component(test_target_name "${test_name}" NAME_WE)
+  #   add_executable("${test_target_name}" 
+  #     "${test_files}"
+  #   )
+
+  #   if(MSVC)
+  #     # TODO remove all insecure c functions
+  #     add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
+  #   endif(MSVC)
+
+  #   target_link_libraries("${test_target_name}" 
+  #     gtest
+  #     leveldb spdlog nbt++ pugixml::static
+  #     ${PNG_LIBRARIES} 
+  #     ${ZLIB_LIBRARIES} 
+  #     ${CMAKE_THREAD_LIBS_INIT}
+  #     ${LIB_NAME}
+  #   )
     
-    if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-      # GCC requires -lstdc++fs to use <filesystem>
-      target_link_libraries("${test_target_name}" stdc++fs)
-    endif()
+  #   if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  #     # GCC requires -lstdc++fs to use <filesystem>
+  #     target_link_libraries("${test_target_name}" stdc++fs)
+  #   endif()
 
-    target_include_directories(${test_target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  #   target_include_directories(${test_target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+  #   add_test(NAME "${test_target_name}" COMMAND "${test_target_name}")
+  # endfunction(viz_test)
 
-    add_test(NAME "${test_target_name}" COMMAND "${test_target_name}")
-  endfunction(viz_test)
-
-  viz_test(${TEST_FILES})
+  # viz_test("bedrock-viz-test" ${TEST_FILES})
 endif(BUILD_TESTS)

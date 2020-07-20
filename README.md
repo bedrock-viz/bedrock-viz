@@ -1,4 +1,8 @@
 # Bedrock Viz
+![Pipeline](https://github.com/bedrock-viz/bedrock-viz/workflows/Pipeline/badge.svg)
+[![badge](https://report.ci/badge/gh/bedrock-viz/bedrock-viz?branch=master)](https://report.ci/reports/gh/bedrock-viz/bedrock-viz)
+[![codecov](https://codecov.io/gh/bedrock-viz/bedrock-viz/branch/master/graph/badge.svg)](https://codecov.io/gh/bedrock-viz/bedrock-viz)
+
 
 A fork of [mcpe_viz](https://github.com/Plethora777/mcpe_viz.git), now maintained by [Jasper Wan](https://github.com/jasper-wan).
 

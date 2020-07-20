@@ -35,14 +35,15 @@ namespace mcpe_viz
                 std::string var_name{ j.attribute("name").as_string() };
                 auto extradata = j.attribute("extradata").as_int(-1);
                 if (var_name.empty() || extradata == -1) {
-                    log::error("add item variant failed(name={}, data={}",
+                    log::error("add item variant failed(name={}, data={})",
                         var_name, extradata);
                     return -1;
                 }
                 auto variant = item->addVariant(extradata, var_name);
                 if (variant == nullptr) {
-                    log::error("add item variant failed(name={}, data={}",
+                    log::error("add item variant failed(name={}, data={})",
                         var_name, extradata);
+                    return -1;
                 }
             }
         }

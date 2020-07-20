@@ -1,4 +1,4 @@
-name: Build
+name: Pipeline
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
     - name: Install requirements
       run: |
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install libpng++-dev zlib1g-dev g++-8 libboost-program-options-dev wget lcov libjson-perl libperlio-gzip-perl
+        sudo -E apt-get -qq install python3 libpng++-dev zlib1g-dev g++-8 libboost-program-options-dev wget lcov libjson-perl libperlio-gzip-perl
         # LCOV 1.13 has some issues with parsing gcc 8+ gcda files
         wget http://archive.ubuntu.com/ubuntu/pool/universe/l/lcov/lcov_1.14-2_all.deb
         sudo dpkg -i lcov_1.14-2_all.deb 
@@ -42,17 +42,25 @@ jobs:
         make
 
     - name: Test
-      run: |
-        ./build/example_test 
-
-    - name: Generate Coverage Report
       continue-on-error: true
+      run: |
+        ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
+        ./build/bedrock-viz-test --gtest_output="xml:integrationtests.xml" --gtest_filter="Integration*:*.Integration*"
+        ./build/bedrock-viz-test --gtest_output="xml:ungroupedtests.xml" --gtest_filter="-Unit*:*.Unit*:Integration*:*.Integration*"
+
+    - name: Upload Test Report
+      env:
+        REPORT_CI_TOKEN: ${{secrets.REPORT_CI_TOKEN}}
+      run: | 
+        curl -s https://report.ci/upload.py | python3 - --include='*.xml' --framework=gtest
+    
+    - name: Generate Coverage Report
       run: | 
         lcov --base-directory . --directory build -c -o coverage.info
         lcov --remove coverage.info '/usr/*' '*/third_party/*' '*/tests/*' --output-file coverage.info
         lcov --list coverage.info
 
-    - name: Upload coverage to Codecov
+    - name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v1
       with: 
         file: coverage.info
