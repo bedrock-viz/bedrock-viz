@@ -76,6 +76,17 @@ namespace mcpe_viz
         return entity;
     }
 
+    void Entity::clearList() {
+        sUnameEntityMap.clear();
+        sEntities.clear();
+        for(size_t i = 0; i < Wrapper::value().size(); ++i) {
+            // TODO: Fix nullptr issues due to data structures
+            Entity* ent = Wrapper::value()[i];
+            Wrapper::value()[i] = nullptr;
+            delete ent;
+        }
+    }
+
     const std::vector<const Entity*>& Entity::list()
     {
         return sEntities;

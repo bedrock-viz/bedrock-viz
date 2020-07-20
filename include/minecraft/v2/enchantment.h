@@ -18,6 +18,7 @@ namespace mcpe_viz
 
         static const std::vector<Enchantment*>& list();
         static Enchantment* add(const IdType& id, const std::string& name, const std::string& offName);
+        static void clearList();
         static const Enchantment* get(const IdType& id);
     };
 }

@@ -4,6 +4,7 @@
 #include "utils/pointer_array.h"
 #include "utils/unknown_recorder.h"
 
+#include <iostream>
 #include <unordered_map>
 
 namespace
@@ -70,6 +71,17 @@ namespace mcpe_viz
         instance[id] = item;
         sItems.emplace_back(item);
         return item;
+    }
+
+    void Item::clearList() {
+        unameItemMap.clear();
+        sItems.clear();
+        for(size_t i = 0; i < Wrapper::value().size(); ++i) {
+            // TODO: Fix nullptr issues due to data structures
+            Item* item = Wrapper::value()[i];
+            Wrapper::value()[i] = nullptr;
+            delete item;
+        }
     }
 
     const std::vector<const Item*>& Item::list()

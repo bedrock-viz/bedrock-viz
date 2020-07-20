@@ -12,13 +12,13 @@ namespace mcpe_viz
             auto id = i.attribute("id").as_int(-1);
 
             if (id == -1 || name.empty()) {
-                log::error("add entity failed(name={}, id={}",
+                log::error("add entity failed(name={}, id={})",
                            name, id);
                 return -1;
             }
             auto entity = Entity::add(id, name);
             if (entity == nullptr) {
-                log::error("add entity failed(name={} id={:x}",
+                log::error("add entity failed(name={} id={:x})",
                     name, id);
                 return -1;
             }
@@ -38,16 +38,16 @@ namespace mcpe_viz
 
             for (auto& j: i.children("entityvariant")) {
                 std::string var_name{ j.attribute("name").as_string() };
-                auto var_data = j.attribute("extradata").as_int();
+                auto var_data = j.attribute("extradata").as_int(-1);
 
-                if (var_name.empty()) {
-                    log::error("add entity variant failed(name={}, data={}",
+                if (var_name.empty() || var_data == -1) {
+                    log::error("add entity variant failed(name={}, data={})",
                                var_name, var_data);
                     return -1;
                 }
                 auto variant = entity->addVariant(var_data, var_name);
                 if (variant == nullptr) {
-                    log::error("add entity variant failed(name={}, data={}",
+                    log::error("add entity variant failed(name={}, data={})",
                                var_name, var_data);
                     return -1;
                 }
