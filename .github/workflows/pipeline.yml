@@ -41,14 +41,23 @@ jobs:
         cmake -DBUILD_TESTS=ON -DCODE_COVERAGE=ON ..
         make
 
-    - name: Test
+    - name: Test (PR)
       continue-on-error: true
+      if: github.ref != 'refs/heads/master'
+      run: |
+        ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
+        ./build/bedrock-viz-test --gtest_output="xml:integrationtests.xml" --gtest_filter="Integration*:*.Integration*"
+        ./build/bedrock-viz-test --gtest_output="xml:ungroupedtests.xml" --gtest_filter="-Unit*:*.Unit*:Integration*:*.Integration*"
+
+    - name: Test
+      if: github.ref == 'refs/heads/master'
       run: |
         ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
         ./build/bedrock-viz-test --gtest_output="xml:integrationtests.xml" --gtest_filter="Integration*:*.Integration*"
         ./build/bedrock-viz-test --gtest_output="xml:ungroupedtests.xml" --gtest_filter="-Unit*:*.Unit*:Integration*:*.Integration*"
 
     - name: Upload Test Report
+      if: github.ref == 'refs/heads/master'
       env:
         REPORT_CI_TOKEN: ${{secrets.REPORT_CI_TOKEN}}
       run: | 
