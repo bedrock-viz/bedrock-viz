@@ -83,9 +83,7 @@ namespace mcpe_viz
             // TODO: Fix nullptr issues due to data structures
             Entity* ent = Wrapper::value()[i];
             Wrapper::value()[i] = nullptr;
-            if(ent != nullptr){
-                delete ent;
-            }
+            delete ent;
         }
     }
 

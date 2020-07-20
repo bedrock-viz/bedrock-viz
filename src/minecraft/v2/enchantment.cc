@@ -38,9 +38,7 @@ namespace mcpe_viz
             // TODO: Fix nullptr issues due to data structures
             Enchantment* ench = Wrapper::value()[i];
             Wrapper::value()[i] = nullptr;
-            if(ench != nullptr){
-                delete ench;
-            }
+            delete ench;
         }
     }
 
