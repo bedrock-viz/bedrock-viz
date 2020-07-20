@@ -41,15 +41,7 @@ jobs:
         cmake -DBUILD_TESTS=ON -DCODE_COVERAGE=ON ..
         make
 
-    - name: Test (PR)
-      if: github.event_name == 'pull_request'
-      run: |
-        ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
-        ./build/bedrock-viz-test --gtest_output="xml:integrationtests.xml" --gtest_filter="Integration*:*.Integration*"
-        ./build/bedrock-viz-test --gtest_output="xml:ungroupedtests.xml" --gtest_filter="-Unit*:*.Unit*:Integration*:*.Integration*"
-
     - name: Test
-      if: github.event_name != 'pull_request'
       continue-on-error: true
       run: |
         ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
@@ -57,7 +49,6 @@ jobs:
         ./build/bedrock-viz-test --gtest_output="xml:ungroupedtests.xml" --gtest_filter="-Unit*:*.Unit*:Integration*:*.Integration*"
 
     - name: Upload Test Report
-      if: github.event_name != 'pull_request'
       env:
         REPORT_CI_TOKEN: ${{secrets.REPORT_CI_TOKEN}}
       run: | 
