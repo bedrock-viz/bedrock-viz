@@ -28,7 +28,7 @@ list(FILTER SRC_FILES EXCLUDE REGEX ".*/main.cc$")
 file(GLOB_RECURSE HEADER_FILES include/*.h)
 file(GLOB_RECURSE TEST_FILES tests/*.cc)
 
-add_library(${LIB_NAME} OBJECT ${SRC_FILES})
+add_library(${LIB_NAME} STATIC ${SRC_FILES})
 
 if(MSVC)
   # TODO remove all insecure c functions
