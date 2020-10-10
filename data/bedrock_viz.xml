@@ -1178,8 +1178,8 @@
     <block id="0x1B1" name="End Stone Brick Stairs" uname="minecraft:end_brick_stairs" color="0xefe9a5" />
     <block id="0x1B2" name="Mossy Cobblestone Stairs" uname="minecraft:mossy_cobblestone_stairs" color="0xfcfbfa" />
     <block id="0x1B3" name="Stone Stairs" uname="minecraft:normal_stone_stairs" color="0x8a9e92" />
-    <block id="0x1B4" name="Spruce Standing Sign" uname="minecraft:spruce_Standing_Sign" color="0x795f43" />
-    <block id="0x1B5" name="Spruce Wall Sign" uname="minecraft:Spruce_Wall_Sign" color="0x795f44" />
+    <block id="0x1B4" name="Spruce Standing Sign" uname="minecraft:spruce_standing_sign" color="0x795f43" />
+    <block id="0x1B5" name="Spruce Wall Sign" uname="minecraft:spruce_wall_sign" color="0x795f44" />
     <block id="0x1B6" name="Smooth Stone" uname="minecraft:smooth_stairs" color="0x8a9e93" />
     <block id="0x1B7" name="Red Nether Brick Stairs" uname="minecraft:red_nether_brick_stairs" color="0xbaf5f2" />
     <block id="0x1B8" name="Smooth Quartz Stairs" uname="minecraft:smooth_quartz_stairs" color="0xfffff2" />
