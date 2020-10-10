@@ -1159,7 +1159,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Diorite, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Diorite, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x1AA" name="Andesite Stairs" uname="minecraft:Andesite_stairs" color="0xfcfbfa" >
+    <block id="0x1AA" name="Andesite Stairs" uname="minecraft:andesite_stairs" color="0xfcfbfa" >
       <blockvariant blockdata="0x0" name="Stairs, Andesite, East" />
       <blockvariant blockdata="0x1" name="Stairs, Andesite, West" />
       <blockvariant blockdata="0x2" name="Stairs, Andesite, South" />
@@ -1171,7 +1171,7 @@
     </block>
     <block id="0x1AB" name="Polished Granite Stairs" uname="minecraft:polished_granite_stairs" color="0xC38437" />
     <block id="0x1AC" name="Polished Diorite Stairs" uname="minecraft:polished_diorite_stairs" color="0xfcfbfa" />
-    <block id="0x1AD" name="Polished Andesite Stairs" uname="minecraft:polished_Andesite_stairs" color="0xfcfbfa" />
+    <block id="0x1AD" name="Polished Andesite Stairs" uname="minecraft:polished_andesite_stairs" color="0xfcfbfa" />
     <block id="0x1AE" name="Mossy Stone Brick Stairs" uname="minecraft:mossy_stone_brick_stairs" color="0xC38437" />
     <block id="0x1AF" name="Smooth Red SandStone Stairs" uname="minecraft:smooth_red_sandstone_stairs" color="0xC38437" />
     <block id="0x1B0" name="Smooth SandStone Stairs" uname="minecraft:smooth_sandstone_stairs" color="0xC38437" />
