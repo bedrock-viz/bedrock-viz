@@ -1865,6 +1865,18 @@
     <item id="0x2de" name="Suspicious Stew" uname="minecraft:suspicious_stew" />
     <item id="0x2e0" name="Honeycomb" uname="minecraft:honeycomb" />
     <item id="0x2e1" name="Honey Bottle" uname="minecraft:honey_bottle" />
+    <item id="0x2e5" name="Lodestonecompass" uname="minecraft:lodestonecompass" />
+    <item id="0x2e6" name="Netherite Ingot" uname="minecraft:netherite_ingot" />
+    <item id="0x2e7" name="Netherite Sword" uname="minecraft:netherite_sword" />
+    <item id="0x2e8" name="Netherite Shovel" uname="minecraft:netherite_shovel" />
+    <item id="0x2e9" name="Netherite Pickaxe" uname="minecraft:netherite_pickaxe" />
+    <item id="0x2ea" name="Netherite Axe" uname="minecraft:netherite_axe" />
+    <item id="0x2eb" name="Netherite Hoe" uname="minecraft:netherite_hoe" />
+    <item id="0x2ec" name="Netherite Helmet" uname="minecraft:netherite_helmet" />
+    <item id="0x2ed" name="Netherite Chestplate" uname="minecraft:netherite_chestplate" />
+    <item id="0x2ee" name="Netherite Leggings" uname="minecraft:netherite_leggings" />
+    <item id="0x2ef" name="Netherite Boots" uname="minecraft:netherite_boots" />
+    <item id="0x2f0" name="Netherite Scrap" uname="minecraft:netherite_scrap" />
   </itemlist>
 
   <!--
