@@ -1159,7 +1159,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Diorite, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Diorite, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x1AA" name="Andesite Stairs" uname="minecraft:Andesite_stairs" color="0xfcfbfa" >
+    <block id="0x1AA" name="Andesite Stairs" uname="minecraft:andesite_stairs" color="0xfcfbfa" >
       <blockvariant blockdata="0x0" name="Stairs, Andesite, East" />
       <blockvariant blockdata="0x1" name="Stairs, Andesite, West" />
       <blockvariant blockdata="0x2" name="Stairs, Andesite, South" />
@@ -1171,7 +1171,7 @@
     </block>
     <block id="0x1AB" name="Polished Granite Stairs" uname="minecraft:polished_granite_stairs" color="0xC38437" />
     <block id="0x1AC" name="Polished Diorite Stairs" uname="minecraft:polished_diorite_stairs" color="0xfcfbfa" />
-    <block id="0x1AD" name="Polished Andesite Stairs" uname="minecraft:polished_Andesite_stairs" color="0xfcfbfa" />
+    <block id="0x1AD" name="Polished Andesite Stairs" uname="minecraft:polished_andesite_stairs" color="0xfcfbfa" />
     <block id="0x1AE" name="Mossy Stone Brick Stairs" uname="minecraft:mossy_stone_brick_stairs" color="0xC38437" />
     <block id="0x1AF" name="Smooth Red SandStone Stairs" uname="minecraft:smooth_red_sandstone_stairs" color="0xC38437" />
     <block id="0x1B0" name="Smooth SandStone Stairs" uname="minecraft:smooth_sandstone_stairs" color="0xC38437" />
@@ -1865,6 +1865,18 @@
     <item id="0x2de" name="Suspicious Stew" uname="minecraft:suspicious_stew" />
     <item id="0x2e0" name="Honeycomb" uname="minecraft:honeycomb" />
     <item id="0x2e1" name="Honey Bottle" uname="minecraft:honey_bottle" />
+    <item id="0x2e5" name="Lodestonecompass" uname="minecraft:lodestonecompass" />
+    <item id="0x2e6" name="Netherite Ingot" uname="minecraft:netherite_ingot" />
+    <item id="0x2e7" name="Netherite Sword" uname="minecraft:netherite_sword" />
+    <item id="0x2e8" name="Netherite Shovel" uname="minecraft:netherite_shovel" />
+    <item id="0x2e9" name="Netherite Pickaxe" uname="minecraft:netherite_pickaxe" />
+    <item id="0x2ea" name="Netherite Axe" uname="minecraft:netherite_axe" />
+    <item id="0x2eb" name="Netherite Hoe" uname="minecraft:netherite_hoe" />
+    <item id="0x2ec" name="Netherite Helmet" uname="minecraft:netherite_helmet" />
+    <item id="0x2ed" name="Netherite Chestplate" uname="minecraft:netherite_chestplate" />
+    <item id="0x2ee" name="Netherite Leggings" uname="minecraft:netherite_leggings" />
+    <item id="0x2ef" name="Netherite Boots" uname="minecraft:netherite_boots" />
+    <item id="0x2f0" name="Netherite Scrap" uname="minecraft:netherite_scrap" />
   </itemlist>
 
   <!--
