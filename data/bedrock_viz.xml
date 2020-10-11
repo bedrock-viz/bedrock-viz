@@ -210,8 +210,8 @@
       <blockvariant blockdata="0x3" name="Double Slab, Cobblestone" />
       <blockvariant blockdata="0x4" name="Double Slab, Bricks" />
       <blockvariant blockdata="0x5" name="Double Slab, Stone Brick" />
-      <blockvariant blockdata="0x6" name="Double Slab, Nether Brick" />
-      <blockvariant blockdata="0x7" name="Double Slab, Quartz" />
+      <blockvariant blockdata="0x6" name="Double Slab, Quartz" />
+      <blockvariant blockdata="0x7" name="Double Slab, Nether Brick" />
       <blockvariant blockdata="0x8" name="Double Slab, Smooth Stone" />
       <blockvariant blockdata="0x9" name="Double Slab, Smooth Sandstone" />
       <blockvariant blockdata="0xf" name="Double Slab, Tile Quartz" />
@@ -223,16 +223,16 @@
       <blockvariant blockdata="0x3" name="Slab, Cobblestone" />
       <blockvariant blockdata="0x4" name="Slab, Bricks" />
       <blockvariant blockdata="0x5" name="Slab, Stone Brick" />
-      <blockvariant blockdata="0x6" name="Slab, Nether Brick" />
-      <blockvariant blockdata="0x7" name="Slab, Quartz" />
+      <blockvariant blockdata="0x6" name="Slab, Quartz" />
+      <blockvariant blockdata="0x7" name="Slab, Nether Brick" />
       <blockvariant blockdata="0x8" name="Upper Slab, Stone" spawnable="1" />
       <blockvariant blockdata="0x9" name="Upper Slab, Sandstone" spawnable="1" />
       <blockvariant blockdata="0xa" name="Upper Slab, Wooden" spawnable="1" />
       <blockvariant blockdata="0xb" name="Upper Slab, Cobblestone" spawnable="1" />
       <blockvariant blockdata="0xc" name="Upper Slab, Bricks" spawnable="1" />
       <blockvariant blockdata="0xd" name="Upper Slab, Stone Brick" spawnable="1" />
-      <blockvariant blockdata="0xe" name="Upper Slab, Nether Brick" spawnable="1" />
-      <blockvariant blockdata="0xf" name="Upper Slab, Quartz" spawnable="1" />
+      <blockvariant blockdata="0xe" name="Upper Slab, Quartz" spawnable="1" />
+      <blockvariant blockdata="0xf" name="Upper Slab, Nether Brick" spawnable="1" />
     </block>
     <block id="0x2D" name="Brick Block" uname="minecraft:brick_block" color="0x9a0b18" />
     <block id="0x2E" name="TNT" uname="minecraft:tnt" color="0xee6f66" solid="0" opaque="0" spawnable="0" />
@@ -538,12 +538,12 @@
       <blockvariant blockdata="0x3" name="Double Slab, Jungle Wood" />
       <blockvariant blockdata="0x4" name="Double Slab, Acacia Wood" />
       <blockvariant blockdata="0x5" name="Double Slab, Dark Oak Wood" />
-      <blockvariant blockdata="0x8" name="Double Slab, Upper Oak Wood" />
-      <blockvariant blockdata="0x9" name="Double Slab, Upper Spruce Wood" />
-      <blockvariant blockdata="0xA" name="Double Slab, Upper Birch Wood" />
-      <blockvariant blockdata="0xB" name="Double Slab, Upper Jungle Wood" />
-      <blockvariant blockdata="0xC" name="Double Slab, Upper Acacia Wood" />
-      <blockvariant blockdata="0xD" name="Double Slab, Upper Dark Oak Wood" />
+      <blockvariant blockdata="0x8" name="Double Slab, Upper Oak Wood" /> <!-- how is this even possible?? -->
+      <blockvariant blockdata="0x9" name="Double Slab, Upper Spruce Wood" /> <!-- "doueble upper" ?? -->
+      <blockvariant blockdata="0xA" name="Double Slab, Upper Birch Wood" /> <!-- I have to assume these are formulaic generation -->
+      <blockvariant blockdata="0xB" name="Double Slab, Upper Jungle Wood" /> <!-- and therefore will never actually occur in a real file -->
+      <blockvariant blockdata="0xC" name="Double Slab, Upper Acacia Wood" /> <!-- double stone slabs all have the same issue -->
+      <blockvariant blockdata="0xD" name="Double Slab, Upper Dark Oak Wood" /> <!-- modern (nether) slabs are better setup -->
     </block>
     <!-- note: on MCPC 0x9e is "Dropper S E" -->
     <block id="0x9E" name="Wooden Slab" uname="minecraft:wooden_slab" color="0x69732c" opaque="0" spawnable="0"> <!-- *B -->
@@ -701,7 +701,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Red Sandstone, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Red Sandstone, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0xB5" name="Double Red Sandstone Slab" uname="minecraft:double_stone_slab2" color="0xcebe8f">
+    <block id="0xB5" name="Double Stone Slab(2)" uname="minecraft:double_stone_slab2" color="0xcebe8f">
       <blockvariant blockdata="0x0" name="Double Slab, Red Sandstone" />
       <blockvariant blockdata="0x1" name="Double Slab, Purpur" />
       <blockvariant blockdata="0x2" name="Double Slab, Prismarine" />
@@ -711,8 +711,15 @@
       <blockvariant blockdata="0x6" name="Double Slab, Smooth Sandstone" />
       <blockvariant blockdata="0x7" name="Double Slab, Red Nether Brick" />
       <blockvariant blockdata="0x8" name="Double Slab, Smooth Red Sandstone" />
+      <blockvariant blockdata="0x9" name="Double Slab, Red Sandstone" />
+      <blockvariant blockdata="0xA" name="Double Slab, Purpur" />
+      <blockvariant blockdata="0xB" name="Double Slab, Prismarine" />
+      <blockvariant blockdata="0xC" name="Double Slab, Prismarine Brick" />
+      <blockvariant blockdata="0xD" name="Double Slab, Dark Prismarine" />
+      <blockvariant blockdata="0xE" name="Double Slab, Mossy Cobblestone" />
+      <blockvariant blockdata="0xF" name="Double Slab, Smooth Sandstone" />
     </block>
-    <block id="0xB6" name="Red Sandstone Slab" uname="minecraft:stone_slab2" color="0xcfbe88" opaque="0" spawnable="0"> <!-- *B -->
+    <block id="0xB6" name="Stone Slab(2)" uname="minecraft:stone_slab2" color="0xcfbe88" opaque="0" spawnable="0"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Slab, Red Sandstone" />
       <blockvariant blockdata="0x1" name="Slab, Purpur" />
       <blockvariant blockdata="0x2" name="Slab, Prismarine" />
@@ -1132,30 +1139,62 @@
     <block id="0x19e" name="Turtle Egg" uname="minecraft:turtle_egg" color="0x4d8845" />
     <block id="0x19f" name="Bubble Column" uname="minecraft:bubble_column" color="0x02cffd" liquid="1" solid="0" opaque="0" spawnable="0" />
     <block id="0x1a0" name="Barrier" uname="minecraft:barrier" color="0xf80a31" />
-    <block id="0x1a1" name="Stone Slab" uname="minecraft:stone_slab3" color="0xefe9a5" opaque="0" spawnable="0">
+    <block id="0x1a1" name="Stone Slab(3)" uname="minecraft:stone_slab3" color="0xefe9a5" opaque="0" spawnable="0">
       <blockvariant blockdata="0x0" name="Slab, End Brick" />
       <blockvariant blockdata="0x1" name="Slab, Smooth Red Sandstone" />
-      <blockvariant blockdata="0x2" name="Slab, Smooth Andesite" />
+      <blockvariant blockdata="0x2" name="Slab, Polished Andesite" />
       <blockvariant blockdata="0x3" name="Slab, Andesite" />
-      <blockvariant blockdata="0x4" name="Slab, Smooth Diorite" />
-      <blockvariant blockdata="0x5" name="Slab, Diorite" />
-      <blockvariant blockdata="0x6" name="Slab, Smooth Granite" />
-      <blockvariant blockdata="0x7" name="Slab, Granite" />
+      <blockvariant blockdata="0x4" name="Slab, Diorite" />
+      <blockvariant blockdata="0x5" name="Slab, Polished Diorite" />
+      <blockvariant blockdata="0x6" name="Slab, Granite" />
+      <blockvariant blockdata="0x7" name="Slab, Polished Granite" />
       <blockvariant blockdata="0x8" name="Upper Slab, End Brick" spawnable="1" />
       <blockvariant blockdata="0x9" name="Upper Slab, Smooth Red Sandstone" spawnable="1" />
-      <blockvariant blockdata="0xA" name="Upper Slab, Smooth Andesite" spawnable="1" />
+      <blockvariant blockdata="0xA" name="Upper Slab, Polished Andesite" spawnable="1" />
       <blockvariant blockdata="0xB" name="Upper Slab, Andesite" spawnable="1" />
-      <blockvariant blockdata="0xC" name="Upper Slab, Smooth Diorite" spawnable="1" />
-      <blockvariant blockdata="0xD" name="Upper Slab, Diorite" spawnable="1" />
-      <blockvariant blockdata="0xE" name="Upper Slab, Smooth Granite" spawnable="1" />
-      <blockvariant blockdata="0xF" name="Upper Slab, Granite" spawnable="1" />
+      <blockvariant blockdata="0xC" name="Upper Slab, Diorite" spawnable="1" />
+      <blockvariant blockdata="0xD" name="Upper Slab, Polished Diorite" spawnable="1" />
+      <blockvariant blockdata="0xE" name="Upper Slab, Granite" spawnable="1" />
+      <blockvariant blockdata="0xF" name="Upper Slab, Polished Granite" spawnable="1" />
     </block>
     <block id="0x1a2" name="Bamboo" uname="minecraft:bamboo" color="0x1DCE32" />
     <block id="0x1a3" name="Bamboo Sapling" uname="minecraft:bamboo_sapling" color="0x1DCE33" />
     <block id="0x1a4" name="Scaffolding" uname="minecraft:scaffolding" color="0xc5b023" />
-    <block id="0x1a5" name="Mossy Stone Brick Slab" uname="minecraft:stone_slab4" color="0x8a9e91" opaque="0" spawnable="0"/>
-    <block id="0x1a6" name="Double End Stone Brick Slab" uname="minecraft:double_stone_slab3" color="0xded99d" />
-    <block id="0x1A7" name="Double Mossy Stone Brick Slab" uname="minecraft:double_stone_slab4" color="0x8a9e92" />
+    <block id="0x1a5" name="Stone Slab(4)" uname="minecraft:stone_slab4" color="0x8a9e91" opaque="0" spawnable="0">
+      <blockvariant blockdata="0x0" name="Slab, Mossy Stone Brick" />
+      <blockvariant blockdata="0x1" name="Slab, Smooth Quartz" />
+      <blockvariant blockdata="0x2" name="Slab, Stone" />
+      <blockvariant blockdata="0x3" name="Slab, Cut Sandstone" />
+      <blockvariant blockdata="0x4" name="Slab, Cut Red Sandstone" />
+      <!--blockvariant blockdata="0x5" name="Slab, " /-->
+      <!--blockvariant blockdata="0x6" name="Slab, " /-->
+      <!--blockvariant blockdata="0x7" name="Slab, " /-->
+      <blockvariant blockdata="0x8" name="Upper Slab, Mossy Stone Brick" spawnable="1" />
+      <blockvariant blockdata="0x9" name="Upper Slab, Smooth Quartz" spawnable="1" />
+      <blockvariant blockdata="0xA" name="Upper Slab, Stone" spawnable="1" />
+      <blockvariant blockdata="0xB" name="Upper Slab, Cut Sandstone" spawnable="1" />
+      <blockvariant blockdata="0xC" name="Upper Slab, Cut Red Sandstone" spawnable="1" />
+      <!--blockvariant blockdata="0xD" name="Upper Slab, " spawnable="1" /-->
+      <!--blockvariant blockdata="0xE" name="Upper Slab, " spawnable="1" /-->
+      <!--blockvariant blockdata="0xF" name="Upper Slab, " spawnable="1" /-->
+    </block>
+    <block id="0x1a6" name="Double Stone Slab(3)" uname="minecraft:double_stone_slab3" color="0xded99d">
+      <blockvariant blockdata="0x0" name="Double Slab, End Stone Brick" />
+      <blockvariant blockdata="0x1" name="Double Slab, Smooth Red Sandstone" />
+      <blockvariant blockdata="0x2" name="Double Slab, Polished Andesite" />
+      <blockvariant blockdata="0x3" name="Double Slab, Andesite" />
+      <blockvariant blockdata="0x4" name="Double Slab, Diorite" />
+      <blockvariant blockdata="0x5" name="Double Slab, Polished Diorite" />
+      <blockvariant blockdata="0x6" name="Double Slab, Granite" />
+      <blockvariant blockdata="0x7" name="Double Slab, Polished Granite" />
+    </block>
+    <block id="0x1A7" name="Double Stone Slab(4)" uname="minecraft:double_stone_slab4" color="0x8a9e92">
+      <blockvariant blockdata="0x0" name="Double Slab, Mossy Stone Brick" />
+      <blockvariant blockdata="0x1" name="Double Slab, Smooth Quartz" />
+      <blockvariant blockdata="0x2" name="Double Slab, Stone" />
+      <blockvariant blockdata="0x3" name="Double Slab, Cut Sandstone" />
+      <blockvariant blockdata="0x4" name="Double Slab, Cut Red Sandstone" />
+    </block>
     <block id="0x1A8" name="Granite Stairs" uname="minecraft:granite_stairs" color="0x7C5960" spawnable="0"> <!-- *D -->
       <blockvariant blockdata="0x0" name="Stairs, Granite, East" />
       <blockvariant blockdata="0x1" name="Stairs, Granite, West" />
