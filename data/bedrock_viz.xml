@@ -1300,8 +1300,14 @@
     <block id="0x204" name="Warped Button" uname="minecraft:warped_button" color="0x113833" />
     <block id="0x205" name="Crimson Pressure Plate" uname="minecraft:crimson_pressure_plate" color="0x521816" />
     <block id="0x206" name="Warped Pressure Plate" uname="minecraft:warped_pressure_plate" color="0x113839" />
-    <block id="0x207" name="Crimson Slab" uname="minecraft:crimson_slab" color="0x521817" />
-    <block id="0x208" name="Warped Slab" uname="minecraft:warped_slab" color="0x11383A" />
+    <block id="0x207" name="Crimson Slab" uname="minecraft:crimson_slab" color="0x521817">
+      <blockvariant blockdata="0x0" name="Lower Crimson Slab" spawnable="0" />
+      <blockvariant blockdata="0x1" name="Upper Crimson Slab" spawnable="1" />
+    </block>
+    <block id="0x208" name="Warped Slab" uname="minecraft:warped_slab" color="0x11383A">
+      <blockvariant blockdata="0x0" name="Lower Warped Slab" spawnable="0" />
+      <blockvariant blockdata="0x1" name="Upper Warped Slab" spawnable="1" />
+    </block>
     <block id="0x209" name="Crimson Double Slab" uname="minecraft:crimson_double_slab" color="0x521820" />
     <block id="0x20A" name="Warped Double Slab" uname="minecraft:warped_double_slab" color="0x113840" />
     <block id="0x20B" name="Soul Torch" uname="minecraft:soul_torch" color="0x11976C" />
@@ -1318,9 +1324,15 @@
     <block id="0x216" name="Chiseled Polished Blackstone" uname="minecraft:chiseled_polished_blackstone" color="0x1B263A" />
     <block id="0x217" name="Cracked Polished Blackstone Bricks" uname="minecraft:cracked_polished_blackstone_bricks" color="0x1B263B" />
     <block id="0x218" name="Gilded Blackstone" uname="minecraft:gilded_blackstone" color="0x1B263F" />
-    <block id="0x219" name="Blackstone Slab" uname="minecraft:blackstone_slab" color="0x1B263C" />
+    <block id="0x219" name="Blackstone Slab" uname="minecraft:blackstone_slab" color="0x1B263C">
+      <blockvariant blockdata="0x0" name="Lower Blackstone Slab" spawnable="0" />
+      <blockvariant blockdata="0x1" name="Upper Blackstone Slab" spawnable="1" />
+    </block>
     <block id="0x21A" name="Blackstone Double Slab" uname="minecraft:blackstone_double_slab" color="0x1B2647" />
-    <block id="0x21B" name="Polished Blackstone Brick Slab" uname="minecraft:polished_blackstone_brick_slab" color="0x1B2631" />
+    <block id="0x21B" name="Polished Blackstone Brick Slab" uname="minecraft:polished_blackstone_brick_slab" color="0x1B2631">
+      <blockvariant blockdata="0x0" name="Lower Polished Blackstone Brick Slab" spawnable="0" />
+      <blockvariant blockdata="0x1" name="Upper Polished Blackstone Brick Slab" spawnable="1" />
+    </block>
     <block id="0x21C" name="Polished Blackstone Brick Double Slab" uname="minecraft:polished_blackstone_brick_double_slab" color="0x1B2644" />
     <block id="0x21D" name="Chain" uname="minecraft:chain" color="0x1B2630" />
     <block id="0x21E" name="Twisting Vines" uname="minecraft:twisting_vines" color="0x006806" />
@@ -1329,7 +1341,10 @@
     <block id="0x221" name="Soul Campfire" uname="minecraft:soul_campfire" color="0x11976E" />
     <block id="0x222" name="Polished Blackstone" uname="minecraft:polished_blackstone" color="0x1B2643" />
     <block id="0x223" name="Polished Blackstone Stairs" uname="minecraft:polished_blackstone_stairs" color="0x1B2638" />
-    <block id="0x224" name="Polished Blackstone Slab" uname="minecraft:polished_blackstone_slab" color="0x1B2637" />
+    <block id="0x224" name="Polished Blackstone Slab" uname="minecraft:polished_blackstone_slab" color="0x1B2637">
+      <blockvariant blockdata="0x0" name="Lower Polished Blackstone Slab" spawnable="0" />
+      <blockvariant blockdata="0x1" name="Upper Polished Blackstone Slab" spawnable="1" />
+    </block>
     <block id="0x225" name="Polished Blackstone Double Slab" uname="minecraft:polished_blackstone_double_slab" color="0x1B2645" />
     <block id="0x226" name="Polished Blackstone Pressure Plate" uname="minecraft:polished_blackstone_pressure_plate" color="0x1B2636" />
     <block id="0x227" name="Polished Blackstone Button" uname="minecraft:polished_blackstone_button" color="0x1B2635" />
