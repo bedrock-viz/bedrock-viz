@@ -382,7 +382,7 @@
     <block id="0x76" name="Cauldron" uname="minecraft:cauldron" color="0x939393" opaque="0" spawnable="0" /> <!-- *I *S 0.14 -->
     <block id="0x77" name="End Portal" uname="minecraft:end_portal" color="0x7f9f81" opaque="0" spawnable="0" />
     <block id="0x78" name="End Portal Frame" uname="minecraft:end_portal_frame" color="0x8faf91" opaque="0" spawnable="0" />
-    <block id="0x79" name="End Stone" uname="minecraft:end_stone" color="0xefe9a5" /> <!-- todo --> <!-- 0.17 -->
+    <block id="0x79" name="End Stone" uname="minecraft:end_stone" color="0xefe9a3" /> <!-- todo --> <!-- 0.17 -->
     <block id="0x7A" name="Dragon Egg" uname="minecraft:dragon_egg" color="0x373737"/> <!-- 0.17 -->
     <block id="0x7B" name="Redstone Lamp, Inactive" uname="minecraft:redstone_lamp" color="0xa03030" opaque="0" spawnable="0" /> <!-- 0.13 -->
     <block id="0x7C" name="Redstone Lamp, Active" uname="minecraft:lit_redstone_lamp" color="0xc03030" opaque="0" spawnable="0" /> <!-- 0.13 -->
@@ -683,8 +683,8 @@
       <blockvariant blockdata="0xE" color="0xff00ff" name="Unknown Tall Flower (0xE)" />
       <blockvariant blockdata="0xF" color="0xfd00fc" name="Unknown Tall Flower (0xF)" />
     </block>
-    <block id="0xB0" name="Standing Banner" uname="minecraft:standing_banner" color="0xe36731" solid="0" opaque="0" spawnable="0" />
-    <block id="0xB1" name="Wall Banner" uname="minecraft:wall_banner" color="0xe36731" solid="0" opaque="0" spawnable="0" />
+    <block id="0xB0" name="Standing Banner" uname="minecraft:standing_banner" color="0xe36734" solid="0" opaque="0" spawnable="0" />
+    <block id="0xB1" name="Wall Banner" uname="minecraft:wall_banner" color="0xe36735" solid="0" opaque="0" spawnable="0" />
     <block id="0xB2" name="Daylight Sensor, Inverted" uname="minecraft:daylight_detector_inverted" color="0x989897" opaque="0" spawnable="0" /> <!-- *E 0.13 -->
     <block id="0xB3" name="Red Sandstone" uname="minecraft:red_sandstone" color="0xd0be86"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Red Sandstone" />
@@ -723,12 +723,12 @@
       <blockvariant blockdata="0x7" name="Slab, Red Nether Brick" />
       <blockvariant blockdata="0x8" name="Upper Slab, Red Sandstone" spawnable="1" />
       <blockvariant blockdata="0x9" name="Upper Slab, Purpur" spawnable="1" />
-      <blockvariant blockdata="0xA" name="Slab, Upper Prismarine" />
-      <blockvariant blockdata="0xB" name="Slab, Upper Prismarine Brick" />
-      <blockvariant blockdata="0xC" name="Slab, Upper Dark Prismarine" />
-      <blockvariant blockdata="0xD" name="Slab, upper Mossy Cobblestone" />
-      <blockvariant blockdata="0xE" name="Slab, Upper Smooth Sandstone" />
-      <blockvariant blockdata="0xF" name="Slab, Upper Red Nether Brick" />
+      <blockvariant blockdata="0xA" name="Upper Slab, Prismarine" spawnable="1" />
+      <blockvariant blockdata="0xB" name="Upper Slab, Prismarine Brick" spawnable="1" />
+      <blockvariant blockdata="0xC" name="Upper Slab, Dark Prismarine" spawnable="1" />
+      <blockvariant blockdata="0xD" name="Upper Slab, Mossy Cobblestone" spawnable="1" />
+      <blockvariant blockdata="0xE" name="Upper Slab, Smooth Sandstone" spawnable="1" />
+      <blockvariant blockdata="0xF" name="Upper Slab, Red Nether Brick" spawnable="1" />
     </block>
     <block id="0xB7" name="Fence Gate, Spruce" uname="minecraft:spruce_fence_gate" color="0xa77b10" solid="0" opaque="0" spawnable="0" />
     <block id="0xB8" name="Fence Gate, Birch" uname="minecraft:birch_fence_gate" color="0xa77b11" solid="0" opaque="0" spawnable="0" />
@@ -739,22 +739,22 @@
     <block id="0xBD" name="Chain Command Block" uname="minecraft:chain_command_block" color="0x9acfd7" />
     <block id="0xBE" name="Hardened Glass Pane" uname="minecraft:hard_glass_pane" color="0xbedbdf" />
     <block id="0xBF" name="Hardened Stained Glass Pane" uname="minecraft:hard_stained_glass_pane" color="0xbce5eb">
-      <blockvariant blockdata="0x0" color="0xDDDDDD" dcolor="2" name="Hardened Stained Glass Pane, White" />
-      <blockvariant blockdata="0x1" color="0xDB7D3E" dcolor="2" name="Hardened Stained Glass Pane, Orange" />
-      <blockvariant blockdata="0x2" color="0xB350BC" dcolor="2" name="Hardened Stained Glass Pane, Magenta" />
-      <blockvariant blockdata="0x3" color="0x6B8AC9" dcolor="2" name="Hardened Stained Glass Pane, Light Blue" />
-      <blockvariant blockdata="0x4" color="0xB1A627" dcolor="2" name="Hardened Stained Glass Pane, Yellow" />
-      <blockvariant blockdata="0x5" color="0x41AE38" dcolor="2" name="Hardened Stained Glass Pane, Lime" />
-      <blockvariant blockdata="0x6" color="0xD08499" dcolor="2" name="Hardened Stained Glass Pane, Pink" />
-      <blockvariant blockdata="0x7" color="0x404040" dcolor="2" name="Hardened Stained Glass Pane, Gray" />
-      <blockvariant blockdata="0x8" color="0x9AA1A1" dcolor="2" name="Hardened Stained Glass Pane, Light Gray" />
-      <blockvariant blockdata="0x9" color="0x2E6E89" dcolor="2" name="Hardened Stained Glass Pane, Cyan" />
-      <blockvariant blockdata="0xa" color="0x7E3DB5" dcolor="2" name="Hardened Stained Glass Pane, Purple" />
-      <blockvariant blockdata="0xb" color="0x2E388D" dcolor="2" name="Hardened Stained Glass Pane, Blue" />
-      <blockvariant blockdata="0xc" color="0x4F321F" dcolor="2" name="Hardened Stained Glass Pane, Brown" />
-      <blockvariant blockdata="0xd" color="0x35461B" dcolor="2" name="Hardened Stained Glass Pane, Green" />
-      <blockvariant blockdata="0xe" color="0x963430" dcolor="2" name="Hardened Stained Glass Pane, Red" />
-      <blockvariant blockdata="0xf" color="0x191616" dcolor="2" name="Hardened Stained Glass Pane, Black" />
+      <blockvariant blockdata="0x0" color="0xDDDDDD" dcolor="8" name="Hardened Stained Glass Pane, White" />
+      <blockvariant blockdata="0x1" color="0xDB7D3E" dcolor="8" name="Hardened Stained Glass Pane, Orange" />
+      <blockvariant blockdata="0x2" color="0xB350BC" dcolor="8" name="Hardened Stained Glass Pane, Magenta" />
+      <blockvariant blockdata="0x3" color="0x6B8AC9" dcolor="8" name="Hardened Stained Glass Pane, Light Blue" />
+      <blockvariant blockdata="0x4" color="0xB1A627" dcolor="8" name="Hardened Stained Glass Pane, Yellow" />
+      <blockvariant blockdata="0x5" color="0x41AE38" dcolor="8" name="Hardened Stained Glass Pane, Lime" />
+      <blockvariant blockdata="0x6" color="0xD08499" dcolor="8" name="Hardened Stained Glass Pane, Pink" />
+      <blockvariant blockdata="0x7" color="0x404040" dcolor="8" name="Hardened Stained Glass Pane, Gray" />
+      <blockvariant blockdata="0x8" color="0x9AA1A1" dcolor="8" name="Hardened Stained Glass Pane, Light Gray" />
+      <blockvariant blockdata="0x9" color="0x2E6E89" dcolor="8" name="Hardened Stained Glass Pane, Cyan" />
+      <blockvariant blockdata="0xa" color="0x7E3DB5" dcolor="8" name="Hardened Stained Glass Pane, Purple" />
+      <blockvariant blockdata="0xb" color="0x2E388D" dcolor="8" name="Hardened Stained Glass Pane, Blue" />
+      <blockvariant blockdata="0xc" color="0x4F321F" dcolor="8" name="Hardened Stained Glass Pane, Brown" />
+      <blockvariant blockdata="0xd" color="0x35461B" dcolor="8" name="Hardened Stained Glass Pane, Green" />
+      <blockvariant blockdata="0xe" color="0x963430" dcolor="8" name="Hardened Stained Glass Pane, Red" />
+      <blockvariant blockdata="0xf" color="0x191616" dcolor="8" name="Hardened Stained Glass Pane, Black" />
     </block>    
     <block id="0xC0" name="Heat Block" uname="minecraft:chemical_heat" color="0xfc5c1e" />
     <block id="0xC1" name="Door, Spruce" uname="minecraft:spruce_door" color="0x805f0d" solid="0" opaque="0" spawnable="0" /> <!-- *S *I 0.13 -->
@@ -772,7 +772,7 @@
       <blockvariant blockdata="0x6" name="Purpur, Pillar (East/West)" />
       <blockvariant blockdata="0xa" name="Purpur, Pillar (North/South)" />
     </block>
-    <block id="0xCA" name="Red Torch" uname= "minecraft:colored_torch_rg" color="0x963430" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
+    <block id="0xCA" name="Red Torch" uname= "minecraft:colored_torch_rg" color="0x963429" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
     <block id="0xCB" name="Stairs, Purpur" uname= "minecraft:purpur_stairs" color="0xf4c4f4" spawnable="0"> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
       <blockvariant blockdata="0x0" name="Stairs, Purpur, East" />
       <blockvariant blockdata="0x1" name="Stairs, Purpur, West" />
@@ -783,19 +783,19 @@
       <blockvariant blockdata="0x6" name="Stairs, Purpur, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Purpur, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0xCC" name="Blue Torch" uname= "minecraft:colored_torch_bp" color="0x2E388D" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
+    <block id="0xCC" name="Blue Torch" uname= "minecraft:colored_torch_bp" color="0x2E388B" spawnable="0" /> <!-- *S --> <!-- 0.17 -->
     <block id="0xCD" name="Shulker Box, Undyed" uname="minecraft:undyed_shulker_box" color="0xB482BA" />
     <block id="0xCE" name="End Bricks" uname="minecraft:end_bricks" color="0xded99e" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
-    <block id="0xCF" name="Frosted Ice" uname="minecraft:frosted_ice" color="0xe0e0f0" opaque="0" />
+    <block id="0xCF" name="Frosted Ice" uname="minecraft:frosted_ice" color="0xe0e0f1" opaque="0" />
     <block id="0xD0" name="End Rod" uname="minecraft:end_rod" color="0xf7f7f6" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
     <block id="0xD1" name="End Gateway" uname="minecraft:end_gateway" color="0x545454" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
     <block id="0xD2" name="Allow Block" uname="minecraft:allow" spawnable="0" /> <!-- EDU -->
     <block id="0xD3" name="Deny Block" uname="minecraft:deny" spawnable="0" /> <!-- EDU -->
     <block id="0xD4" name="Border Block" uname="minecraft:border_block" spawnable="0" /> <!-- EDU -->
-    <block id="0xD5" name="Magma Block" uname="minecraft:magma" color="0xd65c0c" />
+    <block id="0xD5" name="Magma Block" uname="minecraft:magma" color="0xd65c0b" />
     <block id="0xD6" name="Nether wart Block" uname="minecraft:nether_wart_block" color="0xd65c0c" />
     <block id="0xD7" name="Red Nether Brick" uname="minecraft:red_nether_brick" color="0x230203" />
-    <block id="0xD8" name="Bone Block" uname="minecraft:bone_block" color="0xddddde" />
+    <block id="0xD8" name="Bone Block" uname="minecraft:bone_block" color="0xddddda" />
     <block id="0xDA" name="Shulker Box" uname="minecraft:shulker_box">
       <blockvariant blockdata="0x0" color="0xDDDDDD" dcolor="4" name="Shulker Box, White" />
       <blockvariant blockdata="0x1" color="0xDB7D3E" dcolor="4" name="Shulker Box, Orange" />
@@ -814,23 +814,23 @@
       <blockvariant blockdata="0xe" color="0x963430" dcolor="4" name="Shulker Box, Red" />
       <blockvariant blockdata="0xf" color="0x191616" dcolor="4" name="Shulker Box, Black" />
     </block>
-    <block id="0xDB" name="Glazed Terracotta, Purple" uname="minecraft:purple_glazed_terracotta;minecraft:glazedterracotta.purple" color="0x7E3DB5" />
-    <block id="0xDC" name="Glazed Terracotta, White" uname="minecraft:white_glazed_terracotta;minecraft:glazedterracotta.white" color="0xDDDDDD" />
-    <block id="0xDD" name="Glazed Terracotta, Orange" uname="minecraft:orange_glazed_terracotta;minecraft:glazedterracotta.orange" color="0xDB7D3E" />
-    <block id="0xDE" name="Glazed Terracotta, Magenta" uname="minecraft:magenta_glazed_terracotta;minecraft:glazedterracotta.magenta" color="0xB350BC" />
-    <block id="0xDF" name="Glazed Terracotta, Light Blue" uname="minecraft:light_blue_glazed_terracotta;minecraft:glazedterracotta.light_blue" color="0x6B8AC9" />
-    <block id="0xE0" name="Glazed Terracotta, Yellow" uname="minecraft:yellow_glazed_terracotta;minecraft:glazedterracotta.yellow" color="0xB1A627" />
-    <block id="0xE1" name="Glazed Terracotta, Lime" uname="minecraft:lime_glazed_terracotta;minecraft:glazedterracotta.lime" color="0x41AE38" />
-    <block id="0xE2" name="Glazed Terracotta, Pink" uname="minecraft:pink_glazed_terracotta;minecraft:glazedterracotta.pink" color="0xD08499" />
-    <block id="0xE3" name="Glazed Terracotta, Gray" uname="minecraft:gray_glazed_terracotta;minecraft:glazedterracotta.gray" color="0x404040" />
-    <block id="0xE4" name="Glazed Terracotta, Light Gray" uname="minecraft:silver_glazed_terracotta;minecraft:glazedterracotta.silver" color="0x9AA1A1" />
-    <block id="0xE5" name="Glazed Terracotta, Cyan" uname="minecraft:cyan_glazed_terracotta;minecraft:glazedterracotta.cyan" color="0x2E6E89" />
+    <block id="0xDB" name="Glazed Terracotta, Purple" uname="minecraft:purple_glazed_terracotta;minecraft:glazedterracotta.purple" color="0x7E3DB4" />
+    <block id="0xDC" name="Glazed Terracotta, White" uname="minecraft:white_glazed_terracotta;minecraft:glazedterracotta.white" color="0xDDDDDC" />
+    <block id="0xDD" name="Glazed Terracotta, Orange" uname="minecraft:orange_glazed_terracotta;minecraft:glazedterracotta.orange" color="0xDB7D3D" />
+    <block id="0xDE" name="Glazed Terracotta, Magenta" uname="minecraft:magenta_glazed_terracotta;minecraft:glazedterracotta.magenta" color="0xB350BB" />
+    <block id="0xDF" name="Glazed Terracotta, Light Blue" uname="minecraft:light_blue_glazed_terracotta;minecraft:glazedterracotta.light_blue" color="0x6B8AC8" />
+    <block id="0xE0" name="Glazed Terracotta, Yellow" uname="minecraft:yellow_glazed_terracotta;minecraft:glazedterracotta.yellow" color="0xB1A626" />
+    <block id="0xE1" name="Glazed Terracotta, Lime" uname="minecraft:lime_glazed_terracotta;minecraft:glazedterracotta.lime" color="0x41AE37" />
+    <block id="0xE2" name="Glazed Terracotta, Pink" uname="minecraft:pink_glazed_terracotta;minecraft:glazedterracotta.pink" color="0xD08498" />
+    <block id="0xE3" name="Glazed Terracotta, Gray" uname="minecraft:gray_glazed_terracotta;minecraft:glazedterracotta.gray" color="0x404039" />
+    <block id="0xE4" name="Glazed Terracotta, Light Gray" uname="minecraft:silver_glazed_terracotta;minecraft:glazedterracotta.silver" color="0x9AA1A0" />
+    <block id="0xE5" name="Glazed Terracotta, Cyan" uname="minecraft:cyan_glazed_terracotta;minecraft:glazedterracotta.cyan" color="0x2E6E88" />
     <block id="0xE6" name="Glazed Terracotta, Chalkboard" uname="minecraft:chalkboard;minecraft:glazedterracotta.chalkboard" spawnable="0" /> <!-- EDU -->
-    <block id="0xE7" name="Glazed Terracotta, Blue" uname="minecraft:blue_glazed_terracotta;minecraft:glazedterracotta.blue" color="0x2E388f" />
-    <block id="0xE8" name="Glazed Terracotta, Brown" uname="minecraft:brown_glazed_terracotta;minecraft:glazedterracotta.brown" color="0x4F321F" />
-    <block id="0xE9" name="Glazed Terracotta, Green" uname="minecraft:green_glazed_terracotta;minecraft:glazedterracotta.green" color="0x35461B" />
-    <block id="0xEA" name="Glazed Terracotta, Red" uname="minecraft:red_glazed_terracotta;minecraft:glazedterracotta.red" color="0x963430" />
-    <block id="0xEB" name="Glazed Terracotta, Black" uname="minecraft:black_glazed_terracotta;minecraft:glazedterracotta.black" color="0x191616" />
+    <block id="0xE7" name="Glazed Terracotta, Blue" uname="minecraft:blue_glazed_terracotta;minecraft:glazedterracotta.blue" color="0x2E388C" />
+    <block id="0xE8" name="Glazed Terracotta, Brown" uname="minecraft:brown_glazed_terracotta;minecraft:glazedterracotta.brown" color="0x4F321D" />
+    <block id="0xE9" name="Glazed Terracotta, Green" uname="minecraft:green_glazed_terracotta;minecraft:glazedterracotta.green" color="0x35461A" />
+    <block id="0xEA" name="Glazed Terracotta, Red" uname="minecraft:red_glazed_terracotta;minecraft:glazedterracotta.red" color="0x963429" />
+    <block id="0xEB" name="Glazed Terracotta, Black" uname="minecraft:black_glazed_terracotta;minecraft:glazedterracotta.black" color="0x191615" />
     <block id="0xEC" name="Concrete" uname="minecraft:concrete">
       <blockvariant blockdata="0x0" color="0xDDDDDD" dcolor="5" name="Concrete, White" />
       <blockvariant blockdata="0x1" color="0xDB7D3E" dcolor="5" name="Concrete, Orange" />
@@ -867,8 +867,8 @@
       <blockvariant blockdata="0xe" color="0x963430" dcolor="6" name="Concrete Powder, Red" />
       <blockvariant blockdata="0xf" color="0x191616" dcolor="6" name="Concrete Powder, Black" />
     </block>
-    <block id="0xEE" name="Compound Creator" uname="minecraft:chemistry_table" color="0x9AA1A1" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
-    <block id="0xEF" name="Underwater Torch" uname="minecraft:underwater_torch" color="0xDB7D3E" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
+    <block id="0xEE" name="Compound Creator" uname="minecraft:chemistry_table" color="0x9AA1A0" spawnable="0" /> <!-- *S --> <!-- 0.17 -->
+    <block id="0xEF" name="Underwater Torch" uname="minecraft:underwater_torch" color="0xDB7D3C" spawnable="0" /> <!-- *S --> <!-- 0.17 -->
     <block id="0xF0" name="Chorus Plant" uname="minecraft:chorus_plant" color="0x591062" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
     <block id="0xF1" name="Stained Glass" uname="minecraft:stained_glass"> <!-- *B --> <!-- 0.17 --> <!-- todo colors -->
       <blockvariant blockdata="0x0" color="0xDDDDDD" dcolor="3" name="Stained Glass, White" />
@@ -893,7 +893,7 @@
     <block id="0xF4" name="Beetroot" uname="minecraft:beetroot" color="0xd03388" solid="0" opaque="0" spawnable="0" /> <!-- *S *I -->
     <block id="0xF5" name="Stone Cutter" uname="minecraft:stonecutter" color="0xb2aea5" />
     <block id="0xF6" name="Glowing Obsidian" uname="minecraft:glowingobsidian" color="0x8b0000" /> <!-- todo -->
-    <block id="0xF7" name="Nether Reactor Core" uname="minecraft:netherreactor" color="0xbaf5f2" > <!-- Obsolete -->
+    <block id="0xF7" name="Nether Reactor Core" uname="minecraft:netherreactor" color="0xbaf5f1" > <!-- Obsolete -->
       <blockvariant blockdata="0x0" name="Nether Reactor Core (Default)" />
       <blockvariant blockdata="0x1" name="Nether Reactor Core (Active)" />
       <blockvariant blockdata="0x2" name="Nether Reactor Core (Cooled)" />
@@ -909,7 +909,7 @@
       <blockvariant blockdata="0x4" name="Observer (West)" />
       <blockvariant blockdata="0x5" name="Observer (East)" />
     </block>
-    <block id="0xFC" name="Structure Block" uname="minecraft:structure_block" color="0x6de0ae" /> <!-- todo -->
+    <block id="0xFC" name="Structure Block" uname="minecraft:structure_block" color="0x6de0af" /> <!-- todo -->
     <block id="0xFD" name="Hardened Glass" uname="minecraft:hard_glass" color="0x6de0ae" /> <!-- todo -->
     <block id="0xFE" name="Hard Stained Glass" uname="minecraft:hard_stained_glass" color="0x66bd97" /> <!-- todo -->
     <block id="0xFF" name="info_reserved6" uname="minecraft:reserved6" /> <!-- todo -->
@@ -1071,9 +1071,9 @@
     <block id="0x180" name="Oganesson" uname="minecraft:element_118 " color="0xB67622" />
 
     <block id="0x181" name="Sea Grass" uname="minecraft:seagrass" color="0x35461C" opaque="1" spawnable="0" >
-      <blockvariant blockdata="0x0" name="Sea Grass0" color="0x35461a" />
-      <blockvariant blockdata="0x1" name="Sea grass1" color="0x35461d" />
-      <blockvariant blockdata="0x2" name="Sea Grass2" color="0x35461e" />
+      <blockvariant blockdata="0x0" name="Sea Grass0" />
+      <blockvariant blockdata="0x1" name="Sea grass1" />
+      <blockvariant blockdata="0x2" name="Sea Grass2" />
     </block>	
     <block id="0x182" name="Coral" uname="minecraft:coral" color="0x0e1c40" opaque="0" spawnable="0" />
     <block id="0x183" name="Coral Block" uname="minecraft:coral_block" color="0x0e1c41" opaque="0" spawnable="0" />
@@ -1119,12 +1119,12 @@
     <block id="0x191" name="Trapdoor, Birch" uname="minecraft:birch_trapdoor" color="0xd5b28b" />
     <block id="0x192" name="Trapdoor, Dark Oak" uname="minecraft:dark_oak_trapdoor" color="0x9f8971" />
     <block id="0x193" name="Trapdoor, Jungle" uname="minecraft:jungle_trapdoor" color="0xa58057" />
-    <block id="0x194" name="Trapdoor, Spruce" uname="minecraft:spruce_trapdoor" color="0x795f44" />
+    <block id="0x194" name="Trapdoor, Spruce" uname="minecraft:spruce_trapdoor" color="0x795f43" />
     <block id="0x195" name="Pressure Plate, Acacia" uname="minecraft:acacia_pressure_plate" color="0xc7b5a2" />
     <block id="0x196" name="Pressure Plate, Birch" uname="minecraft:birch_pressure_plate" color="0xd5b28c" />
     <block id="0x197" name="Pressure Plate, Dark Oak" uname="minecraft:dark_oak_pressure_plate" color="0x9f8972" />
     <block id="0x198" name="Pressure Plate, Jungle" uname="minecraft:jungle_pressure_plate" color="0xa58058" />
-    <block id="0x199" name="Pressure Plate, Spruce" uname="minecraft:spruce_pressure_plate" color="0x795f45" />
+    <block id="0x199" name="Pressure Plate, Spruce" uname="minecraft:spruce_pressure_plate" color="0x795f42" />
     <block id="0x19a" name="Carved Pumpkin" uname="minecraft:carved_pumpkin" color="0xd18415" />
     <block id="0x19b" name="Sea Pickle" uname="minecraft:sea_pickle" color="0x41c247" />
     <block id="0x19c" name="Conduit" uname="minecraft:conduit" color="0x5e6062" />
@@ -1132,14 +1132,31 @@
     <block id="0x19e" name="Turtle Egg" uname="minecraft:turtle_egg" color="0x4d8845" />
     <block id="0x19f" name="Bubble Column" uname="minecraft:bubble_column" color="0x02cffd" liquid="1" solid="0" opaque="0" spawnable="0" />
     <block id="0x1a0" name="Barrier" uname="minecraft:barrier" color="0xf80a31" />
-    <block id="0x1a1" name="End Stone Brick Slab" uname="minecraft:stone_slab3" color="0xefe9a5" />
+    <block id="0x1a1" name="Stone Slab" uname="minecraft:stone_slab3" color="0xefe9a5" opaque="0" spawnable="0">
+      <blockvariant blockdata="0x0" name="Slab, End Brick" />
+      <blockvariant blockdata="0x1" name="Slab, Smooth Red Sandstone" />
+      <blockvariant blockdata="0x2" name="Slab, Smooth Andesite" />
+      <blockvariant blockdata="0x3" name="Slab, Andesite" />
+      <blockvariant blockdata="0x4" name="Slab, Smooth Diorite" />
+      <blockvariant blockdata="0x5" name="Slab, Diorite" />
+      <blockvariant blockdata="0x6" name="Slab, Smooth Granite" />
+      <blockvariant blockdata="0x7" name="Slab, Granite" />
+      <blockvariant blockdata="0x8" name="Upper Slab, End Brick" spawnable="1" />
+      <blockvariant blockdata="0x9" name="Upper Slab, Smooth Red Sandstone" spawnable="1" />
+      <blockvariant blockdata="0xA" name="Upper Slab, Smooth Andesite" spawnable="1" />
+      <blockvariant blockdata="0xB" name="Upper Slab, Andesite" spawnable="1" />
+      <blockvariant blockdata="0xC" name="Upper Slab, Smooth Diorite" spawnable="1" />
+      <blockvariant blockdata="0xD" name="Upper Slab, Diorite" spawnable="1" />
+      <blockvariant blockdata="0xE" name="Upper Slab, Smooth Granite" spawnable="1" />
+      <blockvariant blockdata="0xF" name="Upper Slab, Granite" spawnable="1" />
+    </block>
     <block id="0x1a2" name="Bamboo" uname="minecraft:bamboo" color="0x1DCE32" />
     <block id="0x1a3" name="Bamboo Sapling" uname="minecraft:bamboo_sapling" color="0x1DCE33" />
     <block id="0x1a4" name="Scaffolding" uname="minecraft:scaffolding" color="0xc5b023" />
-    <block id="0x1a5" name="Mossy Stone Brick Slab" uname="minecraft:stone_slab4" color="0x8a9e91" />
+    <block id="0x1a5" name="Mossy Stone Brick Slab" uname="minecraft:stone_slab4" color="0x8a9e91" opaque="0" spawnable="0"/>
     <block id="0x1a6" name="Double End Stone Brick Slab" uname="minecraft:double_stone_slab3" color="0xded99d" />
     <block id="0x1A7" name="Double Mossy Stone Brick Slab" uname="minecraft:double_stone_slab4" color="0x8a9e92" />
-    <block id="0x1A8" name="Stairs, Granite" uname="minecraft:granite_stairs" color="0x7C5960" spawnable="0"> <!-- *D -->
+    <block id="0x1A8" name="Granite Stairs" uname="minecraft:granite_stairs" color="0x7C5960" spawnable="0"> <!-- *D -->
       <blockvariant blockdata="0x0" name="Stairs, Granite, East" />
       <blockvariant blockdata="0x1" name="Stairs, Granite, West" />
       <blockvariant blockdata="0x2" name="Stairs, Granite, South" />
@@ -1149,7 +1166,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Granite, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Granite, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x1A9" name="Diorite Stairs" uname="minecraft:diorite_stairs" color="0xfcfbfa" >
+    <block id="0x1A9" name="Diorite Stairs" uname="minecraft:diorite_stairs" color="0xfcfbf0" spawnable="0" >
       <blockvariant blockdata="0x0" name="Stairs, Diorite, East" />
       <blockvariant blockdata="0x1" name="Stairs, Diorite, West" />
       <blockvariant blockdata="0x2" name="Stairs, Diorite, South" />
@@ -1159,7 +1176,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Diorite, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Diorite, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x1AA" name="Andesite Stairs" uname="minecraft:andesite_stairs" color="0xfcfbfa" >
+    <block id="0x1AA" name="Andesite Stairs" uname="minecraft:andesite_stairs" color="0xfcfbf8" spawnable="0" >
       <blockvariant blockdata="0x0" name="Stairs, Andesite, East" />
       <blockvariant blockdata="0x1" name="Stairs, Andesite, West" />
       <blockvariant blockdata="0x2" name="Stairs, Andesite, South" />
@@ -1169,15 +1186,15 @@
       <blockvariant blockdata="0x6" name="Stairs, Andesite, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Andesite, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x1AB" name="Polished Granite Stairs" uname="minecraft:polished_granite_stairs" color="0xC38437" />
-    <block id="0x1AC" name="Polished Diorite Stairs" uname="minecraft:polished_diorite_stairs" color="0xfcfbfa" />
-    <block id="0x1AD" name="Polished Andesite Stairs" uname="minecraft:polished_andesite_stairs" color="0xfcfbfa" />
-    <block id="0x1AE" name="Mossy Stone Brick Stairs" uname="minecraft:mossy_stone_brick_stairs" color="0xC38437" />
-    <block id="0x1AF" name="Smooth Red SandStone Stairs" uname="minecraft:smooth_red_sandstone_stairs" color="0xC38437" />
-    <block id="0x1B0" name="Smooth SandStone Stairs" uname="minecraft:smooth_sandstone_stairs" color="0xC38437" />
-    <block id="0x1B1" name="End Stone Brick Stairs" uname="minecraft:end_brick_stairs" color="0xefe9a5" />
-    <block id="0x1B2" name="Mossy Cobblestone Stairs" uname="minecraft:mossy_cobblestone_stairs" color="0xfcfbfa" />
-    <block id="0x1B3" name="Stone Stairs" uname="minecraft:normal_stone_stairs" color="0x8a9e92">
+    <block id="0x1AB" name="Polished Granite Stairs" uname="minecraft:polished_granite_stairs" color="0xC38437" spawnable="0"/>
+    <block id="0x1AC" name="Polished Diorite Stairs" uname="minecraft:polished_diorite_stairs" color="0xfcfbef" spawnable="0"/>
+    <block id="0x1AD" name="Polished Andesite Stairs" uname="minecraft:polished_andesite_stairs" color="0xfcfbee" spawnable="0"/>
+    <block id="0x1AE" name="Mossy Stone Brick Stairs" uname="minecraft:mossy_stone_brick_stairs" color="0xC38438" spawnable="0"/>
+    <block id="0x1AF" name="Smooth Red SandStone Stairs" uname="minecraft:smooth_red_sandstone_stairs" color="0xC38439" spawnable="0"/>
+    <block id="0x1B0" name="Smooth SandStone Stairs" uname="minecraft:smooth_sandstone_stairs" color="0xC3843A" spawnable="0"/>
+    <block id="0x1B1" name="End Stone Brick Stairs" uname="minecraft:end_brick_stairs" color="0xefe9a4" spawnable="0"/>
+    <block id="0x1B2" name="Mossy Cobblestone Stairs" uname="minecraft:mossy_cobblestone_stairs" color="0x8a9e93" spawnable="0"/>
+    <block id="0x1B3" name="Stone Stairs" uname="minecraft:normal_stone_stairs" color="0x8a9e94" spawnable="0">
       <blockvariant blockdata="0x0" name="Stairs, Stone, East" />
       <blockvariant blockdata="0x1" name="Stairs, Stone, West" />
       <blockvariant blockdata="0x2" name="Stairs, Stone, South" />
@@ -1202,7 +1219,7 @@
     <block id="0x1C0" name="Darkoak Wall Sign" uname="minecraft:darkoak_wall_sign" color="0x69722d" />
     <block id="0x1c1" name="lectern" uname="minecraft:lectern" color="0x895c27" />
     <block id="0x1c2" name="Grindstone" uname="minecraft:grindstone" color="0xe808180" />
-    <block id="0x1c3" name="Blast Furnace" uname="minecraft:blast_furnace" color="0xe54e26" />
+    <block id="0x1c3" name="Blast Furnace" uname="minecraft:blast_furnace" color="0xe54e27" />
     <block id="0x1c4" name="Stonecutter Block" uname="minecraft:stonecutter_block" color="0x8a8080" />
     <block id="0x1c5" name="Smoker" uname="minecraft:smoker" color="0x895c28" />
     <block id="0x1c6" name="Lit Smoker" uname="minecraft:lit_smoker" color="0xfd571d" />
@@ -1210,7 +1227,7 @@
     <block id="0x1c8" name="Fletching Table" uname="minecraft:fletching_table" color="0x895c2a" />
     <block id="0x1c9" name="Smithing Table" uname="minecraft:smithing_table" color="0x895c2b" />
     <block id="0x1ca" name="Barrel" uname="minecraft:barrel" color="0x895c2c" />
-    <block id="0x1cb" name="Loom" uname="minecraft:loom" color="0x8a9e91" />
+    <block id="0x1cb" name="Loom" uname="minecraft:loom" color="0x8b9e9a" />
     <!--<block id="0x1cc" name="unknown" uname="unknown" color="0x000000" />-->
     <block id="0x1cd" name="Bell" uname="minecraft:bell" color="0xffff0a" />
     <block id="0x1ce" name="Sweet Berry Bush" uname="minecraft:sweet_berry_bush" color="0xff0101" />
@@ -1236,11 +1253,11 @@
     <block id="0x1d5" name="Lit Blast Furnace" uname="minecraft:lit_blast_furnace" color="0xfd570b" />
     <block id="0x1d6" name="Light Block" uname="minecraft:light_block" color="0xfd572b" />
     <block id="0x1d7" name="Wither Rose" uname="minecraft:wither_rose" color="0xa52a3a" />
-    <block id="0x1d8" name="Sticky Piston Head " uname="minecraft:stickypistonarmcollision" color="0x8a9e91" />
-    <block id="0x1d9" name="Bee Nest" uname="minecraft:bee_nest" color="0x575757" />
-    <block id="0x1da" name="BeeHive" uname="minecraft:beehive" color="0x575757" />
-    <block id="0x1db" name="Honey Block" uname="minecraft:honey_block" color="0x575757" />
-    <block id="0x1Dc" name="Honeycomb Block" uname="minecraft:honeycomb_block" color="0x575757" />
+    <block id="0x1d8" name="Sticky Piston Head " uname="minecraft:stickypistonarmcollision" color="0x8b9e9b" />
+    <block id="0x1d9" name="Bee Nest" uname="minecraft:bee_nest" color="0x585757" />
+    <block id="0x1da" name="BeeHive" uname="minecraft:beehive" color="0x585758" />
+    <block id="0x1db" name="Honey Block" uname="minecraft:honey_block" color="0x585759" />
+    <block id="0x1Dc" name="Honeycomb Block" uname="minecraft:honeycomb_block" color="0x58575A" />
 
 <!-- NETHER UPDATE -->
     <block id="0x1DD" name="Lodestone" uname="minecraft:lodestone" color="0xD7D7D8" />
@@ -1258,7 +1275,7 @@
     <block id="0x1E9" name="Basalt" uname="minecraft:basalt" color="0x1B2640" />
     <block id="0x1EA" name="Polished Basalt" uname="minecraft:polished_basalt" color="0x1B2641" />
     <block id="0x1EB" name="Soul Soil" uname="minecraft:soul_soil" color="0x5C332B" />
-    <block id="0x1EC" name="Soul Fire" uname="minecraft:soul_fire" color="0x11976F" />
+    <block id="0x1EC" name="Soul Fire" uname="minecraft:soul_fire" color="0x11976B" />
     <block id="0x1ED" name="Nether Sprouts" uname="minecraft:nether_sprouts" color="0x11976F" />
     <block id="0x1EE" name="Target" uname="minecraft:target" color="0xD7D7D9" />
     <block id="0x1EF" name="Stripped Crimson Stem" uname="minecraft:stripped_crimson_stem" color="0x52181F" />
