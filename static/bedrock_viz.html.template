@@ -118,7 +118,8 @@
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="18">Rabbit</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="13">Sheep</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="21">Snow Golem</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="15">Villager</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="15">Villager (Old)</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="115">Villager</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="14">Wolf</a></li>
 	    <li role="separator" class="divider"></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="112">Cod</a></li>
