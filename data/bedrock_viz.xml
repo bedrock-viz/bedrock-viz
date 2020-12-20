@@ -2012,7 +2012,7 @@
     <entity id="0x6F" uname="minecraft:tropicalfish" name="Tropical Fish" etype="P" />
     <entity id="0x70" uname="minecraft:cod" name="Cod" etype="P" />
     <entity id="0x71" uname="minecraft:panda" name="Panda" etype="P" />
-    <entity id="0x72" uname="minecraft:Pillager" name="pillager" etype="H" />
+    <entity id="0x72" uname="minecraft:pillager" name="Pillager" etype="H" />
     <entity id="0x73" uname="minecraft:villager_v2" name="Villager" etype="H" />
     <entity id="0x74" uname="minecraft:zombie_villager_v2" name="Zombie Villager" etype="H" />
     <entity id="0x76" uname="minecraft:wandering_trader" name="Wandering Trader" etype="P" />

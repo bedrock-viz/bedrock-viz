@@ -151,6 +151,7 @@
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="50">Guardian, Elder</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="47">Husk</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="51">NPC</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="114">Pillager</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="39">Silverfish</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="34">Skeleton</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="48">Skeleton, Wither</a></li>

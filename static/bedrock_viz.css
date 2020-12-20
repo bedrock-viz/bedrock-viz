@@ -190,3 +190,8 @@ div.ol-attribution.ol-unselectable.ol-control.ol-uncollapsible {
 .pre-scrollable {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
 }
+
+.dropdown-menu {
+    max-height: calc(100vh - 50px);
+    overflow-y: auto;
+}
