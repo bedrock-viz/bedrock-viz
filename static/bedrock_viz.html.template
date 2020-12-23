@@ -99,10 +99,12 @@
             <span class="caret"></span></button>
           <ul class="dropdown-menu">
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="19">Bat</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="122">Cat</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="122">Bee</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="75">Cat</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="10">Chicken</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="11">Cow</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="24">Donkey</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="121">Fox</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="23">Horse</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="26">Horse, Skeleton</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="27">Horse, Zombie</a></li>
@@ -111,15 +113,17 @@
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="16">Mooshroom</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="25">Mule</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="22">Ocelot</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="123">Panda</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="113">Panda</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="30">Parrot</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="12">Pig</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="28">Polar Bear</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="18">Rabbit</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="13">Sheep</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="21">Snow Golem</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="125">Strider</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="15">Villager (Old)</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="115">Villager</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="118">Wandering Trader</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="14">Wolf</a></li>
 	    <li role="separator" class="divider"></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="112">Cod</a></li>
@@ -162,12 +166,17 @@
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="45">Witch</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="52">Wither</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="32">Zombie</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="44">Zombie Villager</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="44">Zombie Villager (Old)</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="116">Zombie Villager</a></li>
 	    <li role="separator" class="divider"></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="43">Blaze</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="41">Ghast</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="124">Hoglin</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="42">Magma Cube</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="36">Zombie Pigman</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="123">Piglin</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="127">Piglin Brute</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="126">Zoglin</a></li>
+	    <li><a href="#" class="entityToggle" data-type="H" data-id="36">Zombified Piglin</a></li>
 	    <li role="separator" class="divider"></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="53">Ender Dragon</a></li>
 	    <li><a href="#" class="entityToggle" data-type="H" data-id="55">Endermite</a></li>
