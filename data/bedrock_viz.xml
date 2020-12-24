@@ -1927,7 +1927,7 @@
     <item id="0x1d9" name="Birch Sign" uname="minecraft:birch_sign" />
     <item id="0x1da" name="Jungle Sign" uname="minecraft:jungle_sign" />
     <item id="0x1db" name="Acacia Sign" uname="minecraft:acacia_sign" />
-    <item id="0x1dc" name="Dark Oak Sign" uname="minecraft:darkoak_sign" />
+    <item id="0x1dc" name="Dark Oak Sign" uname="minecraft:dark_oak_sign" />
     <item id="0x1dd" name="Sweet Berries" uname="minecraft:sweet_berries" />
     <item id="0x1F2" name="Camera" uname="minecraft:camera" /> <!-- EDU -->
     <item id="0x1F3" name="Salt" uname="minecraft:compound" />
