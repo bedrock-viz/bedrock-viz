@@ -1453,7 +1453,7 @@
       <itemvariant extradata="39" name="Arrow of the Turtle Master (0:30)" uname="minecraft:" />
       <itemvariant extradata="40" name="Arrow of the Turtle Master (0:30)" uname="minecraft:" />
     </item>
-    <item id="0x107" name="Coal" uname="minecraft:coal"> <!-- *B -->
+    <item id="0x107" name="Coal"> <!-- *B -->
       <itemvariant extradata="0" name="Coal" uname="minecraft:coal" />
       <itemvariant extradata="1" name="Charcoal" uname="minecraft:charcoal" />
     </item>
@@ -1521,7 +1521,7 @@
     </item>
     <item id="0x143" name="Oak Sign" uname="minecraft:sign" />
     <item id="0x144" name="Oak Door" uname="minecraft:wooden_door" />
-    <item id="0x145" name="Bucket" uname="minecraft:bucket">
+    <item id="0x145" name="Bucket">
       <itemvariant extradata="0x0" name="Bucket, Empty" uname="minecraft:bucket" />
       <itemvariant extradata="0x1" name="Bucket, Milk" uname="minecraft:milk_bucket" />
       <itemvariant extradata="0x2" name="Bucket, Cod" uname="minecraft:cod_bucket" />
