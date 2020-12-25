@@ -678,6 +678,7 @@ namespace mcpe_viz
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - what is this?
+                    break;
 
                 case 0x76:
                     // "Version"
