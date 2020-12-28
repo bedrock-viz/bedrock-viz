@@ -120,18 +120,23 @@ int main(int argc, char** argv)
     for(auto& biome : mcpe_viz::Biome::list()) {
         if (biome->is_color_set()) {
             // check for conflicts...
-            auto found = biomeColorMap.find(biome->color());
+            auto found = biomeColorMap.find(biome->colorAsLocalInt());
             if (found != biomeColorMap.end()) {
-                log::warn("duplicate biome color found, {} and {}", biome->name, found->second);
+                log::warn("duplicate biome color found, {} and {} both 0x{:x}", biome->name, found->second, biome->colorAsLocalInt());
             } else {
                 // log that we've seen it
-                biomeColorMap[biome->color()] = biome->name;
+                biomeColorMap[biome->colorAsLocalInt()] = biome->name;
+
+                if (biome->colorAsLocalInt() > 0xffffff || biome->colorAsLocalInt() < 0) {
+                    log::error("color out of range for biome id:{} name:{} is 0x{:x}", biome->id, biome->name, biome->colorAsLocalInt());
+                }
+
                 // output legend entry
                 output << "<div class=\"grid-cell\">" << endl
                        << "    <div class=\"name\">" << escapeString(biome->name, "'") << "</div>" << endl
                        << "    <div class=\"color-swatch\" style=\"background-color: #";
                 // set the stream to render integers correctly in hexcodes for colors
-                output << hex << setfill('0') << setw(6) << right << local_be32toh(biome->color());
+                output << hex << setfill('0') << setw(6) << right << biome->colorAsLocalInt();
                 output << "\">&nbsp;</div>" << endl
                        << "</div>" << endl;
             }
@@ -152,12 +157,16 @@ int main(int argc, char** argv)
 
         if (block->is_color_set()) {
             // check for conflicts...
-            auto found = blockColorMap.find(block->color());
+            auto found = blockColorMap.find(block->colorAsLocalInt());
             if (found != blockColorMap.end()) {
-                log::warn("duplicate block color found, {} and {}", block->name, found->second);
+                log::warn("duplicate block color found, {} and {} both 0x{:x}", block->name, found->second, block->colorAsLocalInt());
             } else {
                 // log that we've seen it
-                blockColorMap[block->color()] = block->name;
+                blockColorMap[block->colorAsLocalInt()] = block->name;
+            }
+
+            if (block->colorAsLocalInt() > 0xffffff || block->colorAsLocalInt() < 0) {
+                log::error("color out of range for block id:{} name:{} is 0x{:x}", block->id, block->name, block->colorAsLocalInt());
             }
 
             if (hasVariants) {
@@ -168,18 +177,22 @@ int main(int argc, char** argv)
             output << "    <div class=\"name\">" << escapeString(block->name, "'") << "</div>" << endl
                    << "    <div class=\"color-swatch\" style=\"background-color: #";
             // set the stream to render integers correctly in hexcodes for colors
-            output << hex << setfill('0') << setw(6) << right << local_be32toh(block->color());
+            output << hex << setfill('0') << setw(6) << right << block->colorAsLocalInt();
             output << "\" title=\"" << block->name << "\">&nbsp;</div>" << endl;
 
             if (hasVariants) {
                 int i = 0;
                 for(auto &variant : block->getVariants()) {
-                    auto found = blockColorMap.find(variant.second->color());
+                    auto found = blockColorMap.find(variant.second->colorAsLocalInt());
                     if (found != blockColorMap.end()) {
-                        log::warn("duplicate block color found, {} and {}", variant.second->name, found->second);
+                        log::warn("duplicate block color found, {} and {} both 0x{:x}", variant.second->name, found->second, variant.second->colorAsLocalInt());
                     } else {
                         // log that we've seen it
-                        blockColorMap[variant.second->color()] = variant.second->name;
+                        blockColorMap[variant.second->colorAsLocalInt()] = variant.second->name;
+                    }
+
+                    if (variant.second->colorAsLocalInt() > 0xffffff || variant.second->colorAsLocalInt() < 0) {
+                        log::error("color out of range for block id:{} name:{} variant:{} is 0x{:x}", block->id, block->name, variant.second->data, variant.second->colorAsLocalInt());
                     }
 
                     if (i++ % 8 == 0) {
@@ -187,7 +200,7 @@ int main(int argc, char** argv)
                     } else {
                         output << "    <div class=\"variant-swatch\" style=\"background-color: #";
                     }
-                    output << hex << setfill('0') << setw(6) << right << local_be32toh(variant.second->color());
+                    output << hex << setfill('0') << setw(6) << right << variant.second->colorAsLocalInt();
                     output << "\" title=\"" << block->getVariantName(variant.first) << "\">&nbsp;</div>" << endl;
                 }
             }
