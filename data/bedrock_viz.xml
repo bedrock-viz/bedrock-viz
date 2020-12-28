@@ -508,7 +508,7 @@
     <block id="0x98" name="Block of Redstone" uname="minecraft:redstone_block" color="0xcd5c5c" opaque="0" />
     <block id="0x99" name="Nether Quartz Ore" uname="minecraft:quartz_ore" color="0xd6cdcd" />
     <block id="0x9A" name="Hopper" uname="minecraft:hopper" color="0xa5a5a5" opaque="0" spawnable="0" /> <!-- *S *E 0.14 -->
-    <block id="0x9B" name="Block of Quartz" uname="minecraft:quartz_block" color="0xfffff1"> <!-- *B -->
+    <block id="0x9B" name="Block of Quartz" uname="minecraft:quartz_block" color="0xfffef1"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Block of Quartz" />
       <blockvariant blockdata="0x1" name="Chiseled Quartz Block (Vertical)" />
       <blockvariant blockdata="0x2" name="Pillar Quartz Block (Vertical)" />
