@@ -207,7 +207,9 @@ int main(int argc, char** argv)
 
             output << "</div>" << endl; //end grid-cell
         } else {
-            log::error("Block id:{} name:{} has no color", block->id, block->name);
+            if (! block->hasVariants()) {
+                log::error("Block id:{} name:{} has no color and no variants", block->id, block->name);
+            }
         }
     }
 
