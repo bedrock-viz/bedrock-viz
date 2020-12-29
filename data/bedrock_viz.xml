@@ -46,7 +46,7 @@
       <blockvariant blockdata="0x1" name="Dirt, Coarse" />
     </block>
     <block id="0x04" name="Cobblestone" uname="minecraft:cobblestone" color="0xc0c0c0" />
-    <block id="0x05" name="Wood Planks" uname="minecraft:planks" color="0x696a2d">
+    <block id="0x05" name="Wood Planks" uname="minecraft:planks" color="0x69692d">
       <blockvariant blockdata="0x0" name="Planks, Oak" />
       <blockvariant blockdata="0x1" name="Planks, Spruce" />
       <blockvariant blockdata="0x2" name="Planks, Birch" />
@@ -249,7 +249,7 @@
     </block>
     <block id="0x33" name="Fire" uname="minecraft:fire" color="0xff1d32" solid="0" opaque="0" spawnable="0" />
     <block id="0x34" name="Spawner" uname="minecraft:mob_spawner" color="0x930a91" /> <!-- *E -->
-    <block id="0x35" name="Oak Stairs" uname="minecraft:oak_stairs" color="0x696b2d" spawnable="0"> <!-- *S -->
+    <block id="0x35" name="Oak Stairs" uname="minecraft:oak_stairs" color="0x696a2a" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Oak Stairs, East" />
       <blockvariant blockdata="0x1" name="Oak Stairs, West" />
       <blockvariant blockdata="0x2" name="Oak Stairs, South" />
@@ -404,7 +404,7 @@
     <block id="0x83" name="Tripwire Hook" uname="minecraft:tripwire_hook" color="0x454545" solid="0" /> <!-- *S 0.13 -->
     <block id="0x84" name="Tripwire" uname="minecraft:tripwire;minecraft:tripWire" color="0xa7a7a7" solid="0" /> <!-- *I *S 0.13 -->
     <block id="0x85" name="Block of Emerald" uname="minecraft:emerald_block" color="0x6dbc73" />
-    <block id="0x86" name="Stairs, Spruce Wood" uname="minecraft:spruce_stairs" color="0x696c2d" spawnable="0"> <!-- *S -->
+    <block id="0x86" name="Stairs, Spruce Wood" uname="minecraft:spruce_stairs" color="0x696b2b" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Spruce Wood, East" />
       <blockvariant blockdata="0x1" name="Stairs, Spruce Wood, West" />
       <blockvariant blockdata="0x2" name="Stairs, Spruce Wood, South" />
@@ -424,7 +424,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Birch Wood, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Birch Wood, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x88" name="Stairs, Jungle Wood" uname="minecraft:jungle_stairs" color="0x696e2d" spawnable="0"> <!-- *S -->
+    <block id="0x88" name="Stairs, Jungle Wood" uname="minecraft:jungle_stairs" color="0x696e2e" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Jungle Wood, East" />
       <blockvariant blockdata="0x1" name="Stairs, Jungle Wood, West" />
       <blockvariant blockdata="0x2" name="Stairs, Jungle Wood, South" />
@@ -639,7 +639,7 @@
     <block id="0xA5" name="Slime Block" uname="minecraft:slime" color="0x34e734" opaque="0" spawnable="1" /> <!-- 0.14 -->
     <block id="0xA6" name="Glow Stick" uname="minecraft:glow_stick" color="0x7fff00" opaque="0" spawnable="1" /> <!-- 0.14 -->
     <block id="0xA7" name="Trapdoor, Iron" uname="minecraft:iron_trapdoor" color="0xcfcccc" opaque="0" spawnable="0" /> <!-- *S 0.13 -->
-    <block id="0xA8" name="Prismarine" uname="minecraft:prismarine" color="0x008080" opaque="1" spawnable="1"> <!-- *S 0.16 --> <!-- todo color -->
+    <block id="0xA8" name="Prismarine" uname="minecraft:prismarine" color="0x008081" opaque="1" spawnable="1"> <!-- *S 0.16 -->
       <blockvariant blockdata="0x0" color="0x008080" name="Prismarine, Rough" /> <!-- 0.16 -->
       <blockvariant blockdata="0x1" color="0x004040" name="Prismarine, Dark" /> <!-- 0.16 -->
       <blockvariant blockdata="0x2" color="0x006060" name="Prismarine, Bricks" /> <!-- 0.16 -->
@@ -671,13 +671,13 @@
       <blockvariant blockdata="0x0" color="0x57d657" name="Sunflower" />
       <blockvariant blockdata="0x1" color="0x1f821f" name="Lilac" />
       <blockvariant blockdata="0x2" color="0x5f9ea0" name="Double Tallgrass" />
-      <blockvariant blockdata="0x3" color="0x5f9ea0" name="Large Fern" />
+      <blockvariant blockdata="0x3" color="0x5f9ea2" name="Large Fern" />
       <blockvariant blockdata="0x4" color="0xbc8f8f" name="Rose Bush" />
       <blockvariant blockdata="0x5" color="0x2dba2d" name="Peony" />
       <blockvariant blockdata="0x8" color="0xffff00" name="Sunflower (top)" />
       <blockvariant blockdata="0x9" color="0xee82ee" name="Lilac (top)" />
-      <blockvariant blockdata="0xA" color="0x5f9ea0" name="Double Tallgrass (top)" />
-      <blockvariant blockdata="0xB" color="0x5f9ea0" name="Large Fern (top)" />
+      <blockvariant blockdata="0xA" color="0x5f9ea1" name="Double Tallgrass (top)" />
+      <blockvariant blockdata="0xB" color="0x5f9ea3" name="Large Fern (top)" />
       <blockvariant blockdata="0xC" color="0xdc143c" name="Rose Bush (top)" />
       <blockvariant blockdata="0xD" color="0xd87093" name="Peony (top)" />
       <blockvariant blockdata="0xE" color="0xff00ff" name="Unknown Tall Flower (0xE)" />
@@ -779,7 +779,7 @@
       <blockvariant blockdata="0x6" name="Purpur, Pillar (East/West)" />
       <blockvariant blockdata="0xa" name="Purpur, Pillar (North/South)" />
     </block>
-    <block id="0xCA" name="Red Torch" uname= "minecraft:colored_torch_rg" color="0x963429" spawnable="0" /> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
+    <block id="0xCA" name="Red Torch" uname= "minecraft:colored_torch_rg" color="0x963428" spawnable="0" /> <!-- *S --> <!-- 0.17 -->
     <block id="0xCB" name="Stairs, Purpur" uname= "minecraft:purpur_stairs" color="0xf4c4f4" spawnable="0"> <!-- *S --> <!-- 0.17 --> <!-- todo color -->
       <blockvariant blockdata="0x0" name="Stairs, Purpur, East" />
       <blockvariant blockdata="0x1" name="Stairs, Purpur, West" />
@@ -1160,7 +1160,7 @@
     <block id="0x1a2" name="Bamboo" uname="minecraft:bamboo" color="0x1DCE32" />
     <block id="0x1a3" name="Bamboo Sapling" uname="minecraft:bamboo_sapling" color="0x1DCE33" />
     <block id="0x1a4" name="Scaffolding" uname="minecraft:scaffolding" color="0xc5b023" />
-    <block id="0x1a5" name="Stone Slab(4)" uname="minecraft:stone_slab4" color="0x8a9e91" opaque="0" spawnable="0">
+    <block id="0x1a5" name="Stone Slab(4)" uname="minecraft:stone_slab4" color="0x8b9e91" opaque="0" spawnable="0">
       <blockvariant blockdata="0x0" name="Slab, Mossy Stone Brick" />
       <blockvariant blockdata="0x1" name="Slab, Smooth Quartz" />
       <blockvariant blockdata="0x2" name="Slab, Stone" />
@@ -1232,7 +1232,7 @@
     <block id="0x1AF" name="Smooth Red SandStone Stairs" uname="minecraft:smooth_red_sandstone_stairs" color="0xC38439" spawnable="0"/>
     <block id="0x1B0" name="Smooth SandStone Stairs" uname="minecraft:smooth_sandstone_stairs" color="0xC3843A" spawnable="0"/>
     <block id="0x1B1" name="End Stone Brick Stairs" uname="minecraft:end_brick_stairs" color="0xefe9a4" spawnable="0"/>
-    <block id="0x1B2" name="Mossy Cobblestone Stairs" uname="minecraft:mossy_cobblestone_stairs" color="0x8a9e93" spawnable="0"/>
+    <block id="0x1B2" name="Mossy Cobblestone Stairs" uname="minecraft:mossy_cobblestone_stairs" color="0x8aae93" spawnable="0"/>
     <block id="0x1B3" name="Stone Stairs" uname="minecraft:normal_stone_stairs" color="0x8a9e94" spawnable="0">
       <blockvariant blockdata="0x0" name="Stairs, Stone, East" />
       <blockvariant blockdata="0x1" name="Stairs, Stone, West" />
@@ -1243,19 +1243,19 @@
       <blockvariant blockdata="0x6" name="Stairs, Stone, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Stone, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x1B4" name="Spruce Standing Sign" uname="minecraft:spruce_standing_sign" color="0x795f43" />
+    <block id="0x1B4" name="Spruce Standing Sign" uname="minecraft:spruce_standing_sign" color="0x795e43" />
     <block id="0x1B5" name="Spruce Wall Sign" uname="minecraft:spruce_wall_sign" color="0x795f44" />
     <block id="0x1B6" name="Smooth Stone" uname="minecraft:smooth_stone" color="0x8a9e93" />
     <block id="0x1B7" name="Red Nether Brick Stairs" uname="minecraft:red_nether_brick_stairs" color="0xbaf5f2" />
-    <block id="0x1B8" name="Smooth Quartz Stairs" uname="minecraft:smooth_quartz_stairs" color="0xfffff2" />
+    <block id="0x1B8" name="Smooth Quartz Stairs" uname="minecraft:smooth_quartz_stairs" color="0xfffef2" />
     <block id="0x1B9" name="Birch Standing Sign" uname="minecraft:birch_standing_sign" color="0x916601" />
     <block id="0x1BA" name="Birch Wall Sign" uname="minecraft:birch_wall_sign" color="0x916602" />
     <block id="0x1BB" name="Jungle Standing Sign" uname="minecraft:jungle_standing_sign" color="0x926603" />
     <block id="0x1BC" name="Jungle Wall Sign" uname="minecraft:jungle_wall_sign" color="0x926604" />
-    <block id="0x1BD" name="Acacia Standing Sign" uname="minecraft:acacia_standing_sign" color="0x69702b" />
-    <block id="0x1BE" name="Acacia Wall Sign" uname="minecraft:acacia_wall_sign" color="0x69702e" />
-    <block id="0x1BF" name="Darkoak Standing Sign" uname="minecraft:darkoak_standing_sign" color="0x69722a" />
-    <block id="0x1C0" name="Darkoak Wall Sign" uname="minecraft:darkoak_wall_sign" color="0x69722d" />
+    <block id="0x1BD" name="Acacia Standing Sign" uname="minecraft:acacia_standing_sign" color="0x70702b" />
+    <block id="0x1BE" name="Acacia Wall Sign" uname="minecraft:acacia_wall_sign" color="0x70702e" />
+    <block id="0x1BF" name="Darkoak Standing Sign" uname="minecraft:darkoak_standing_sign" color="0x68722a" />
+    <block id="0x1C0" name="Darkoak Wall Sign" uname="minecraft:darkoak_wall_sign" color="0x68722d" />
     <block id="0x1c1" name="lectern" uname="minecraft:lectern" color="0x895c27" />
     <block id="0x1c2" name="Grindstone" uname="minecraft:grindstone" color="0x808180" />
     <block id="0x1c3" name="Blast Furnace" uname="minecraft:blast_furnace" color="0xe54e27" />
