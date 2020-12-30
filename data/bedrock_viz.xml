@@ -606,7 +606,7 @@
       <blockvariant blockdata="0xc" name="Leaves, Acacia (no + check decay)" />
       <blockvariant blockdata="0xd" name="Leaves, Dark Oak (no + check decay)" />
     </block>
-    <block id="0xA2" name="Wood (Acacia/Dark Oak)" uname="minecraft:log2" color="0x69702c"> <!-- *B -->
+    <block id="0xA2" name="Wood (Acacia/Dark Oak)" uname="minecraft:log2" color="0x697020"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Wood, Acacia (Up/Down)" />
       <blockvariant blockdata="0x1" name="Wood, Dark Oak (Up/Down)" />
       <blockvariant blockdata="0x4" name="Wood, Acacia (East/West)" />
@@ -616,7 +616,7 @@
       <blockvariant blockdata="0xc" name="Wood, Acacia (Bark Only)" />
       <blockvariant blockdata="0xd" name="Wood, Dark Oak (Bark Only)" />
     </block>
-    <block id="0xA3" name="Stairs, Acacia Wood" uname="minecraft:acacia_stairs" color="0x69712c" spawnable="0"> <!-- *S -->
+    <block id="0xA3" name="Stairs, Acacia Wood" uname="minecraft:acacia_stairs" color="0x697220" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Acacia Wood, East" />
       <blockvariant blockdata="0x1" name="Stairs, Acacia Wood, West" />
       <blockvariant blockdata="0x2" name="Stairs, Acacia Wood, South" />
