@@ -531,7 +531,7 @@
       <blockvariant blockdata="0x7" name="Stairs, Quartz, North (Upside-down)" spawnable="1" />
     </block>
     <!-- note: on MCPC 0x9d is "Activator Rail" *S -->
-    <block id="0x9D" name="Wooden Double Slab" uname="minecraft:double_wooden_slab" color="0x696f2c">
+    <block id="0x9D" name="Wooden Double Slab" uname="minecraft:double_wooden_slab" color="0x686f2c">
       <blockvariant blockdata="0x0" name="Double Slab, Oak Wood" />
       <blockvariant blockdata="0x1" name="Double Slab, Spruce Wood" />
       <blockvariant blockdata="0x2" name="Double Slab, Birch Wood" />
@@ -539,7 +539,7 @@
       <blockvariant blockdata="0x4" name="Double Slab, Acacia Wood" />
       <blockvariant blockdata="0x5" name="Double Slab, Dark Oak Wood" />
       <blockvariant blockdata="0x8" name="Double Slab, Upper Oak Wood" /> <!-- how is this even possible?? -->
-      <blockvariant blockdata="0x9" name="Double Slab, Upper Spruce Wood" /> <!-- "doueble upper" ?? -->
+      <blockvariant blockdata="0x9" name="Double Slab, Upper Spruce Wood" /> <!-- "double upper" ?? -->
       <blockvariant blockdata="0xA" name="Double Slab, Upper Birch Wood" /> <!-- I have to assume these are formulaic generation -->
       <blockvariant blockdata="0xB" name="Double Slab, Upper Jungle Wood" /> <!-- and therefore will never actually occur in a real file -->
       <blockvariant blockdata="0xC" name="Double Slab, Upper Acacia Wood" /> <!-- double stone slabs all have the same issue -->
