@@ -1188,7 +1188,7 @@
       <blockvariant blockdata="0x6" name="Double Slab, Granite" />
       <blockvariant blockdata="0x7" name="Double Slab, Polished Granite" />
     </block>
-    <block id="0x1A7" name="Double Stone Slab(4)" uname="minecraft:double_stone_slab4" color="0x8a9e92">
+    <block id="0x1A7" name="Double Stone Slab(4)" uname="minecraft:double_stone_slab4" color="0x8a9e98">
       <blockvariant blockdata="0x0" name="Double Slab, Mossy Stone Brick" />
       <blockvariant blockdata="0x1" name="Double Slab, Smooth Quartz" />
       <blockvariant blockdata="0x2" name="Double Slab, Stone" />
@@ -1233,7 +1233,7 @@
     <block id="0x1B0" name="Smooth SandStone Stairs" uname="minecraft:smooth_sandstone_stairs" color="0xC3843A" spawnable="0"/>
     <block id="0x1B1" name="End Stone Brick Stairs" uname="minecraft:end_brick_stairs" color="0xefe9a4" spawnable="0"/>
     <block id="0x1B2" name="Mossy Cobblestone Stairs" uname="minecraft:mossy_cobblestone_stairs" color="0x8aae93" spawnable="0"/>
-    <block id="0x1B3" name="Stone Stairs" uname="minecraft:normal_stone_stairs" color="0x8a9e94" spawnable="0">
+    <block id="0x1B3" name="Stone Stairs" uname="minecraft:normal_stone_stairs" color="0x8a9e90" spawnable="0">
       <blockvariant blockdata="0x0" name="Stairs, Stone, East" />
       <blockvariant blockdata="0x1" name="Stairs, Stone, West" />
       <blockvariant blockdata="0x2" name="Stairs, Stone, South" />
