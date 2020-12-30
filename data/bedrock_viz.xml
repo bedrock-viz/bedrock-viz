@@ -249,7 +249,7 @@
     </block>
     <block id="0x33" name="Fire" uname="minecraft:fire" color="0xff1d32" solid="0" opaque="0" spawnable="0" />
     <block id="0x34" name="Spawner" uname="minecraft:mob_spawner" color="0x930a91" /> <!-- *E -->
-    <block id="0x35" name="Oak Stairs" uname="minecraft:oak_stairs" color="0x696a2a" spawnable="0"> <!-- *S -->
+    <block id="0x35" name="Oak Stairs" uname="minecraft:oak_stairs" color="0x696a20" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Oak Stairs, East" />
       <blockvariant blockdata="0x1" name="Oak Stairs, West" />
       <blockvariant blockdata="0x2" name="Oak Stairs, South" />
@@ -404,7 +404,7 @@
     <block id="0x83" name="Tripwire Hook" uname="minecraft:tripwire_hook" color="0x454545" solid="0" /> <!-- *S 0.13 -->
     <block id="0x84" name="Tripwire" uname="minecraft:tripwire;minecraft:tripWire" color="0xa7a7a7" solid="0" /> <!-- *I *S 0.13 -->
     <block id="0x85" name="Block of Emerald" uname="minecraft:emerald_block" color="0x6dbc73" />
-    <block id="0x86" name="Stairs, Spruce Wood" uname="minecraft:spruce_stairs" color="0x696b2b" spawnable="0"> <!-- *S -->
+    <block id="0x86" name="Stairs, Spruce Wood" uname="minecraft:spruce_stairs" color="0x696a29" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Spruce Wood, East" />
       <blockvariant blockdata="0x1" name="Stairs, Spruce Wood, West" />
       <blockvariant blockdata="0x2" name="Stairs, Spruce Wood, South" />
@@ -414,7 +414,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Spruce Wood, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Spruce Wood, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x87" name="Stairs, Birch Wood" uname="minecraft:birch_stairs" color="0x696d2d" spawnable="0"> <!-- *S -->
+    <block id="0x87" name="Stairs, Birch Wood" uname="minecraft:birch_stairs" color="0x696d20" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Birch Wood, East" />
       <blockvariant blockdata="0x1" name="Stairs, Birch Wood, West" />
       <blockvariant blockdata="0x2" name="Stairs, Birch Wood, South" />
@@ -424,7 +424,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Birch Wood, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Birch Wood, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0x88" name="Stairs, Jungle Wood" uname="minecraft:jungle_stairs" color="0x696e2e" spawnable="0"> <!-- *S -->
+    <block id="0x88" name="Stairs, Jungle Wood" uname="minecraft:jungle_stairs" color="0x696d29" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Jungle Wood, East" />
       <blockvariant blockdata="0x1" name="Stairs, Jungle Wood, West" />
       <blockvariant blockdata="0x2" name="Stairs, Jungle Wood, South" />
@@ -546,7 +546,7 @@
       <blockvariant blockdata="0xD" name="Double Slab, Upper Dark Oak Wood" /> <!-- modern (nether) slabs are better setup -->
     </block>
     <!-- note: on MCPC 0x9e is "Dropper S E" -->
-    <block id="0x9E" name="Wooden Slab" uname="minecraft:wooden_slab" color="0x69732c" opaque="0" spawnable="0"> <!-- *B -->
+    <block id="0x9E" name="Wooden Slab" uname="minecraft:wooden_slab" color="0x687320" opaque="0" spawnable="0"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Slab, Oak Wood" />
       <blockvariant blockdata="0x1" name="Slab, Spruce Wood" />
       <blockvariant blockdata="0x2" name="Slab, Birch Wood" />
@@ -626,7 +626,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Acacia Wood, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Acacia Wood, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0xA4" name="Stairs, Dark Oak Wood" uname="minecraft:dark_oak_stairs" color="0x69722c" spawnable="0"> <!-- *S -->
+    <block id="0xA4" name="Stairs, Dark Oak Wood" uname="minecraft:dark_oak_stairs" color="0x697429" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Dark Oak Wood, East" />
       <blockvariant blockdata="0x1" name="Stairs, Dark Oak Wood, West" />
       <blockvariant blockdata="0x2" name="Stairs, Dark Oak Wood, South" />
