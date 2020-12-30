@@ -237,7 +237,7 @@
     <block id="0x2D" name="Brick Block" uname="minecraft:brick_block" color="0x9a0b18" />
     <block id="0x2E" name="TNT" uname="minecraft:tnt" color="0xee6f66" solid="0" opaque="0" spawnable="0" />
     <block id="0x2F" name="Bookshelf" uname="minecraft:bookshelf" color="0xa27826" />
-    <block id="0x30" name="Mossy Cobblestone" uname="minecraft:mossy_cobblestone" color="0x8a9e90" />
+    <block id="0x30" name="Mossy Cobblestone" uname="minecraft:mossy_cobblestone" color="0x8a9d9f" />
     <block id="0x31" name="Obsidian" uname="minecraft:obsidian" color="0xc2a6c1" />
     <block id="0x32" name="Torch" uname="minecraft:torch" color="0xfffd00" solid="0" opaque="0" spawnable="0">
       <blockvariant blockdata="0x0" name="Torch" />
