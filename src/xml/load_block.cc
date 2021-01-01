@@ -72,13 +72,13 @@ namespace mcpe_viz
                 }
                 if (var_color != -1) {
                     if (var_dcolor != -1) {
-                        var_color += var_dcolor;
+                        var_color += var_dcolor + 0x000100;
                     }
                     variant->color(var_color);
                 }
                 else {
                     auto new_color = local_be32toh(block->color());
-                    new_color += var_data;
+                    new_color += var_data + 0x000100;
                     variant->color(new_color);
                 }
 
