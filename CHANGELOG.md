@@ -9,7 +9,7 @@
 
 ## bedrock_viz changelog
 
-v0.1.3 - 2020.12.TBD
+v0.1.3 - 2021.01.01
 
 - Viewer changes
   - Extraneous comments from template removed from generated HTML
