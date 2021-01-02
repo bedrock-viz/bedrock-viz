@@ -53,6 +53,9 @@ namespace mcpe_viz {
         bool quietFlag;
         char helpFlags;
         bool tryDbRepair;
+
+        bool limitX, limitZ;
+        int32_t limitXMin, limitXMax, limitZMin, limitZMax;
         int32_t movieX, movieY, movieW, movieH;
 
         int32_t heightMode;
@@ -98,6 +101,9 @@ namespace mcpe_viz {
             helpFlags = HelpFlags::Basic;
             tryDbRepair = false;
             movieX = movieY = movieW = movieH = 0;
+
+            limitX = limitZ = false;
+            limitXMin = limitXMax = limitZMin = limitZMax = 0;
 
             leveldbFilter = 10;
             leveldbBlockSize = 4096;

@@ -450,6 +450,8 @@ namespace mcpe_viz {
 			("movie-dim", "Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)")
 			("grid", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
 				->multitoken()->zero_tokens(), "Display chunk grid on top of images")
+			("limit-x", value<std::string>(), "Min,max of X chunk coordinates")
+			("limit-z", value<std::string>(), "Min,max of Z chunk coordinates")
 			("html", "Create html and javascript files to use as a fancy viewer")
 			("html-most", "Create html, javascript, and most image files to use as a fancy viewer")
 			("html-all", "Create html, javascript, and *all* image files to use as a fancy viewer")
@@ -645,6 +647,32 @@ namespace mcpe_viz {
 			// --grid[=did]
 			if (vm.count("grid")) {
 				control.doGrid = parseDimIdOptArgs(vm["grid"].as<std::vector<std::string>>());
+			}
+			// --limit-x min,max
+			if (vm.count("limit-x")) {
+				std::string optarg = vm["limit-x"].as<std::string>();
+				// limit range
+				if (sscanf(optarg.c_str(), "%d,%d", &control.limitXMin, &control.limitXMax) == 2) {
+					// good
+					control.limitX = true;
+				}
+				else {
+					log::error("Failed to parse --limit-x ({})", optarg.c_str());
+					errct++;
+				}
+			}
+			// --limit-z min,max
+			if (vm.count("limit-z")) {
+				std::string optarg = vm["limit-z"].as<std::string>();
+				// limit range
+				if (sscanf(optarg.c_str(), "%d,%d", &control.limitZMin, &control.limitZMax) == 2) {
+					// good
+					control.limitZ = true;
+				}
+				else {
+					log::error("Failed to parse --limit-z ({})", optarg.c_str());
+					errct++;
+				}
 			}
 			// --html
 			if (vm.count("html")) {
