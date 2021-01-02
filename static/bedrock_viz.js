@@ -3,16 +3,16 @@
     maintained by   : https://github.com/jasper-wan
     contributions by: https://github.com/paulgrahek, https://github.com/tomnolan, https://github.com/bazfp, https://github.com/DazWorrall
     forked from     : https://github.com/Plethora777/mcpe_viz
-  
+
 
   todobig
 
   * tiling - see test-xyz* dirs for code; BUT tiling breaks the elevation overlay
   -- it appears that since we fake the Z in tiles that we always get resolution=1 data in the shade() function.  Sigh.
 
-  * introduce layers -- e.g. rail; leaves; water -- that can be toggled on/off.  could be quite cool.  
+  * introduce layers -- e.g. rail; leaves; water -- that can be toggled on/off.  could be quite cool.
   -- requires re-think of bedrock_viz program -- need to produce a base layer (solid blocks) and then overlay layers with other things (e.g. rail; leaves; water; torches: etc)
-  -- how to prioritize layers? hmmm... 
+  -- how to prioritize layers? hmmm...
   -- ideas for layers:
   - trees: leaves; saplings; vines; cocoa; wood that is up/down?
   - rails: all types
@@ -38,7 +38,7 @@
   * todobig -- Chrome appears to be demented about serving local files.  You get CORS errors.  Not at all clear that this can be resolved w/o really ugly workarounds (e.g. disabling chrome security); This could be the case with MS Edge on win10 also.
   -- http://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome
   -- https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en
-  
+
   * some mods in test-all2 -- combine raw layer + regular layer selector; experiments w/ multilevel dropdown for mobs
 
   * goto X -- e.g. Player; World Origin; World Spawn; Player Spawn; etc
@@ -163,7 +163,7 @@ function map_addLayer(layer) {
     // 210 map.addLayer(layerSlimeChunks);
     // 300 map.addLayer(vectorPoints);
     // 400 map.addLayer(layerDraw);
-    
+
     var layerStackOrder = +layer.get('myStackOrder');
     a.forEach( function (el, index, arr) {
         var elStackOrder = +el.get('myStackOrder');
@@ -399,7 +399,7 @@ var MeasureTool = function(xmap) {
             */
         });
         map.addInteraction(draw);
-        
+
         createMeasureTooltip();
         createHelpTooltip();
 
@@ -408,7 +408,7 @@ var MeasureTool = function(xmap) {
                 function(evt) {
                     // set sketch
                     sketch = evt.feature;
-                    
+
                     /** @type {ol.Coordinate|undefined} */
                     var tooltipCoord = evt.coordinate;
 
@@ -448,7 +448,7 @@ var MeasureTool = function(xmap) {
                     return true;
                 }, this_);
     };
-    
+
 
     /**
      * Let user change the geometry type.
@@ -470,7 +470,7 @@ var MeasureTool = function(xmap) {
             layerDraw = new ol.layer.Vector({
                 myStackOrder: 400,
                 source: sourceDraw,
-                style: [ 
+                style: [
                     new ol.style.Style({
                         fill: new ol.style.Fill({
                             color: 'rgba(255, 255, 255, 0.2)'
@@ -495,7 +495,7 @@ var MeasureTool = function(xmap) {
         } else {
             map.removeLayer(layerDraw);
             map.un('pointermove', pointerMoveHandler);
-            $(map.getViewport()).off('mouseout', hideHelpTooltip);      
+            $(map.getViewport()).off('mouseout', hideHelpTooltip);
             map.removeInteraction(draw);
             map.removeOverlay(helpTooltip);
             map.removeOverlay(measureTooltip);
@@ -520,7 +520,7 @@ var MeasureTool = function(xmap) {
         this_.enabled = true;
         updateState();
     };
-    
+
     this.forceStop = function() {
         this_.enabled = false;
         updateState();
@@ -553,7 +553,7 @@ MeasureTool.prototype.isEnabled = function() {
  * @param {Object=} opt_options Control options.
  */
 var MeasureControl = function(opt_options) {
-    
+
     var options = opt_options || {};
 
     //this.enabled = false;
@@ -562,7 +562,7 @@ var MeasureControl = function(opt_options) {
 
     this.measureTool = null;
 
-    var setDrawType = function(dt) { 
+    var setDrawType = function(dt) {
         this_.measureTool.setDrawType(dt);
     };
 
@@ -577,31 +577,31 @@ var MeasureControl = function(opt_options) {
             $('.measureSubcontrol').hide();
         }
     };
-    
+
     var button = document.createElement('button');
     button.innerHTML = 'M';
     button.addEventListener('click', this.handleMeasure, false);
     button.addEventListener('touchstart', this.handleMeasure, false);
     $(button).addClass('mytooltip inline-block').attr('title', 'Measurement Tools - Press ESC to quit');
-    
+
     var btnLine = document.createElement('button');
     btnLine.innerHTML = 'L';
     btnLine.addEventListener('click', function() { setDrawType('LineString'); }, false);
     btnLine.addEventListener('touchstart', function() { setDrawType('LineString'); }, false);
     $(btnLine).addClass('mytooltip measureSubcontrol inline-block').attr('title', 'Lines - Hotkey L').hide();
-    
+
     var btnCircle = document.createElement('button');
     btnCircle.innerHTML = 'C';
     btnCircle.addEventListener('click', function() { setDrawType('Circle'); }, false);
     btnCircle.addEventListener('touchstart', function() { setDrawType('Circle'); }, false);
     $(btnCircle).addClass('mytooltip measureSubcontrol inline-block').attr('title', 'Circles - Hotkey C').hide();
-    
+
     var element = document.createElement('div');
     element.className = 'measure ol-unselectable ol-control';
     element.appendChild(button);
     element.appendChild(btnLine);
     element.appendChild(btnCircle);
-    
+
     ol.control.Control.call(this, {
         element: element,
         target: options.target
@@ -650,7 +650,7 @@ function doGlobalQuit() {
     if (measureControl.isEnabled()) {
         measureControl.forceStop();
     }
-    
+
     // make popover disappear
     var element = popover.getElement();
     $(element).popover('destroy');
@@ -669,7 +669,7 @@ var loadEventCount = 0;
 function updateLoadEventCount(delta) {
     loadEventCount += delta;
     if (loadEventCount < 0) { loadEventCount = 0; }
-    
+
     if (loadEventCount > 0) {
         var pos = $('#map').offset();
         var x1 = pos.left + 70;
@@ -677,7 +677,7 @@ function updateLoadEventCount(delta) {
         $('#throbber')
             .css({ position: 'absolute', left: x1, top: y1 })
             .show();
-        
+
         var a = [];
         if (loadEventCount > 0) {
             a.push('Layers remaining: ' + loadEventCount);
@@ -697,11 +697,11 @@ function doParsedItem(obj, sortFlag) {
         } else {
             var s = '';
             var fnimg = 'images/unknown.png';
-            
+
             if ( obj[j].imgid !== undefined ) {
                 fnimg = imageIconLUT['' + obj[j].imgid];
             }
-            
+
             var title = obj[j].Name;
             if (obj[j].Enchantments !== undefined) {
                 var ench = obj[j].Enchantments;
@@ -722,7 +722,7 @@ function doParsedItem(obj, sortFlag) {
             }
             // debug
             //title += ' (' + fnimg + ') (' + obj[j].imgid + ')' + ' (' + j + ')';
-            
+
             s += '<div class="col-xs-1 mytooltip_dyn inventory-grid" title="' + title + '">';
             s += '<img class="pull-left inventory-item-image" height="32" width="32" src="' + fnimg + '" />';
             if (obj[j].Count !== undefined) {
@@ -789,7 +789,7 @@ function doParsedItem(obj, sortFlag) {
     ret += '</ul></div></div>';
 
     ret += '</div></div>';
-    
+
     return ret;
 }
 
@@ -919,7 +919,7 @@ function doParsedDoors(doors) {
 
 function doFeaturePopover(features, id, coordinate) {
     var feature = features[id];
-    
+
     var element = popover.getElement();
     // todo - is this too broad?
     $('.mytooltip_dyn').tooltip('hide');
@@ -941,7 +941,7 @@ function doFeaturePopover(features, id, coordinate) {
 
         enabled = (id < (features.length - 1)) ? '' : ' disabled';
         stitle += '<a href="#" class="btn btn-primary btn-xs mytooltip_dyn featureNext' + enabled + '" title="Next"><strong>&gt;</strong></a>';
-        
+
         stitle += '</div>&nbsp;';
     }
     // mob/item title
@@ -953,7 +953,7 @@ function doFeaturePopover(features, id, coordinate) {
     stitle += '</div>';
 
     if (name === 'Village') {
-        
+
         if ( !globalWarnVillage ) {
             doModal('Villages',
                     '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
@@ -969,14 +969,14 @@ function doFeaturePopover(features, id, coordinate) {
 
             // adjust point to ol coordinates
             var pts = mcpeToOpenlayers(door.Pos[0], door.Pos[2], true);
-            
+
             var pt = new ol.geom.Point( pts );
 
             var feature = new ol.Feature({
                 name: 'Village Door',
                 geometry: pt
             });
-            
+
             // copy properties (for popup)
             for (var dp in door) {
                 feature.set(dp, door[dp], true);
@@ -999,7 +999,7 @@ function doFeaturePopover(features, id, coordinate) {
 
         // todobig todohere - how to remove this?! (currently only escape key will do it)
     }
-    
+
     var s = '<div class="container-fluid my-scrollable">';
 
     for (var i in props) {
@@ -1075,7 +1075,7 @@ function doFeaturePopover(features, id, coordinate) {
                 else if ( i === 'Villagers' ) {
                     s += 'Villager Count: <b>' + props[i].length + '</b><br/>';
                 }
-                
+
                 else if (i === 'Pos') {
                     // make "Pos" clickable if we have raw layers
                     s += '' + i + ': <a href="#" class="layerGoto_dyn mytooltip_dyn" data-id="' + props[i][1] + '" title="Click to go to layer">' + JSON.stringify(props[i], null, 2) + '</a><br/>';
@@ -1113,7 +1113,7 @@ function doFeaturePopover(features, id, coordinate) {
     } else {
         $('a.itemsIcon').tab('show');
     }
-    
+
     $('.myTabs a').click(function (e) {
         e.preventDefault();
         globalItemStyleSelector = $(this).attr('data-id');
@@ -1131,7 +1131,7 @@ function doFeaturePopover(features, id, coordinate) {
     });
 
     //todobig - would be cool to support up/down left/right as kbd accel for prev/next
-    
+
     // activate links
     // todo - seems silly that we have to do this - can't use regular ones init'ed in main func?
     $('.layerGoto_dyn').click(function() {
@@ -1143,7 +1143,7 @@ function doFeaturePopover(features, id, coordinate) {
         trigger: 'hover',
         container: 'body'
     });
-    
+
     // todo - disabled because this does not appear to work
     if (false) {
         if (feature !== highlight) {
@@ -1176,7 +1176,7 @@ function doFeatureSelect(features, coordinate) {
         var bstr = bp.Name + ' @ ' + (bp.Pos[1] / 255.0) + ', ' + bp.Pos[0] + ', ' + bp.Pos[2];
         return astr.localeCompare(bstr);
     });
-    
+
     var s = 'Select item:<div class="list-group my-scrollable">';
     for (var i in features) {
         var feature = features[i];
@@ -1188,7 +1188,7 @@ function doFeatureSelect(features, coordinate) {
             '</a>';
     }
     s += '</div>';
-    
+
     popover.setPosition(coordinate);
     $(element).popover({
         'placement': 'auto right',
@@ -1229,7 +1229,7 @@ var displayFeatureInfo = function(evt) {
                 addFlag = false;
             }
         }
-        if ( addFlag) { 
+        if ( addFlag) {
             features.push(feature);
         }
     });
@@ -1285,7 +1285,7 @@ var getText = function(feature, resolution) {
             text = stringDivider(text, 16, '\n');
         }
     }
-    
+
     return text;
 };
 
@@ -1297,7 +1297,7 @@ var createTextStyle = function(feature, resolution, textColor) {
     var offsetY = -2;
     var weight = 'bold';
     var rotation = 0;
-    
+
     // smaller font when we are zoomed out
     if ( resolution > 3 ) {
         size = '8pt';
@@ -1306,14 +1306,14 @@ var createTextStyle = function(feature, resolution, textColor) {
     } else {
         size = '12pt';
     }
-    
+
     var font = weight + ' ' + size + ' Calibri,sans-serif';
     var fillColor = textColor;
     var outlineColor = '#000000';
     var outlineWidth = 3;
 
     var txt = getText(feature, resolution);
-    
+
     return new ol.style.Text({
         textAlign: align,
         textBaseline: baseline,
@@ -1396,19 +1396,19 @@ function shade(inputs, data) {
         // notes: negative values simply reverse the sun azimuth; the range of interesting values is fairly narrow - somewhere on (0.001..0.8)
         var zFactor = (data.vert / 10.0) - 0.075;
 
-        var x0, x1, x2, 
-            y0, y1, y2, 
+        var x0, x1, x2,
+            y0, y1, y2,
             offset,
-            z0, z2, 
-            dzdx, dzdy, 
+            z0, z2,
+            dzdx, dzdy,
             slopeRad, aspectRad, hillshade, fhillshade;
 
-        /* 
+        /*
            our 3x3 grid:
            a b c
            d e f
            g h i
-           
+
            y0 is row above curr
            y1 is curr
            y2 is row below curr
@@ -1427,40 +1427,40 @@ function shade(inputs, data) {
                 x2 = (x1 === maxX) ? maxX : (x1 + 1);
 
                 // z0 = a + 2d + g
-                z0 = 
-                    elevationData[(y0 * width + x0) * 4] + 
-                    elevationData[(y1 * width + x0) * 4] * 2.0 + 
+                z0 =
+                    elevationData[(y0 * width + x0) * 4] +
+                    elevationData[(y1 * width + x0) * 4] * 2.0 +
                     elevationData[(y2 * width + x0) * 4];
 
                 // z2 = c + 2f + i
-                z2 = 
-                    elevationData[(y0 * width + x2) * 4] + 
-                    elevationData[(y1 * width + x2) * 4] * 2.0 + 
+                z2 =
+                    elevationData[(y0 * width + x2) * 4] +
+                    elevationData[(y1 * width + x2) * 4] * 2.0 +
                     elevationData[(y2 * width + x2) * 4];
-                
+
                 // (7)  [dz/dx] = ((c + 2f + i) - (a + 2d + g)) / (8 * cellsize)
                 dzdx = (z2 - z0) / dp;
 
 
                 // z0 = a + 2b + c
-                z0 = 
-                    elevationData[(y0 * width + x0) * 4] + 
-                    elevationData[(y0 * width + x1) * 4] * 2.0 + 
+                z0 =
+                    elevationData[(y0 * width + x0) * 4] +
+                    elevationData[(y0 * width + x1) * 4] * 2.0 +
                     elevationData[(y0 * width + x2) * 4];
 
                 // z2 = g + 2h + i
-                z2 = 
-                    elevationData[(y2 * width + x0) * 4] + 
-                    elevationData[(y2 * width + x1) * 4] * 2.0 + 
+                z2 =
+                    elevationData[(y2 * width + x0) * 4] +
+                    elevationData[(y2 * width + x1) * 4] * 2.0 +
                     elevationData[(y2 * width + x2) * 4];
 
                 // (8)  [dz/dy] = ((g + 2h + i) - (a + 2b + c))  / (8 * cellsize)
                 dzdy = (z2 - z0) / dp;
 
-                // (9)  Slope_rad = ATAN (z_factor * sqrt ([dz/dx]2 + [dz/dy]2)) 
+                // (9)  Slope_rad = ATAN (z_factor * sqrt ([dz/dx]2 + [dz/dy]2))
                 slopeRad = Math.atan(zFactor * Math.sqrt(dzdx * dzdx + dzdy * dzdy));
 
-                if (dzdx !== 0.0) { 
+                if (dzdx !== 0.0) {
                     aspectRad = Math.atan2(dzdy, -dzdx);
 
                     if (aspectRad < 0) {
@@ -1470,7 +1470,7 @@ function shade(inputs, data) {
                 else {
                     if (dzdy > 0.0) {
                         aspectRad = halfPi;
-                    } 
+                    }
                     else if (dzdy < 0.0) {
                         aspectRad = twoPi - halfPi;
                     }
@@ -1479,8 +1479,8 @@ function shade(inputs, data) {
                         aspectRad = 0.0; // todo - this is my guess; algo notes are ambiguous
                     }
                 }
-                
-                // (1)  Hillshade = 255.0 * ((cos(Zenith_rad) * cos(Slope_rad)) + 
+
+                // (1)  Hillshade = 255.0 * ((cos(Zenith_rad) * cos(Slope_rad)) +
                 //        (sin(Zenith_rad) * sin(Slope_rad) * cos(Azimuth_rad - Aspect_rad)))
                 // Note that if the calculation of Hillshade value is < 0, the cell value will be = 0.
 
@@ -1575,7 +1575,7 @@ var srcLayerShadedReliefStatic = null, layerShadedReliefStatic = null;
 
 function doElevationStatic(enableFlag) {
     if (enableFlag) {
-        var fn = dimensionInfo[globalDimensionId].fnLayerShadedRelief;  
+        var fn = dimensionInfo[globalDimensionId].fnLayerShadedRelief;
         if ( useTilesFlag ) {
             srcLayerShadedReliefStatic = new ol.source.XYZ({
                 url: fn,
@@ -1709,15 +1709,15 @@ function makeChunkGrid(inputs, data) {
     var gridData = new Uint8ClampedArray(srcData.length);
     var dx = data.resolution;
     var dy = data.resolution;
-    
+
     //console.log('makeChunkGrid w=' + width + ' h=' + height + ' dx='+dx+' dy='+dy);
 
     // todo - so fiddly.  it's still off a bit (not 100% locked to src pixels)
-    
+
     var truncate = function(value) {
         return Math.floor(value);
     };
-    
+
     var cy = data.extent[3];
     for (var pixelY = 0; pixelY < height; ++pixelY, cy -= dy) {
         var icy = truncate((data.worldHeight - cy) + data.globalOffsetY);
@@ -1733,7 +1733,7 @@ function makeChunkGrid(inputs, data) {
                     gridData[offset] = 255;
                     gridData[offset + 1] = 0;
                     gridData[offset + 2] = 0;
-                    gridData[offset + 3] = 128; 
+                    gridData[offset + 3] = 128;
                 } else {
                     gridData[offset] = 255;
                     gridData[offset + 1] = 255;
@@ -1741,9 +1741,9 @@ function makeChunkGrid(inputs, data) {
                     gridData[offset + 3] = 128;
                 }
             } else {
-                gridData[offset] = 
-                    gridData[offset + 1] = 
-                    gridData[offset + 2] = 
+                gridData[offset] =
+                    gridData[offset + 1] =
+                    gridData[offset + 2] =
                     gridData[offset + 3] = 0;
             }
         }
@@ -1860,7 +1860,7 @@ function setLayer(fn, extraHelp) {
         doModal('Error', 'That image is not available -- see README and re-run bedrock_viz.' + extraHelp);
         return -1;
     }
-    
+
     // todo - attribution is small and weird in map - why?
     if ( useTilesFlag ) {
         srcLayerMain = new ol.source.XYZ({
@@ -1904,7 +1904,7 @@ function setLayer(fn, extraHelp) {
     }
 
     setLayerLoadListeners(srcLayerMain, fn);
-    
+
     if (layerMain === null) {
         if ( useTilesFlag ) {
             layerMain = new ol.layer.Tile({
@@ -1914,7 +1914,7 @@ function setLayer(fn, extraHelp) {
                 extent: extent,
                 source: srcLayerMain
             });
-        } else { 
+        } else {
             layerMain = new ol.layer.Image({
                 myStackOrder: 0,
                 source: srcLayerMain
@@ -1931,7 +1931,7 @@ function setLayer(fn, extraHelp) {
                 })
             }) );
         }
-        
+
         // get the pixel position with every move
         $(map.getViewport()).on('mousemove', function(evt) {
             globalMousePosition = map.getEventPixel(evt.originalEvent);
@@ -1947,7 +1947,7 @@ function setLayer(fn, extraHelp) {
                 var ctx = event.context;
                 var pixelRatio = event.frameState.pixelRatio;
                 pixelDataName = '';
-                if (globalMousePosition && 
+                if (globalMousePosition &&
                     ((globalLayerMode === 0 && (globalLayerId === 0 || globalLayerId === 1)) || globalLayerMode !== 0)) {
                     // todo - this appears to be slightly off at times (e.g. block does not change crisply at src pixel boundaries)
                     var x = globalMousePosition[0] * pixelRatio;
@@ -1987,7 +1987,7 @@ function setLayer(fn, extraHelp) {
                 }
             }
         });
-        
+
         disableLayerSmoothing(layerMain);
     } else {
         layerMain.setSource(srcLayerMain);
@@ -1997,7 +1997,7 @@ function setLayer(fn, extraHelp) {
         // update vector points (e.g. up/down/same markers if we are in raw layer mode and blocks are shown)
         vectorPoints.changed();
     }
-    
+
     return 0;
 }
 
@@ -2056,26 +2056,26 @@ function initDimension() {
     dimensionInfo[globalDimensionId].globalOffsetX = dimensionInfo[globalDimensionId].minWorldX;
     dimensionInfo[globalDimensionId].globalOffsetY = dimensionInfo[globalDimensionId].minWorldY;
 
-    
+
     // todobig - adjust maxworldX & Y if in tile mode so that we include the right edge and bottom edge tiles?
     if ( false ) {
         extent = [ dimensionInfo[globalLayerId].minWorldX,
                    dimensionInfo[globalLayerId].minWorldY,
                    dimensionInfo[globalLayerId].maxWorldX,
                    dimensionInfo[globalLayerId].maxWorldY ];
-        
+
         dimensionInfo[globalDimensionId].globalOffsetX = 0;
         dimensionInfo[globalDimensionId].globalOffsetY = 0;
     }
 
-    
+
     console.log('World bounds: dimId=' + globalDimensionId +
                 ' w=' + dimensionInfo[globalDimensionId].worldWidth +
                 ' h=' + dimensionInfo[globalDimensionId].worldHeight +
-                ' offx=' + dimensionInfo[globalDimensionId].globalOffsetX + 
+                ' offx=' + dimensionInfo[globalDimensionId].globalOffsetX +
                 ' offy=' + dimensionInfo[globalDimensionId].globalOffsetY
                );
-    
+
     projection = new ol.proj.Projection({
         code: 'bedrock_viz-image',
         // todobig - this appears to break loading geojson
@@ -2109,9 +2109,9 @@ function initDimension() {
       collapsed: false,
       collapsible: false
       //target: '_blank'
-      });               
+      });
     */
-    
+
     if (map === null) {
         measureControl = new MeasureControl();
         map = new ol.Map({
@@ -2152,7 +2152,7 @@ function initDimension() {
     // setup per-dimension block select menu
 
     // todobig - clear selected items?
-    
+
     // clear existing items
     $('#blockSelectList .blockToggle').remove();
     var newItems = '';
@@ -2167,7 +2167,7 @@ function initDimension() {
         $(newItems).prependTo('#blockSelectList');
     }
     // todobig - could disable button if the menu is empty
-    
+
     $('.blockToggleAddAll').click(function() {
         var cflag = true;
         if ( vectorPoints === null ) {
@@ -2189,7 +2189,7 @@ function initDimension() {
     $('.blockToggleRemoveAll').click(function() {
         listBlockToggle = [];
         spawnableEnableFlag = false;
-        if (vectorPoints !== null) { 
+        if (vectorPoints !== null) {
             vectorPoints.changed();
         }
         $('.blockToggle').parent().removeClass('active');
@@ -2215,7 +2215,7 @@ function initDimension() {
         }
     });
 
-    
+
     // finally load the proper layer
     if (globalLayerMode === 0) {
         return setLayerById(globalLayerId);
@@ -2288,14 +2288,14 @@ var createPointStyleFunction = function() {
         var spawnable = feature.get('Spawnable');
         var dimId = feature.get('Dimension');
         var textColor = '#ffffff';
-        
+
         // hack for pre-0.12 worlds
         if (dimId === undefined) {
             dimId = 0;
         } else {
             dimId = +dimId;
         }
-        
+
         if (entity !== undefined) {
             if (dimId === globalDimensionId) {
                 var id = +feature.get('id');
@@ -2319,7 +2319,7 @@ var createPointStyleFunction = function() {
             if (dimId === globalDimensionId) {
                 var Name = feature.get('Name');
                 if (listTileEntityToggle[Name] !== undefined) {
-                    if (listTileEntityToggle[Name]) { 
+                    if (listTileEntityToggle[Name]) {
                         style = new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: 4,
@@ -2408,7 +2408,7 @@ var villageCreatePointStyleFunction = function() {
                 })
             }) ];
         }
-        
+
         var weight = 'bold';
         var size;
         // smaller font when we are zoomed out
@@ -2460,7 +2460,7 @@ function loadVectors() {
 
     try {
         var src;
-        if ( loadGeoJSONFlag ) { 
+        if ( loadGeoJSONFlag ) {
             src = new ol.source.Vector({
                 url: fnGeoJSON,
                 //crossOrigin: 'anonymous',
@@ -2476,7 +2476,7 @@ function loadVectors() {
                 features: features
             });
         }
-        
+
         var listenerKey = src.on('change', function(e) {
             if (src.getState() == 'ready') {
                 updateLoadEventCount(-1);
@@ -2490,13 +2490,13 @@ function loadVectors() {
                         globalCORSWarning);
             }
         });
-        
+
         vectorPoints = new ol.layer.Vector({
             myStackOrder: 300,
             source: src,
             style: createPointStyleFunction()
         });
-        
+
         map_addLayer(vectorPoints);
 
     } catch (e) {
@@ -2505,7 +2505,7 @@ function loadVectors() {
                 'Error: ' + e.toString() + '<br/>' +
                 '<br/>' +
                 globalCORSWarning);
-    } 
+    }
     // todobig - how to catch CORS issue here?
 
     // add village doors vector layer
@@ -2518,7 +2518,7 @@ function loadVectors() {
         //todobig - could use a func to set door labels w/ more info
         style: villageCreatePointStyleFunction()
     });
-    
+
     map_addLayer(villageVectorPoints);
 }
 
@@ -2615,7 +2615,7 @@ var coordinateFormatFunction = function(coordinate) {
         cx = coordinate[0];
         cy = -coordinate[1];
     }
-    
+
     var ix = coordinate[0];
     var iy = (dimensionInfo[globalDimensionId].worldHeight - 1) - coordinate[1];
 
@@ -2624,12 +2624,12 @@ var coordinateFormatFunction = function(coordinate) {
         ix = cx - dimensionInfo[globalDimensionId].minWorldX;
         iy = cy - dimensionInfo[globalDimensionId].minWorldY;
     }
-    
+
     var chunkX = Math.floor(cx / 16);
     var chunkY = Math.floor(cy / 16);
 
     var prec = 1;
-    var s = '<span class="lgray">World</span> ' + cx.toFixed(prec) + ' ' + cy.toFixed(prec) + 
+    var s = '<span class="lgray">World</span> ' + cx.toFixed(prec) + ' ' + cy.toFixed(prec) +
         ' <span class="lgray">Image</span> ' + ix.toFixed(prec) + ' ' + iy.toFixed(prec);
     if ( showChunkCoordinatesFlag || chunkGridFlag ) {
         s += '<br/><span class="lgray">Chunk</span> ' + chunkX.toFixed(0) + ' ' + chunkY.toFixed(0);
@@ -2677,7 +2677,7 @@ function doTour(aboutFlag) {
         container: 'body',
         orphan: true,
         // backdrop: true,
-        
+
         steps: [
             {
                 title: 'Welcome to Bedrock Viz!',
@@ -2689,7 +2689,7 @@ function doTour(aboutFlag) {
                 element: '#map',
                 title: 'The Map',
                 content: 'The main area of the web app.<br/>' +
-                    '<br/>' + 
+                    '<br/>' +
                     'Some ways to interact with the map:<br/><ul>' +
                     '<li>Drag the map to move it</li>' +
                     '<li>Double click to zoom in</li>' +
@@ -2766,14 +2766,14 @@ function doTour(aboutFlag) {
                 element: '#menuHostileMobs',
                 placement: 'top',
                 title: 'Hostile Mobs',
-                content: 'You can display the location of hostile mobs here.' + 
+                content: 'You can display the location of hostile mobs here.' +
                     featureExtra
             },
             {
                 element: '#menuObjects',
                 placement: 'top',
                 title: 'Objects',
-                content: 'You can display the location of objects here.' + 
+                content: 'You can display the location of objects here.' +
                     featureExtra
             },
             {
@@ -2822,8 +2822,8 @@ function doTour(aboutFlag) {
         ]});
     tour.init();
     if ( aboutFlag ) {
-        tour._options.template = '<div class="popover tour">' + 
-            '<div class="arrow"></div>' + 
+        tour._options.template = '<div class="popover tour">' +
+            '<div class="arrow"></div>' +
             '<h3 class="popover-title"></h3>' +
             '<div class="popover-content"></div>' +
             '<div class="popover-navigation">' +
@@ -2866,7 +2866,7 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
            '</a></h4></div>' +
            '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">' +
            '<div class="panel-body"><div class="pre-scrollable">' + changeLog + '</div></div>' +
-           '</div></div>' + 
+           '</div></div>' +
            (!isCurrent ? '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>' : '');
 
     doModal( title, msg);
@@ -2882,7 +2882,7 @@ function doCheckUpdate_getChangeLog(newVersion) {
         dataType: 'text',
         cache: false,
         success: function(result, textStatus, jqxhr) {
-            
+
             // parse this: Latest Highlight: New stuff added");
             var newVersionHighlight = '(See ChangeLog on GitHub)';
             var res = result.match(/Latest highlight\s*:\s*(.+)/);
@@ -2908,7 +2908,7 @@ function doCheckUpdate() {
         dataType: 'text',
         cache: false,
         success: function(result, textStatus, jqxhr) {
-            
+
             // parse this: Latest release: X.Y.Z
             var res = result.match(/Latest release\s*:\s*(\S+)/);
             if ( res ) {
@@ -2949,7 +2949,7 @@ $(function() {
         });
 
         var radius = 8;
-        
+
         globalStyleBlockUp = new ol.style.Style({
             image:  new ol.style.RegularShape({
                 fill: new ol.style.Fill({color: 'rgba(128, 255, 128, 0.8)'}),
@@ -2982,7 +2982,7 @@ $(function() {
             })
         });
     }
-    
+
     popover = new ol.Overlay({
         element: document.getElementById('popover'),
         autoPan: true,
@@ -3009,16 +3009,16 @@ $(function() {
         var id = +$(this).attr('data-id');
         setDimensionById(id);
     });
-    
-    
+
+
     $('.layerGoto').click(function() {
         var id = +$(this).attr('data-id');
         layerGoto(id);
     });
-    
+
     $('#layerPrev').click(function() { layerMove(-1); });
     $('#layerNext').click(function() { layerMove(1); });
-    
+
     $('.imageSelect').click(function() {
         var id = +$(this).attr('data-id');
         setLayerById(id);
@@ -3067,11 +3067,11 @@ $(function() {
                 $(this).parent().removeClass('active');
             }
         });
-        if (vectorPoints !== null) { 
+        if (vectorPoints !== null) {
             vectorPoints.changed();
         }
     });
-    
+
     $('.entityToggle').click(function() {
         var id = $(this).attr('data-id');
         entityToggle(id);
@@ -3110,7 +3110,7 @@ $(function() {
         }
         showNetherCoordinatesFlag = !showNetherCoordinatesFlag;
     });
-    
+
     $('#chunkDisplayToggle').click(function() {
         if ($(this).parent().hasClass('active')) {
             $(this).parent().removeClass('active');
@@ -3141,7 +3141,7 @@ $(function() {
             vectorPoints.changed();
         }
     });
-    
+
     $('#elevationToggle').click(function() {
         if ( globalCORSWarningFlag ) {
             doModal('CORS Error', 'Error accessing map pixels.  We cannot enable the elevation overlay.<br/><br/>' +
@@ -3191,7 +3191,7 @@ $(function() {
         updateElevationAlphaOpacity();
     });
     updateElevationAlphaOpacity();
-    
+
     $('#elevationStaticToggle').click(function() {
         if ($('#elevationStaticToggle').parent().hasClass('active')) {
             $('#elevationStaticToggle').parent().removeClass('active');
@@ -3212,7 +3212,7 @@ $(function() {
     });
     updateElevationStaticOpacity();
 
-    
+
     $('#btnHelp').click(function() {
         doTour(false);
     });
@@ -3231,7 +3231,7 @@ $(function() {
             e.stopPropagation();
         }
     });
-    
+
     // put the world info
     $('#worldInfo').html(
         '<span id="worldName" class="badge mytooltip" title="World Name">' + worldName + '</span>' +
@@ -3249,7 +3249,7 @@ $(function() {
         // remove dynamic shaded relief -- currently does not work in tile mode
         $('.dynamicShadedRelief').hide();
     }
-    
+
     // setup hotkeys
     $(document).on('keydown', function(evt) {
         var key = String.fromCharCode(evt.which);
