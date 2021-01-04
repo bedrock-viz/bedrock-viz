@@ -2142,9 +2142,9 @@ var fixContentHeight = function() {
 };
 
 function doModal(title, body) {
-    $('.modal-title').html(title);
-    $('.modal-body').html(body);
-    $('.modal').modal({});
+    $('#globalModal').find('.modal-title').html(title);
+    $('#globalModal').find('.modal-body').html(body);
+    $('#globalModal').modal({});
 }
 
 function updateElevationAlphaOpacity() {
