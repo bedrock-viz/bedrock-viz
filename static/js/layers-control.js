@@ -154,7 +154,7 @@ const LayersControl = function(opt_options) {
             // when a key is released, check if it is enter. If it is, go to the currently entered layer and remove the box
             .keyup(e => {
                 const lowerCaseKeyName = String(e.key).toLowerCase();
-                if (lowerCaseKeyName === "enter") {
+                if (lowerCaseKeyName === 'enter') {
                     const layerValue = getJumpLayerValue($layerJumpEntry);
                     doJumpToLayer(layerValue);
                     removeLayerJumpEntry();

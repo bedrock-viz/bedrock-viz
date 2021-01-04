@@ -242,7 +242,7 @@ const OptionsControl = function(opt_options) {
      */
     function applyOptionStatesToInterface() {
         Object.keys(optionStates).forEach(optionKey => {
-            const element = $(`.modal-body .option-toggle[data-option="${optionKey}"]`);
+            const element = $('#options-modal-content').find(`.modal-body .option-toggle[data-option="${optionKey}"]`);
             if (!!element && !!optionStates[optionKey]) {
                 element.addClass('active');
             } else {
