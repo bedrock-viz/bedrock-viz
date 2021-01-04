@@ -876,12 +876,6 @@ namespace mcpe_viz
         //sprintf(tmpstring, "%s/bedrock_viz.html.template", dirExec.c_str());
         const std::string fnHtmlSrc = static_path("bedrock_viz.html.template").generic_string();
 
-        //sprintf(tmpstring, "%s/bedrock_viz.js", dirExec.c_str());
-        const std::string fnJsSrc = static_path("bedrock_viz.js").generic_string();
-
-        //sprintf(tmpstring, "%s/bedrock_viz.css", dirExec.c_str());
-        const std::string fnCssSrc = static_path("bedrock_viz.css").generic_string();
-
         // create html file -- need to substitute one variable (extra js file)
         StringReplacementList replaceStrings;
 
@@ -1094,19 +1088,18 @@ namespace mcpe_viz
 
         if (dirDest.size() > 0 && dirDest != ".") {
             // todo - how to be sure that this is a diff dir?
-            sprintf(tmpstring, "%s/%s", dirDest.c_str(), mybasename(fnJsSrc).c_str());
-            std::string fnJsDest = tmpstring;
-            copyFile(fnJsSrc, fnJsDest, false);
-
-            sprintf(tmpstring, "%s/%s", dirDest.c_str(), mybasename(fnCssSrc).c_str());
-            std::string fnCssDest = tmpstring;
-            copyFile(fnCssSrc, fnCssDest, false);
 
             // copy javascript files
             std::string dirJs = dirDest + "/js";
             local_mkdir(dirJs);
             //copyDirToDir(dirExec + "/js", dirJs, false);
             copyDirToDir(static_path("js").generic_string(), dirJs, false);
+
+            // copy css files
+            std::string dirJs = dirDest + "/css";
+            local_mkdir(dirJs);
+            //copyDirToDir(dirExec + "/css", dirJs, false);
+            copyDirToDir(static_path("css").generic_string(), dirJs, false);
 
             // copy images
             // todobig - could save a good amount of time per run if we detect if dir has already been copied
