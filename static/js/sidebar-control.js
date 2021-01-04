@@ -1,14 +1,31 @@
 /**
  * Sidebar Control
- * Shows a slide in/out sidebar overlayed on map with toggles for object and mob visibility
+ * Shows a slide in/out sidebar overlay on map with toggles for object and mob visibility.
+ *
+ * Does not implement any options.
+ *
+ * References the global scope to change:
+ *  - listEntityToggle
+ *  - listTileEntityToggle
+ *  - listBlockToggle
+ *  - spawnableEnableFlag
+ *  - vectorPoints
+ *  - loadVectors() function
+ *
+ * @todo Global scope reference
  * @extends {ol.control.Control}
  * @param {Object=} opt_options Control options.
  */
 let SidebarControl = function(opt_options) {
     const options = opt_options || {};
 
+    // known types of entities, any other type that comes from config will be unknown and not work
     const knownEntityTypes = ['entity', 'tile', 'block', 'spawnable-block'];
 
+    // the main map control element
+    let element;
+
+    // if the visible-only filter is active
     let filterVisibleActive = false;
 
     // main content area element
@@ -17,7 +34,179 @@ let SidebarControl = function(opt_options) {
     // filter input
     let $sidebarFilter;
 
-    const checkEntityVisibility = function(id, type) {
+    // Sidebar toggle element
+    const $sidebarToggle = $(document.createElement('div'))
+        .attr('id', 'sidebar-toggle')
+        .append(
+            $(document.createElement('img'))
+                .attr('src', 'images/sidebar-assets/arrow_left.png')
+        );
+    $sidebarToggle.append($sidebarToggleIcon);
+
+    // when the toggle is clicked, either open or close the sidebar
+    $sidebarToggle.click(function (e) {
+        $sidebarFilter.val('');
+        if (!$(element).hasClass('open')) {
+            $('body').addClass('sidebar-open');
+            doUpdateEntityList();
+            $(element).addClass('open');
+            $sidebarToggleIcon.addClass('open');
+            $sidebarFilter.focus();
+        } else {
+            $('body').removeClass('sidebar-open');
+            $sidebarContent.find('.sidebar-content-group p').remove();
+            $(element).removeClass('open');
+            $sidebarToggleIcon.removeClass('open');
+        }
+    });
+
+    // Brand and logo area
+    const $sidebarHeaderWrapper = $(document.createElement('div'))
+        .addClass('sidebar-header-wrapper');
+
+    const $sidebarLogoImage = $(document.createElement('img'))
+        .attr('src', 'images/sidebar-assets/bedrock-viz-logo.png');
+
+    const $sidebarLogoText = $(document.createElement('div'))
+        .html('Bedrock Viz')
+        .addClass('sidebar-brand');
+
+    // Filter label, input, and clear button
+    const $sidebarFilterWrapper = $(document.createElement('div'))
+        .addClass('sidebar-filter-wrapper');
+
+    const $sidebarFilterText = $(document.createElement('label'))
+        .html('Search for Entity');
+
+    $sidebarFilter = $(document.createElement('input'))
+        .attr({
+            'placeholder': 'type 2 or more characters to search',
+            'type': 'search'
+        })
+        .keyup(e => {
+            doUpdateEntityList();
+        });
+
+    const $sidebarFilterClear = $(document.createElement('button'))
+        .html('X')
+        .addClass('sidebar-filter-clear')
+        .attr('role', 'button')
+        .click(e => {
+            $sidebarFilter.val('');
+            doUpdateEntityList();
+        });
+
+    // build filter area
+    $sidebarFilterWrapper
+        .append($sidebarFilterText)
+        .append($sidebarFilter)
+        .append($sidebarFilterClear);
+
+    // wrapper for "quick links", utilities like expand/collapse all
+    const $sidebarQuickLinkWrapper = $(document.createElement('div'))
+        .addClass('sidebar-quick-link-wrapper');
+
+    const $sidebarQuickLink1 = $(document.createElement('a'))
+        .html('Expand All')
+        .click(() => {
+            $sidebarContent.find('.sidebar-content-group').each((idx, ele) => {
+                if ($(ele).find('.collapse.in').length === 0) {
+                    $(ele).find('.sidebar-group-heading').click();
+                }
+            });
+        });
+
+    const $sidebarQuickLink2 = $(document.createElement('a'))
+        .html('Collapse All')
+        .click(() => {
+            $sidebarContent.find('.sidebar-content-group').each((idx, ele) => {
+                if ($(ele).find('.collapse.in').length > 0) {
+                    $(ele).find('.sidebar-group-heading').click();
+                }
+            });
+        });
+
+    const $sidebarQuickLink3 = $(document.createElement('a'))
+        .html('Clear All Visible')
+        .click(() => {
+            $('#sidebar .entity-toggle').each((idx, ele) => {
+                const id = $(ele).attr('data-id');
+                const type = $(ele).attr('data-type');
+                if (setEntityVisibility(id, type, false)) {
+                    $(ele).removeClass('active');
+                }
+            });
+            if (filterVisibleActive) {
+                doUpdateEntityList();
+            }
+        });
+
+    const $sidebarQuickLink4 = $(document.createElement('a'))
+        .html('Filter Visible')
+        .click(() => {
+            filterVisibleActive = !filterVisibleActive;
+            if (filterVisibleActive) {
+                $sidebarQuickLink4.addClass('pin-active');
+            } else {
+                $sidebarQuickLink4.removeClass('pin-active');
+            }
+            doUpdateEntityList();
+        });
+
+    // add the links to the wrapper
+    $sidebarQuickLinkWrapper.append($sidebarQuickLink1)
+        .append(' | ')
+        .append($sidebarQuickLink2)
+        .append(' | ')
+        .append($sidebarQuickLink3)
+        .append(' | ')
+        .append($sidebarQuickLink4);
+
+    // build header area
+    $sidebarHeaderWrapper.append($sidebarLogoImage)
+        .append($sidebarLogoText)
+        .append($sidebarFilterWrapper)
+        .append($sidebarQuickLinkWrapper);
+
+    // main content container
+    $sidebarContent = $(document.createElement('div'))
+        .attr('id', 'sidebar-content');
+
+    // add logo/filter header
+    $sidebarContent.append($sidebarHeaderWrapper);
+
+    // main element for control
+    element = document.createElement('div');
+
+    // build the interface
+    $(element)
+        .attr('id', 'sidebar')
+        .append($sidebarToggle)
+        .append($sidebarContent);
+
+    ol.control.Control.call(this, {
+        element: element,
+        target: options.target
+    });
+
+    // Public API
+
+    /**
+     * Update the list of entity toggles on the sidebar
+     */
+    this.updateEntityList = function() {
+        doUpdateEntityList();
+    };
+
+    // private methods
+
+    /**
+     * Checks the given entity, by id, for visibility state
+     * @param id id of entity to check
+     * @param type the entity type, must be a type that is in knownEntityTypes
+     * @returns {boolean}
+     */
+    function checkEntityVisibility(id, type) {
         if (!knownEntityTypes.includes(type)) {
             console.error(`Sidebar: Cannot check visibility of ${id} from type ${type} -- unknown type`);
             return false;
@@ -36,7 +225,14 @@ let SidebarControl = function(opt_options) {
         return false;
     }
 
-    const setEntityVisibility = function(id, type, state) {
+    /**
+     * Sets the given entity's visibility state to the indicated state
+     * @param id id of entity to check
+     * @param type the entity type, must be a type that is in knownEntityTypes
+     * @param state true/false visible
+     * @returns {boolean} if the state was actually changed
+     */
+    function setEntityVisibility(id, type, state) {
         if (!knownEntityTypes.includes(type)) {
             console.error(`Sidebar: Cannot toggle visibility of ${id} from type ${type} -- unknown type`);
             return false;
@@ -63,19 +259,28 @@ let SidebarControl = function(opt_options) {
         }
 
         return true;
-    };
+    }
 
-    const drawEntities = function (filterText) {
+    /**
+     * Update the entity list, with filter text if any. If there are no groups displayed, show a "not found" message.
+     * If there is only one group, force it open.
+     *
+     * @param filterText optional text to filter the entity list
+     */
+    function drawEntities(filterText) {
+        // kill lingering tooltips
         $sidebarContent.find('[aria-describedby]').each((idx, ele) => {
             const tooltipId = $(ele).attr('aria-describedby');
             $(`#${tooltipId}`).remove();
-        }); // kill lingering tooltips
+        });
 
         $sidebarContent.find('.sidebar-content-group').remove();
 
         Array.from(sidebarControlConfig).forEach(sidebarItemGroup => {
             const $newGroupElement = buildOneSidebarContentGroup(sidebarItemGroup, filterText);
-            $sidebarContent.append($newGroupElement);
+            if (!!$newGroupElement) {
+                $sidebarContent.append($newGroupElement);
+            }
         });
 
         const numberOfVisibleGroups = $sidebarContent.find('.sidebar-content-group').length;
@@ -122,40 +327,56 @@ let SidebarControl = function(opt_options) {
         }
 
         $sidebarContent.append($nothingFoundWrapper);
-    };
+    }
 
-    const doUpdateEntityList = function() {
+    /**
+     * Updates the entity list, with or without a filter
+     */
+    function doUpdateEntityList() {
         if ($sidebarFilter.val().length > 2) {
             drawEntities(String($sidebarFilter.val()).toLowerCase());
         } else {
             drawEntities();
         }
-    };
+    }
 
-    const buildOneSidebarContentGroup = function (group, filterText) {
+    /**
+     * Constructs the UI for one entity group, including the accordion and each selectable item. Uses sessionStorage to remember the open/closed
+     * state of individual groups.
+     *
+     * @param group the group to render
+     * @param filterText optional filter text to reduce the number of items shown
+     * @returns {jQuery|HTMLElement}
+     */
+    function buildOneSidebarContentGroup(group, filterText) {
         let itemsToShow = Array.from(group.items);
+
+        // if there is a filter, apply it to the items
         if (!!filterText) {
             itemsToShow = itemsToShow.filter(i => String(i.label).toLowerCase().includes(filterText));
         }
 
+        // if the filter visible is active, only show visible items
         if (filterVisibleActive) {
             itemsToShow = itemsToShow.filter(item => checkEntityVisibility(item.id, item.type));
         }
 
+        // don't draw the group if there aren't any items
         if (itemsToShow.length === 0) {
-            return;
+            return null;
         }
 
+        // name used for IDs and to group DOM elements
         const keyName = String(group.title).toLowerCase().replace(' ', '');
 
         // figure out if this should start expanded (default yes)
         let restoreState = sessionStorage.getItem(keyName);
-        if (restoreState !== 'false') {
-            restoreState = true;
-        } else {
-            restoreState = false;
-        }
+        restoreState = restoreState !== 'false';
 
+        // this element will eventually hold the items
+        const $contentGroupItemWrapper = $(document.createElement('div'));
+
+        // build the accordion elements
         const $contentGroupWrapper = $(document.createElement('div'));
         $contentGroupWrapper
             .addClass('sidebar-content-group')
@@ -177,79 +398,71 @@ let SidebarControl = function(opt_options) {
                 'aria-expanded': 'false',
                 'aria-controls': `${keyName}Toggles`
             })
-            .html(group.title);
-
-        const $contentGroupHeadingIndicator = $(document.createElement('img'));
-        $contentGroupHeadingIndicator.attr('src', 'images/sidebar-assets/arrow_left.png');
-        $contentGroupHeading.append($contentGroupHeadingIndicator);
-
-        $contentGroupHeading.click(() => {
-            $contentGroupCollapser.collapse('toggle');
-            $contentGroupHeadingIndicator.toggleClass('open');
-            const currentState = $contentGroupHeadingIndicator.hasClass('open');
-            sessionStorage.setItem(keyName, String(currentState));
-        });
+            .html(group.title)
+            .append(
+                $(document.createElement('img'))
+                    .attr('src', 'images/sidebar-assets/arrow_left.png')
+            )
+            .click(() => {
+                $contentGroupCollapser.collapse('toggle');
+                $contentGroupHeading.find('img').toggleClass('open');
+                const currentState = $contentGroupHeading.find('img').hasClass('open');
+                sessionStorage.setItem(keyName, String(currentState));
+            });
 
         if (restoreState) {
             $contentGroupCollapser.addClass('in');
-            $contentGroupHeadingIndicator.addClass('open');
+            $contentGroupHeading.find('img').addClass('open');
         }
 
-        const $contentGroupToggleAllWrapper = $(document.createElement('div'));
-        $contentGroupToggleAllWrapper.addClass('feature-toggle-all-wrapper');
+        // build the toggle all on/off UI for this group
+        const $contentGroupToggleAllWrapper = $(document.createElement('div'))
+            .addClass('feature-toggle-all-wrapper');
         $contentGroupCollapser.append($contentGroupToggleAllWrapper);
 
-        const $contentGroupItemWrapper = $(document.createElement('div'));
-
-        const $contentGroupShowAll = $(document.createElement('a'));
-        $contentGroupShowAll
+        const $contentGroupShowAll = $(document.createElement('a'))
             .addClass('feature-toggle-all feature-toggle-add-all')
             .attr({
                 'data-group': keyName,
                 'href': 'javascript: void(0)'
             })
-            .html('Show All');
+            .html('Show All')
+            .click(() => {
+                $contentGroupItemWrapper.find('.entity-toggle').each((index, ele) => {
+                    const id = $(ele).attr('data-id');
+                    const type = $(ele).attr('data-type');
+                    if (setEntityVisibility(id, type, true)) {
+                        $(ele).addClass('active');
+                        if (filterVisibleActive) {
+                            doUpdateEntityList();
+                        }
+                    }
+                });
+            });
         $contentGroupToggleAllWrapper.append($contentGroupShowAll);
 
         $contentGroupToggleAllWrapper.append(' | ');
 
-        const $contentGroupHideAll = $(document.createElement('a'));
-        $contentGroupHideAll
+        const $contentGroupHideAll = $(document.createElement('a'))
             .addClass('feature-toggle-all feature-toggle-remove-all')
             .attr({
                 'data-group': keyName,
                 'href': 'javascript: void(0)'
             })
-            .html('Hide All');
+            .html('Hide All')
+            .click(() => {
+                $contentGroupItemWrapper.find('.entity-toggle').each((index, ele) => {
+                    const id = $(ele).attr('data-id');
+                    const type = $(ele).attr('data-type');
+                    if (setEntityVisibility(id, type, false)) {
+                        $(ele).removeClass('active');
+                        if (filterVisibleActive) {
+                            doUpdateEntityList();
+                        }
+                    }
+                });
+            });
         $contentGroupToggleAllWrapper.append($contentGroupHideAll);
-
-        $contentGroupShowAll.click((e) => {
-            const dataGroup = $(e.target).attr('data-group');
-            $contentGroupItemWrapper.find(`.entity-toggle`).each((index, ele) => {
-                const id = $(ele).attr('data-id');
-                const type = $(ele).attr('data-type');
-                if (setEntityVisibility(id, type, true)) {
-                    $(ele).addClass('active');
-                    if (filterVisibleActive) {
-                        doUpdateEntityList();
-                    }
-                }
-            });
-        });
-
-        $contentGroupHideAll.click((e) => {
-            const dataGroup = $(e.target).attr('data-group');
-            $contentGroupItemWrapper.find(`.entity-toggle`).each((index, ele) => {
-                const id = $(ele).attr('data-id');
-                const type = $(ele).attr('data-type');
-                if (setEntityVisibility(id, type, false)) {
-                    $(ele).removeClass('active');
-                    if (filterVisibleActive) {
-                        doUpdateEntityList();
-                    }
-                }
-            });
-        });
 
         $contentGroupItemWrapper.addClass('entity-toggle-wrapper');
         $contentGroupCollapser.append($contentGroupItemWrapper);
@@ -294,7 +507,8 @@ let SidebarControl = function(opt_options) {
                 $contentGroupItemWrapper.append($thisItem);
             });
 
-        $contentGroupItemWrapper.delegate('.entity-toggle', 'click', (e) => {
+        // bind an event delegate to catch clicking on the individual elements
+        $contentGroupItemWrapper.delegate('.entity-toggle', 'click touchstart', (e) => {
             const id = $(e.target).attr('data-id');
             const type = $(e.target).attr('data-type');
             const currentState = $(e.target).hasClass('active');
@@ -312,168 +526,17 @@ let SidebarControl = function(opt_options) {
             }
         });
 
+        // finish putting the elements together
         $contentGroupWrapper.append($contentGroupHeading);
         $contentGroupWrapper.append($contentGroupCollapser);
 
+        // bind up any tooltips in the newly created group
         $contentGroupWrapper.find('.mytooltip').tooltip({
             trigger: 'hover',
             container: 'body'
         });
 
         return $contentGroupWrapper
-    };
-
-    // Sidebar toggle element
-    const $sidebarToggle = $(document.createElement('div'));
-    $sidebarToggle.attr('id', 'sidebar-toggle');
-
-    const $sidebarToggleIcon = $(document.createElement('img'));
-    $sidebarToggleIcon.attr('src', 'images/sidebar-assets/arrow_left.png');
-    $sidebarToggle.append($sidebarToggleIcon);
-
-    $sidebarToggle.click(function (e) {
-        $sidebarFilter.val('');
-        if (!$(element).hasClass('open')) {
-            $('body').addClass('sidebar-open');
-            doUpdateEntityList();
-            $(element).addClass('open');
-            $sidebarToggleIcon.addClass('open');
-            $sidebarFilter.focus();
-        } else {
-            $('body').removeClass('sidebar-open');
-            $sidebarContent.find('.sidebar-content-group p').remove();
-            $(element).removeClass('open');
-            $sidebarToggleIcon.removeClass('open');
-        }
-    });
-
-    // Brand and logo area
-    const $sidebarHeaderWrapper = $(document.createElement('div'));
-    $sidebarHeaderWrapper.addClass('sidebar-header-wrapper');
-
-    const $sidebarLogoImage = $(document.createElement('img'));
-    $sidebarLogoImage.attr('src', 'images/sidebar-assets/bedrock-viz-logo.png');
-
-    const $sidebarLogoText = $(document.createElement('div'));
-    $sidebarLogoText.html('Bedrock Viz');
-    $sidebarLogoText.addClass('sidebar-brand');
-
-    // Filter label, input, and clear button
-    const $sidebarFilterWrapper = $(document.createElement('div'));
-    $sidebarFilterWrapper.addClass('sidebar-filter-wrapper');
-
-    const $sidebarFilterText = $(document.createElement('label'));
-    $sidebarFilterText.html('Search for Entity');
-    $sidebarFilter = $(document.createElement('input'));
-    $sidebarFilter.attr({
-        'placeholder': 'type 2 or more characters to search',
-        'type': 'search'
-    });
-    $sidebarFilter.keyup(e => {
-        doUpdateEntityList();
-    });
-
-    const $sidebarFilterClear = $(document.createElement('button'));
-    $sidebarFilterClear.html('X');
-    $sidebarFilterClear.addClass('sidebar-filter-clear');
-    $sidebarFilterClear.attr('role', 'button');
-    $sidebarFilterClear.click(e => {
-        $sidebarFilter.val('');
-        doUpdateEntityList();
-    });
-
-    // build filter area
-    $sidebarFilterWrapper.append($sidebarFilterText);
-    $sidebarFilterWrapper.append($sidebarFilter);
-    $sidebarFilterWrapper.append($sidebarFilterClear);
-
-    const $sidebarQuickLinkWrapper = $(document.createElement('div'));
-    $sidebarQuickLinkWrapper.addClass('sidebar-quick-link-wrapper');
-
-    const $sidebarQuickLink1 = $(document.createElement('a'));
-    $sidebarQuickLink1.html('Expand All');
-    $sidebarQuickLink1.click(() => {
-        $sidebarContent.find('.sidebar-content-group').each((idx, ele) => {
-            if ($(ele).find('.collapse.in').length === 0) {
-                $(ele).find('.sidebar-group-heading').click();
-            }
-        });
-    });
-
-    const $sidebarQuickLink2 = $(document.createElement('a'));
-    $sidebarQuickLink2.html('Collapse All');
-    $sidebarQuickLink2.click(() => {
-        $sidebarContent.find('.sidebar-content-group').each((idx, ele) => {
-            if ($(ele).find('.collapse.in').length > 0) {
-                $(ele).find('.sidebar-group-heading').click();
-            }
-        });
-    });
-
-    const $sidebarQuickLink3 = $(document.createElement('a'));
-    $sidebarQuickLink3.html('Clear All Visible');
-    $sidebarQuickLink3.click(() => {
-        $(`.entity-toggle`).each((idx, ele) => {
-            const id = $(ele).attr('data-id');
-            const type = $(ele).attr('data-type');
-            if (setEntityVisibility(id, type, false)) {
-                $(ele).removeClass('active');
-            }
-        });
-        if (filterVisibleActive) {
-            doUpdateEntityList();
-        }
-    });
-
-    const $sidebarQuickLink4 = $(document.createElement('a'));
-    $sidebarQuickLink4.html('Filter Visible');
-    $sidebarQuickLink4.click(() => {
-        filterVisibleActive = !filterVisibleActive;
-        if (filterVisibleActive) {
-            $sidebarQuickLink4.addClass('pin-active');
-        } else {
-            $sidebarQuickLink4.removeClass('pin-active');
-        }
-        doUpdateEntityList();
-    });
-
-    $sidebarQuickLinkWrapper.append($sidebarQuickLink1);
-    $sidebarQuickLinkWrapper.append(" | ");
-    $sidebarQuickLinkWrapper.append($sidebarQuickLink2);
-    $sidebarQuickLinkWrapper.append(" | ");
-    $sidebarQuickLinkWrapper.append($sidebarQuickLink3);
-    $sidebarQuickLinkWrapper.append(" | ");
-    $sidebarQuickLinkWrapper.append($sidebarQuickLink4);
-
-    // build header area
-    $sidebarHeaderWrapper.append($sidebarLogoImage);
-    $sidebarHeaderWrapper.append($sidebarLogoText);
-    $sidebarHeaderWrapper.append($sidebarFilterWrapper);
-    $sidebarHeaderWrapper.append($sidebarQuickLinkWrapper);
-
-    // main content container
-    $sidebarContent = $(document.createElement('div'));
-    $sidebarContent.attr('id', 'sidebar-content');
-
-    // add logo/filter header
-    $sidebarContent.append($sidebarHeaderWrapper);
-
-    // main element for control
-    const element = document.createElement('div');
-    element.id = 'sidebar';
-
-    // build main element
-    $(element).append($sidebarToggle);
-    $(element).append($sidebarContent);
-
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-
-    // Public API
-    this.updateEntityList = function() {
-        doUpdateEntityList();
-    };
+    }
 };
 ol.inherits(SidebarControl, ol.control.Control);
