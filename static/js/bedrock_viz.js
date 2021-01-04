@@ -61,7 +61,19 @@
 
   * front-end code relies heavily on global scope, and is a bit of a mess. Moving a lot of the map controls off to their own files
     helped, but there is still a lot of restructuring that could be done here to make the js easier to work on and less fragile.
-    It could also use with a brush up using modern JS, the practices in here are kind of old-school.
+    It could also use a brush up using modern JS, the practices in here are kind of old-school.
+  -- All the functions declared with "var" in front are hoisted to the "top" when the code runs, there's no reason, in this file, to
+     declare them that way; they'll act the same as a regularly-declared function since we're operating in the global scope.
+  -- There are "var" variables all through the file that are global in scope, this makes the scope conceptually even more confusing since you
+     can't easily look at the top of the file and see everything that's available. These things should be moved up, or better yet,
+     encapsulated in relevant scope objects with a public API so they're protected from detrimental modification.
+  -- One chunk of code I see that could clearly should be split off is the shading
+  -- Another chunk to get encapsulated should be the map state and interactions with the OL API
+  -- This author (cmbkla) recommends against adding any further frameworks. Between jQuery and Bootstrap, this is ok and
+     vanilla JS can get the rest. It may even be worth considering, for performance, REMOVING Bootstrap. Accordions and modals aren't worth the
+     weight and file size since they are very, very easy to build with just jQuery and modern CSS.
+  -- One exception to the above is SCSS -- it would clean up the stylesheet situation a little to be able to use variables for colors and
+     theme. Could easily implement a dark mode after converting to SCSS! It doesn't add to the run weight, but does add a build step to transpile.
 
   * do a separate geojson file for nether + overworld?
 
@@ -96,18 +108,12 @@
  *
  * CMBKLA TODO
  *
- *
  * 14 )look through the code to see if any todos are dead now!
  * look through github issues to see if I addressed any!
  *
  * 15) Make screenshots & gifs for PR
  *
  * 16) make PR
- *
- * 17) profit
- *
- * 11) Lint all my own code, make sure: using const/let instead of var, no functions(), all single quotes, eager jquery wrap
- * 12) Comment the shit out of everything
  * 13) Test on smaller screen sizes, I think the sidebar might need some adjustment. There is also now definitely a "minimum height" -- what can be done about that?
 
  */
