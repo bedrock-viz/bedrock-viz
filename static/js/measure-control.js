@@ -1,5 +1,5 @@
 /**
- * @constructor
+ * @todo Cleanup needed
  * @param {ol.Map} xmap
  */
 var MeasureTool = function(xmap) {
