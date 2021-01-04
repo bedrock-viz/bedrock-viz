@@ -97,22 +97,18 @@
  * CMBKLA TODO
  *
  *
- * 8) Test that all the static stuff just copies over with no backend change
- *
- * 9) Move this into the branch
- *
- * 10) make sure my changes didn't ditch anything I am not expecting
- *
- * 13 )look through the code to see if any todos are dead now!
+ * 14 )look through the code to see if any todos are dead now!
  * look through github issues to see if I addressed any!
  *
- * 14) Make screenshots & gifs for PR
+ * 15) Make screenshots & gifs for PR
  *
- * 15) make PR
+ * 16) make PR
+ *
+ * 17) profit
  *
  * 11) Lint all my own code, make sure: using const/let instead of var, no functions(), all single quotes, eager jquery wrap
- * 11a) Test on smaller screen sizes, I think the sidebar might need some adjustment. There is also now definitely a "minimum height" -- what can be done about that?
  * 12) Comment the shit out of everything
+ * 13) Test on smaller screen sizes, I think the sidebar might need some adjustment. There is also now definitely a "minimum height" -- what can be done about that?
 
  */
 
