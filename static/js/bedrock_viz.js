@@ -96,28 +96,6 @@
         http://openlayers.org/en/v3.9.0/examples/overviewmap-custom.html
 */
 
-/**
- * PR notes --
- *  I do not have a world that uses geojson blocks, so my blocks menu was always empty on the old version. I think this will work as well as the old one did, but it has not been tested!
- *
- *  Light and grass color have not worked for me. I get black images, with white spots.
- *
- *  I brought in a few face images that aren't implemented yet, but they're in the folder and ready to go when Cliffs & Caves drops
- *
- *  This PR covers all the changes in PR #xxx, so that PR would be superseeded.
- *
- * CMBKLA TODO
- *
- * 14 )look through the code to see if any todos are dead now!
- * look through github issues to see if I addressed any!
- *
- * 15) Make screenshots & gifs for PR
- *
- * 16) make PR
- * 13) Test on smaller screen sizes, I think the sidebar might need some adjustment. There is also now definitely a "minimum height" -- what can be done about that?
-
- */
-
 'use strict';
 
 var map = null, projection = null, extent = null;
@@ -548,7 +526,7 @@ function doFeaturePopover(features, id, coordinate) {
 
         if ( !globalWarnVillage ) {
             doModal('Villages',
-                    '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
+                '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
             globalWarnVillage = true;
         }
 
@@ -608,7 +586,7 @@ function doFeaturePopover(features, id, coordinate) {
             i !== 'id' &&
             i !== 'etype' &&
             i !== 'Dimension'
-           ) {
+        ) {
             if (typeof(props[i]) === 'object') {
                 if (i === 'Armor') {
                     var armor = props[i];
@@ -933,7 +911,7 @@ function setLayerLoadListeners(src, fn) {
     src.on('imageloaderror', function(event) {
         updateLoadEventCount(-1);
         doModal('Image Load Error',
-                'Could not load file: ' + fn);
+            'Could not load file: ' + fn);
     });
 }
 
@@ -1088,7 +1066,7 @@ function shade(inputs, data) {
                 offset = (y1 * width + x1) * 4;
                 shadeData[offset] =
                     shadeData[offset + 1] =
-                    shadeData[offset + 2] = hillshade;
+                        shadeData[offset + 2] = hillshade;
                 // note: reduce the opacity for brighter parts; idea is to reduce haziness
                 shadeData[offset + 3] = 255 - (hillshade / 2);
             }
@@ -1106,9 +1084,9 @@ function shade(inputs, data) {
 
         // we are probably failing because of CORS
         doModal('CORS Error',
-                'Error accessing map pixels.  Disabling elevation overlay.<br/><br/>' +
-                'Error: ' + e.toString() + '<br/><br/>' +
-                globalCORSWarning);
+            'Error accessing map pixels.  Disabling elevation overlay.<br/><br/>' +
+            'Error: ' + e.toString() + '<br/><br/>' +
+            globalCORSWarning);
         map.removeLayer(layerElevation);
     }
     // todobig - how to catch CORS issue here?
@@ -1224,9 +1202,9 @@ function doShadedRelief(enableFlag) {
             var fn = dimensionInfo[globalDimensionId].fnLayerHeightGrayscale;
             if (fn === undefined || fn.length <= 1) {
                 doModal('CORS Error',
-                        'Data for elevation image is not available -- see README and re-run bedrock_viz<br/>' +
-                        '<br/>' +
-                        'Hint: You need to run bedrock_viz with --html-most (or --html-all)');
+                    'Data for elevation image is not available -- see README and re-run bedrock_viz<br/>' +
+                    '<br/>' +
+                    'Hint: You need to run bedrock_viz with --html-most (or --html-all)');
                 return -1;
             }
             var doInitFlag = false;
@@ -1288,9 +1266,9 @@ function doShadedRelief(enableFlag) {
         }
     } catch (e) {
         doModal('CORS Error',
-                'Error accessing map pixels.<br/><br/>' +
-                'Error: ' + e.toString() + '<br/><br/>' +
-                globalCORSWarning);
+            'Error accessing map pixels.<br/><br/>' +
+            'Error: ' + e.toString() + '<br/><br/>' +
+            globalCORSWarning);
     }
     // todobig - how to catch CORS issue here?
     return 0;
@@ -1338,8 +1316,8 @@ function makeChunkGrid(inputs, data) {
             } else {
                 gridData[offset] =
                     gridData[offset + 1] =
-                    gridData[offset + 2] =
-                    gridData[offset + 3] = 0;
+                        gridData[offset + 2] =
+                            gridData[offset + 3] = 0;
             }
         }
     }
@@ -1584,9 +1562,9 @@ function setLayer(fn, extraHelp) {
                 pixelDataName = '<i>Browser will not let us access map pixels - See README</i>';
                 if ( ! globalCORSWarningFlag ) {
                     doModal('CORS Error',
-                            'Error accessing map pixels.<br/><br/>' +
-                            'Error: ' + e.toString() + '<br/><br/>' +
-                            globalCORSWarning);
+                        'Error accessing map pixels.<br/><br/>' +
+                        'Error: ' + e.toString() + '<br/><br/>' +
+                        globalCORSWarning);
                     globalCORSWarningFlag = true;
                 }
             }
@@ -1646,8 +1624,8 @@ function initDimension() {
         dimensionInfo[globalDimensionId].maxWorldY - dimensionInfo[globalDimensionId].minWorldY + 1;
 
     extent = [0, 0,
-              dimensionInfo[globalDimensionId].worldWidth,
-              dimensionInfo[globalDimensionId].worldHeight];
+        dimensionInfo[globalDimensionId].worldWidth,
+        dimensionInfo[globalDimensionId].worldHeight];
 
     dimensionInfo[globalDimensionId].globalOffsetX = dimensionInfo[globalDimensionId].minWorldX;
     dimensionInfo[globalDimensionId].globalOffsetY = dimensionInfo[globalDimensionId].minWorldY;
@@ -1656,9 +1634,9 @@ function initDimension() {
     // todobig - adjust maxworldX & Y if in tile mode so that we include the right edge and bottom edge tiles?
     if ( false ) {
         extent = [ dimensionInfo[globalLayerId].minWorldX,
-                   dimensionInfo[globalLayerId].minWorldY,
-                   dimensionInfo[globalLayerId].maxWorldX,
-                   dimensionInfo[globalLayerId].maxWorldY ];
+            dimensionInfo[globalLayerId].minWorldY,
+            dimensionInfo[globalLayerId].maxWorldX,
+            dimensionInfo[globalLayerId].maxWorldY ];
 
         dimensionInfo[globalDimensionId].globalOffsetX = 0;
         dimensionInfo[globalDimensionId].globalOffsetY = 0;
@@ -1666,11 +1644,11 @@ function initDimension() {
 
 
     console.log('World bounds: dimId=' + globalDimensionId +
-                ' w=' + dimensionInfo[globalDimensionId].worldWidth +
-                ' h=' + dimensionInfo[globalDimensionId].worldHeight +
-                ' offx=' + dimensionInfo[globalDimensionId].globalOffsetX +
-                ' offy=' + dimensionInfo[globalDimensionId].globalOffsetY
-               );
+        ' w=' + dimensionInfo[globalDimensionId].worldWidth +
+        ' h=' + dimensionInfo[globalDimensionId].worldHeight +
+        ' offx=' + dimensionInfo[globalDimensionId].globalOffsetX +
+        ' offy=' + dimensionInfo[globalDimensionId].globalOffsetY
+    );
 
     projection = new ol.proj.Projection({
         code: 'bedrock_viz-image',
@@ -1772,7 +1750,7 @@ function initDimension() {
      * If this is only in reference to clearing the selected BLOCKS, that is accomplished below and this todo can be removed
      */
 
-    // remove all old blocks from the sidebar, mark the old ones as not selected, add the ones (if any) for this dimension
+        // remove all old blocks from the sidebar, mark the old ones as not selected, add the ones (if any) for this dimension
     const blocksSidebarGroup = sidebarControlConfig.find(group => group.title === 'Blocks');
 
     if (sidebarControl && blocksSidebarGroup) {
@@ -1831,8 +1809,8 @@ function checkPlayerDistance(feature) {
     if ( ! doCheckPlayerDistanceFlag ) { return true; }
 
     var playerpos = openlayersToMcpe(dimensionInfo[globalDimensionId].playerPosX,
-                                     dimensionInfo[globalDimensionId].playerPosY,
-                                     false);
+        dimensionInfo[globalDimensionId].playerPosY,
+        false);
     var featurepos = feature.get('Pos');
     var dx = playerpos[0] - featurepos[0];
     var dy = playerpos[1] - featurepos[2];
@@ -2054,8 +2032,8 @@ function loadVectors() {
                 updateLoadEventCount(-1);
                 ol.Observable.unByKey(listenerKey);
                 doModal('Image Load Error',
-                        'Could not load file: ' + src.url + '<br/>' +
-                        globalCORSWarning);
+                    'Could not load file: ' + src.url + '<br/>' +
+                    globalCORSWarning);
             }
         });
 
@@ -2070,9 +2048,9 @@ function loadVectors() {
     } catch (e) {
         updateLoadEventCount(-1);
         doModal('Vector Load Error',
-                'Error: ' + e.toString() + '<br/>' +
-                '<br/>' +
-                globalCORSWarning);
+            'Error: ' + e.toString() + '<br/>' +
+            '<br/>' +
+            globalCORSWarning);
     }
     // todobig - how to catch CORS issue here?
 
@@ -2156,12 +2134,38 @@ var coordinateFormatFunction = function(coordinate) {
 // adapted from: http://stackoverflow.com/questions/12887506/cannot-set-maps-div-height-for-openlayers-map
 var fixContentHeight = function() {
     var viewHeight = $(window).height();
-    var navbar = $('div[data-role="navbar"]:visible:visible');
     // todo - this is not quite right, off by approx 7 pixels - why?
-    var newMapH = viewHeight - navbar.outerHeight();
     var curMapSize = map.getSize();
-    curMapSize[1] = newMapH;
+    curMapSize[1] = viewHeight;
     map.setSize(curMapSize);
+
+    // the magic number where the top and bottom interfaces touch. We'll shift the left-side top icons to the left.
+    if (viewHeight < 448) {
+        $('body').addClass('small-vertical');
+    } else {
+        $('body').removeClass('small-vertical');
+    }
+
+    // the magic number where we have to start shedding some left-side interface elements to prevent overlap.
+    if (viewHeight <= 315) {
+        $('body').addClass('tiny-vertical');
+    } else {
+        $('body').removeClass('tiny-vertical');
+    }
+
+    // the magic number where I can't help you anymore, get a bigger screen. All left-side controls will hide
+    if (viewHeight <= 222) {
+        $('body').addClass('micro-vertical');
+    } else {
+        $('body').removeClass('micro-vertical');
+    }
+
+    var viewWidth = $(window).width();
+    if (viewWidth <= 950) {
+        $('body').addClass('restricted-horizontal');
+    } else {
+        $('body').removeClass('restricted-horizontal');
+    }
 };
 
 function doModal(title, body) {

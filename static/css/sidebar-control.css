@@ -14,7 +14,7 @@
 }
 
 #sidebar.open {
-    width: 30vw;
+    width: 474px;
     pointer-events: all;
 }
 
@@ -44,7 +44,7 @@
 }
 
 #sidebar.open #sidebar-toggle {
-    left: calc(30vw - 1px);
+    left: 473px;
 }
 
 #sidebar.open #sidebar-toggle img {

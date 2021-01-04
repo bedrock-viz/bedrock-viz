@@ -225,7 +225,7 @@ html, body, .container-fluid, #map {
 .ol-control.measure {
     top: auto;
     left: auto;
-    bottom: 268px;
+    bottom: 263px;
     right: 10px;
 }
 
@@ -262,14 +262,6 @@ html, body, .container-fluid, #map {
     right: 10px;
 }
 
-.ol-control.layers button:first-of-type {
-    margin-bottom: 4px;
-}
-
-.ol-control.layers button:last-of-type {
-    margin-top: 4px;
-}
-
 .ol-mouse-position {
     background-color: #ffffff;
     border: 1px solid gray;
@@ -277,6 +269,39 @@ html, body, .container-fluid, #map {
     padding: 0.25em 0.5em;
     right: 56px;
     top: 8px;
+}
+
+.ol-rotate {
+    bottom: 86px;
+    right: 56px;
+    top: auto;
+}
+
+body.small-vertical .ol-mouse-position {
+    right: 100px;
+}
+
+body.small-vertical .ol-full-screen,
+body.small-vertical .ol-control.help,
+body.small-vertical .ol-control.settings {
+    right: 56px;
+}
+
+body.tiny-vertical .ol-control.measure,
+body.tiny-vertical .ol-zoom-extent {
+    display: none;
+}
+body.tiny-vertical .ol-control.layers {
+    bottom: 86px;
+}
+
+body.micro-vertical .ol-control,
+body.micro-vertical .ol-scale-line {
+    display: none;
+}
+
+body.micro-vertical .ol-mouse-position {
+    right: 10px;
 }
 
 /**

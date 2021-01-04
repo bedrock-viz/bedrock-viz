@@ -11,8 +11,13 @@
 }
 
 body.sidebar-open #view-control {
-    left: calc(30vw + 10px);
+    left: 484px;
 }
+
+body.restricted-horizontal.sidebar-open #view-control {
+    display: none;
+}
+
 
 #view-control.active {
     height: 160px;
