@@ -1,26 +1,52 @@
 /**
  * Help Control
- * Show an interface invoke the Help tour
+ * Show an interface invoke a Help tour, displaying information about each of the main UI elements.
+ *
+ * Does not implement any options.
+ *
+ * References the global scope to read:
+ * - globalAboutMessage
+ *
+ * @todo Global scope reference
  * @extends {ol.control.Control}
  * @param {Object=} opt_options Control options.
  */
-var HelpControl = function(opt_options) {
+const HelpControl = function(opt_options) {
+    const options = opt_options || {};
 
-    var options = opt_options || {};
-    var this_ = this;
-    this._selfReference = null;
+    // create the help button and icon, bind a click/touch event to start the tour
+    const $helpButton = $(document.createElement('button'));
+    $helpButton
+        .on('click touchstart', doTour)
+        .addClass('mytooltip').attr('title', 'Help')
+        .append(
+            $(document.createElement('img'))
+                .addClass('interface-icon')
+                .attr('src', 'images/map-control-assets/help-icon.png')
+        );
 
-    var doTour = function () {
-        var featureExtra = '<br/><br/>' +
-            'You can click on mobs/objects on the map to get information about them.<br/>';
+    // create the main map control element, and add the button
+    const element = document.createElement('div');
+    $(element)
+        .addClass('help ol-unselectable ol-control')
+        .append($helpButton);
 
-        var tour = new Tour({
+    ol.control.Control.call(this, {
+        element: element,
+        target: options.target
+    });
+
+    // private methods
+
+    /**
+     * Displays an interactive UI tour using the Bootstrap Tour library
+     */
+    function doTour () {
+        const tour = new Tour({
             backdropContainer: 'body',
             storage: false,
             container: 'body',
             orphan: true,
-            // backdrop: true,
-
             steps: [
                 {
                     title: 'Welcome to Bedrock Viz!',
@@ -148,22 +174,6 @@ var HelpControl = function(opt_options) {
             ]});
         tour.init();
         tour.start();
-    };
-
-    var helpButton = document.createElement('button');
-    helpButton.innerHTML = '<img src="images/map-control-assets/help-icon.png" class="interface-icon" />';
-    helpButton.addEventListener('click', doTour, false);
-    helpButton.addEventListener('touchstart', doTour, false);
-    $(helpButton).addClass('mytooltip inline-block').attr('title', 'Help');
-
-    var element = document.createElement('div');
-    element.className = 'help ol-unselectable ol-control';
-    element.appendChild(helpButton);
-
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-
+    }
 };
 ol.inherits(HelpControl, ol.control.Control);
