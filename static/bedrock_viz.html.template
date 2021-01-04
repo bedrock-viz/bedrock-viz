@@ -37,6 +37,7 @@
 		<link rel="stylesheet" href="css/bedrock_viz.css" type="text/css" />
 		<script src="js/bedrock_viz.js"></script>
 
+        <script src="output.js"></script>
 		%JSFILE%
 	</head>
   	<body>
