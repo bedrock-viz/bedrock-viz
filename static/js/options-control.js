@@ -1,25 +1,160 @@
-// todo - make the update checks come from https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest for the latest version info.
-// todobig - make this a bootstrap dialog box that has a clickable link
-
 /**
  * Options Control
- * Show an interface to interact with map options in a modal
+ * An interface to interact with map options. Initially displays a button, which will show a modal with options on click.
+ *
+ * Does not implement any options.
+ *
+ * References the global scope to change:
+ *  - creationBedrockVizVersion
+ *  - showChunkCoordinatesFlag
+ *  - showNetherCoordinatesFlag
+ *  - doCheckPlayerDistanceFlag
+ *  - doChunkGrid() function
+ *  - doSlimeChunks() function
+ *  - doElevationAlpha() function
+ *  - doElevationStatic() function
+ *  - doShadedRelief() function
+ *  - doModal() function
+ *
+ * @todo big - Global scope reference
+ * @todo Move the option HTML off the template and into here, create it with JS like other Controls. May have issues with the sliders.
+ * @todo make the update checks come from https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest for the latest version info.
  * @extends {ol.control.Control}
  * @param {Object=} opt_options Control options.
  */
-var OptionsControl = function(opt_options) {
-    var options = opt_options || {};
-    var this_ = this;
-    this._selfReference = null;
+const OptionsControl = function(opt_options) {
+    const options = opt_options || {};
 
-    var optionStates = {};
+    // keeps track of which options are turned off/on with a map - key: boolean
+    const optionStates = {};
 
+    // create settings button and icon, bind click event
+    const $settingsButton = $(document.createElement('button'))
+        .addClass('mytooltip').attr('title', 'Map Options')
+        .on('click touchstart', showOptions)
+        .append(
+            $(document.createElement('img'))
+                .addClass('interface-icon')
+                .attr('src', 'images/map-control-assets/settings.png')
+        );
+
+    // create the main map control element, and add the button
+    const element = document.createElement('div')
+
+    setUpModalContent();
+
+    $(element)
+        .addClass('settings ol-unselectable ol-control')
+        .append($settingsButton);
+
+    ol.control.Control.call(this, {
+        element: element,
+        target: options.target
+    });
+
+    // private methods
+
+    function setUpModalContent() {
+        const $modalBody = $('#options-modal-content').find('.modal-body').first();
+
+        // set initial value and bind to slider events
+        $modalBody.find('.elevationAlphaOpacityOut').html(elevationAlphaOpacity);
+        $modalBody.find('.elevationAlphaOpacity')
+            .val(elevationAlphaOpacity)
+            .change(() => {
+                elevationAlphaOpacity = $modalBody.find('.elevationAlphaOpacity').val();
+                $modalBody.find('.elevationAlphaOpacityOut').html(elevationAlphaOpacity);
+                updateElevationAlphaOpacity();
+            });
+
+        $modalBody.find('.elevationStaticOpacityOut').html(elevationStaticOpacity);
+        $modalBody.find('.elevationStaticOpacity')
+            .val(elevationStaticOpacity)
+            .change(() => {
+                elevationStaticOpacity = $modalBody.find('.elevationStaticOpacity').val();
+                $modalBody.find('.elevationStaticOpacityOut').html(elevationStaticOpacity);
+                updateElevationStaticOpacity();
+            });
+
+        $modalBody.find('.shadeOpacityOut').html(shadeOpacity);
+        $modalBody.find('.shadeOpacity')
+            .val(shadeOpacity)
+            .change(() => {
+                shadeOpacity = $modalBody.find('.shadeOpacity').val();
+                $modalBody.find('.shadeOpacityOut').html(shadeOpacity);
+                if (layerElevation !== null) {
+                    layerElevation.setOpacity(shadeOpacity / 100.0 );
+                }
+            });
+
+        // if there's been a CORS warning, don't bother showing the dynamic shader relief options, it ain't gonna work
+        if (globalCORSWarningFlag) {
+            $modalBody.find('.dynamicShadedRelief').hide();
+        }
+
+        // click handler, when an options is clicked, toggle the option state and take appropriate action
+        $modalBody.delegate('.option-toggle', 'click', (e) => {
+            const selectedOption = $(e.currentTarget).data('option');
+            const currentOptionState = optionStates[selectedOption];
+            const targetOptionState = !currentOptionState;
+
+            // depending on which option was clicked (based on data-option), do what needs to be done
+            switch (selectedOption) {
+                case 'chunkGrid':
+                    doChunkGrid(targetOptionState)
+                    break;
+                case 'chunkDisplayToggle':
+                    showChunkCoordinatesFlag = !showChunkCoordinatesFlag;
+                    break;
+                case 'showNetherCoordinatesToggle':
+                    showNetherCoordinatesFlag = !showNetherCoordinatesFlag;
+                    break;
+                case 'slimeChunksToggle':
+                    doSlimeChunks(targetOptionState);
+                    break;
+                case 'checkPlayerDistanceToggle':
+                    doCheckPlayerDistanceFlag = !doCheckPlayerDistanceFlag;
+                    if (vectorPoints) {
+                        vectorPoints.changed();
+                    }
+                    break;
+                case 'elevationAlphaToggle':
+                    doElevationAlpha(targetOptionState);
+                    break;
+                case 'elevationStaticToggle':
+                    doElevationStatic(targetOptionState);
+                    break;
+                case 'checkForUpdates':
+                    checkForUpdate();
+                    break;
+                case 'about':
+                    doModal(
+                        'About Bedrock Viz',
+                        globalAboutMessage
+                    );
+                    break;
+                case 'dynamicShadedRelief':
+                    doShadedRelief(targetOptionState);
+                    break;
+            }
+
+            optionStates[selectedOption] = targetOptionState;
+
+            applyOptionStatesToInterface();
+        });
+    }
+
+    /**
+     * After checking for a new version, show information about the result of the check in a modal.
+     * @param newVersion the new version number to compare against the current
+     * @param newVersionHighlight a brief blurb about the new version, to highlight in the main modal content area
+     * @param changeLog a detailed changelog
+     */
     function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
-        var isCurrent = newVersion == creationBedrockVizVersion;
-        var title;
-        var msg;
-        if (!isCurrent)
-        {
+        const isCurrent = String(newVersion).trim().toLowerCase() === String(creationBedrockVizVersion).trim().toLowerCase();
+        let title;
+        let msg;
+        if (!isCurrent) {
             title = 'New Update Available!';
             msg = 'You are running <b>v' + creationBedrockVizVersion + '</b> and <b>v' + newVersion + '</b> is available on GitHub.<br/><br/>' +
                 'New Version Highlight:<br/><b>' + newVersionHighlight + '</b><br/><br/>';
@@ -44,57 +179,64 @@ var OptionsControl = function(opt_options) {
         doModal( title, msg);
     }
 
+    /**
+     * Get the changelog for the specified version
+     * @param newVersion the version to get the changelog for
+     */
     function doCheckUpdate_getChangeLog(newVersion) {
         // get data from github
-        var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+        const url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
 
         $.ajax({
             type: 'GET',
             url: url,
             dataType: 'text',
             cache: false,
-            success: function(result, textStatus, jqxhr) {
-
+            success: (result) => {
                 // parse this: Latest Highlight: New stuff added");
-                var newVersionHighlight = '(See ChangeLog on GitHub)';
-                var res = result.match(/Latest highlight\s*:\s*(.+)/);
-                if ( res ) {
+                let newVersionHighlight = '(See ChangeLog on GitHub)';
+                const res = result.match(/Latest highlight\s*:\s*(.+)/);
+                if (res) {
                     newVersionHighlight = res[1];
                 }
-
                 showUpdateInfo(newVersion, newVersionHighlight, marked(result));
             },
-            error: function(jqXHR, textStatus, errorThrown, execptionObject) {
+            error: () => {
                 showUpdateInfo(newVersion, '(Sorry, we had a problem checking the ChangeLog -- See ChangeLog on GitHub)', '(See ChangeLog on GitHub)');
             }
         });
     }
 
-    var checkForUpdate = function () {
-        var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+    /**
+     * Check the changelog on github for a version, and if it is different, fetch a change log.
+     */
+    function checkForUpdate() {
+        const url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
         $.ajax({
             type: 'GET',
             url: url,
             dataType: 'text',
             cache: false,
-            success: function(result, textStatus, jqxhr) {
+            success: (result) => {
                 // parse this: Latest release: X.Y.Z
-                var res = result.match(/Latest release\s*:\s*(\S+)/);
+                const res = result.match(/Latest release\s*:\s*(\S+)/);
                 if ( res ) {
                     doCheckUpdate_getChangeLog(res[1]);
                 } else {
                     doModal('Error', 'Sorry, failed to find version info on GitHub.');
                 }
-
             },
-            error: function(jqXHR, textStatus, errorThrown, execptionObject) {
+            error: (jqXHR, textStatus, errorThrown) => {
                 doModal('Error',
                     'Sorry, failed to check for update: Status [' + textStatus + '] error [' + errorThrown + ']');
             }
         });
-    };
+    }
 
-    var applyOptionStatesToInterface = function () {
+    /**
+     * Sets the active class on any options that are toggled on
+     */
+    function applyOptionStatesToInterface() {
         Object.keys(optionStates).forEach(optionKey => {
             const element = $(`.modal-body .option-toggle[data-option="${optionKey}"]`);
             if (!!element && !!optionStates[optionKey]) {
@@ -103,123 +245,15 @@ var OptionsControl = function(opt_options) {
                 element.removeClass('active');
             }
         });
-    };
+    }
 
-    var showOptions = function () {
-        doModal(
-            "Map Options",
-            $('#options-modal-content').first().html(),
-            {
-                width: '60W'
-            }
-        );
-
-        $('.modal-body').find('.elevationAlphaOpacity').val(elevationAlphaOpacity);
-        $('.modal-body').find('.elevationAlphaOpacityOut').html(elevationAlphaOpacity);
-        $('.modal-body').find('.elevationAlphaOpacity').change(function() {
-            elevationAlphaOpacity = $('.modal-body').find('.elevationAlphaOpacity').val();
-            $('.modal-body').find('.elevationAlphaOpacityOut').html(elevationAlphaOpacity);
-            updateElevationAlphaOpacity();
-        });
-
-        $('.modal-body').find('.elevationStaticOpacity').val(elevationStaticOpacity);
-        $('.modal-body').find('.elevationStaticOpacityOut').html(elevationStaticOpacity);
-        $('.modal-body').find('.elevationStaticOpacity').change(function() {
-            elevationStaticOpacity = $('.modal-body').find('.elevationStaticOpacity').val();
-            $('.modal-body').find('.elevationStaticOpacityOut').html(elevationStaticOpacity);
-            updateElevationStaticOpacity();
-        });
-
-        $('.modal-body').find('.shadeOpacity').val(shadeOpacity);
-        $('.modal-body').find('.shadeOpacityOut').html(shadeOpacity);
-        $('.modal-body').find('.shadeOpacity').change(function() {
-            shadeOpacity = $('.modal-body').find('.shadeOpacity').val();
-            $('.modal-body').find('.shadeOpacityOut').html(shadeOpacity);
-            if (layerElevation !== null) {
-                layerElevation.setOpacity(shadeOpacity / 100.0 );
-            }
-        });
-
-        if (globalCORSWarningFlag) {
-            $('.modal-body').find('.dynamicShadedRelief').hide();
-        }
-
-        $('.modal-body .option-toggle').click(function (e) {
-           const selectedOption = $(e.currentTarget).data('option');
-           const currentOptionState = optionStates[selectedOption];
-           const targetOptionState = !currentOptionState;
-
-           switch (selectedOption) {
-               case 'chunkGrid':
-                   doChunkGrid(targetOptionState)
-                   break;
-               case 'chunkDisplayToggle':
-                   showChunkCoordinatesFlag = !showChunkCoordinatesFlag;
-                   break;
-               case 'showNetherCoordinatesToggle':
-                   showNetherCoordinatesFlag = !showNetherCoordinatesFlag;
-                   break;
-               case 'slimeChunksToggle':
-                   doSlimeChunks(targetOptionState);
-                   break;
-               case 'checkPlayerDistanceToggle':
-                   doCheckPlayerDistanceFlag = !doCheckPlayerDistanceFlag;
-                   if (vectorPoints) {
-                       vectorPoints.changed();
-                   }
-                   break;
-               case 'elevationAlphaToggle':
-                   doElevationAlpha(targetOptionState);
-                   break;
-               case 'elevationStaticToggle':
-                   doElevationStatic(targetOptionState);
-                   break;
-               case 'checkForUpdates':
-                   checkForUpdate();
-                   break;
-               case 'about':
-                   doModal(
-                       'About Bedrock Viz',
-                       globalAboutMessage
-                   );
-                   break;
-               case 'dynamicShadedRelief':
-                   doShadedRelief(targetOptionState);
-                   break;
-           }
-
-           optionStates[selectedOption] = targetOptionState;
-
-           applyOptionStatesToInterface();
-        });
-
+    /**
+     * Show a modal dialog with a form that allows interaction with the map options.
+     * Uses the element #options-modal-content, expected to be in the HTML document.
+     */
+    function showOptions() {
+        $('#options-modal-content').first().modal({});
         applyOptionStatesToInterface();
-    };
-
-    var settingsButton = document.createElement('button');
-    settingsButton.innerHTML = '<img src="images/map-control-assets/settings.png" class="interface-icon" />';
-    $(settingsButton).addClass('mytooltip').attr('title', 'Map Options');
-    settingsButton.addEventListener('click', showOptions, false);
-    settingsButton.addEventListener('touchstart', showOptions, false);
-
-    var element = document.createElement('div');
-    element.className = 'settings ol-unselectable ol-control';
-    element.appendChild(settingsButton);
-
-    $('#gridToggle').click(function() {
-        if ($('#gridToggle').parent().hasClass('active')) {
-            $('#gridToggle').parent().removeClass('active');
-            doChunkGrid(false);
-        } else {
-            $('#gridToggle').parent().addClass('active');
-            doChunkGrid(true);
-        }
-    });
-
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-
+    }
 };
 ol.inherits(OptionsControl, ol.control.Control);
