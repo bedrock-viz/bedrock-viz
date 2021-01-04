@@ -1,6 +1,6 @@
 /**
  * Help Control
- * Show an interface invoke a Help tour, displaying information about each of the main UI elements.
+ * An interface to invoke a Help tour, displaying information about each of the main UI elements.
  *
  * Does not implement any options.
  *
@@ -27,6 +27,7 @@ const HelpControl = function(opt_options) {
 
     // create the main map control element, and add the button
     const element = document.createElement('div');
+
     $(element)
         .addClass('help ol-unselectable ol-control')
         .append($helpButton);
