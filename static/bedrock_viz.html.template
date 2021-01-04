@@ -1,339 +1,176 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Bedrock Viz Viewer</title>
-    <meta charset="utf-8" />
-    <script src="js/jquery-1.11.2.min.js"></script>
-    <link rel="stylesheet" href="js/bootstrap.min.css" />
-    <script src="js/bootstrap.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link rel="stylesheet" href="js/ol.css" type="text/css" />
-    <script src="js/ol.js"></script>
-    <link rel="stylesheet" href="js/bootstrap-tour.min.css" />
-    <script src="js/bootstrap-tour.min.js"></script>
-    <link rel="stylesheet" href="bedrock_viz.css" type="text/css" />
-    <script src="bedrock_viz.js"></script>
-    <script src="output.js"></script>
-	%JSFILE%
-  </head>
-  <body>
-    <div class="container-fluid" data-role="content">
-      <div class="row-fluid">
-	<div class="span12">
-	  <div id="map" class="map"></div>
-	</div>
-      </div>
-    </div>
+	<head>
+		<title>Bedrock Viz Viewer</title>
+		<meta charset="utf-8" />
 
-    <div class="navbar navbar-inverse navbar-fixed-bottom" data-role="navbar">
-      <div class="container-fluid">
+		<script src="js/jquery-1.11.2.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<script src="js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-	<div class="btn-group dropup navbar-btn">
-	  <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" title="Select Dimension">
-	    <span id="dimensionSelectName">Dimension</span>
-	    <span class="caret"></span></button>
-	  <ul class="dropdown-menu">
-	    <li><a href="#" class="dimensionSelect" data-id="0">Overworld</a></li>
-	    <li><a href="#" class="dimensionSelect" data-id="1">Nether</a></li>
-	    <li><a href="#" class="dimensionSelect" data-id="2">The End</a></li>
-	  </ul>
-	</div>
+		<link rel="stylesheet" href="css/ol.css" type="text/css" />
+		<script src="js/ol.js"></script>
 
-	<div class="btn-group navbar-btn">
-	  <button type="button" class="btn btn-primary mytooltip" id="layerPrev" title="Go to Lower Layer">&darr;</button>
-	  <div class="btn-group dropup">
-	    <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" title="Select Layer">
-	      <span id="layerNumber">Go to Layer</span>
-	      <span class="caret"></span></button>
-	    <ul class="dropdown-menu">
-	      <li><a href="#" class="layerGoto" data-id="255" href="#">Layer 255 (Build Limit)</a></li>
-	      <li><a href="#" class="layerGoto" data-id="250" href="#">Layer 250</a></li>
-	      <li><a href="#" class="layerGoto" data-id="240" href="#">Layer 240</a></li>
-	      <li><a href="#" class="layerGoto" data-id="230" href="#">Layer 230</a></li>
-	      <li><a href="#" class="layerGoto" data-id="220" href="#">Layer 220</a></li>
-	      <li><a href="#" class="layerGoto" data-id="210" href="#">Layer 210</a></li>
-	      <li><a href="#" class="layerGoto" data-id="200" href="#">Layer 200</a></li>
-	      <li><a href="#" class="layerGoto" data-id="190" href="#">Layer 190</a></li>
-	      <li><a href="#" class="layerGoto" data-id="180" href="#">Layer 180</a></li>
-	      <li><a href="#" class="layerGoto" data-id="170" href="#">Layer 170</a></li>
-	      <li><a href="#" class="layerGoto" data-id="160" href="#">Layer 160</a></li>
-	      <li><a href="#" class="layerGoto" data-id="150" href="#">Layer 150</a></li>
-	      <li><a href="#" class="layerGoto" data-id="140" href="#">Layer 140</a></li>
-	      <li><a href="#" class="layerGoto" data-id="130" href="#">Layer 130</a></li>
-	      <li><a href="#" class="layerGoto" data-id="120" href="#">Layer 120</a></li>
-	      <li><a href="#" class="layerGoto" data-id="110" href="#">Layer 110</a></li>
-	      <li><a href="#" class="layerGoto" data-id="100" href="#">Layer 100</a></li>
-	      <li><a href="#" class="layerGoto" data-id="90" href="#">Layer 90</a></li>
-	      <li><a href="#" class="layerGoto" data-id="80" href="#">Layer 80</a></li>
-	      <li><a href="#" class="layerGoto" data-id="70" href="#">Layer 70</a></li>
-	      <li><a href="#" class="layerGoto" data-id="62" href="#">Layer 62 (Sea Level)</a></li>
-	      <li><a href="#" class="layerGoto" data-id="60" href="#">Layer 60</a></li>
-	      <li><a href="#" class="layerGoto" data-id="50" href="#">Layer 50</a></li>
-	      <li><a href="#" class="layerGoto" data-id="40" href="#">Layer 40</a></li>
-	      <li><a href="#" class="layerGoto" data-id="30" href="#">Layer 30</a></li>
-	      <li><a href="#" class="layerGoto" data-id="20" href="#">Layer 20</a></li>
-	      <li><a href="#" class="layerGoto" data-id="10" href="#">Layer 10</a></li>
-	      <li><a href="#" class="layerGoto" data-id="0" href="#">Layer 0 (Bedrock)</a></li>
-	    </ul>
-	  </div>
-	  <button type="button" class="btn btn-primary mytooltip" id="layerNext" title="Go to Higher Layer">&uarr;</button>
-	</div>
+		<script src="js/measure-control.js"></script>
+		<link rel="stylesheet" href="css/measure-control.css">
 
-	<div class="btn-group dropup navbar-btn">
-	  <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" title="Select Main Image">
-	    <span id="imageSelectName">Main Image</span>
-	    <span class="caret"></span></button>
-	  <ul class="dropdown-menu">
-	    <li><a href="#" class="imageSelect" data-id="0">Overview</a></li>
-	    <li><a href="#" class="imageSelect" data-id="1">Biome</a></li>
-	    <li><a href="#" class="imageSelect" data-id="2">Height</a></li>
-	    <li><a href="#" class="imageSelect" data-id="3">Height (Grayscale)</a></li>
-	    <li><a href="#" class="imageSelect" data-id="4">Block Light</a></li>
-	    <li><a href="#" class="imageSelect" data-id="5">Grass Color</a></li>
-	  </ul>
-	</div>
-	
-	<div class="btn-group dropup navbar-btn menu-stay">
-	  <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" id="menuPassiveMobs" title="Show Passive Mobs">
-	    Passive Mobs
-            <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="19">Bat</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="122">Bee</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="75">Cat</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="10">Chicken</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="11">Cow</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="24">Donkey</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="121">Fox</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="23">Horse</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="26">Horse, Skeleton</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="27">Horse, Zombie</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="20">Iron Golem</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="29">Llama</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="16">Mooshroom</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="25">Mule</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="22">Ocelot</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="113">Panda</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="30">Parrot</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="12">Pig</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="28">Polar Bear</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="18">Rabbit</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="13">Sheep</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="21">Snow Golem</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="125">Strider</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="15">Villager (Old)</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="115">Villager</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="118">Wandering Trader</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="14">Wolf</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="112">Cod</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="31">Dolphin</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="108">Pufferfish</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="109">Salmon</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="17">Squid</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="111">Tropical Fish</a></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="74">Turtle</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="entityToggle" data-type="P" data-id="63">Player</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="featureToggleAddAll" data-type="P">Show All</a></li>
-	    <li><a href="#" class="featureToggleRemoveAll" data-type="P">Hide All</a></li>
-          </ul>
-	</div>
+		<script src="js/players-control.js"></script>
+		<script src="js/help-control.js"></script>
 
-	<div class="btn-group dropup navbar-btn menu-stay">
-	  <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" id="menuHostileMobs" title="Show Hostile Mobs">
-	    Hostile Mobs
-            <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="40">Cave Spider</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="33">Creeper</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="110">Drowned</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="38">Enderman</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="104">Evoker</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="49">Guardian</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="50">Guardian, Elder</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="47">Husk</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="51">NPC</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="114">Pillager</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="39">Silverfish</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="34">Skeleton</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="48">Skeleton, Wither</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="37">Slime</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="35">Spider</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="46">Stray</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="105">Vex</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="45">Witch</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="52">Wither</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="32">Zombie</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="44">Zombie Villager (Old)</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="116">Zombie Villager</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="43">Blaze</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="41">Ghast</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="124">Hoglin</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="42">Magma Cube</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="123">Piglin</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="127">Piglin Brute</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="126">Zoglin</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="36">Zombified Piglin</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="53">Ender Dragon</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="55">Endermite</a></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="54">Shulker</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="entityToggle" data-type="H" data-id="63">Player</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="featureToggleAddAll" data-type="H">Show All</a></li>
-	    <li><a href="#" class="featureToggleRemoveAll" data-type="H">Hide All</a></li>
-          </ul>
-	</div>
+		<script src="js/options-control.js"></script>
+		<link rel="stylesheet" href="css/options-control.css">
 
-	<div class="btn-group dropup navbar-btn menu-stay">
-	  <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" id="menuObjects" title="Show Objects">
-	    Objects
-            <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Village">Village</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="MobSpawner">Mob Spawner</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="NetherPortal">Nether Portal</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="SignNonBlank">Sign (Non-blank)</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="SignBlank">Sign (Blank)</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Chest">Chest</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="ShulkerBox">Shulker Box</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="EnderChest">Ender Chest</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Hopper">Hopper</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Dropper">Dropper</a></li>
-	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Dispenser">Dispenser</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="entityToggle" data-type="O" data-id="61">Armor Stand</a></li>
-	    <li><a href="#" class="entityToggle" data-type="O" data-id="90">Boat</a></li>
-	    <li><a href="#" class="entityToggle" data-type="O" data-id="64">Dropped Item</a></li>
-	    <li><a href="#" class="entityToggle" data-type="O" data-id="84">Minecart</a></li>
-	    <li><a href="#" class="entityToggle" data-type="O" data-id="98">Minecart with Chest</a></li>
-	    <li><a href="#" class="entityToggle" data-type="O" data-id="96">Minecart with Hopper</a></li>
-	    <li><a href="#" class="entityToggle" data-type="O" data-id="97">Minecart with TNT</a></li>
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="featureToggleAddAll" data-type="O">Show All</a></li>
-	    <li><a href="#" class="featureToggleRemoveAll" data-type="O">Hide All</a></li>
-          </ul>
-	</div>
+		<script src="js/layers-control.js"></script>
+		<link rel="stylesheet" href="css/layers-control.css">
 
-	<div class="btn-group dropup navbar-btn menu-stay" id="blockSelectButton">
-	  <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" id="menuBlocks" title="Show Blocks">
-	    Blocks
-            <span class="caret"></span></button>
-          <ul class="dropdown-menu" id="blockSelectList">
-	    <li role="separator" class="divider"></li>
-	    <li><a href="#" class="blockToggleAddAll">Show All</a></li>
-	    <li><a href="#" class="blockToggleRemoveAll">Hide All</a></li>
-          </ul>
-	</div>
+		<script src="js/view-mode-control.js"></script>
+		<link rel="stylesheet" href="css/view-mode-control.css">
 
-	<div class="btn-group dropup navbar-btn menu-stay">
-	  <button type="button" class="btn btn-primary dropdown-toggle mytooltip" data-toggle="dropdown" id="menuOptions" title="Options">
-	    Options
-	    <span class="caret"></span></button>
-	  <ul class="dropdown-menu">
-	    <li><a href="#" id="gridToggle">Show Chunk Grid</a></li>
-	    <li><a href="#" id="chunkDisplayToggle">Show Chunk Coordinates</a></li>
-	    <li><a href="#" id="showNetherCoordinatesToggle">Show Nether Coordinate Conversion</a></li>
-	    <li><a href="#" id="slimeChunksToggle">Show Slime Chunks</a></li>
-	    <li><a href="#" id="checkPlayerDistanceToggle">Only Show Mobs Within 128 Blocks of Player</a></li>
+		<script src="js/sidebar-config.js"></script>
+		<script src="js/sidebar-control.js"></script>
+		<link rel="stylesheet" href="css/sidebar-control.css" />
 
-	    <li role="separator" class="divider"></li>
+		<link rel="stylesheet" href="css/bootstrap-tour.min.css" />
+		<script src="js/bootstrap-tour.min.js"></script>
 
-	    <li><a href="#" id="elevationAlphaToggle">Show Height Shading</a>
-	      <ul>
-		<li class="input-group">
-		  <span class="input-group-addon">Opacity: <span id="elevationAlphaOpacityOut"></span>%</span>
-		  <input id="elevationAlphaOpacity" class="mytooltip" title="Overlay Opacity" type="range" min="0" max="100" data-default="60" value="60"/>
-		</li>
-	      </ul>
-	    </li>
+		<link rel="stylesheet" href="css/bedrock_viz.css" type="text/css" />
+		<script src="js/bedrock_viz.js"></script>
 
-	    <li role="separator" class="divider"></li>
+		%JSFILE%
+	</head>
+  	<body>
 
-	    <li><a href="#" id="elevationStaticToggle">Show Shaded Relief (Pre-generated)</a>
-	      <ul>
-		<li class="input-group">
-		  <span class="input-group-addon">Opacity: <span id="elevationStaticOpacityOut"></span>%</span>
-		  <input id="elevationStaticOpacity" class="mytooltip" title="Overlay Opacity" type="range" min="0" max="100" data-default="30" value="30"/>
-		</li>
-	      </ul>
-	    </li>
+		<div id="map" class="map"></div>
 
-	    <li role="separator" class="divider dynamicShadedRelief"></li>
+		<div class="hide">
+	  		<div id="popover" class="mypopover"></div>
+		</div>
 
-	    <li class="dynamicShadedRelief"><a href="#" id="elevationToggle">Show Shaded Relief (Dynamic)</a>
-	      <ul class="input-group">
-		<li class="input-group dynamicShadedRelief">
-		  <span class="input-group-addon">Intensity: <span id="vertOut"></span></span>
-		  <input id="vert" class="mytooltip" title="Vertical Exaggeration" type="range" min="1" max="10" data-default="3" value="3"/>
-		</li>
-		<li class="input-group dynamicShadedRelief">
-		  <span class="input-group-addon">Altitude: <span id="sunElOut"></span>&deg;</span>
-		  <input id="sunEl" class="mytooltip" title="Sun Altitude" type="range" min="0" max="90" data-default="45" value="45"/>
-		</li>
-		<li class="input-group dynamicShadedRelief">
-		  <span class="input-group-addon">Azimuth: <span id="sunAzOut"></span>&deg;</span>
-		  <input id="sunAz" class="mytooltip" title="Sun Azimuth" type="range" min="0" max="360" data-default="315" value="315"/>
-		</li>
-		<li class="input-group dynamicShadedRelief">
-		  <span class="input-group-addon">Opacity: <span id="shadeOpacityOut"></span>%</span>
-		  <input id="shadeOpacity" class="mytooltip" title="Overlay Opacity" type="range" min="0" max="100" data-default="30" value="30"/>
-		</li>
-		<li class="input-group dynamicShadedRelief"><button type="button" class="btn" id="elevationReset">Reset Settings</button></li>
-	      </ul>
-	    </li>
+		<div id="throbber" class="ui-corner-all" style="display:none;">
+			<div id="throbber-content">
+				<div class="throbber-image"><b>Loading...</b><br/><span id="throbber-msg"></span></div>
+		  	</div>
+		</div>
 
-	    <li role="separator" class="divider"></li>
+		<div class="modal fade" style="display:none;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+								aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title"></h4>
+					</div>
+					<div class="modal-body">
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 
-	    <li><a href="#" id="btnCheckUpdate">Check for <b>Bedrock Viz</b> update...</a></li>
-	    <li><a href="#" id="btnAbout">About <b>Bedrock Viz</b>...</a></li>
-	  </ul>
-	</div>
+		<div id="options-modal-content" style="display:none;">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-lg-5 col-md-5">
+						<div class="option-toggle toggleable" data-option="chunkGrid">
+							<span class="option-state-indicator"></span>
+							<span>Show Chunk Grid</span>
+						</div>
 
-	<div class="btn-group">
-	  <button type="button" class="btn btn-danger mytooltip" id="btnHelp" title="Help">Help</button>
-	</div>
-	
-	<div class="navbar-header navbar-right">
-	  <div id="worldInfo" class="navbar-text">
-	  </div>
-	  <div class="navbar-brand">
-	    <a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz/">Bedrock Viz</a> by the <a target="_blank" href="https://github.com/orgs/bedrock-viz/people">Bedrock Viz Team</a>
-	  </div>
-	</div>
-      </div>
-    </div>
+						<div class="option-toggle toggleable" data-option="chunkDisplayToggle">
+							<span class="option-state-indicator"></span>
+							<span>Show Chunk Coordinates</span>
+						</div>
 
-    <div class="hide">
-      <div id="popover" class="mypopover"></div>
-    </div>
+						<div class="option-toggle toggleable" data-option="showNetherCoordinatesToggle">
+							<span class="option-state-indicator"></span>
+							<span>Show Nether Coordinate Conversion</span>
+						</div>
 
-    <div id="throbber" class="ui-corner-all" style="display:none;">
-      <div id="throbber-content">
-	<div class="throbber-image"><b>Loading...</b><br/><span id="throbber-msg"></span></div>
-      </div>
-    </div>
+						<div class="option-toggle toggleable" data-option="slimeChunksToggle">
+							<span class="option-state-indicator"></span>
+							<span>Show Slime Chunks</span>
+						</div>
 
-    <div class="modal fade" style="display:none;">
-      <div class="modal-dialog">
-	<div class="modal-content">
-	  <div class="modal-header">
-	    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	    <h4 class="modal-title"></h4>
-	  </div>
-	  <div class="modal-body">
-	  </div>
-	  <div class="modal-footer">
-	    <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
-	  </div>
-	</div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-    
+						<div class="option-toggle toggleable" data-option="checkPlayerDistanceToggle">
+							<span class="option-state-indicator"></span>
+							<span>Only Show Mobs Within 128 Blocks of Player</span>
+						</div>
+
+						<hr>
+
+						<div class="option-toggle" data-option="checkForUpdates">
+							<span class="option-state-indicator"></span>
+							<span>Check for <b>Bedrock Viz</b> update...</span>
+						</div>
+
+						<div class="option-toggle" data-option="about">
+							<span class="option-state-indicator"></span>
+							<span>About <b>Bedrock Viz</b>...</span>
+						</div>
+					</div>
+					<div class="col-lg-7 col-md-7">
+						<div class="option-toggle toggleable" data-option="elevationAlphaToggle">
+							<span class="option-state-indicator"></span>
+							<span>Show Height Shading</span>
+						</div>
+						<ul class="options-slider">
+							<li class="input-group">
+								<span class="input-group-addon">Opacity: <span class="elevationAlphaOpacityOut"></span>%</span>
+								<input class="elevationAlphaOpacity mytooltip" title="Overlay Opacity" type="range" min="0"
+									   max="100" data-default="60" value="60"/>
+							</li>
+						</ul>
+
+						<div class="option-toggle toggleable" data-option="elevationStaticToggle">
+							<span class="option-state-indicator"></span>
+							<span>Show Shaded Relief (Pre-generated)</span>
+						</div>
+						<ul class="options-slider">
+							<li class="input-group">
+								<span class="input-group-addon">Opacity: <span class="elevationStaticOpacityOut"></span>%</span>
+								<input class="elevationStaticOpacity mytooltip" title="Overlay Opacity" type="range" min="0"
+									   max="100" data-default="30" value="30"/>
+							</li>
+						</ul>
+
+						<div class="option-toggle toggleable dynamicShadedRelief" data-option="dynamicShadedRelief">
+							<span class="option-state-indicator"></span>
+							<span>Show Shaded Relief (Dynamic)</span>
+						</div>
+						<ul class="options-slider dynamicShadedRelief">
+							<!-- Removed unimplemented sliders -->
+<!--							<li class="input-group dynamicShadedRelief">
+								<span class="input-group-addon">Intensity: <span id="vertOut"></span></span>
+								<input id="vert" class="mytooltip" title="Vertical Exaggeration" type="range" min="1" max="10"
+									   data-default="3" value="3"/>
+							</li>-->
+<!--							<li class="input-group dynamicShadedRelief">
+								<span class="input-group-addon">Altitude: <span id="sunElOut"></span>&deg;</span>
+								<input id="sunEl" class="mytooltip" title="Sun Altitude" type="range" min="0" max="90"
+									   data-default="45" value="45"/>
+							</li>-->
+<!--							<li class="input-group dynamicShadedRelief">
+								<span class="input-group-addon">Azimuth: <span id="sunAzOut"></span>&deg;</span>
+								<input id="sunAz" class="mytooltip" title="Sun Azimuth" type="range" min="0" max="360"
+									   data-default="315" value="315"/>
+							</li>-->
+							<li class="input-group dynamicShadedRelief">
+								<span class="input-group-addon">Opacity: <span class="shadeOpacityOut"></span>%</span>
+								<input class="shadeOpacity mytooltip" title="Overlay Opacity" type="range" min="0"
+									   max="100" data-default="30" value="30"/>
+							</li>
+							<!--why reset if there's only one -- restore this when the other sliders are actually wired up -->
+<!--							<li class="input-group"><br></li>
+							<li class="input-group dynamicShadedRelief">
+								<button type="button" class="btn" id="elevationReset">Reset Settings</button>
+							</li>-->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
   </body>
 </html>
