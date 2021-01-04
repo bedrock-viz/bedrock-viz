@@ -5,7 +5,7 @@
  * @extends {ol.control.Control}
  * @param {Object=} opt_options Control options.
  */
-let ViewModeControl = function(opt_options) {
+const ViewModeControl = function(opt_options) {
     const options = opt_options || {};
 
     // timers to manage showing/hiding the preview vs. the real interface
@@ -149,7 +149,7 @@ let ViewModeControl = function(opt_options) {
     });
 
     // when a mouse enters the preview, add the active class, hide the preview, show the selection interface
-    $displayWrapper.mouseenter((e) => {
+    $displayWrapper.mouseenter(() => {
         $element.addClass('active');
         $displayWrapper.hide();
 
