@@ -243,7 +243,9 @@ function doGlobalQuit() {
     $('.mytooltip').tooltip('hide');
 
     // clear village doors
-    srcVillageVectorPoints.clear();
+    if (srcVillageVectorPoints) {
+        srcVillageVectorPoints.clear();
+    }
 
     // todo - others?
 }
@@ -551,7 +553,9 @@ function doFeaturePopover(features, id, coordinate) {
         }
 
         // remove old items
-        srcVillageVectorPoints.clear();
+        if (srcVillageVectorPoints) {
+            srcVillageVectorPoints.clear();
+        }
 
         // add doors to map
         for (var d in props['Doors']) {

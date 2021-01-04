@@ -121,7 +121,7 @@ const ViewModeControl = function(opt_options) {
         // todo: there is still a way to sneak your mouse out of the element without it collapsing, if you use the tooltip as a lane.
         // make sure we are really leaving the element, and not getting a weird signal from mousing around the child elements
         if (
-            $(e.fromElement).attr('id') !== $element.attr('id') &&
+            $(e.fromElement).attr('id') !== $(element).attr('id') &&
             !!e.toElement.tagName &&
             String(e.toElement.tagName).toLowerCase() !== 'canvas'
         ) {
@@ -137,7 +137,7 @@ const ViewModeControl = function(opt_options) {
         }
 
         // remove the active class and hide the selection interface
-        $element.removeClass('active');
+        $(element).removeClass('active');
         $dimensionWrapper.hide();
         $viewModeWrapper.hide();
 
@@ -150,7 +150,7 @@ const ViewModeControl = function(opt_options) {
 
     // when a mouse enters the preview, add the active class, hide the preview, show the selection interface
     $displayWrapper.mouseenter(() => {
-        $element.addClass('active');
+        $(element).addClass('active');
         $displayWrapper.hide();
 
         // clean up any current timers

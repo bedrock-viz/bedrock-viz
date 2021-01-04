@@ -41,7 +41,6 @@ let SidebarControl = function(opt_options) {
             $(document.createElement('img'))
                 .attr('src', 'images/sidebar-assets/arrow_left.png')
         );
-    $sidebarToggle.append($sidebarToggleIcon);
 
     // when the toggle is clicked, either open or close the sidebar
     $sidebarToggle.click(function (e) {
@@ -50,13 +49,13 @@ let SidebarControl = function(opt_options) {
             $('body').addClass('sidebar-open');
             doUpdateEntityList();
             $(element).addClass('open');
-            $sidebarToggleIcon.addClass('open');
+            $sidebarToggle.find('img').addClass('open');
             $sidebarFilter.focus();
         } else {
             $('body').removeClass('sidebar-open');
             $sidebarContent.find('.sidebar-content-group p').remove();
             $(element).removeClass('open');
-            $sidebarToggleIcon.removeClass('open');
+            $sidebarToggle.find('img').removeClass('open');
         }
     });
 

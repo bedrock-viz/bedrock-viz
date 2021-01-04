@@ -25,6 +25,9 @@
 const OptionsControl = function(opt_options) {
     const options = opt_options || {};
 
+    // currently open options modal
+    let optionsModal;
+
     // keeps track of which options are turned off/on with a map - key: boolean
     const optionStates = {};
 
@@ -132,6 +135,11 @@ const OptionsControl = function(opt_options) {
                     checkForUpdate();
                     break;
                 case 'about':
+                    console.log(optionsModal);
+                    if (optionsModal) {
+                        optionsModal.modal('hide');
+                        optionsModal = null;
+                    }
                     doModal(
                         'About Bedrock Viz',
                         globalAboutMessage
@@ -180,6 +188,10 @@ const OptionsControl = function(opt_options) {
             '</div></div>' +
             (!isCurrent ? '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>' : '');
 
+        if (optionsModal) {
+            optionsModal.modal('hide');
+            optionsModal = null;
+        }
         doModal( title, msg);
     }
 
@@ -227,10 +239,18 @@ const OptionsControl = function(opt_options) {
                 if ( res ) {
                     doCheckUpdate_getChangeLog(res[1]);
                 } else {
+                    if (optionsModal) {
+                        optionsModal.modal('hide');
+                        optionsModal = null;
+                    }
                     doModal('Error', 'Sorry, failed to find version info on GitHub.');
                 }
             },
             error: (jqXHR, textStatus, errorThrown) => {
+                if (optionsModal) {
+                    optionsModal.modal('hide');
+                    optionsModal = null;
+                }
                 doModal('Error',
                     'Sorry, failed to check for update: Status [' + textStatus + '] error [' + errorThrown + ']');
             }
@@ -256,7 +276,7 @@ const OptionsControl = function(opt_options) {
      * Uses the element #options-modal-content, expected to be in the HTML document.
      */
     function showOptions() {
-        $('#options-modal-content').first().modal({});
+        optionsModal = $('#options-modal-content').first().modal({});
         applyOptionStatesToInterface();
     }
 };
