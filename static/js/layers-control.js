@@ -1,6 +1,6 @@
 /**
  * Layers Control
- * Show an interface to interact with the map layers. Includes an up and down layer button, as well as a button that displays
+ * An interface to interact with the map layers. Includes an up and down layer button, as well as a button that displays
  * a floating number entry box that will interact with the layer setting.
  *
  * Does not implement any options.
@@ -56,7 +56,7 @@ const LayersControl = function(opt_options) {
                 .attr('src', 'images/map-control-assets/layer-down-icon.png')
         );
 
-    // create the main map control element, and add the button
+    // create the main map control element
     const element = document.createElement('div');
 
     // build the interface
@@ -162,13 +162,13 @@ const LayersControl = function(opt_options) {
             })
 
             // when the value changes, immediately go to the entered layer
-            .change(e => {
+            .change(() => {
                 const layerValue = getJumpLayerValue($layerJumpEntry);
                 doJumpToLayer(layerValue);
             })
 
             // when focus leaves the entry box, remove this interface
-            .blur(e => removeLayerJumpEntry());
+            .blur(() => removeLayerJumpEntry());
 
         $layerJumpEntryWrapper.append($layerJumpEntry);
 
@@ -177,7 +177,7 @@ const LayersControl = function(opt_options) {
             .attr('role', 'buttn=on')
             .addClass('btn btn-primary')
             .html('GO')
-            .click(e => {
+            .click(() => {
                 const layerValue = getJumpLayerValue($layerJumpEntry);
                 doJumpToLayer(layerValue);
                 removeLayerJumpEntry();
