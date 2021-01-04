@@ -38,9 +38,10 @@ const OptionsControl = function(opt_options) {
                 .attr('src', 'images/map-control-assets/settings.png')
         );
 
-    // create the main map control element, and add the button
+    // create the main map control element
     const element = document.createElement('div')
 
+    // bind various events to the modal content
     setUpModalContent();
 
     $(element)
@@ -54,6 +55,9 @@ const OptionsControl = function(opt_options) {
 
     // private methods
 
+    /**
+     * Bind to change events on the sliders, cllick events on the option toggles
+     */
     function setUpModalContent() {
         const $modalBody = $('#options-modal-content').find('.modal-body').first();
 

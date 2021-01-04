@@ -1,17 +1,67 @@
 /**
  * Players Control
- * Show an interface to toggle on/off player visiblity, and to center on the Local Player
+ * Show an interface to toggle on/off player visibility, and to center on the Local Player
+ *
+ * Does not implement any options.
+ *
+ * References the global scope to change:
+ *  - projection
+ *  - dimensionInfo
+ *  - globalDimensionId
+ *  - map (could easily get this through the map control API)
+ *
+ * @todo Global scope reference
  * @extends {ol.control.Control}
  * @param {Object=} opt_options Control options.
  */
-var PlayersControl = function(opt_options) {
-    var options = opt_options || {};
-    var showPlayersButton;
+const PlayersControl = function(opt_options) {
+    const options = opt_options || {};
 
+    // toggle button to show/hide players on the map
+    let $showPlayersButton;
+
+    // the entityID of "the player" -- ie, the local player that generated the map
     const playerEntityId = 63;
 
-    this.showPlayers = function(e) {
-        var cflag = true;
+    // create players toggle button and icon, bind click event
+    $showPlayersButton = $(document.createElement('button'))
+        .on('click touchstart', showPlayers)
+        .addClass('mytooltip inline-block').attr('title', 'Show Players')
+        .append(
+            $(document.createElement('img'))
+                .addClass('interface-icon')
+                .attr('src', 'images/map-control-assets/player-icon.png')
+        );
+
+    // create center on player button and icon, bind click event
+    const $centerLocalPlayerButton = $(document.createElement('button'))
+        .on('click touchstart', centerLocalPlayer)
+        .addClass('mytooltip inline-block').attr('title', 'Center Map on Player')
+        .append(
+            $(document.createElement('img'))
+                .addClass('interface-icon')
+                .attr('src', 'images/map-control-assets/target-location.png')
+        )
+
+    const element = document.createElement('div');
+
+    $(element)
+        .addClass('players ol-unselectable ol-control')
+        .append($showPlayersButton)
+        .append($centerLocalPlayerButton);
+
+    ol.control.Control.call(this, {
+        element: element,
+        target: options.target
+    });
+
+    // private methods
+
+    /**
+     * Toggle the visibility of the local player Entity, and add/remove a class to the button to indicate its status
+     */
+    function showPlayers() {
+        let cflag = true;
         if (vectorPoints === null) {
             cflag = false;
             loadVectors();
@@ -25,18 +75,21 @@ var PlayersControl = function(opt_options) {
             vectorPoints.changed();
         }
 
-        if (!showPlayersButton) {
+        if (!$showPlayersButton) {
             return;
         }
-        if ($(showPlayersButton).hasClass('pin-active')) {
-            $(showPlayersButton).removeClass('pin-active');
+        if ($showPlayersButton.hasClass('pin-active')) {
+            $showPlayersButton.removeClass('pin-active');
         } else {
-            $(showPlayersButton).addClass('pin-active');
+            $showPlayersButton.addClass('pin-active');
         }
-    };
+    }
 
-    this.centerLocalPlayer = function(e) {
-        var view = new ol.View({
+    /**
+     * Create a map view and center it on the current player X/Y
+     */
+    function centerLocalPlayer() {
+        const view = new ol.View({
             projection: projection,
             center: [
                 dimensionInfo[globalDimensionId].playerPosX,
@@ -45,29 +98,6 @@ var PlayersControl = function(opt_options) {
             resolution: 1
         });
         map.setView(view);
-    };
-
-    showPlayersButton = document.createElement('button');
-    showPlayersButton.innerHTML = '<img src="images/map-control-assets/player-icon.png" class="interface-icon" />';
-    showPlayersButton.addEventListener('click', this.showPlayers, false);
-    showPlayersButton.addEventListener('touchstart', this.showPlayers, false);
-    $(showPlayersButton).addClass('mytooltip inline-block').attr('title', 'Show Players');
-
-    var centerLocalPlayerButton = document.createElement('button');
-    centerLocalPlayerButton.innerHTML = '<img src="images/map-control-assets/target-location.png" class="interface-icon" />';
-    centerLocalPlayerButton.addEventListener('click', this.centerLocalPlayer, false);
-    centerLocalPlayerButton.addEventListener('touchstart', this.centerLocalPlayer, false);
-    $(centerLocalPlayerButton).addClass('mytooltip inline-block').attr('title', 'Center Map on Player');
-
-    var element = document.createElement('div');
-    element.className = 'players ol-unselectable ol-control';
-    element.appendChild(showPlayersButton);
-    element.appendChild(centerLocalPlayerButton);
-
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-
+    }
 };
 ol.inherits(PlayersControl, ol.control.Control);
