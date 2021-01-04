@@ -2,14 +2,14 @@
 <html>
 	<head>
 		<title>Bedrock Viz Viewer</title>
-		<meta charset="utf-8" />
+		<meta charset="utf-8"/>
 
 		<script src="js/jquery-1.11.2.min.js"></script>
-		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/bootstrap.min.css"/>
 		<script src="js/bootstrap.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-		<link rel="stylesheet" href="css/ol.css" type="text/css" />
+		<link rel="stylesheet" href="css/ol.css" type="text/css"/>
 		<script src="js/ol.js"></script>
 
 		<script src="js/measure-control.js"></script>
@@ -29,32 +29,32 @@
 
 		<script src="js/sidebar-config.js"></script>
 		<script src="js/sidebar-control.js"></script>
-		<link rel="stylesheet" href="css/sidebar-control.css" />
+		<link rel="stylesheet" href="css/sidebar-control.css"/>
 
-		<link rel="stylesheet" href="css/bootstrap-tour.min.css" />
+		<link rel="stylesheet" href="css/bootstrap-tour.min.css"/>
 		<script src="js/bootstrap-tour.min.js"></script>
 
-		<link rel="stylesheet" href="css/bedrock_viz.css" type="text/css" />
+		<link rel="stylesheet" href="css/bedrock_viz.css" type="text/css"/>
 		<script src="js/bedrock_viz.js"></script>
 
-        <script src="output.js"></script>
+		<script src="output.js"></script>
 		%JSFILE%
 	</head>
-  	<body>
+	<body>
 
 		<div id="map" class="map"></div>
 
 		<div class="hide">
-	  		<div id="popover" class="mypopover"></div>
+			<div id="popover" class="mypopover"></div>
 		</div>
 
 		<div id="throbber" class="ui-corner-all" style="display:none;">
 			<div id="throbber-content">
 				<div class="throbber-image"><b>Loading...</b><br/><span id="throbber-msg"></span></div>
-		  	</div>
+			</div>
 		</div>
 
-		<div class="modal fade" style="display:none;">
+		<div id="globalModal" class="modal fade" style="display:none;">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -67,111 +67,133 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
 					</div>
-				</div><!-- /.modal-content -->
-			</div><!-- /.modal-dialog -->
-		</div><!-- /.modal -->
-
-		<div id="options-modal-content" style="display:none;">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-lg-5 col-md-5">
-						<div class="option-toggle toggleable" data-option="chunkGrid">
-							<span class="option-state-indicator"></span>
-							<span>Show Chunk Grid</span>
-						</div>
-
-						<div class="option-toggle toggleable" data-option="chunkDisplayToggle">
-							<span class="option-state-indicator"></span>
-							<span>Show Chunk Coordinates</span>
-						</div>
-
-						<div class="option-toggle toggleable" data-option="showNetherCoordinatesToggle">
-							<span class="option-state-indicator"></span>
-							<span>Show Nether Coordinate Conversion</span>
-						</div>
-
-						<div class="option-toggle toggleable" data-option="slimeChunksToggle">
-							<span class="option-state-indicator"></span>
-							<span>Show Slime Chunks</span>
-						</div>
-
-						<div class="option-toggle toggleable" data-option="checkPlayerDistanceToggle">
-							<span class="option-state-indicator"></span>
-							<span>Only Show Mobs Within 128 Blocks of Player</span>
-						</div>
-
-						<hr>
-
-						<div class="option-toggle" data-option="checkForUpdates">
-							<span class="option-state-indicator"></span>
-							<span>Check for <b>Bedrock Viz</b> update...</span>
-						</div>
-
-						<div class="option-toggle" data-option="about">
-							<span class="option-state-indicator"></span>
-							<span>About <b>Bedrock Viz</b>...</span>
-						</div>
-					</div>
-					<div class="col-lg-7 col-md-7">
-						<div class="option-toggle toggleable" data-option="elevationAlphaToggle">
-							<span class="option-state-indicator"></span>
-							<span>Show Height Shading</span>
-						</div>
-						<ul class="options-slider">
-							<li class="input-group">
-								<span class="input-group-addon">Opacity: <span class="elevationAlphaOpacityOut"></span>%</span>
-								<input class="elevationAlphaOpacity mytooltip" title="Overlay Opacity" type="range" min="0"
-									   max="100" data-default="60" value="60"/>
-							</li>
-						</ul>
-
-						<div class="option-toggle toggleable" data-option="elevationStaticToggle">
-							<span class="option-state-indicator"></span>
-							<span>Show Shaded Relief (Pre-generated)</span>
-						</div>
-						<ul class="options-slider">
-							<li class="input-group">
-								<span class="input-group-addon">Opacity: <span class="elevationStaticOpacityOut"></span>%</span>
-								<input class="elevationStaticOpacity mytooltip" title="Overlay Opacity" type="range" min="0"
-									   max="100" data-default="30" value="30"/>
-							</li>
-						</ul>
-
-						<div class="option-toggle toggleable dynamicShadedRelief" data-option="dynamicShadedRelief">
-							<span class="option-state-indicator"></span>
-							<span>Show Shaded Relief (Dynamic)</span>
-						</div>
-						<ul class="options-slider dynamicShadedRelief">
-							<!-- Removed unimplemented sliders -->
-<!--							<li class="input-group dynamicShadedRelief">
-								<span class="input-group-addon">Intensity: <span id="vertOut"></span></span>
-								<input id="vert" class="mytooltip" title="Vertical Exaggeration" type="range" min="1" max="10"
-									   data-default="3" value="3"/>
-							</li>-->
-<!--							<li class="input-group dynamicShadedRelief">
-								<span class="input-group-addon">Altitude: <span id="sunElOut"></span>&deg;</span>
-								<input id="sunEl" class="mytooltip" title="Sun Altitude" type="range" min="0" max="90"
-									   data-default="45" value="45"/>
-							</li>-->
-<!--							<li class="input-group dynamicShadedRelief">
-								<span class="input-group-addon">Azimuth: <span id="sunAzOut"></span>&deg;</span>
-								<input id="sunAz" class="mytooltip" title="Sun Azimuth" type="range" min="0" max="360"
-									   data-default="315" value="315"/>
-							</li>-->
-							<li class="input-group dynamicShadedRelief">
-								<span class="input-group-addon">Opacity: <span class="shadeOpacityOut"></span>%</span>
-								<input class="shadeOpacity mytooltip" title="Overlay Opacity" type="range" min="0"
-									   max="100" data-default="30" value="30"/>
-							</li>
-							<!--why reset if there's only one -- restore this when the other sliders are actually wired up -->
-<!--							<li class="input-group"><br></li>
-							<li class="input-group dynamicShadedRelief">
-								<button type="button" class="btn" id="elevationReset">Reset Settings</button>
-							</li>-->
-						</ul>
-					</div>
 				</div>
 			</div>
 		</div>
-  </body>
+
+		<div id="options-modal-content" class="modal fade" style="display:none;">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+								aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">Map Options</h4>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-lg-5 col-md-5">
+								<div class="option-toggle toggleable" data-option="chunkGrid">
+									<span class="option-state-indicator"></span>
+									<span>Show Chunk Grid</span>
+								</div>
+
+								<div class="option-toggle toggleable" data-option="chunkDisplayToggle">
+									<span class="option-state-indicator"></span>
+									<span>Show Chunk Coordinates</span>
+								</div>
+
+								<div class="option-toggle toggleable" data-option="showNetherCoordinatesToggle">
+									<span class="option-state-indicator"></span>
+									<span>Show Nether Coordinate Conversion</span>
+								</div>
+
+								<div class="option-toggle toggleable" data-option="slimeChunksToggle">
+									<span class="option-state-indicator"></span>
+									<span>Show Slime Chunks</span>
+								</div>
+
+								<div class="option-toggle toggleable" data-option="checkPlayerDistanceToggle">
+									<span class="option-state-indicator"></span>
+									<span>Only Show Mobs Within 128 Blocks of Player</span>
+								</div>
+
+								<hr>
+
+								<div class="option-toggle" data-option="checkForUpdates">
+									<span class="option-state-indicator"></span>
+									<span>Check for <b>Bedrock Viz</b> update...</span>
+								</div>
+
+								<div class="option-toggle" data-option="about">
+									<span class="option-state-indicator"></span>
+									<span>About <b>Bedrock Viz</b>...</span>
+								</div>
+							</div> <!-- /.column -->
+							<div class="col-lg-7 col-md-7">
+								<div class="option-toggle toggleable" data-option="elevationAlphaToggle">
+									<span class="option-state-indicator"></span>
+									<span>Show Height Shading</span>
+								</div>
+								<ul class="options-slider">
+									<li class="input-group">
+										<span class="input-group-addon">Opacity: <span class="elevationAlphaOpacityOut"></span>%</span>
+										<input class="elevationAlphaOpacity mytooltip" title="Overlay Opacity" type="range"
+											   min="0"
+											   max="100" data-default="60" value="60"/>
+									</li>
+								</ul>
+
+								<div class="option-toggle toggleable" data-option="elevationStaticToggle">
+									<span class="option-state-indicator"></span>
+									<span>Show Shaded Relief (Pre-generated)</span>
+								</div>
+								<ul class="options-slider">
+									<li class="input-group">
+										<span class="input-group-addon">Opacity: <span class="elevationStaticOpacityOut"></span>%</span>
+										<input class="elevationStaticOpacity mytooltip" title="Overlay Opacity" type="range"
+											   min="0"
+											   max="100" data-default="30" value="30"/>
+									</li>
+								</ul>
+
+								<div class="option-toggle toggleable dynamicShadedRelief" data-option="dynamicShadedRelief">
+									<span class="option-state-indicator"></span>
+									<span>Show Shaded Relief (Dynamic)</span>
+								</div>
+								<ul class="options-slider dynamicShadedRelief">
+									<!-- Removed unimplemented sliders -->
+									<!--
+									<li class="input-group dynamicShadedRelief">
+										<span class="input-group-addon">Intensity: <span id="vertOut"></span></span>
+										<input id="vert" class="mytooltip" title="Vertical Exaggeration" type="range" min="1" max="10"
+											   data-default="3" value="3"/>
+									</li>
+									-->
+									<!--
+									<li class="input-group dynamicShadedRelief">
+										<span class="input-group-addon">Altitude: <span id="sunElOut"></span>&deg;</span>
+										<input id="sunEl" class="mytooltip" title="Sun Altitude" type="range" min="0" max="90"
+											   data-default="45" value="45"/>
+									</li>
+									-->
+									<!--
+									<li class="input-group dynamicShadedRelief">
+										<span class="input-group-addon">Azimuth: <span id="sunAzOut"></span>&deg;</span>
+										<input id="sunAz" class="mytooltip" title="Sun Azimuth" type="range" min="0" max="360"
+											   data-default="315" value="315"/>
+									</li>
+									-->
+									<li class="input-group dynamicShadedRelief">
+										<span class="input-group-addon">Opacity: <span class="shadeOpacityOut"></span>%</span>
+										<input class="shadeOpacity mytooltip" title="Overlay Opacity" type="range" min="0"
+											   max="100" data-default="30" value="30"/>
+									</li>
+									<!--why reset if there's only one -- restore this when the other sliders are actually wired up -->
+									<!--
+									<li class="input-group"><br></li>
+										<li class="input-group dynamicShadedRelief">
+										<button type="button" class="btn" id="elevationReset">Reset Settings</button>
+									</li>
+									-->
+								</ul>
+							</div> <!-- /.column -->
+						</div> <!-- /.row -->
+					</div> <!-- /options .modal-body -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+					</div>
+				</div> <!-- /options .modal-content -->
+			</div> <!-- /options .modal-dialog -->
+		</div> <!-- /options modal -->
+	</body>
 </html>
