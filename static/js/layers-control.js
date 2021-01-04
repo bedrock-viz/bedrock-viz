@@ -1,44 +1,124 @@
 /**
- * LayersControl Control
- * Show an interface to interact with the map layers.
+ * Layers Control
+ * Show an interface to interact with the map layers. Includes an up and down layer button, as well as a button that displays
+ * a floating number entry box that will interact with the layer setting.
+ *
+ * Does not implement any options.
+ *
+ * References the global scope to change:
+ *  - layerRawIndex
+ *
+ * @todo Global scope reference
  * @extends {ol.control.Control}
  * @param {Object=} opt_options Control options.
  */
-var LayersControl = function(opt_options) {
-    var options = opt_options || {};
-    var this_ = this;
-    this._selfReference = null;
+const LayersControl = function(opt_options) {
+    const options = opt_options || {};
 
-    var $layerCurrentDisplay;
+    // element for displaying the current layer. Declared as a scope global so utility functions can change the value
+    let $layerCurrentDisplay;
 
-    var doLayerUp = function() {
-        const delta = 1;
-        layerRawIndex += delta;
+    // display area for current layer number
+    $layerCurrentDisplay = $(document.createElement('span'))
+        .html('-')
+        .addClass('mytooltip layer-current-display').attr('title', 'Current Layer');
+
+    // create layer up button and icon, bind click event
+    const $layerUpButton = $(document.createElement('button'))
+        .on('click touchstart', doLayerUp)
+        .addClass('mytooltip')
+        .attr('title', 'Go up a Layer')
+        .append(
+            $(document.createElement('img'))
+                .addClass('interface-icon')
+                .attr('src', 'images/map-control-assets/layer-up-icon.png')
+        );
+
+    // create layer jump button and icon, bind click event
+    const $layerJumpButton = $(document.createElement('button'))
+        .on('click touchstart', showLayerJumpEntry)
+        .addClass('mytooltip')
+        .attr('title', 'Jump to Layer')
+        .append(
+            $(document.createElement('img'))
+                .addClass('interface-icon')
+                .attr('src', 'images/map-control-assets/layer-jump-icon.png')
+        );
+
+    // create layer down button and icon, bind click event
+    const $layerDownButton = $(document.createElement('button'))
+        .on('click touchstart', doLayerDown)
+        .addClass('mytooltip')
+        .attr('title', 'Go down a Layer')
+        .append(
+            $(document.createElement('img'))
+                .addClass('interface-icon')
+                .attr('src', 'images/map-control-assets/layer-down-icon.png')
+        );
+
+    // create the main map control element, and add the button
+    const element = document.createElement('div');
+
+    // build the interface
+    $(element)
+        .addClass('layers ol-unselectable ol-control')
+        .append($layerCurrentDisplay)
+        .append($layerUpButton)
+        .append($layerJumpButton)
+        .append($layerDownButton);
+
+    ol.control.Control.call(this, {
+        element: element,
+        target: options.target
+    });
+
+    // private methods
+
+    /**
+     * Sets the active layer to current + 1. Values greater than 255 will use 255.
+     */
+    function doLayerUp() {
+        layerRawIndex += 1;
         if (layerRawIndex < 0) { layerRawIndex = 0; }
         if (layerRawIndex > 255) { layerRawIndex = 255; }
         layerGoto(layerRawIndex);
         $layerCurrentDisplay.html(layerRawIndex);
-    };
+    }
 
-    var doLayerDown = function() {
-        const delta = -1;
-        layerRawIndex += delta;
+    /**
+     * Sets the active layer to current - 1. Values less than 0 will use 0.
+     */
+    function doLayerDown() {
+        layerRawIndex += -1;
         if (layerRawIndex < 0) { layerRawIndex = 0; }
         if (layerRawIndex > 255) { layerRawIndex = 255; }
         layerGoto(layerRawIndex);
         $layerCurrentDisplay.html(layerRawIndex);
-    };
+    }
 
-    var doJumpToLayer = function (layerNumber) {
+    /**
+     * Sets the active layer to the specified layer number
+     * @param layerNumber the layer number to go to
+     */
+    function doJumpToLayer(layerNumber) {
         layerGoto(layerNumber);
         $layerCurrentDisplay.html(layerRawIndex);
     }
 
-    var removeLayerJumpEntry = function () {
+    /**
+     * Called when entry is complete in the layer jump input
+     */
+    function removeLayerJumpEntry() {
         $('.layer-jump-entry-box-wrapper').remove();
-    };
+    }
 
-    var getJumpLayerValue = function ($el) {
+    /**
+     * Used to extract a value from the layer jump input. If a value greater than 255 is entered, sets the input to 255 and returns 255.
+     * If a value less than 0 is entered, sets the input to 0 and returns 0.
+     * @param $el the element to read the value from
+     * @returns {number} the value of the element or a min/max default from the valid range
+     */
+    function getJumpLayerValue($el) {
         let intValue = parseInt($el.val());
         if (intValue < 0) {
             $el.val('0');
@@ -52,92 +132,64 @@ var LayersControl = function(opt_options) {
         return intValue;
     }
 
-    var showLayerJumpEntry = function () {
-        var $layerJumpEntryWrapper = $(document.createElement('div'));
-        $layerJumpEntryWrapper.addClass('layer-jump-entry-box-wrapper');
+    /**
+     * Creates a floating input to collect the desired layer to jump to.
+     * Value starts off with the current active layer number.
+     */
+    function showLayerJumpEntry() {
+        // create a wrapper for the entry box
+        const $layerJumpEntryWrapper = $(document.createElement('div'))
+            .addClass('layer-jump-entry-box-wrapper');
 
-        var $layerJumpEntry = $(document.createElement('input'));
-        $layerJumpEntry.attr({
-            'type': 'number',
-            'min': '0',
-            'max': '255'
-        });
-        $layerJumpEntry.val(layerRawIndex);
-        $layerJumpEntry.addClass('layer-jump-entry-box');
+        // create an input with events
+        const $layerJumpEntry = $(document.createElement('input'))
+            .attr({
+                'type': 'number',
+                'min': '0',
+                'max': '255'
+            })
+            .val(layerRawIndex)
+            .addClass('layer-jump-entry-box')
+
+            // when a key is released, check if it is enter. If it is, go to the currently entered layer and remove the box
+            .keyup(e => {
+                const lowerCaseKeyName = String(e.key).toLowerCase();
+                if (lowerCaseKeyName === "enter") {
+                    const layerValue = getJumpLayerValue($layerJumpEntry);
+                    doJumpToLayer(layerValue);
+                    removeLayerJumpEntry();
+                }
+            })
+
+            // when the value changes, immediately go to the entered layer
+            .change(e => {
+                const layerValue = getJumpLayerValue($layerJumpEntry);
+                doJumpToLayer(layerValue);
+            })
+
+            // when focus leaves the entry box, remove this interface
+            .blur(e => removeLayerJumpEntry());
+
         $layerJumpEntryWrapper.append($layerJumpEntry);
-        $layerJumpEntry.keyup(e => {
-            console.log('keyup', e);
-            const lowerCaseKeyName = String(e.key).toLowerCase();
-            if (lowerCaseKeyName === "enter") {
+
+        // create a button that will "submit" the layer change, and remove the interface (just like if you press enter in the entry box)
+        const $layerJumpEntrySubmit = $(document.createElement('buton'))
+            .attr('role', 'buttn=on')
+            .addClass('btn btn-primary')
+            .html('GO')
+            .click(e => {
                 const layerValue = getJumpLayerValue($layerJumpEntry);
                 doJumpToLayer(layerValue);
                 removeLayerJumpEntry();
-            }
-        });
+            });
 
-        $layerJumpEntry.change(e => {
-            console.log('change', e);
-            const layerValue = getJumpLayerValue($layerJumpEntry);
-            doJumpToLayer(layerValue);
-        });
-
-        $layerJumpEntry.blur(e => {
-            removeLayerJumpEntry();
-        });
-
-        var $layerJumpEntrySubmit = $(document.createElement('buton'));
-        $layerJumpEntrySubmit.attr('role', 'buttn=on');
-        $layerJumpEntrySubmit.addClass('btn btn-primary');
-        $layerJumpEntrySubmit.html('GO');
         $layerJumpEntryWrapper.append($layerJumpEntrySubmit);
-        $layerJumpEntrySubmit.click(e => {
-            const layerValue = getJumpLayerValue($layerJumpEntry);
-            doJumpToLayer(layerValue);
-            removeLayerJumpEntry();
-        });
 
+        // add the entry box wrapper to dom before the layer control, so it's still "on the map" and works in fullscreen
         $(element).before($layerJumpEntryWrapper);
+
+        // focus the layer input box
         $layerJumpEntry.focus();
-    };
-
-    $layerCurrentDisplay = $(document.createElement('span'));
-    $layerCurrentDisplay.html('-');
-    $layerCurrentDisplay.addClass('mytooltip layer-current-display').attr('title', 'Current Layer');
-
-    var layerUpButton = document.createElement('button');
-    layerUpButton.innerHTML = '<img src="images/map-control-assets/layer-up-icon.png" class="interface-icon" />';
-    layerUpButton.addEventListener('click', doLayerUp, false);
-    layerUpButton.addEventListener('touchstart', doLayerUp, false);
-    $(layerUpButton).addClass('mytooltip inline-block').attr('title', 'Go up a Layer');
-
-    var layerJumpButton = document.createElement('button');
-    layerJumpButton.innerHTML = '<img src="images/map-control-assets/layer-jump-icon.png" class="interface-icon" />';
-    layerJumpButton.addEventListener('click', showLayerJumpEntry, false);
-    layerJumpButton.addEventListener('touchstart', showLayerJumpEntry, false);
-    $(layerJumpButton).addClass('mytooltip inline-block').attr('title', 'Jump to Layer');
-
-    var layerDownButton = document.createElement('button');
-    layerDownButton.innerHTML = '<img src="images/map-control-assets/layer-down-icon.png" class="interface-icon" />';
-    layerDownButton.addEventListener('click', doLayerDown, false);
-    layerDownButton.addEventListener('touchstart', doLayerDown, false);
-    $(layerDownButton).addClass('mytooltip inline-block').attr('title', 'Go down a Layer');
-
-    var element = document.createElement('div');
-    element.className = 'layers ol-unselectable ol-control';
-    $(element).append($layerCurrentDisplay);
-    element.append(layerUpButton);
-    element.appendChild(layerJumpButton);
-    element.appendChild(layerDownButton);
-
-/*    $('.layerGoto').click(function() {
-        var id = +$(this).attr('data-id');
-        layerGoto(id);
-    });*/
-
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-
+    }
 };
 ol.inherits(LayersControl, ol.control.Control);
