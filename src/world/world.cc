@@ -153,7 +153,7 @@ namespace mcpe_viz
         fflush(stderr);
         if (!openstatus.ok()) {
             log::error("LevelDB operation returned status={}", openstatus.ToString());
-            
+
             if (control.tryDbRepair)
             {
                 log::info("Attempting leveldb repair due to failed open");
@@ -685,8 +685,8 @@ namespace mcpe_viz
                 {
                     // this record is not very interesting, we usually hide it
                     // note: it would be interesting if this is not == 2 (as of MCPE 0.12.x it is always 2)
-                    
-                    // chunk versions have changed many times since this was originally included. 
+
+                    // chunk versions have changed many times since this was originally included.
                     // it seems unnecessary to keep track of this for anything other than trace information
                     log::trace("{} 0x76 chunk (world format version): v={}"
                         ,dimName
@@ -905,7 +905,7 @@ namespace mcpe_viz
             char timebuf[256];
 #if _MSC_VER
             ctime_s(timebuf, 256, &xtime);
-#else 
+#else
             ctime_r(&xtime, timebuf);
 #endif
             // todo - this is hideous.
@@ -941,10 +941,10 @@ namespace mcpe_viz
                 double px = playerPositionImageX;
                 double py = playerPositionImageY;
 
-                /* 
-                tomnolan: I'm of the opinion that we should be setting the default position to 0,0 
-                          for any dimensions the player is not located. If the player is in the nether, 
-                          we shouldn't be setting the map position to x/8,z/8 in the overworld because 
+                /*
+                tomnolan: I'm of the opinion that we should be setting the default position to 0,0
+                          for any dimensions the player is not located. If the player is in the nether,
+                          we shouldn't be setting the map position to x/8,z/8 in the overworld because
                           this position has no relevance. They may have never traveled to that position
                           in the overworld ever and a user will see a mass of white space on their screen
                           when they load the map by default. This is very confusing.
@@ -1096,10 +1096,10 @@ namespace mcpe_viz
             copyDirToDir(static_path("js").generic_string(), dirJs, false);
 
             // copy css files
-            std::string dirJs = dirDest + "/css";
-            local_mkdir(dirJs);
-            //copyDirToDir(dirExec + "/css", dirJs, false);
-            copyDirToDir(static_path("css").generic_string(), dirJs, false);
+            std::string dirCss = dirDest + "/css";
+            local_mkdir(dirCss);
+            //copyDirToDir(dirExec + "/css", dirCss, false);
+            copyDirToDir(static_path("css").generic_string(), dirCss, false);
 
             // copy images
             // todobig - could save a good amount of time per run if we detect if dir has already been copied
@@ -1173,7 +1173,7 @@ namespace mcpe_viz
         }
 
         if (control.doHtml) {
-            
+
             // TODO: Remove this whole block?
             // if (control.autoTileFlag) {
             //     int32_t xdimId = kDimIdOverworld;
