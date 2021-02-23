@@ -119,7 +119,6 @@ var globalItemStyleSelector = null;
 var globalItemStyleCount = 0;
 
 var globalWarnSlimeChunks = false;
-var globalWarnVillage = false;
 
 var showChunkCoordinatesFlag = false;
 var chunkGridFlag = false;
@@ -953,13 +952,6 @@ function doFeaturePopover(features, id, coordinate) {
     stitle += '</div>';
 
     if (name === 'Village') {
-        
-        if ( !globalWarnVillage ) {
-            doModal('Villages',
-                    '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
-            globalWarnVillage = true;
-        }
-
         // remove old items
         srcVillageVectorPoints.clear();
 
