@@ -2204,6 +2204,17 @@ namespace mcpe_viz
                       0x31-te: NBT Decode End (1 tags)
                     */
                 }
+                else if (tileEntity->id == "Barrel") {
+                    if (tc.has_key("Items", nbt::tag_type::List)) {
+                        tileEntity->containerFlag = true;
+                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
+                        for (const auto& iter : items) {
+                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
+                            tileEntity->addItem(iitem);
+                        }
+                        parseFlag = true;
+                    }
+                }
 
                 else {
                     log::debug("Unknown tileEntity id=({})", tileEntity->id);
