@@ -1609,7 +1609,7 @@
     <item id="0x175" name="Potion" uname="minecraft:potion"> <!-- *B -->
       <itemvariant extradata="0x00" name="Water Bottle" uname="minecraft:water" />
       <itemvariant extradata="0x01" name="Mundane Potion" uname="minecraft:mundane" />
-      <itemvariant extradata="0x02" name="Mundane Potion" uname="minecraft:mundane" />
+      <itemvariant extradata="0x02" name="Mundane Potion (Long)" uname="minecraft:long_mundane" />
       <itemvariant extradata="0x03" name="Thick Potion" uname="minecraft:thick" />
       <itemvariant extradata="0x04" name="Awkward Potion" uname="minecraft:awkward" />
       <itemvariant extradata="0x05" name="Potion of Night Vision (3:00)" uname="minecraft:night_vision" />
@@ -1660,7 +1660,6 @@
     <item id="0x17D" name="Eye of Ender" uname="minecraft:ender_eye" />
     <item id="0x17E" name="Glistering Melon" uname="minecraft:glistering_melon_slice" />
     <item id="0x17F" name="Spawn Egg" uname="minecraft:spawn_egg"> <!-- *B -->
-      <!-- todo jocopa3 has a lot more here - sync up -->
       <itemvariant extradata="0x0A" name="Spawn Egg, Chicken" uname="minecraft:chicken_spawn_egg" />
       <itemvariant extradata="0x0B" name="Spawn Egg, Cow" uname="minecraft:cow_spawn_egg" />
       <itemvariant extradata="0x0C" name="Spawn Egg, Pig" uname="minecraft:pig_spawn_egg" />
@@ -1681,18 +1680,18 @@
       <itemvariant extradata="0x1B" name="Spawn Egg, Zombie Horse" uname="minecraft:zombie_horse_spawn_egg" />
       <itemvariant extradata="0x1C" name="Spawn Egg, Polar bear" uname="minecraft:polar_bear_spawn_egg" />
       <itemvariant extradata="0x1D" name="Spawn Egg, Llama" uname="minecraft:llama_spawn_egg" />
-      <itemvariant extradata="0x1E" name="Spawn Egg, Parrot" uname="minecraft:prot_spawn_egg" />
-      <itemvariant extradata="0x1F" name="Spawn Egg, Dolphin" uname="minecraft:dolphin_spawn_egg"  />
-      <itemvariant extradata="0x20" name="Spawn Egg, Zombie " uname="minecraft:zombie_spawn_egg" />
+      <itemvariant extradata="0x1E" name="Spawn Egg, Parrot" uname="minecraft:parrot_spawn_egg" />
+      <itemvariant extradata="0x1F" name="Spawn Egg, Dolphin" uname="minecraft:dolphin_spawn_egg" />
+      <itemvariant extradata="0x20" name="Spawn Egg, Zombie" uname="minecraft:zombie_spawn_egg" />
       <itemvariant extradata="0x21" name="Spawn Egg, Creeper" uname="minecraft:creeper_spawn_egg" />
       <itemvariant extradata="0x22" name="Spawn Egg, Skeleton" uname="minecraft:skeleton_spawn_egg" />
       <itemvariant extradata="0x23" name="Spawn Egg, Spider" uname="minecraft:spider_spawn_egg" />
-      <itemvariant extradata="0x24" name="Spawn Egg, Zombie Pigman" uname="minecraft:zombie_pigman_spawn_egg" />
+      <itemvariant extradata="0x24" name="Spawn Egg, Zombified Piglin" uname="minecraft:zombie_pigman_spawn_egg" />
       <itemvariant extradata="0x25" name="Spawn Egg, Slime" uname="minecraft:slime_spawn_egg" />
       <itemvariant extradata="0x26" name="Spawn Egg, Enderman" uname="minecraft:enderman_spawn_egg" />
       <itemvariant extradata="0x27" name="Spawn Egg, Silverfish" uname="minecraft:silverfish_spawn_egg" />
       <itemvariant extradata="0x28" name="Spawn Egg, Cave Spider" uname="minecraft:cave_spider_spawn_egg" />
-      <itemvariant extradata="0x29" name="Spawn Egg, Ghast" uname="minecraft:gast_spawn_egg" />
+      <itemvariant extradata="0x29" name="Spawn Egg, Ghast" uname="minecraft:ghast_spawn_egg" />
       <itemvariant extradata="0x2A" name="Spawn Egg, Magma Cube" uname="minecraft:magma_cube_spawn_egg" />
       <itemvariant extradata="0x2B" name="Spawn Egg, Blaze" uname="minecraft:blaze_spawn_egg" />
       <itemvariant extradata="0x2C" name="Spawn Egg, Zombie Villager" uname="minecraft:zombie_villager_spawn_egg" />
@@ -1717,12 +1716,12 @@
       <itemvariant extradata="0x6C" name="Spawn Egg, Pufferfish" uname="minecraft:pufferfish_spawn_egg" />
       <itemvariant extradata="0x6D" name="Spawn Egg, Salmon" uname="minecraft:salmon_spawn_egg" />
       <itemvariant extradata="0x6E" name="Spawn Egg, Drowned" uname="minecraft:drowned_spawn_egg" />
-      <itemvariant extradata="0x6F" name="Spawn Egg, Tropicalfish" uname="minecraft:tropical_fish_spawn_egg" />
+      <itemvariant extradata="0x6F" name="Spawn Egg, Tropical Fish" uname="minecraft:tropical_fish_spawn_egg" />
       <itemvariant extradata="0x70" name="Spawn Egg, Cod" uname="minecraft:cod_spawn_egg" />
       <itemvariant extradata="0x71" name="Spawn Egg, Panda" uname="minecraft:panda_spawn_egg" />
       <itemvariant extradata="0x72" name="Spawn Egg, Pillager" uname="minecraft:pillager_spawn_egg" />
-      <itemvariant extradata="0x73" name="Spawn Egg, Villager2" uname="minecraft:villager_spawn_egg" />
-      <itemvariant extradata="0x74" name="Spawn Egg, Zombie Villager2" uname="minecraft:zombie_villager_spawn_egg" /> <!-- EDU -->
+      <itemvariant extradata="0x73" name="Spawn Egg, Villager2" /><!-- duplicate uname="minecraft:villager_spawn_egg" -->
+      <itemvariant extradata="0x74" name="Spawn Egg, Zombie Villager2" /><!-- duplicate uname="minecraft:zombie_villager_spawn_egg" -->
       <itemvariant extradata="0x76" name="Spawn Egg, Wandering Trader" uname="minecraft:wandering_trader_spawn_egg" />
       <itemvariant extradata="0x79" name="Spawn Egg, Fox" uname="minecraft:fox_spawn_egg" />
       <itemvariant extradata="0x7A" name="Spawn Egg, Bee" uname="minecraft:bee_spawn_egg" />
