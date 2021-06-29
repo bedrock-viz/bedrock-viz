@@ -16,6 +16,7 @@ v0.1.4 - 2021.07.04
   - new utility to parse the xml data, check for conflicting colors and write out a legend file
   - local config files now actually work the way the docs said they did!
   - Barrels are recognized as containers
+  - item variants are now registered by uname so they can be found if that's all that is available from the db
 - Fixes in this release from:
   - [cabbey](https://github.com/cabbey)
   - [geoffholden](https://github.com/geoffholden) (first time contributor)
