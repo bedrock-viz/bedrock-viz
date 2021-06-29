@@ -2,12 +2,45 @@
 
 ## Repo Info
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
-- Maintained by   : [jasper-wan](https://github.com/jasper-wan)
+- Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
-- Latest highlight: Nether update (1.16) support and numerous bug fixes
-- Latest release  : 0.1.2
+- Latest highlight: Caves & Cliffs: Blocks & Items; and tooling to make life easier
+- Latest release  : 0.1.4
 
 ## bedrock_viz changelog
+
+v0.1.4 - 2021.07.04
+- Viewer changes
+  - Barrels are now an option to display in the Objects menu, with full inventory.
+- Parser changes
+  - new utility to parse the xml data, check for conflicting colors and write out a legend file
+  - local config files now actually work the way the docs said they did!
+  - Barrels are recognized as containers
+- Fixes in this release from:
+  - [cabbey](https://github.com/cabbey)
+  - [geoffholden](https://github.com/geoffholden) (first time contributor)
+
+v0.1.3 - 2021.01.01
+
+- Viewer changes
+  - Extraneous comments from template removed from generated HTML
+  - Signs that don't use all 4 lines of text no longer break object display
+  - Embedded images for chests fixed
+  - Villagers and Pillagers should now both show in the mob menu correctly
+  - Mob menu should fit on screen better
+- Parser changes
+  - Command line options which take a Dimension ID now accept a list of them
+  - Tiled output is now the default, an option for non-tiled is available
+  - Extensive updates to known blocks: consistent names, missing ids, unique colors
+  - More Nether updates: Netherite Items are now recognized, added missing Nether Block variants
+- Housekeeping
+  - Improvements to the release processing scripts and source control
+  - A lot of re-structuring of the codebase has happened to make it more developer friendly
+- Fixes in this release from:
+  - [jasper-wan](https://github.com/jasper-wan)
+  - [paulgrahek](https://github.com/paulgrahek)
+  - [cabbey](https://github.com/cabbey) (first time contributor, new dev team member)
+  - [hoersten](https://github.com/hoersten) (first time contributor)
 
 v0.1.2 - 2020.06.28
 
