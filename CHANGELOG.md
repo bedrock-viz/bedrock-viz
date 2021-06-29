@@ -4,7 +4,7 @@
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
 - Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
-- Latest highlight: Caves & Cliffs; Blocks & Items, and tooling to make that easier
+- Latest highlight: Caves & Cliffs: Blocks & Items; and tooling to make life easier
 - Latest release  : 0.1.4
 
 ## bedrock_viz changelog
@@ -12,6 +12,7 @@
 v0.1.4 - 2021.07.04
 - Parser changes
   - new utility to parse the xml data, check for conflicting colors and write out a legend file
+  - local config files now actually work the way the docs said they did!
 - Fixes in this release from:
   - [cabbey](https://github.com/cabbey)
 
