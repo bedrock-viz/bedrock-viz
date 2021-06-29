@@ -1,0 +1,1 @@
+This folder contains utility programs for maintaining the source code of Bedrock Viz.

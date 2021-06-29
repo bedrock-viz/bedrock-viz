@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdint>
 
+#include "util.h"
+
 namespace mcpe_viz {
 
     class Named {
@@ -29,6 +31,8 @@ namespace mcpe_viz {
 
         [[nodiscard]]
         bool is_color_set() const { return this->is_color_set_; }
+
+        int32_t colorAsLocalInt() const { return local_be32toh(this->color_); }
     };
 
     class WithId {
