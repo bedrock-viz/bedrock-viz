@@ -226,9 +226,9 @@ using namespace boost::program_options;
 
 namespace mcpe_viz {
 
-    int32_t doParseConfigFile(const std::string& fn) {
+    bool doParseConfigFile(const std::string& fn) {
         if (!file_exists(fn)) {
-            return -1;
+            return false;
         }
 
         // todo - this should use streams
@@ -239,7 +239,7 @@ namespace mcpe_viz {
         FILE* fp = fopen(fn.c_str(), "r");
         if (!fp) {
             log::error("Failed to open file ({}) error={} ({})", fn, strerror(errno), errno);
-            return 1;
+            return false;
         }
         log::info("Loading config from ({})", fn);
 
@@ -337,55 +337,66 @@ namespace mcpe_viz {
         }
 
         fclose(fp);
-        return 0;
+        return true;
     }
 
-
-    int32_t loadConfigFile() {
-        // parse cfg files in this order:
-        // -- option specified on command-line
+    bool searchForAndLoadConfigFile(const char* fileName) {
+        // parse cfg files in this order, first found wins:
         // -- home dir
         // -- userprofile dir
-        // -- local dir
-        std::string configFile;
-
-        // as specified on cmdline
-        if (!control.fnCfg.empty())
-        {
-            if (doParseConfigFile(control.fnCfg) == 0)
-                configFile = control.fnCfg;
-        }
+        // -- local data dir
 
         // default config file from home
-        if (configFile.empty() && getenv("HOME")) {
+        if (getenv("HOME")) {
             std::string fnHome = getenv("HOME");
-            fnHome += "/.bedrock_viz.cfg";
-            if (doParseConfigFile(fnHome) == 0)
-                configFile = fnHome;
+            fnHome += "/.";
+            fnHome += fileName;
+            if (doParseConfigFile(fnHome))
+                return true;
         }
 
         // default config file from profile directory
-        if (configFile.empty() && getenv("USERPROFILE")) {
+        if (getenv("USERPROFILE")) {
             std::string fnHome = getenv("USERPROFILE");
-            fnHome += "/.bedrock_viz.cfg";
-            if (doParseConfigFile(fnHome) == 0)
-                configFile = fnHome;
+            fnHome += "/.";
+            fnHome += fileName;
+            if (doParseConfigFile(fnHome))
+                return true;
         }
 
         // local data dir
-        if (configFile.empty() && doParseConfigFile(data_path("bedrock_viz.cfg").generic_string()) == 0)
-            configFile = data_path("bedrock_viz.cfg").generic_string();
+        if (doParseConfigFile(data_path(fileName).generic_string()))
+            return true;
 
-        if (configFile.empty())
-        {
-            log::error("Could not find a valid config file to load");
-            return -1;
-        }
-        else
-            return 0;
+        return false;
     }
 
-	std::vector<int> parseDimIdOptArgs(const std::vector<std::string>& dimIdStrings) {
+    void loadConfigFiles() {
+        // as specified on cmdline
+        if (!control.fnCfg.empty())
+        {
+            if (doParseConfigFile(control.fnCfg)) {
+                return; // the file the user asked for was loaded, we're done here
+            }
+        }
+
+        bool nothingLoaded = true;
+
+        // search first for the base file
+        if (!searchForAndLoadConfigFile("bedrock_viz.cfg")) {
+            nothingLoaded = false;
+            log::error("Could not find main config file to load");
+        }
+
+        // search second for the local override file
+        if (!searchForAndLoadConfigFile("bedrock_viz.local.cfg")) {
+            if (nothingLoaded) {
+                log::error("Could not find any config files, visualization expected to be useless");
+            }
+        }
+    }
+
+    std::vector<int> parseDimIdOptArgs(const std::vector<std::string>& dimIdStrings) {
 		std::vector<int> dimIds;
 		for (auto dimIdStr : dimIdStrings) {
 			int32_t did = std::stoi(dimIdStr);
@@ -910,7 +921,7 @@ int main(int argc, char** argv)
         }
     }
     
-    loadConfigFile();
+    loadConfigFiles();
     
     world->init();
     world->dbOpen(std::string(mcpe_viz::control.dirLeveldb));
