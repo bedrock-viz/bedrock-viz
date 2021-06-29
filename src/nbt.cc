@@ -2031,32 +2031,19 @@ namespace mcpe_viz
             if (tc.has_key("id", nbt::tag_type::String)) {
                 tileEntity->id = tc["id"].as<nbt::tag_string>().get();
 
-                if (false) {
-                }
-                else if (tileEntity->id == "Sign") {
+                if (tileEntity->id == "Sign") {
                     tileEntity->addSign(tc);
                     parseFlag = true;
                 }
                 else if (tileEntity->id == "Chest") {
                     if (tc.has_key("Items", nbt::tag_type::List)) {
                         tileEntity->containerFlag = true;
-                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                        for (const auto& iter : items) {
-                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                            tileEntity->addItem(iitem);
-                        }
-
                         parseFlag = true;
                     }
                 }
                 else if (tileEntity->id == "EnderChest") {
                     if (tc.has_key("Items", nbt::tag_type::List)) {
                         tileEntity->containerFlag = true;
-                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                        for (const auto& iter : items) {
-                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                            tileEntity->addItem(iitem);
-                        }
                         tileEntity->addNote("Ender Chest contents are only listed in Player entities (click Player in 'Passive Mobs')");
                         parseFlag = true;
                     }
@@ -2065,11 +2052,6 @@ namespace mcpe_viz
                 else if (tileEntity->id == "ShulkerBox") {
                     if (tc.has_key("Items", nbt::tag_type::List)) {
                         tileEntity->containerFlag = true;
-                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                        for (const auto& iter : items) {
-                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                            tileEntity->addItem(iitem);
-                        }
                         parseFlag = true;
                     }
                 }
@@ -2128,11 +2110,6 @@ namespace mcpe_viz
                     // todo - has a LIST of items in the hopper; 'TransferCooldown'
                     if (tc.has_key("Items", nbt::tag_type::List)) {
                         tileEntity->containerFlag = true;
-                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                        for (const auto& iter : items) {
-                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                            tileEntity->addItem(iitem);
-                        }
                         parseFlag = true;
                     }
                 }
@@ -2142,12 +2119,7 @@ namespace mcpe_viz
                     // todo - has a LIST of items in the dropper
                     if (tc.has_key("Items", nbt::tag_type::List)) {
                         tileEntity->containerFlag = true;
-                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                        for (const auto& iter : items) {
-                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                            tileEntity->addItem(iitem);
-                        }
-                        parseFlag = true;
+                         parseFlag = true;
                     }
                 }
                 else if (tileEntity->id == "Dispenser") {
@@ -2156,11 +2128,6 @@ namespace mcpe_viz
                     // todo - has a LIST of items in the dispenser
                     if (tc.has_key("Items", nbt::tag_type::List)) {
                         tileEntity->containerFlag = true;
-                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                        for (const auto& iter : items) {
-                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                            tileEntity->addItem(iitem);
-                        }
                         parseFlag = true;
                     }
                 }
@@ -2207,11 +2174,6 @@ namespace mcpe_viz
                 else if (tileEntity->id == "Barrel") {
                     if (tc.has_key("Items", nbt::tag_type::List)) {
                         tileEntity->containerFlag = true;
-                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                        for (const auto& iter : items) {
-                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                            tileEntity->addItem(iitem);
-                        }
                         parseFlag = true;
                     }
                 }
@@ -2219,6 +2181,15 @@ namespace mcpe_viz
                 else {
                     log::debug("Unknown tileEntity id=({})", tileEntity->id);
                 }
+
+                if (tileEntity->containerFlag) {
+                    nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
+                    for (const auto& iter : items) {
+                        nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
+                        tileEntity->addItem(iitem);
+                    }
+                }
+
             }
 
             if (parseFlag) {
