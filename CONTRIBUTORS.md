@@ -5,6 +5,11 @@
   * Primary contributor
   * leveldb memory leak fix
 
+* [cabbey](https://github.com/cabbey)
+
+  * block and item id wrangler
+  * occasional release engineer
+  
 * [DazWorrall](https://github.com/DazWorrall)
 
   * Primary contributor
@@ -33,3 +38,4 @@
   * help docs
   * bug fixes
   * viewer updates
+  
