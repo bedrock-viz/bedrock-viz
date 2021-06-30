@@ -2615,7 +2615,7 @@ namespace mcpe_viz
             return 0;
         }
 
-        std::string toGeoJSON(std::map<int64_t, std::shared_ptr<PlayerInfo>> playerMap)
+        std::string toGeoJSON(MyNbtPlayerMap &playerMap)
         {
             std::vector<std::string> list;
             std::vector<std::string> templist;
@@ -2924,7 +2924,11 @@ namespace mcpe_viz
     };
     typedef std::vector< std::unique_ptr<ParsedVillage> > ParsedVillageList;
 
-    int32_t parseNbt_village(MyNbtTagList &info_tags, MyNbtTagList &player_tags, MyNbtTagList &dweller_tags, MyNbtTagList &poi_tags, std::map<int64_t, std::shared_ptr<PlayerInfo>> playerMap) {
+    int32_t parseNbt_village(MyNbtTagList &info_tags,
+                             MyNbtTagList &player_tags,
+                             MyNbtTagList &dweller_tags,
+                             MyNbtTagList &poi_tags,
+                             MyNbtPlayerMap &playerMap) {
         std::unique_ptr<ParsedVillageInfo> village(new ParsedVillageInfo());
         village->clear();
 
