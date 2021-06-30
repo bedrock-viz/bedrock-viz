@@ -3,16 +3,16 @@
     maintained by   : https://github.com/jasper-wan
     contributions by: https://github.com/paulgrahek, https://github.com/tomnolan, https://github.com/bazfp, https://github.com/DazWorrall
     forked from     : https://github.com/Plethora777/mcpe_viz
-  
+
 
   todobig
 
   * tiling - see test-xyz* dirs for code; BUT tiling breaks the elevation overlay
   -- it appears that since we fake the Z in tiles that we always get resolution=1 data in the shade() function.  Sigh.
 
-  * introduce layers -- e.g. rail; leaves; water -- that can be toggled on/off.  could be quite cool.  
+  * introduce layers -- e.g. rail; leaves; water -- that can be toggled on/off.  could be quite cool.
   -- requires re-think of bedrock_viz program -- need to produce a base layer (solid blocks) and then overlay layers with other things (e.g. rail; leaves; water; torches: etc)
-  -- how to prioritize layers? hmmm... 
+  -- how to prioritize layers? hmmm...
   -- ideas for layers:
   - trees: leaves; saplings; vines; cocoa; wood that is up/down?
   - rails: all types
@@ -38,22 +38,18 @@
   * todobig -- Chrome appears to be demented about serving local files.  You get CORS errors.  Not at all clear that this can be resolved w/o really ugly workarounds (e.g. disabling chrome security); This could be the case with MS Edge on win10 also.
   -- http://stackoverflow.com/questions/3102819/disable-same-origin-policy-in-chrome
   -- https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en
-  
+
   * some mods in test-all2 -- combine raw layer + regular layer selector; experiments w/ multilevel dropdown for mobs
 
   * goto X -- e.g. Player; World Origin; World Spawn; Player Spawn; etc
 
   * improve measure tools ui
 
-  * improve the ui - it's sorta clunky :)
-
   * some reporting of details in geojson -- counts of different items?
 
   * idea from /u/sturace -- filter by pixel value (e.g. show only oak trees)
 
   * when in raw layer mode, auto load layer before/after the layer that gets loaded? (improve perceived speed)
-
-  * how to get navbar + popovers in full screen?
 
   * web: why does click on feature not always work?
 
@@ -63,30 +59,42 @@
 
   * rewrite/adapt to use the google closure tools?
 
-  */
+  * front-end code relies heavily on global scope, and is a bit of a mess. Moving a lot of the map controls off to their own files
+    helped, but there is still a lot of restructuring that could be done here to make the js easier to work on and less fragile.
+    It could also use a brush up using modern JS, the practices in here are kind of old-school.
+  -- All the functions declared with "var" in front are hoisted to the "top" when the code runs, there's no reason, in this file, to
+     declare them that way; they'll act the same as a regularly-declared function since we're operating in the global scope.
+  -- There are "var" variables all through the file that are global in scope, this makes the scope conceptually even more confusing since you
+     can't easily look at the top of the file and see everything that's available. These things should be moved up, or better yet,
+     encapsulated in relevant scope objects with a public API so they're protected from detrimental modification.
+  -- One chunk of code I see that could clearly should be split off is the shading
+  -- Another chunk to get encapsulated should be the map state and interactions with the OL API
+  -- This author (cmbkla) recommends against adding any further frameworks. Between jQuery and Bootstrap, this is ok and
+     vanilla JS can get the rest. It may even be worth considering, for performance, REMOVING Bootstrap. Accordions and modals aren't worth the
+     weight and file size since they are very, very easy to build with just jQuery and modern CSS.
+  -- One exception to the above is SCSS -- it would clean up the stylesheet situation a little to be able to use variables for colors and
+     theme. Could easily implement a dark mode after converting to SCSS! It doesn't add to the run weight, but does add a build step to transpile.
 
+  * do a separate geojson file for nether + overworld?
 
-/*
-  todo - interesting openlayers examples:
+  * it might be cool to use ONE projection for both overworld and nether -- nether would auto-adjust?
 
-  color manipulation -- color space conversion funcs
-  http://openlayers.org/en/v3.11.0/examples/color-manipulation.html
+  * when there are multiple "tabbed" areas on a popover (such as on a player info box), they are not independent.
 
-  vector icons
-  http://openlayers.org/en/v3.9.0/examples/icon.html
+  * interesting openlayers examples:
+        color manipulation -- color space conversion funcs
+        http://openlayers.org/en/v3.11.0/examples/color-manipulation.html
 
-  nav controls
-  http://openlayers.org/en/v3.9.0/examples/navigation-controls.html
+        vector icons
+        http://openlayers.org/en/v3.9.0/examples/icon.html
 
-  overview map
-  http://openlayers.org/en/v3.9.0/examples/overviewmap.html
-  http://openlayers.org/en/v3.9.0/examples/overviewmap-custom.html
+        nav controls
+        http://openlayers.org/en/v3.9.0/examples/navigation-controls.html
+
+        overview map
+        http://openlayers.org/en/v3.9.0/examples/overviewmap.html
+        http://openlayers.org/en/v3.9.0/examples/overviewmap-custom.html
 */
-
-// todo - do a separate geojson file for nether + overworld?
-
-// todo - it might be cool to use ONE projection for both overworld and nether -- nether would auto-adjust?
-
 
 'use strict';
 
@@ -96,12 +104,22 @@ var popover = null;
 var globalMousePosition = null;
 var pixelData = null, pixelDataName = '';
 
-var layerRawIndex = 63;
+var layerRawIndex = 102;
 var layerMain = null, srcLayerMain = null;
 var layerSlimeChunks = null, srcLayerSlimeChunks = null;
 
+var elevationAlphaOpacity = 60;
+var elevationStaticOpacity = 30;
+var shadeOpacity = 30;
+
 var measureControl = null;
 var mousePositionControl = null;
+var playersControl = null;
+var helpControl = null;
+var optionsControl = null;
+var layersControl = null;
+var sidebarControl = null;
+var viewModeControl = null;
 
 var globalDimensionId = -1;
 var globalLayerMode = 0, globalLayerId = 0;
@@ -128,6 +146,8 @@ var showNetherCoordinatesFlag = false;
 
 var doCheckPlayerDistanceFlag = false;
 
+var globalAboutMessage;
+
 // this removes the hideous blurriness when zoomed in
 var setCanvasSmoothingMode = function(evt) {
     evt.context.mozImageSmoothingEnabled = false;
@@ -135,18 +155,18 @@ var setCanvasSmoothingMode = function(evt) {
     evt.context.msImageSmoothingEnabled = false;
     evt.context.imageSmoothingEnabled = false;
 };
+
 var resetCanvasSmoothingMode = function(evt) {
     evt.context.mozImageSmoothingEnabled = true;
     evt.context.webkitImageSmoothingEnabled = true;
     evt.context.msImageSmoothingEnabled = true;
     evt.context.imageSmoothingEnabled = true;
 };
+
 var disableLayerSmoothing = function(layer) {
     layer.on('precompose', setCanvasSmoothingMode);
     layer.on('postcompose', resetCanvasSmoothingMode);
 };
-
-
 
 function map_addLayer(layer) {
     var a = map.getLayers();
@@ -163,7 +183,7 @@ function map_addLayer(layer) {
     // 210 map.addLayer(layerSlimeChunks);
     // 300 map.addLayer(vectorPoints);
     // 400 map.addLayer(layerDraw);
-    
+
     var layerStackOrder = +layer.get('myStackOrder');
     a.forEach( function (el, index, arr) {
         var elStackOrder = +el.get('myStackOrder');
@@ -186,471 +206,12 @@ function map_addLayer(layer) {
     }
 }
 
-
-
-/**
- * @constructor
- * @param {ol.Map} xmap
- */
-var MeasureTool = function(xmap) {
-
-    var this_ = this;
-
-    var map = xmap;
-
-    var sourceDraw = null;
-    var layerDraw = null;
-    var overlays = [];
-
-
-    /**
-     * Currently drawn feature.
-     * @type {ol.Feature}
-     */
-    var sketch;
-
-
-    /**
-     * The help tooltip element.
-     * @type {Element}
-     */
-    var helpTooltipElement;
-
-
-    /**
-     * Overlay to show the help messages.
-     * @type {ol.Overlay}
-     */
-    var helpTooltip;
-
-
-    /**
-     * The measure tooltip element.
-     * @type {Element}
-     */
-    var measureTooltipElement;
-
-
-    /**
-     * Overlay to show the measurement.
-     * @type {ol.Overlay}
-     */
-    var measureTooltip;
-
-
-    /**
-     * Handle pointer move.
-     * @param {ol.MapBrowserEvent} evt
-     */
-    var pointerMoveHandler = function(evt) {
-        if (evt.dragging) {
-            return;
-        }
-        /** @type {string} */
-        var helpMsg = 'Click to start drawing; Press ESC to quit measurement mode';
-
-        if (sketch) {
-            var geom = (sketch.getGeometry());
-            if (geom instanceof ol.geom.Polygon) {
-                helpMsg = 'Click to continue drawing the polygon; Double Click to complete';
-            } else if (geom instanceof ol.geom.LineString) {
-                helpMsg = 'Click to continue drawing the line; Double Click to complete';
-            } else if (geom instanceof ol.geom.Circle) {
-                helpMsg = 'Click to complete circle';
-            }
-        }
-
-        helpTooltipElement.innerHTML = helpMsg;
-        helpTooltip.setPosition(evt.coordinate);
-
-        $(helpTooltipElement).removeClass('hidden');
-    };
-
-    var hideHelpTooltip = function() {
-        $(helpTooltipElement).addClass('hidden');
-    };
-
-    /**
-     * format length output
-     * @param {ol.geom.LineString} line
-     * @return {string}
-     */
-    var formatLength = function(line) {
-        var length = Math.round(line.getLength() * 100) / 100;
-
-        var output;
-        if (length > 1000) {
-            output = (Math.round(length / 1000 * 100) / 100) +
-                ' ' + 'km';
-        } else {
-            output = (Math.round(length * 100) / 100) +
-                ' ' + 'm';
-        }
-        return output;
-    };
-
-
-    /**
-     * format circle radius output
-     * @param {ol.geom.Circle} circle
-     * @return {string}
-     */
-    var formatRadius = function(circle) {
-        var length = Math.round(circle.getRadius() * 100) / 100;
-
-        var output;
-        if (length > 1000) {
-            output = (Math.round(length / 1000 * 100) / 100) +
-                ' ' + 'km';
-        } else {
-            output = (Math.round(length * 100) / 100) +
-                ' ' + 'm';
-        }
-        return output;
-    };
-
-
-    /**
-     * format length output
-     * @param {ol.geom.Polygon} polygon
-     * @return {string}
-     */
-    var formatArea = function(polygon) {
-        var area = polygon.getArea();
-
-        var output;
-        if (area > 10000) {
-            output = (Math.round(area / 1000000 * 100) / 100) +
-                ' ' + 'km<sup>2</sup>';
-        } else {
-            output = (Math.round(area * 100) / 100) +
-                ' ' + 'm<sup>2</sup>';
-        }
-        return output;
-    };
-
-
-    /**
-     * Creates a new help tooltip
-     */
-    var createHelpTooltip = function() {
-        if (helpTooltipElement) {
-            helpTooltipElement.parentNode.removeChild(helpTooltipElement);
-        }
-        helpTooltipElement = document.createElement('div');
-        helpTooltipElement.className = 'measureTooltip hidden';
-        helpTooltip = new ol.Overlay({
-            element: helpTooltipElement,
-            offset: [15, 0],
-            positioning: 'center-left'
-        });
-        overlays.push(helpTooltip);
-        map.addOverlay(helpTooltip);
-    };
-
-
-    /**
-     * Creates a new measure tooltip
-     */
-    var createMeasureTooltip = function() {
-        if (measureTooltipElement) {
-            measureTooltipElement.parentNode.removeChild(measureTooltipElement);
-        }
-        measureTooltipElement = document.createElement('div');
-        measureTooltipElement.className = 'measureTooltip measureTooltip-measure';
-        measureTooltip = new ol.Overlay({
-            element: measureTooltipElement,
-            offset: [0, -15],
-            positioning: 'bottom-center'
-        });
-        overlays.push(measureTooltip);
-        map.addOverlay(measureTooltip);
-    };
-
-
-    var drawType = 'LineString';
-
-    var draw;
-
-    var createInteraction = function() {
-        draw = new ol.interaction.Draw({
-            source: sourceDraw,
-            type: /** @type {ol.geom.GeometryType} */ (drawType)
-            /*
-              style: new ol.style.Style({
-              fill: new ol.style.Fill({
-              color: 'rgba(255, 255, 255, 0.2)'
-              }),
-              stroke: new ol.style.Stroke({
-              color: 'rgba(0, 0, 0, 0.5)',
-              lineDash: [3, 3],
-              width: 2
-              }),
-              image: new ol.style.Circle({
-              radius: 5,
-              stroke: new ol.style.Stroke({
-              color: 'rgba(0, 0, 0, 0.7)'
-              }),
-              fill: new ol.style.Fill({
-              color: 'rgba(255, 255, 255, 0.2)'
-              })
-              })
-              })
-            */
-        });
-        map.addInteraction(draw);
-        
-        createMeasureTooltip();
-        createHelpTooltip();
-
-        var listener;
-        draw.on('drawstart',
-                function(evt) {
-                    // set sketch
-                    sketch = evt.feature;
-                    
-                    /** @type {ol.Coordinate|undefined} */
-                    var tooltipCoord = evt.coordinate;
-
-                    listener = sketch.getGeometry().on('change', function(evt) {
-                        var geom = evt.target;
-                        var output;
-                        if (geom instanceof ol.geom.Polygon) {
-                            output = formatArea(/** @type {ol.geom.Polygon} */ (geom));
-                            tooltipCoord = geom.getInteriorPoint().getCoordinates();
-                        } else if (geom instanceof ol.geom.LineString) {
-                            output = formatLength( /** @type {ol.geom.LineString} */ (geom));
-                            tooltipCoord = geom.getLastCoordinate();
-                            // we move the coordinate slightly (this avoids the "not able to continue line" problem)
-                            var res = map.getView().getResolution() * 1.5;
-                            tooltipCoord[0] += res;
-                            tooltipCoord[1] += res;
-                        } else if (geom instanceof ol.geom.Circle) {
-                            output = formatRadius( /** @type {ol.geom.Circle} */ (geom));
-                            tooltipCoord = geom.getLastCoordinate();
-                        } else {
-                            //console.log("unknown geom type in sketch listener");
-                        }
-                        measureTooltipElement.innerHTML = output;
-                        measureTooltip.setPosition(tooltipCoord);
-                    }, this_);
-                }, this_);
-        draw.on('drawend',
-                function(evt) {
-                    measureTooltipElement.className = 'measureTooltip measureTooltip-static';
-                    measureTooltip.setOffset([0, -7]);
-                    // unset sketch
-                    sketch = null;
-                    // unset tooltip so that a new one can be created
-                    measureTooltipElement = null;
-                    createMeasureTooltip();
-                    ol.Observable.unByKey(listener);
-                    return true;
-                }, this_);
-    };
-    
-
-    /**
-     * Let user change the geometry type.
-     * @param {string} dt LineString, Circle, etc
-     */
-    this.setDrawTypeReal = function(dt) {
-        sketch = null;
-        drawType = dt;
-        map.removeInteraction(draw);
-        createInteraction();
-    };
-
-
-    var updateState = function() {
-        if ( this_.enabled ) {
-            sourceDraw = new ol.source.Vector();
-            var width = 3;
-            var color = '#f22929';
-            layerDraw = new ol.layer.Vector({
-                myStackOrder: 400,
-                source: sourceDraw,
-                style: [ 
-                    new ol.style.Style({
-                        fill: new ol.style.Fill({
-                            color: 'rgba(255, 255, 255, 0.2)'
-                        }),
-                        stroke: new ol.style.Stroke({ color: '#ffffff', width: width + 2 }),
-                        image: new ol.style.Circle({
-                            radius: 7,
-                            fill: new ol.style.Fill({
-                                color: color
-                            })
-                        })
-                    }),
-                    new ol.style.Style({
-                        stroke: new ol.style.Stroke({ color: color, width: width })
-                    })
-                ]
-            });
-            map_addLayer(layerDraw);
-            map.on('pointermove', pointerMoveHandler);
-            $(map.getViewport()).on('mouseout', hideHelpTooltip);
-            createInteraction();
-        } else {
-            map.removeLayer(layerDraw);
-            map.un('pointermove', pointerMoveHandler);
-            $(map.getViewport()).off('mouseout', hideHelpTooltip);      
-            map.removeInteraction(draw);
-            map.removeOverlay(helpTooltip);
-            map.removeOverlay(measureTooltip);
-            // destroy objects so that they are removed from map
-            draw = null;
-            layerDraw = null;
-            sourceDraw = null;
-            for (var i in overlays) {
-                map.removeOverlay(overlays[i]);
-                overlays[i] = null;
-            }
-            overlays = [];
-        }
-    };
-
-    this.toggleEnable = function() {
-        this_.enabled = !this_.enabled;
-        updateState();
-    };
-
-    this.forceStart = function() {
-        this_.enabled = true;
-        updateState();
-    };
-    
-    this.forceStop = function() {
-        this_.enabled = false;
-        updateState();
-    };
-
-};
-
-
-/**
- * @param {string} dt draw type (e.g. "LineString", "Circle", etc)
- */
-MeasureTool.prototype.setDrawType = function(dt) {
-    this.setDrawTypeReal(dt);
-};
-
-
-/**
- * @return {boolean} true if measure control is active
- */
-MeasureTool.prototype.isEnabled = function() {
-    //console.log('mt enabled = ' + this.enabled);
-    return this.enabled;
-};
-
-
-
-/**
- * @constructor
- * @extends {ol.control.Control}
- * @param {Object=} opt_options Control options.
- */
-var MeasureControl = function(opt_options) {
-    
-    var options = opt_options || {};
-
-    //this.enabled = false;
-
-    var this_ = this;
-
-    this.measureTool = null;
-
-    var setDrawType = function(dt) { 
-        this_.measureTool.setDrawType(dt);
-    };
-
-    this.handleMeasure = function(e) {
-        if ( this_.measureTool === null ) {
-            this_.measureTool = new MeasureTool(this_.getMap());
-        }
-        this_.measureTool.toggleEnable();
-        if (this_.measureTool.isEnabled()) {
-            $('.measureSubcontrol').show();
-        } else {
-            $('.measureSubcontrol').hide();
-        }
-    };
-    
-    var button = document.createElement('button');
-    button.innerHTML = 'M';
-    button.addEventListener('click', this.handleMeasure, false);
-    button.addEventListener('touchstart', this.handleMeasure, false);
-    $(button).addClass('mytooltip inline-block').attr('title', 'Measurement Tools - Press ESC to quit');
-    
-    var btnLine = document.createElement('button');
-    btnLine.innerHTML = 'L';
-    btnLine.addEventListener('click', function() { setDrawType('LineString'); }, false);
-    btnLine.addEventListener('touchstart', function() { setDrawType('LineString'); }, false);
-    $(btnLine).addClass('mytooltip measureSubcontrol inline-block').attr('title', 'Lines - Hotkey L').hide();
-    
-    var btnCircle = document.createElement('button');
-    btnCircle.innerHTML = 'C';
-    btnCircle.addEventListener('click', function() { setDrawType('Circle'); }, false);
-    btnCircle.addEventListener('touchstart', function() { setDrawType('Circle'); }, false);
-    $(btnCircle).addClass('mytooltip measureSubcontrol inline-block').attr('title', 'Circles - Hotkey C').hide();
-    
-    var element = document.createElement('div');
-    element.className = 'measure ol-unselectable ol-control';
-    element.appendChild(button);
-    element.appendChild(btnLine);
-    element.appendChild(btnCircle);
-    
-    ol.control.Control.call(this, {
-        element: element,
-        target: options.target
-    });
-
-};
-ol.inherits(MeasureControl, ol.control.Control);
-
-
-/**
- * @return {boolean} true if measure control is active
- */
-MeasureControl.prototype.isEnabled = function() {
-    if ( this.measureTool !== null ) {
-        return this.measureTool.isEnabled();
-    }
-    return false;
-};
-
-
-/**
- * force measurement control to stop
- */
-MeasureControl.prototype.forceStop = function() {
-    if ( this.isEnabled() ) {
-        this.handleMeasure();
-    }
-};
-
-
-/**
- * force measurement tool to start and be in a particular drawing mode
- * @param {string} dt drawing type
- */
-MeasureControl.prototype.forceDrawType = function(dt) {
-    if ( ! this.isEnabled() ) {
-        this.handleMeasure();
-    }
-    this.measureTool.setDrawType(dt);
-};
-
-
-
 function doGlobalQuit() {
     // user has pressed ESC - we want to quit any special modes
     if (measureControl.isEnabled()) {
         measureControl.forceStop();
     }
-    
+
     // make popover disappear
     var element = popover.getElement();
     $(element).popover('destroy');
@@ -660,16 +221,19 @@ function doGlobalQuit() {
     $('.mytooltip').tooltip('hide');
 
     // clear village doors
-    srcVillageVectorPoints.clear();
+    if (srcVillageVectorPoints) {
+        srcVillageVectorPoints.clear();
+    }
 
     // todo - others?
 }
 
+// todo move globals to top
 var loadEventCount = 0;
 function updateLoadEventCount(delta) {
     loadEventCount += delta;
     if (loadEventCount < 0) { loadEventCount = 0; }
-    
+
     if (loadEventCount > 0) {
         var pos = $('#map').offset();
         var x1 = pos.left + 70;
@@ -677,7 +241,7 @@ function updateLoadEventCount(delta) {
         $('#throbber')
             .css({ position: 'absolute', left: x1, top: y1 })
             .show();
-        
+
         var a = [];
         if (loadEventCount > 0) {
             a.push('Layers remaining: ' + loadEventCount);
@@ -697,11 +261,11 @@ function doParsedItem(obj, sortFlag) {
         } else {
             var s = '';
             var fnimg = 'images/unknown.png';
-            
+
             if ( obj[j].imgid !== undefined ) {
                 fnimg = imageIconLUT['' + obj[j].imgid];
             }
-            
+
             var title = obj[j].Name;
             if (obj[j].Enchantments !== undefined) {
                 var ench = obj[j].Enchantments;
@@ -722,7 +286,7 @@ function doParsedItem(obj, sortFlag) {
             }
             // debug
             //title += ' (' + fnimg + ') (' + obj[j].imgid + ')' + ' (' + j + ')';
-            
+
             s += '<div class="col-xs-1 mytooltip_dyn inventory-grid" title="' + title + '">';
             s += '<img class="pull-left inventory-item-image" height="32" width="32" src="' + fnimg + '" />';
             if (obj[j].Count !== undefined) {
@@ -789,13 +353,13 @@ function doParsedItem(obj, sortFlag) {
     ret += '</ul></div></div>';
 
     ret += '</div></div>';
-    
+
     return ret;
 }
 
-
 // adapted from: http://openlayers.org/en/v3.9.0/examples/vector-layer.html
 // todo - this does not work?
+// todo move globals to top
 var highlightStyleCache = {};
 var featureOverlay = new ol.layer.Vector({
     source: new ol.source.Vector(),
@@ -864,7 +428,12 @@ function correctGeoJSONName(feature) {
     else if (name == 'Dropped item') {
         // rename dropped item so that it is visible in map
         var props = feature.getProperties();
-        name = 'Drop: ' + props.Item.Name;
+        if (!props.Item) {
+            console.warn('Dropped Item with no Item', feature, props);
+            name = 'Drop: Unknown Item';
+        } else {
+            name = 'Drop: ' + props.Item.Name;
+        }
         // todo - highlight interesting drops? e.g. armor / weapons (i.e. indication of a player death spot)
     }
     else if (name == 'SignNonBlank' || name == 'SignBlank') {
@@ -917,9 +486,10 @@ function doParsedDoors(doors) {
     return a.join('<br/>');
 }
 
+// todo not sure why this function needs to return a 0 Consider true/false.
 function doFeaturePopover(features, id, coordinate) {
     var feature = features[id];
-    
+
     var element = popover.getElement();
     // todo - is this too broad?
     $('.mytooltip_dyn').tooltip('hide');
@@ -941,7 +511,7 @@ function doFeaturePopover(features, id, coordinate) {
 
         enabled = (id < (features.length - 1)) ? '' : ' disabled';
         stitle += '<a href="#" class="btn btn-primary btn-xs mytooltip_dyn featureNext' + enabled + '" title="Next"><strong>&gt;</strong></a>';
-        
+
         stitle += '</div>&nbsp;';
     }
     // mob/item title
@@ -953,15 +523,17 @@ function doFeaturePopover(features, id, coordinate) {
     stitle += '</div>';
 
     if (name === 'Village') {
-        
+
         if ( !globalWarnVillage ) {
             doModal('Villages',
-                    '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
+                '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
             globalWarnVillage = true;
         }
 
         // remove old items
-        srcVillageVectorPoints.clear();
+        if (srcVillageVectorPoints) {
+            srcVillageVectorPoints.clear();
+        }
 
         // add doors to map
         for (var d in props['Doors']) {
@@ -969,14 +541,14 @@ function doFeaturePopover(features, id, coordinate) {
 
             // adjust point to ol coordinates
             var pts = mcpeToOpenlayers(door.Pos[0], door.Pos[2], true);
-            
+
             var pt = new ol.geom.Point( pts );
 
             var feature = new ol.Feature({
                 name: 'Village Door',
                 geometry: pt
             });
-            
+
             // copy properties (for popup)
             for (var dp in door) {
                 feature.set(dp, door[dp], true);
@@ -999,7 +571,7 @@ function doFeaturePopover(features, id, coordinate) {
 
         // todobig todohere - how to remove this?! (currently only escape key will do it)
     }
-    
+
     var s = '<div class="container-fluid my-scrollable">';
 
     for (var i in props) {
@@ -1014,7 +586,7 @@ function doFeaturePopover(features, id, coordinate) {
             i !== 'id' &&
             i !== 'etype' &&
             i !== 'Dimension'
-           ) {
+        ) {
             if (typeof(props[i]) === 'object') {
                 if (i === 'Armor') {
                     var armor = props[i];
@@ -1075,7 +647,7 @@ function doFeaturePopover(features, id, coordinate) {
                 else if ( i === 'Villagers' ) {
                     s += 'Villager Count: <b>' + props[i].length + '</b><br/>';
                 }
-                
+
                 else if (i === 'Pos') {
                     // make "Pos" clickable if we have raw layers
                     s += '' + i + ': <a href="#" class="layerGoto_dyn mytooltip_dyn" data-id="' + props[i][1] + '" title="Click to go to layer">' + JSON.stringify(props[i], null, 2) + '</a><br/>';
@@ -1113,7 +685,7 @@ function doFeaturePopover(features, id, coordinate) {
     } else {
         $('a.itemsIcon').tab('show');
     }
-    
+
     $('.myTabs a').click(function (e) {
         e.preventDefault();
         globalItemStyleSelector = $(this).attr('data-id');
@@ -1131,7 +703,7 @@ function doFeaturePopover(features, id, coordinate) {
     });
 
     //todobig - would be cool to support up/down left/right as kbd accel for prev/next
-    
+
     // activate links
     // todo - seems silly that we have to do this - can't use regular ones init'ed in main func?
     $('.layerGoto_dyn').click(function() {
@@ -1143,7 +715,7 @@ function doFeaturePopover(features, id, coordinate) {
         trigger: 'hover',
         container: 'body'
     });
-    
+
     // todo - disabled because this does not appear to work
     if (false) {
         if (feature !== highlight) {
@@ -1176,7 +748,7 @@ function doFeatureSelect(features, coordinate) {
         var bstr = bp.Name + ' @ ' + (bp.Pos[1] / 255.0) + ', ' + bp.Pos[0] + ', ' + bp.Pos[2];
         return astr.localeCompare(bstr);
     });
-    
+
     var s = 'Select item:<div class="list-group my-scrollable">';
     for (var i in features) {
         var feature = features[i];
@@ -1188,7 +760,7 @@ function doFeatureSelect(features, coordinate) {
             '</a>';
     }
     s += '</div>';
-    
+
     popover.setPosition(coordinate);
     $(element).popover({
         'placement': 'auto right',
@@ -1207,9 +779,10 @@ function doFeatureSelect(features, coordinate) {
     });
 }
 
+// todo move globals to top
 var highlight;
-var displayFeatureInfo = function(evt) {
 
+var displayFeatureInfo = function(evt) {
     // we don't continue if the measure control is active
     if ( measureControl !== null ) {
         if ( measureControl.isEnabled() ) {
@@ -1229,7 +802,7 @@ var displayFeatureInfo = function(evt) {
                 addFlag = false;
             }
         }
-        if ( addFlag) { 
+        if ( addFlag) {
             features.push(feature);
         }
     });
@@ -1285,7 +858,7 @@ var getText = function(feature, resolution) {
             text = stringDivider(text, 16, '\n');
         }
     }
-    
+
     return text;
 };
 
@@ -1297,7 +870,7 @@ var createTextStyle = function(feature, resolution, textColor) {
     var offsetY = -2;
     var weight = 'bold';
     var rotation = 0;
-    
+
     // smaller font when we are zoomed out
     if ( resolution > 3 ) {
         size = '8pt';
@@ -1306,14 +879,14 @@ var createTextStyle = function(feature, resolution, textColor) {
     } else {
         size = '12pt';
     }
-    
+
     var font = weight + ' ' + size + ' Calibri,sans-serif';
     var fillColor = textColor;
     var outlineColor = '#000000';
     var outlineWidth = 3;
 
     var txt = getText(feature, resolution);
-    
+
     return new ol.style.Text({
         textAlign: align,
         textBaseline: baseline,
@@ -1328,7 +901,6 @@ var createTextStyle = function(feature, resolution, textColor) {
     });
 };
 
-
 function setLayerLoadListeners(src, fn) {
     src.on('imageloadstart', function(event) {
         updateLoadEventCount(1);
@@ -1339,10 +911,9 @@ function setLayerLoadListeners(src, fn) {
     src.on('imageloaderror', function(event) {
         updateLoadEventCount(-1);
         doModal('Image Load Error',
-                'Could not load file: ' + fn);
+            'Could not load file: ' + fn);
     });
 }
-
 
 // originally from: http://openlayers.org/en/v3.10.0/examples/shaded-relief.html
 // but that code is actually *quite* insane
@@ -1351,7 +922,6 @@ function setLayerLoadListeners(src, fn) {
 
 // todo what does this comment do? (from openlayers version)
 // NOCOMPILE
-
 
 /**
  * Generates a shaded relief image given elevation data.  Uses a 3x3
@@ -1396,19 +966,19 @@ function shade(inputs, data) {
         // notes: negative values simply reverse the sun azimuth; the range of interesting values is fairly narrow - somewhere on (0.001..0.8)
         var zFactor = (data.vert / 10.0) - 0.075;
 
-        var x0, x1, x2, 
-            y0, y1, y2, 
+        var x0, x1, x2,
+            y0, y1, y2,
             offset,
-            z0, z2, 
-            dzdx, dzdy, 
+            z0, z2,
+            dzdx, dzdy,
             slopeRad, aspectRad, hillshade, fhillshade;
 
-        /* 
+        /*
            our 3x3 grid:
            a b c
            d e f
            g h i
-           
+
            y0 is row above curr
            y1 is curr
            y2 is row below curr
@@ -1427,40 +997,40 @@ function shade(inputs, data) {
                 x2 = (x1 === maxX) ? maxX : (x1 + 1);
 
                 // z0 = a + 2d + g
-                z0 = 
-                    elevationData[(y0 * width + x0) * 4] + 
-                    elevationData[(y1 * width + x0) * 4] * 2.0 + 
+                z0 =
+                    elevationData[(y0 * width + x0) * 4] +
+                    elevationData[(y1 * width + x0) * 4] * 2.0 +
                     elevationData[(y2 * width + x0) * 4];
 
                 // z2 = c + 2f + i
-                z2 = 
-                    elevationData[(y0 * width + x2) * 4] + 
-                    elevationData[(y1 * width + x2) * 4] * 2.0 + 
+                z2 =
+                    elevationData[(y0 * width + x2) * 4] +
+                    elevationData[(y1 * width + x2) * 4] * 2.0 +
                     elevationData[(y2 * width + x2) * 4];
-                
+
                 // (7)  [dz/dx] = ((c + 2f + i) - (a + 2d + g)) / (8 * cellsize)
                 dzdx = (z2 - z0) / dp;
 
 
                 // z0 = a + 2b + c
-                z0 = 
-                    elevationData[(y0 * width + x0) * 4] + 
-                    elevationData[(y0 * width + x1) * 4] * 2.0 + 
+                z0 =
+                    elevationData[(y0 * width + x0) * 4] +
+                    elevationData[(y0 * width + x1) * 4] * 2.0 +
                     elevationData[(y0 * width + x2) * 4];
 
                 // z2 = g + 2h + i
-                z2 = 
-                    elevationData[(y2 * width + x0) * 4] + 
-                    elevationData[(y2 * width + x1) * 4] * 2.0 + 
+                z2 =
+                    elevationData[(y2 * width + x0) * 4] +
+                    elevationData[(y2 * width + x1) * 4] * 2.0 +
                     elevationData[(y2 * width + x2) * 4];
 
                 // (8)  [dz/dy] = ((g + 2h + i) - (a + 2b + c))  / (8 * cellsize)
                 dzdy = (z2 - z0) / dp;
 
-                // (9)  Slope_rad = ATAN (z_factor * sqrt ([dz/dx]2 + [dz/dy]2)) 
+                // (9)  Slope_rad = ATAN (z_factor * sqrt ([dz/dx]2 + [dz/dy]2))
                 slopeRad = Math.atan(zFactor * Math.sqrt(dzdx * dzdx + dzdy * dzdy));
 
-                if (dzdx !== 0.0) { 
+                if (dzdx !== 0.0) {
                     aspectRad = Math.atan2(dzdy, -dzdx);
 
                     if (aspectRad < 0) {
@@ -1470,7 +1040,7 @@ function shade(inputs, data) {
                 else {
                     if (dzdy > 0.0) {
                         aspectRad = halfPi;
-                    } 
+                    }
                     else if (dzdy < 0.0) {
                         aspectRad = twoPi - halfPi;
                     }
@@ -1479,8 +1049,8 @@ function shade(inputs, data) {
                         aspectRad = 0.0; // todo - this is my guess; algo notes are ambiguous
                     }
                 }
-                
-                // (1)  Hillshade = 255.0 * ((cos(Zenith_rad) * cos(Slope_rad)) + 
+
+                // (1)  Hillshade = 255.0 * ((cos(Zenith_rad) * cos(Slope_rad)) +
                 //        (sin(Zenith_rad) * sin(Slope_rad) * cos(Azimuth_rad - Aspect_rad)))
                 // Note that if the calculation of Hillshade value is < 0, the cell value will be = 0.
 
@@ -1496,7 +1066,7 @@ function shade(inputs, data) {
                 offset = (y1 * width + x1) * 4;
                 shadeData[offset] =
                     shadeData[offset + 1] =
-                    shadeData[offset + 2] = hillshade;
+                        shadeData[offset + 2] = hillshade;
                 // note: reduce the opacity for brighter parts; idea is to reduce haziness
                 shadeData[offset + 3] = 255 - (hillshade / 2);
             }
@@ -1510,18 +1080,19 @@ function shade(inputs, data) {
 
         return new ImageData(shadeData, width, height);
     } catch (e) {
-        console.log('shade() exception: ' + e.toString());
+        console.error('shade() exception: ' + e.toString());
 
         // we are probably failing because of CORS
         doModal('CORS Error',
-                'Error accessing map pixels.  Disabling elevation overlay.<br/><br/>' +
-                'Error: ' + e.toString() + '<br/><br/>' +
-                globalCORSWarning);
+            'Error accessing map pixels.  Disabling elevation overlay.<br/><br/>' +
+            'Error: ' + e.toString() + '<br/><br/>' +
+            globalCORSWarning);
         map.removeLayer(layerElevation);
     }
     // todobig - how to catch CORS issue here?
 }
 
+// todo move globals to top
 var srcLayerElevationAlpha = null, layerElevationAlpha = null;
 
 function doElevationAlpha(enableFlag) {
@@ -1543,7 +1114,7 @@ function doElevationAlpha(enableFlag) {
                 projection: projection,
                 extent: extent,
                 source: srcLayerElevationAlpha,
-                opacity: $('#elevationAlphaOpacity').val() / 100.0
+                opacity: elevationAlphaOpacity / 100.0
             });
         } else {
             srcLayerElevationAlpha = new ol.source.ImageStatic({
@@ -1555,7 +1126,7 @@ function doElevationAlpha(enableFlag) {
             });
             layerElevationAlpha = new ol.layer.Image({
                 myStackOrder: 120,
-                opacity: $('#elevationAlphaOpacity').val() / 100.0,
+                opacity: elevationAlphaOpacity / 100.0,
                 source: srcLayerElevationAlpha
             });
         }
@@ -1571,11 +1142,12 @@ function doElevationAlpha(enableFlag) {
     }
 }
 
+// todo move globals to top
 var srcLayerShadedReliefStatic = null, layerShadedReliefStatic = null;
 
 function doElevationStatic(enableFlag) {
     if (enableFlag) {
-        var fn = dimensionInfo[globalDimensionId].fnLayerShadedRelief;  
+        var fn = dimensionInfo[globalDimensionId].fnLayerShadedRelief;
         if ( useTilesFlag ) {
             srcLayerShadedReliefStatic = new ol.source.XYZ({
                 url: fn,
@@ -1592,7 +1164,7 @@ function doElevationStatic(enableFlag) {
                 projection: projection,
                 extent: extent,
                 source: srcLayerShadedReliefStatic,
-                opacity: $('#elevationStaticOpacity').val() / 100.0
+                opacity: elevationStaticOpacity / 100.0
             });
         } else {
             srcLayerShadedReliefStatic = new ol.source.ImageStatic({
@@ -1604,7 +1176,7 @@ function doElevationStatic(enableFlag) {
             });
             layerShadedReliefStatic = new ol.layer.Image({
                 myStackOrder: 100,
-                opacity: $('#elevationStaticOpacity').val() / 100.0,
+                opacity: elevationStaticOpacity / 100.0,
                 source: srcLayerShadedReliefStatic
             });
         }
@@ -1620,17 +1192,19 @@ function doElevationStatic(enableFlag) {
     }
 }
 
+// todo move globals to top
 var srcElevation = null, rasterElevation = null, layerElevation = null;
 
+// todo not sure why this function needs to return a 0/-1! Consider true/false.
 function doShadedRelief(enableFlag) {
     try {
         if (enableFlag) {
             var fn = dimensionInfo[globalDimensionId].fnLayerHeightGrayscale;
             if (fn === undefined || fn.length <= 1) {
                 doModal('CORS Error',
-                        'Data for elevation image is not available -- see README and re-run bedrock_viz<br/>' +
-                        '<br/>' +
-                        'Hint: You need to run bedrock_viz with --html-most (or --html-all)');
+                    'Data for elevation image is not available -- see README and re-run bedrock_viz<br/>' +
+                    '<br/>' +
+                    'Hint: You need to run bedrock_viz with --html-most (or --html-all)');
                 return -1;
             }
             var doInitFlag = false;
@@ -1655,7 +1229,7 @@ function doShadedRelief(enableFlag) {
 
                 layerElevation = new ol.layer.Image({
                     myStackOrder: 110,
-                    opacity: $('#shadeOpacity').val() / 100.0,
+                    opacity: shadeOpacity / 100.0,
                     source: rasterElevation
                 });
             }
@@ -1692,14 +1266,13 @@ function doShadedRelief(enableFlag) {
         }
     } catch (e) {
         doModal('CORS Error',
-                'Error accessing map pixels.<br/><br/>' +
-                'Error: ' + e.toString() + '<br/><br/>' +
-                globalCORSWarning);
+            'Error accessing map pixels.<br/><br/>' +
+            'Error: ' + e.toString() + '<br/><br/>' +
+            globalCORSWarning);
     }
     // todobig - how to catch CORS issue here?
     return 0;
 }
-
 
 function makeChunkGrid(inputs, data) {
     var srcImage = inputs[0];
@@ -1709,15 +1282,15 @@ function makeChunkGrid(inputs, data) {
     var gridData = new Uint8ClampedArray(srcData.length);
     var dx = data.resolution;
     var dy = data.resolution;
-    
+
     //console.log('makeChunkGrid w=' + width + ' h=' + height + ' dx='+dx+' dy='+dy);
 
     // todo - so fiddly.  it's still off a bit (not 100% locked to src pixels)
-    
+
     var truncate = function(value) {
         return Math.floor(value);
     };
-    
+
     var cy = data.extent[3];
     for (var pixelY = 0; pixelY < height; ++pixelY, cy -= dy) {
         var icy = truncate((data.worldHeight - cy) + data.globalOffsetY);
@@ -1733,7 +1306,7 @@ function makeChunkGrid(inputs, data) {
                     gridData[offset] = 255;
                     gridData[offset + 1] = 0;
                     gridData[offset + 2] = 0;
-                    gridData[offset + 3] = 128; 
+                    gridData[offset + 3] = 128;
                 } else {
                     gridData[offset] = 255;
                     gridData[offset + 1] = 255;
@@ -1741,18 +1314,26 @@ function makeChunkGrid(inputs, data) {
                     gridData[offset + 3] = 128;
                 }
             } else {
-                gridData[offset] = 
-                    gridData[offset + 1] = 
-                    gridData[offset + 2] = 
-                    gridData[offset + 3] = 0;
+                gridData[offset] =
+                    gridData[offset + 1] =
+                        gridData[offset + 2] =
+                            gridData[offset + 3] = 0;
             }
         }
     }
     return new ImageData(gridData, width, height);
 }
 
+// todo move global variables to top -- they get hoisted anyway
 var rasterChunkGrid = null, layerChunkGrid = null;
 
+// todo If the CORS issue is active, currently fails with console errors but no UI indiciation
+// todo not sure why this function needs to return a 0/-1! Consider true/false.
+/**
+ * Display a chunk grid.
+ * @param enableFlag
+ * @returns {number}
+ */
 function doChunkGrid(enableFlag) {
     chunkGridFlag = enableFlag;
     if (enableFlag) {
@@ -1850,6 +1431,7 @@ function doSlimeChunks(enabled) {
     }
 }
 
+// todo - not sure why this function needs to return a 0/-1! Consider true/false.
 function setLayer(fn, extraHelp) {
     if (fn.length <= 1) {
         if ( extraHelp === undefined ) {
@@ -1860,13 +1442,13 @@ function setLayer(fn, extraHelp) {
         doModal('Error', 'That image is not available -- see README and re-run bedrock_viz.' + extraHelp);
         return -1;
     }
-    
+
     // todo - attribution is small and weird in map - why?
     if ( useTilesFlag ) {
         srcLayerMain = new ol.source.XYZ({
             attributions: [
                 new ol.Attribution({
-                    html: 'Created by <a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">bedrock_viz</a>'
+                    html: `Created by <a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">bedrock_viz</a> - ${worldName} | ${creationTime}`
                 })
             ],
             url: fn,
@@ -1904,7 +1486,7 @@ function setLayer(fn, extraHelp) {
     }
 
     setLayerLoadListeners(srcLayerMain, fn);
-    
+
     if (layerMain === null) {
         if ( useTilesFlag ) {
             layerMain = new ol.layer.Tile({
@@ -1914,7 +1496,7 @@ function setLayer(fn, extraHelp) {
                 extent: extent,
                 source: srcLayerMain
             });
-        } else { 
+        } else {
             layerMain = new ol.layer.Image({
                 myStackOrder: 0,
                 source: srcLayerMain
@@ -1931,7 +1513,7 @@ function setLayer(fn, extraHelp) {
                 })
             }) );
         }
-        
+
         // get the pixel position with every move
         $(map.getViewport()).on('mousemove', function(evt) {
             globalMousePosition = map.getEventPixel(evt.originalEvent);
@@ -1947,7 +1529,7 @@ function setLayer(fn, extraHelp) {
                 var ctx = event.context;
                 var pixelRatio = event.frameState.pixelRatio;
                 pixelDataName = '';
-                if (globalMousePosition && 
+                if (globalMousePosition &&
                     ((globalLayerMode === 0 && (globalLayerId === 0 || globalLayerId === 1)) || globalLayerMode !== 0)) {
                     // todo - this appears to be slightly off at times (e.g. block does not change crisply at src pixel boundaries)
                     var x = globalMousePosition[0] * pixelRatio;
@@ -1980,14 +1562,14 @@ function setLayer(fn, extraHelp) {
                 pixelDataName = '<i>Browser will not let us access map pixels - See README</i>';
                 if ( ! globalCORSWarningFlag ) {
                     doModal('CORS Error',
-                            'Error accessing map pixels.<br/><br/>' +
-                            'Error: ' + e.toString() + '<br/><br/>' +
-                            globalCORSWarning);
+                        'Error accessing map pixels.<br/><br/>' +
+                        'Error: ' + e.toString() + '<br/><br/>' +
+                        globalCORSWarning);
                     globalCORSWarningFlag = true;
                 }
             }
         });
-        
+
         disableLayerSmoothing(layerMain);
     } else {
         layerMain.setSource(srcLayerMain);
@@ -1997,10 +1579,9 @@ function setLayer(fn, extraHelp) {
         // update vector points (e.g. up/down/same markers if we are in raw layer mode and blocks are shown)
         vectorPoints.changed();
     }
-    
+
     return 0;
 }
-
 
 function setLayerById(id) {
     var extraHelp = 'You need to run bedrock_viz with --html-most (or --html-all)';
@@ -2008,37 +1589,30 @@ function setLayerById(id) {
     } else if (id === 1) {
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerBiome, extraHelp) === 0) {
             globalLayerMode = 0; globalLayerId = 1;
-            $('#imageSelectName').html('Biome');
         }
     } else if (id === 2) {
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerHeight, extraHelp) === 0) {
             globalLayerMode = 0; globalLayerId = 2;
-            $('#imageSelectName').html('Height');
         }
     } else if (id === 3) {
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerHeightGrayscale, extraHelp) === 0) {
             globalLayerMode = 0; globalLayerId = 3;
-            $('#imageSelectName').html('Height (Grayscale)');
         }
     } else if (id === 4) {
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerBlockLight, extraHelp) === 0) {
             globalLayerMode = 0; globalLayerId = 4;
-            $('#imageSelectName').html('Block Light');
         }
     } else if (id === 5) {
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerGrass, extraHelp) === 0) {
             globalLayerMode = 0; globalLayerId = 5;
-            $('#imageSelectName').html('Grass Color');
         }
     } else {
         // default is overview map
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerTop, '') === 0) {
             globalLayerMode = 0; globalLayerId = 0;
-            $('#imageSelectName').html('Overview');
         }
     }
 }
-
 
 function initDimension() {
     // Map views always need a projection.  Here we just want to map image
@@ -2050,32 +1624,32 @@ function initDimension() {
         dimensionInfo[globalDimensionId].maxWorldY - dimensionInfo[globalDimensionId].minWorldY + 1;
 
     extent = [0, 0,
-              dimensionInfo[globalDimensionId].worldWidth,
-              dimensionInfo[globalDimensionId].worldHeight];
+        dimensionInfo[globalDimensionId].worldWidth,
+        dimensionInfo[globalDimensionId].worldHeight];
 
     dimensionInfo[globalDimensionId].globalOffsetX = dimensionInfo[globalDimensionId].minWorldX;
     dimensionInfo[globalDimensionId].globalOffsetY = dimensionInfo[globalDimensionId].minWorldY;
 
-    
+
     // todobig - adjust maxworldX & Y if in tile mode so that we include the right edge and bottom edge tiles?
     if ( false ) {
         extent = [ dimensionInfo[globalLayerId].minWorldX,
-                   dimensionInfo[globalLayerId].minWorldY,
-                   dimensionInfo[globalLayerId].maxWorldX,
-                   dimensionInfo[globalLayerId].maxWorldY ];
-        
+            dimensionInfo[globalLayerId].minWorldY,
+            dimensionInfo[globalLayerId].maxWorldX,
+            dimensionInfo[globalLayerId].maxWorldY ];
+
         dimensionInfo[globalDimensionId].globalOffsetX = 0;
         dimensionInfo[globalDimensionId].globalOffsetY = 0;
     }
 
-    
+
     console.log('World bounds: dimId=' + globalDimensionId +
-                ' w=' + dimensionInfo[globalDimensionId].worldWidth +
-                ' h=' + dimensionInfo[globalDimensionId].worldHeight +
-                ' offx=' + dimensionInfo[globalDimensionId].globalOffsetX + 
-                ' offy=' + dimensionInfo[globalDimensionId].globalOffsetY
-               );
-    
+        ' w=' + dimensionInfo[globalDimensionId].worldWidth +
+        ' h=' + dimensionInfo[globalDimensionId].worldHeight +
+        ' offx=' + dimensionInfo[globalDimensionId].globalOffsetX +
+        ' offy=' + dimensionInfo[globalDimensionId].globalOffsetY
+    );
+
     projection = new ol.proj.Projection({
         code: 'bedrock_viz-image',
         // todobig - this appears to break loading geojson
@@ -2109,21 +1683,35 @@ function initDimension() {
       collapsed: false,
       collapsible: false
       //target: '_blank'
-      });               
+      });
     */
-    
+
     if (map === null) {
         measureControl = new MeasureControl();
+        playersControl = new PlayersControl();
+        helpControl = new HelpControl();
+        optionsControl = new OptionsControl();
+        layersControl = new LayersControl();
+        sidebarControl = new SidebarControl();
+        viewModeControl = new ViewModeControl();
+
         map = new ol.Map({
-            controls: ol.control.defaults({
-                attribution: true,
-                attributionOptions: { collapsed: false, collapsible: false, target: '_blank' }
-            })
+            controls: ol.control
+                .defaults({
+                    attribution: true,
+                    attributionOptions: { collapsed: false, collapsible: false, target: '_blank' }
+                })
                 .extend([
                     new ol.control.ZoomToExtent(),
                     new ol.control.ScaleLine(),
                     new ol.control.FullScreen(),
                     measureControl,
+                    playersControl,
+                    helpControl,
+                    optionsControl,
+                    layersControl,
+                    sidebarControl,
+                    viewModeControl,
                     mousePositionControl
                 ]),
             // pixelRatio: 1, // todo - need this?
@@ -2131,8 +1719,8 @@ function initDimension() {
             view: new ol.View({
                 projection: projection,
                 center: [
-                    dimensionInfo[globalDimensionId].playerPosX + Math.floor(dimensionInfo[globalDimensionId].worldWidth / 2)
-                   ,dimensionInfo[globalDimensionId].playerPosY + Math.floor(dimensionInfo[globalDimensionId].worldHeight / 2)
+                    dimensionInfo[globalDimensionId].playerPosX,
+                    dimensionInfo[globalDimensionId].playerPosY,
                 ],
                 resolution: 1
             })
@@ -2141,81 +1729,58 @@ function initDimension() {
         var view = new ol.View({
             projection: projection,
             center: [
-                dimensionInfo[globalDimensionId].playerPosX + Math.floor(dimensionInfo[globalDimensionId].worldWidth / 2)
-               ,dimensionInfo[globalDimensionId].playerPosY + Math.floor(dimensionInfo[globalDimensionId].worldHeight / 2)
+                dimensionInfo[globalDimensionId].playerPosX,
+                dimensionInfo[globalDimensionId].playerPosY
             ],
-        resolution: 1
+            resolution: 1
         });
         map.setView(view);
     }
 
-    // setup per-dimension block select menu
+    $('.ol-zoom-extent button').html('<img src="images/map-control-assets/globe.png" class="interface-icon" />');
+    $('.ol-zoom-extent button').addClass('mytooltip');
+    $('.ol-zoom button').addClass('mytooltip');
 
-    // todobig - clear selected items?
-    
-    // clear existing items
-    $('#blockSelectList .blockToggle').remove();
-    var newItems = '';
-    for (var b in  dimensionInfo[globalDimensionId].geojsonBlocks) {
-        var block = dimensionInfo[globalDimensionId].geojsonBlocks[b];
-        newItems += '<li><a href="#" class="blockToggle" data-id="' + block + '">' + block + '</a></li>';
-    }
-    if ( dimensionInfo[globalDimensionId].spawnableFlag) {
-        newItems += '<li><a href="#" class="spawnableToggle" data-id="spawnable">Spawnable Blocks</a></li>';
-    }
-    if ( newItems.length > 0 ) {
-        $(newItems).prependTo('#blockSelectList');
-    }
-    // todobig - could disable button if the menu is empty
-    
-    $('.blockToggleAddAll').click(function() {
-        var cflag = true;
-        if ( vectorPoints === null ) {
-            cflag = false;
-            loadVectors();
-        }
-        $('.blockToggle').each(function(index) {
-            listBlockToggle[$(this).attr('data-id')] = true;
-            $(this).parent().addClass('active');
-        });
-        $('.spawnableToggle').each(function(index) {
-            spawnableEnableFlag = true;
-            $(this).parent().addClass('active');
-        });
-        if ( cflag ) {
-            vectorPoints.changed();
-        }
-    });
-    $('.blockToggleRemoveAll').click(function() {
-        listBlockToggle = [];
-        spawnableEnableFlag = false;
-        if (vectorPoints !== null) { 
-            vectorPoints.changed();
-        }
-        $('.blockToggle').parent().removeClass('active');
-        $('.spawnableToggle').parent().removeClass('active');
-    });
-    $('.blockToggle').click(function() {
-        var id = $(this).attr('data-id');
-        blockToggle(id);
-        if (listBlockToggle[id]) {
-            $('.blockToggle[data-id="' + id + '"]').parent().addClass('active');
-        } else {
-            $('.blockToggle[data-id="' + id + '"]').parent().removeClass('active');
-        }
-    });
-    $('.spawnableToggle').click(function() {
-        var id = $(this).attr('data-id');
-        spawnableEnableFlag = ! spawnableEnableFlag;
-        spawnableToggle();
-        if ( spawnableEnableFlag ) {
-            $('.spawnableToggle[data-id="' + id + '"]').parent().addClass('active');
-        } else {
-            $('.spawnableToggle[data-id="' + id + '"]').parent().removeClass('active');
-        }
-    });
+    /**
+     * todobig - clear selected items?
+     *
+     * cmbkla 01/03/2021: If this means to clear the toggled entities that are marked on the map, IDK that we need to do that.
+     * Overworld entities can be in the Nether, and vice-versa, so it isn't that any given toggle is "invalid" when you change dimensions.
+     *
+     * If this is only in reference to clearing the selected BLOCKS, that is accomplished below and this todo can be removed
+     */
 
-    
+        // remove all old blocks from the sidebar, mark the old ones as not selected, add the ones (if any) for this dimension
+    const blocksSidebarGroup = sidebarControlConfig.find(group => group.title === 'Blocks');
+
+    if (sidebarControl && blocksSidebarGroup) {
+        Array.from(listBlockToggle).forEach((item, index) => listBlockToggle[index] = false);
+
+        blocksSidebarGroup.items = [];
+        sidebarControl.updateEntityList();
+
+        // todo -- is there any way to provide an icon for the block? Should we be checking uniqueness here?
+        for (let b in dimensionInfo[globalDimensionId].geojsonBlocks) {
+            let block = dimensionInfo[globalDimensionId].geojsonBlocks[b];
+            blocksSidebarGroup.items.push({
+                id: block,
+                label: block,
+                type: "block",
+            });
+        }
+        if (dimensionInfo[globalDimensionId].spawnableFlag) {
+            blocksSidebarGroup.items.push({
+                id: 'spawnable',
+                label: 'Spawnable Blocks',
+                type: 'spawnable-block',
+            });
+        }
+
+        if (blocksSidebarGroup.items.length > 0) {
+            sidebarControl.updateEntityList();
+        }
+    }
+
     // finally load the proper layer
     if (globalLayerMode === 0) {
         return setLayerById(globalLayerId);
@@ -2226,20 +1791,13 @@ function initDimension() {
 
 function setDimensionById(id) {
     var prevDimId = globalDimensionId;
-    if (0) {
-    }
-    else if (id === 1) {
+
+    if (id === 1) { // Nether
         globalDimensionId = id;
-        $('#dimensionSelectName').html('Nether');
-    }
-    else if (id === 2) {
+    } else if (id === 2) { // The End
         globalDimensionId = id;
-        $('#dimensionSelectName').html('The End');
-    }
-    else {
-        // default to overworld
+    } else { // Overworld
         globalDimensionId = id;
-        $('#dimensionSelectName').html('Overworld');
     }
 
     if (prevDimId !== globalDimensionId) {
@@ -2247,13 +1805,12 @@ function setDimensionById(id) {
     }
 }
 
-
 function checkPlayerDistance(feature) {
     if ( ! doCheckPlayerDistanceFlag ) { return true; }
 
     var playerpos = openlayersToMcpe(dimensionInfo[globalDimensionId].playerPosX,
-                                     dimensionInfo[globalDimensionId].playerPosY,
-                                     false);
+        dimensionInfo[globalDimensionId].playerPosY,
+        false);
     var featurepos = feature.get('Pos');
     var dx = playerpos[0] - featurepos[0];
     var dy = playerpos[1] - featurepos[2];
@@ -2263,7 +1820,6 @@ function checkPlayerDistance(feature) {
     }
     return false;
 }
-
 
 // color feature labels according to entity type (etype)
 function etypeToTextColor(feature) {
@@ -2277,7 +1833,6 @@ function etypeToTextColor(feature) {
     return '#ffffff';
 }
 
-
 var createPointStyleFunction = function() {
     return function(feature, resolution) {
         var style;
@@ -2288,14 +1843,14 @@ var createPointStyleFunction = function() {
         var spawnable = feature.get('Spawnable');
         var dimId = feature.get('Dimension');
         var textColor = '#ffffff';
-        
+
         // hack for pre-0.12 worlds
         if (dimId === undefined) {
             dimId = 0;
         } else {
             dimId = +dimId;
         }
-        
+
         if (entity !== undefined) {
             if (dimId === globalDimensionId) {
                 var id = +feature.get('id');
@@ -2314,12 +1869,11 @@ var createPointStyleFunction = function() {
                     }
                 }
             }
-        }
-        else if (tileEntity !== undefined) {
+        } else if (tileEntity !== undefined) {
             if (dimId === globalDimensionId) {
                 var Name = feature.get('Name');
                 if (listTileEntityToggle[Name] !== undefined) {
-                    if (listTileEntityToggle[Name]) { 
+                    if (listTileEntityToggle[Name]) {
                         style = new ol.style.Style({
                             image: new ol.style.Circle({
                                 radius: 4,
@@ -2332,8 +1886,7 @@ var createPointStyleFunction = function() {
                     }
                 }
             }
-        }
-        else if (block !== undefined) {
+        } else if (block !== undefined) {
             if (dimId === globalDimensionId) {
                 var Name = feature.get('Name');
                 if (listBlockToggle[Name] !== undefined) {
@@ -2355,8 +1908,7 @@ var createPointStyleFunction = function() {
                     }
                 }
             }
-        }
-        else if (spawnable !== undefined) {
+        } else if (spawnable !== undefined) {
             if (dimId === globalDimensionId) {
                 if ( spawnableEnableFlag ) {
                     if ( feature.get('BoundingCircle') ) {
@@ -2386,18 +1938,15 @@ var createPointStyleFunction = function() {
                     }
                 }
             }
-        }
-        else {
-            console.log('Weird.  Found a GeoJSON item that is not an entity, tileEntitiy or block');
+        } else {
+            console.error('Weird. Found a GeoJSON item that is not an entity, tileEntitiy or block');
         }
         return null;
     };
 };
 
-
 var villageCreatePointStyleFunction = function() {
     return function(feature, resolution) {
-
         if ( feature.get('name') === 'Village Radius' ) {
             var bcradius = feature.get('radius');
             return [ new ol.style.Style({
@@ -2408,7 +1957,7 @@ var villageCreatePointStyleFunction = function() {
                 })
             }) ];
         }
-        
+
         var weight = 'bold';
         var size;
         // smaller font when we are zoomed out
@@ -2445,9 +1994,7 @@ var villageCreatePointStyleFunction = function() {
     }
 };
 
-
-
-
+// todo move globals to top
 var vectorPoints = null;
 var villageVectorPoints = null;
 var srcVillageVectorPoints = null;
@@ -2460,7 +2007,7 @@ function loadVectors() {
 
     try {
         var src;
-        if ( loadGeoJSONFlag ) { 
+        if ( loadGeoJSONFlag ) {
             src = new ol.source.Vector({
                 url: fnGeoJSON,
                 //crossOrigin: 'anonymous',
@@ -2476,36 +2023,35 @@ function loadVectors() {
                 features: features
             });
         }
-        
+
         var listenerKey = src.on('change', function(e) {
             if (src.getState() == 'ready') {
                 updateLoadEventCount(-1);
                 ol.Observable.unByKey(listenerKey);
-            }
-            else if (src.getState() == 'error') {
+            } else if (src.getState() == 'error') {
                 updateLoadEventCount(-1);
                 ol.Observable.unByKey(listenerKey);
                 doModal('Image Load Error',
-                        'Could not load file: ' + src.url + '<br/>' +
-                        globalCORSWarning);
+                    'Could not load file: ' + src.url + '<br/>' +
+                    globalCORSWarning);
             }
         });
-        
+
         vectorPoints = new ol.layer.Vector({
             myStackOrder: 300,
             source: src,
             style: createPointStyleFunction()
         });
-        
+
         map_addLayer(vectorPoints);
 
     } catch (e) {
         updateLoadEventCount(-1);
         doModal('Vector Load Error',
-                'Error: ' + e.toString() + '<br/>' +
-                '<br/>' +
-                globalCORSWarning);
-    } 
+            'Error: ' + e.toString() + '<br/>' +
+            '<br/>' +
+            globalCORSWarning);
+    }
     // todobig - how to catch CORS issue here?
 
     // add village doors vector layer
@@ -2518,78 +2064,8 @@ function loadVectors() {
         //todobig - could use a func to set door labels w/ more info
         style: villageCreatePointStyleFunction()
     });
-    
+
     map_addLayer(villageVectorPoints);
-}
-
-
-
-function entityToggle(id) {
-    id = +id;
-    var cflag = true;
-    if (vectorPoints === null) {
-        cflag = false;
-        loadVectors();
-    }
-    if (listEntityToggle[id] === undefined) {
-        listEntityToggle[id] = true;
-    } else {
-        listEntityToggle[id] = !listEntityToggle[id];
-    }
-    if ( cflag ) {
-        vectorPoints.changed();
-    }
-}
-
-function tileEntityToggle(name) {
-    var cflag = true;
-    if (vectorPoints === null) {
-        cflag = false;
-        loadVectors();
-    }
-    if (listTileEntityToggle[name] === undefined) {
-        listTileEntityToggle[name] = true;
-    } else {
-        listTileEntityToggle[name] = !listTileEntityToggle[name];
-    }
-    if ( cflag ) {
-        vectorPoints.changed();
-    }
-}
-
-function blockToggle(name) {
-    var cflag = true;
-    if (vectorPoints === null) {
-        cflag = false;
-        loadVectors();
-    }
-    if (listBlockToggle[name] === undefined) {
-        listBlockToggle[name] = true;
-    } else {
-        listBlockToggle[name] = !listBlockToggle[name];
-    }
-    if ( cflag ) {
-        vectorPoints.changed();
-    }
-}
-
-function spawnableToggle() {
-    var cflag = true;
-    if (vectorPoints === null) {
-        cflag = false;
-        loadVectors();
-    }
-    if ( cflag ) {
-        vectorPoints.changed();
-    }
-}
-
-function layerMove(delta) {
-    //this_.getMap().getView().setRotation(0);
-    layerRawIndex += delta;
-    if (layerRawIndex < 0) { layerRawIndex = 0; }
-    if (layerRawIndex > 255) { layerRawIndex = 255; }
-    layerGoto(layerRawIndex);
 }
 
 function layerGoto(layer) {
@@ -2604,7 +2080,6 @@ function layerGoto(layer) {
     }
 }
 
-
 // todo - this is still not quite right
 var coordinateFormatFunction = function(coordinate) {
     var cx = coordinate[0] + dimensionInfo[globalDimensionId].globalOffsetX;
@@ -2615,7 +2090,7 @@ var coordinateFormatFunction = function(coordinate) {
         cx = coordinate[0];
         cy = -coordinate[1];
     }
-    
+
     var ix = coordinate[0];
     var iy = (dimensionInfo[globalDimensionId].worldHeight - 1) - coordinate[1];
 
@@ -2624,12 +2099,12 @@ var coordinateFormatFunction = function(coordinate) {
         ix = cx - dimensionInfo[globalDimensionId].minWorldX;
         iy = cy - dimensionInfo[globalDimensionId].minWorldY;
     }
-    
+
     var chunkX = Math.floor(cx / 16);
     var chunkY = Math.floor(cy / 16);
 
     var prec = 1;
-    var s = '<span class="lgray">World</span> ' + cx.toFixed(prec) + ' ' + cy.toFixed(prec) + 
+    var s = '<span class="lgray">World</span> ' + cx.toFixed(prec) + ' ' + cy.toFixed(prec) +
         ' <span class="lgray">Image</span> ' + ix.toFixed(prec) + ' ' + iy.toFixed(prec);
     if ( showChunkCoordinatesFlag || chunkGridFlag ) {
         s += '<br/><span class="lgray">Chunk</span> ' + chunkX.toFixed(0) + ' ' + chunkY.toFixed(0);
@@ -2659,280 +2134,81 @@ var coordinateFormatFunction = function(coordinate) {
 // adapted from: http://stackoverflow.com/questions/12887506/cannot-set-maps-div-height-for-openlayers-map
 var fixContentHeight = function() {
     var viewHeight = $(window).height();
-    var navbar = $('div[data-role="navbar"]:visible:visible');
     // todo - this is not quite right, off by approx 7 pixels - why?
-    var newMapH = viewHeight - navbar.outerHeight();
     var curMapSize = map.getSize();
-    curMapSize[1] = newMapH;
+    curMapSize[1] = viewHeight;
     map.setSize(curMapSize);
+
+    // the magic number where the top and bottom interfaces touch. We'll shift the left-side top icons to the left.
+    if (viewHeight < 448) {
+        $('body').addClass('small-vertical');
+    } else {
+        $('body').removeClass('small-vertical');
+    }
+
+    // the magic number where we have to start shedding some left-side interface elements to prevent overlap.
+    if (viewHeight <= 315) {
+        $('body').addClass('tiny-vertical');
+    } else {
+        $('body').removeClass('tiny-vertical');
+    }
+
+    // the magic number where I can't help you anymore, get a bigger screen. All left-side controls will hide
+    if (viewHeight <= 222) {
+        $('body').addClass('micro-vertical');
+    } else {
+        $('body').removeClass('micro-vertical');
+    }
+
+    var viewWidth = $(window).width();
+    if (viewWidth <= 950) {
+        $('body').addClass('restricted-horizontal');
+    } else {
+        $('body').removeClass('restricted-horizontal');
+    }
 };
 
-function doTour(aboutFlag) {
-    var featureExtra = '<br/><br/>' +
-        'You can click on mobs/objects on the map to get information about them.<br/>';
-
-    var tour = new Tour({
-        backdropContainer: 'body',
-        storage: false,
-        container: 'body',
-        orphan: true,
-        // backdrop: true,
-        
-        steps: [
-            {
-                title: 'Welcome to Bedrock Viz!',
-                content: 'This tour will show you the features of the <span class="nobreak"><b>Bedrock Viz Viewer</b></span> web app.<br/>' +
-                    '<br/>' +
-                    'You can naviate the steps of this tour with your arrow keys (<kbd>&larr;</kbd> and <kbd>&rarr;</kbd>).  You can stop it by pressing <kbd>ESC</kbd>.'
-            },
-            {
-                element: '#map',
-                title: 'The Map',
-                content: 'The main area of the web app.<br/>' +
-                    '<br/>' + 
-                    'Some ways to interact with the map:<br/><ul>' +
-                    '<li>Drag the map to move it</li>' +
-                    '<li>Double click to zoom in</li>' +
-                    '<li><kbd>Shift</kbd> + Double click to zoom out</li>' +
-                    '<li>Rotate map with <kbd>Shift</kbd> + <kbd>Alt</kbd> + drag</li>' +
-                    '</ul>' +
-                    '<i>Tips:</i><br/><ul>' +
-                    '<li>Press "G" to toggle chunk grid</li>' +
-                    '<li>Press "N" to toggle showing Nether coordinate conversion</li>' +
-                    '</ul>'
-            },
-            {
-                element: '.ol-zoom',
-                title: 'Zoom Controls',
-                content: 'You can also zoom in and out with these buttons.'
-            },
-            {
-                element: '.ol-zoom-extent',
-                title: 'Zoom to Full Extent',
-                content: 'Zoom out so that the entire world is visible.'
-            },
-            {
-                element: '.measure',
-                title: 'Measurement Tools',
-                content: 'You can measure distances with Lines and Circles.<br/>' +
-                    '<br/>' +
-                    'You can quit measurement mode by pressing <kbd>ESC</kbd><br/>' +
-                    '<br/>' +
-                    'You can quickly access Line measurement mode by pressing <kbd>L</kbd><br/>' +
-                    '<br/>' +
-                    'You can quickly access Circle measurement mode by pressing <kbd>C</kbd><br/>' +
-                    ''
-            },
-            {
-                element: '.ol-mouse-position',
-                placement: 'left',
-                title: 'Mouse Position',
-                content: 'Position of the mouse is shown here as well as information on the block under the mouse cursor.'
-            },
-            {
-                element: '#dimensionSelectName',
-                placement: 'top',
-                title: 'Select Dimension',
-                content: 'You can switch between dimensions (e.g. Overworld, The Nether).'
-            },
-            {
-                element: '#layerNumber',
-                placement: 'top',
-                title: 'Select Raw Layer',
-                content: 'You can view individual layers of your world, if you ran Bedrock Viz in "html-all" mode.'
-            },
-            {
-                element: '#imageSelectName',
-                placement: 'top',
-                title: 'Select Image',
-                content: 'You can view different images of your world.<br/>' +
-                    '<br/><ul>' +
-                    '<li><b>Overview</b> is an image of the highest blocks in your world.</li>' +
-                    '<li><b>Biome</b> is an image of the biomes in your world.</li>' +
-                    '<li><b>Height</b> is an image of the heights of the highest blocks in your world.  Red is below sea level, Green is above.</li>' +
-                    '<li><b>Height (Grayscale)</b> is an image of the heights of the highest blocks in your world in grayscale.</li>' +
-                    '<li><b>Block Light</b> is an image of the block light levels of the highest blocks in your world.</li>' +
-                    '<li><b>Grass Color</b> is an image of the color of grass in all parts of your world.</li>' +
-                    '</ul>'
-            },
-            {
-                element: '#menuPassiveMobs',
-                placement: 'top',
-                title: 'Passive Mobs',
-                content: 'You can display the location of passive mobs here.' +
-                    featureExtra
-            },
-            {
-                element: '#menuHostileMobs',
-                placement: 'top',
-                title: 'Hostile Mobs',
-                content: 'You can display the location of hostile mobs here.' + 
-                    featureExtra
-            },
-            {
-                element: '#menuObjects',
-                placement: 'top',
-                title: 'Objects',
-                content: 'You can display the location of objects here.' + 
-                    featureExtra
-            },
-            {
-                element: '#menuBlocks',
-                placement: 'top',
-                title: 'Blocks',
-                content: 'You can display the location of blocks here.<br/><br/>' +
-                    'Please note that to improve performance labels are not shown.  Click on a dot to get information about the block.<br/><br/>' +
-                    'You can change which blocks are available by using the command-line switch <i>--geojson-block</i>, or you can add <i>geojson-block</i> items to your config file.  See <i>bedrock_viz.cfg</i> for more details.'
-            },
-            {
-                element: '#menuOptions',
-                placement: 'top',
-                title: 'Options',
-                content: 'You can set options here.<br/>' +
-                    '<br/><ul>' +
-                    '<li><b>Show Chunk Grid</b> overlays a grid showing the chunk boundaries in your world.</li>' +
-                    '<li><b>Show Slime Chunks</b> overlays green on slime chunks.  <i>Note: we\'re currently using the MCPC slime chunk calculation.  It is not known if this is accurate for MCPE.</i></li>' +
-                    '<li><b>Show Height Shading</b> overlays a shading based on height.  Higher blocks are brighter than lower blocks.</li>' +
-                    '<li><b>Show Shaded Relief</b> overlays a shaded relief elevation map.  <i>Pre-generated</i> is generated when bedrock_viz runs.  <i>Dynamic</i> is generated in the web app.  You can alter the settings to change the display.  Note that due to bugs in one of the support libraries, <i>Dynamic</i> is not available when in tiled image mode.</li>' +
-                    '<li><b>Check for update</b> checks for an <b>Bedrock Viz</b> update on GitHub.</li>' +
-                    '</ul>'
-            },
-            {
-                element: '#worldName',
-                placement: 'top',
-                title: 'World Name',
-                content: 'The name of your world, and the date/time that you ran Bedrock Viz on it.'
-            },
-            {
-                title: 'About Bedrock Viz',
-                content: '' +
-                    '<a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">Bedrock Viz on github<br/>' +
-                    'Version ' + creationBedrockVizVersion + '<br/>' +
-                    'Please be sure to check back often for updates!</a><br/>' +
-                    '<br/>' +
-                    '<b>Bedrock Viz Viewer</b> is built using these other fine projects and libraries:<br/><ul>' +
-                    '<li><a href="http://openlayers.org/" target="_blank">OpenLayers 3</a></li>' +
-                    '<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>' +
-                    '<li><a href="http://bootstraptour.com/" target="_blank">Bootstrap Tour</a></li>' +
-                    '<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>' +
-                    '<li><a href="https://github.com/Plethora777/mcpe_viz" target="_blank">Fork of MCPE Viz by Plethora777</li>' +
-                    '</ul>' +
-                    'Block and Item images are borrowed from the <a href="http://minecraft.gamepedia.com/" target="_blank">Minecraft Wiki</a>.  The textures themselves are copyright Mojang.'
-            }
-        ]});
-    tour.init();
-    if ( aboutFlag ) {
-        tour._options.template = '<div class="popover tour">' + 
-            '<div class="arrow"></div>' + 
-            '<h3 class="popover-title"></h3>' +
-            '<div class="popover-content"></div>' +
-            '<div class="popover-navigation">' +
-            '<button class="btn btn-default" data-role="end">Close</button>' +
-            '</div></div>';
-        tour.goTo( tour._options.steps.length - 1);
-    }
-    tour.start();
-}
-
 function doModal(title, body) {
-    $('.modal-title').html(title);
-    $('.modal-body').html(body);
-    $('.modal').modal({});
+    $('#globalModal').find('.modal-title').html(title);
+    $('#globalModal').find('.modal-body').html(body);
+    $('#globalModal').modal({});
 }
 
-function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
-    // todo - make the update checks come from https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest for the latest version info.
-    // todobig - make this a bootstrap dialog box that has a clickable link
-    var isCurrent = newVersion == creationBedrockVizVersion;
-    var title;
-    var msg;
-    if (!isCurrent)
-    {
-        title = 'New Update Available!';
-        msg = 'You are running <b>v' + creationBedrockVizVersion + '</b> and <b>v' + newVersion + '</b> is available on GitHub.<br/><br/>' +
-              'New Version Highlight:<br/><b>' + newVersionHighlight + '</b><br/><br/>';
+function updateElevationAlphaOpacity() {
+    if (layerElevationAlpha !== null) {
+        layerElevationAlpha.setOpacity(elevationAlphaOpacity / 100.0 );
     }
-    else
-    {
-        title = 'You are running the latest version';
-        msg = 'You are running the latest version: <b>v' + creationBedrockVizVersion + '</b><br/><br/>';
+}
+
+function updateElevationStaticOpacity() {
+    if (layerShadedReliefStatic !== null) {
+        layerShadedReliefStatic.setOpacity(elevationStaticOpacity / 100.0 );
     }
-
-    msg += '<div class="panel panel-default">' +
-           '<div class="panel-heading" role="tab" id="headingOne">' +
-           '<h4 class="panel-title">' +
-           '<a role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">' +
-           'View Changelog' +
-           '</a></h4></div>' +
-           '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">' +
-           '<div class="panel-body"><div class="pre-scrollable">' + changeLog + '</div></div>' +
-           '</div></div>' + 
-           (!isCurrent ? '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>' : '');
-
-    doModal( title, msg);
 }
 
-function doCheckUpdate_getChangeLog(newVersion) {
-    // get data from github
-    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'text',
-        cache: false,
-        success: function(result, textStatus, jqxhr) {
-            
-            // parse this: Latest Highlight: New stuff added");
-            var newVersionHighlight = '(See ChangeLog on GitHub)';
-            var res = result.match(/Latest highlight\s*:\s*(.+)/);
-            if ( res ) {
-                newVersionHighlight = res[1];
-            }
-
-            showUpdateInfo(newVersion, newVersionHighlight, marked(result));
-        },
-        error: function(jqXHR, textStatus, errorThrown, execptionObject) {
-            showUpdateInfo(newVersion, '(Sorry, we had a problem checking the ChangeLog -- See ChangeLog on GitHub)', '(See ChangeLog on GitHub)');
-        }
-    });
-}
-
-function doCheckUpdate() {
-    // get data from github
-    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
-
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'text',
-        cache: false,
-        success: function(result, textStatus, jqxhr) {
-            
-            // parse this: Latest release: X.Y.Z
-            var res = result.match(/Latest release\s*:\s*(\S+)/);
-            if ( res ) {
-                doCheckUpdate_getChangeLog(res[1]);
-            } else {
-                doModal('Error', 'Sorry, failed to find version info on GitHub.');
-            }
-
-        },
-        error: function(jqXHR, textStatus, errorThrown, execptionObject) {
-            doModal('Error',
-                    'Sorry, failed to check for update: Status [' + textStatus + '] error [' + errorThrown + ']');
-        }
-    });
-}
-
-function doAbout() {
-    doTour(true);
+function updateShadeOpacity() {
+    if (layerElevation !== null) {
+        layerElevation.setOpacity(shadeOpacity / 100.0 );
+    }
 }
 
 $(function() {
-
     // add the main layer
     setDimensionById(0);
+
+    globalAboutMessage = '<a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">Bedrock Viz on github</a><br/>' +
+        'Version ' + creationBedrockVizVersion + '<br/>' +
+        'Please be sure to check back often for updates!<br/>' +
+        'Thanks for the hard work by the <a target="_blank" href="https://github.com/orgs/bedrock-viz/people">Bedrock Viz Team</a>!<br/>' +
+        '<br/>' +
+        '<b>Bedrock Viz Viewer</b> is built using these other fine projects and libraries:<br/><ul>' +
+        '<li><a href="http://openlayers.org/" target="_blank">OpenLayers 3</a></li>' +
+        '<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>' +
+        '<li><a href="http://bootstraptour.com/" target="_blank">Bootstrap Tour</a></li>' +
+        '<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>' +
+        '<li><a href="https://github.com/Plethora777/mcpe_viz" target="_blank">Fork of MCPE Viz by Plethora777</li>' +
+        '</ul>' +
+        'Block and Item images are borrowed from the <a href="http://minecraft.gamepedia.com/" target="_blank">Minecraft Wiki</a>.  The textures themselves are copyright Mojang.';
 
     // create default style for blocks
     // we do this to reduce memory consumption for blocks
@@ -2949,7 +2225,7 @@ $(function() {
         });
 
         var radius = 8;
-        
+
         globalStyleBlockUp = new ol.style.Style({
             image:  new ol.style.RegularShape({
                 fill: new ol.style.Fill({color: 'rgba(128, 255, 128, 0.8)'}),
@@ -2982,7 +2258,7 @@ $(function() {
             })
         });
     }
-    
+
     popover = new ol.Overlay({
         element: document.getElementById('popover'),
         autoPan: true,
@@ -3005,238 +2281,9 @@ $(function() {
         displayFeatureInfo(evt);
     });
 
-    $('.dimensionSelect').click(function() {
-        var id = +$(this).attr('data-id');
-        setDimensionById(id);
-    });
-    
-    
-    $('.layerGoto').click(function() {
-        var id = +$(this).attr('data-id');
-        layerGoto(id);
-    });
-    
-    $('#layerPrev').click(function() { layerMove(-1); });
-    $('#layerNext').click(function() { layerMove(1); });
-    
-    $('.imageSelect').click(function() {
-        var id = +$(this).attr('data-id');
-        setLayerById(id);
-    });
-
-
-    $('.featureToggleAddAll').click(function() {
-        var dtype = $(this).attr('data-type');
-        var cflag = true;
-        if ( vectorPoints === null ) {
-            cflag = false;
-            loadVectors();
-        }
-        $('.entityToggle').each(function(index) {
-            if ($(this).attr('data-type') === dtype) {
-                var id = +$(this).attr('data-id');
-                listEntityToggle[id] = true;
-                $(this).parent().addClass('active');
-            }
-        });
-        $('.tileEntityToggle').each(function(index) {
-            if ($(this).attr('data-type') === dtype) {
-                var id = $(this).attr('data-id');
-                listTileEntityToggle[id] = true;
-                $(this).parent().addClass('active');
-            }
-        });
-        if ( cflag ) {
-            vectorPoints.changed();
-        }
-    });
-
-    $('.featureToggleRemoveAll').click(function() {
-        var dtype = $(this).attr('data-type');
-        $('.entityToggle').each(function(index) {
-            if ($(this).attr('data-type') === dtype) {
-                var id = +$(this).attr('data-id');
-                listEntityToggle[id] = false;
-                $(this).parent().removeClass('active');
-            }
-        });
-        $('.tileEntityToggle').each(function(index) {
-            if ($(this).attr('data-type') === dtype) {
-                var id = $(this).attr('data-id');
-                listTileEntityToggle[id] = false;
-                $(this).parent().removeClass('active');
-            }
-        });
-        if (vectorPoints !== null) { 
-            vectorPoints.changed();
-        }
-    });
-    
-    $('.entityToggle').click(function() {
-        var id = $(this).attr('data-id');
-        entityToggle(id);
-        if (listEntityToggle[id]) {
-            $('.entityToggle[data-id="' + id + '"]').parent().addClass('active');
-        } else {
-            $('.entityToggle[data-id="' + id + '"]').parent().removeClass('active');
-        }
-    });
-
-    $('.tileEntityToggle').click(function() {
-        var id = $(this).attr('data-id');
-        tileEntityToggle(id);
-        if (listTileEntityToggle[id]) {
-            $('.tileEntityToggle[data-id="' + id + '"]').parent().addClass('active');
-        } else {
-            $('.tileEntityToggle[data-id="' + id + '"]').parent().removeClass('active');
-        }
-    });
-
-    $('#gridToggle').click(function() {
-        if ($('#gridToggle').parent().hasClass('active')) {
-            $('#gridToggle').parent().removeClass('active');
-            doChunkGrid(false);
-        } else {
-            $('#gridToggle').parent().addClass('active');
-            doChunkGrid(true);
-        }
-    });
-
-    $('#showNetherCoordinatesToggle').click(function() {
-        if ($(this).parent().hasClass('active')) {
-            $(this).parent().removeClass('active');
-        } else {
-            $(this).parent().addClass('active');
-        }
-        showNetherCoordinatesFlag = !showNetherCoordinatesFlag;
-    });
-    
-    $('#chunkDisplayToggle').click(function() {
-        if ($(this).parent().hasClass('active')) {
-            $(this).parent().removeClass('active');
-        } else {
-            $(this).parent().addClass('active');
-        }
-        showChunkCoordinatesFlag = !showChunkCoordinatesFlag;
-    });
-
-    $('#slimeChunksToggle').click(function() {
-        if ($('#slimeChunksToggle').parent().hasClass('active')) {
-            $('#slimeChunksToggle').parent().removeClass('active');
-            doSlimeChunks(false);
-        } else {
-            $('#slimeChunksToggle').parent().addClass('active');
-            doSlimeChunks(true);
-        }
-    });
-
-    $('#checkPlayerDistanceToggle').click(function() {
-        if ($(this).parent().hasClass('active')) {
-            $(this).parent().removeClass('active');
-        } else {
-            $(this).parent().addClass('active');
-        }
-        doCheckPlayerDistanceFlag = !doCheckPlayerDistanceFlag;
-        if ( vectorPoints ) {
-            vectorPoints.changed();
-        }
-    });
-    
-    $('#elevationToggle').click(function() {
-        if ( globalCORSWarningFlag ) {
-            doModal('CORS Error', 'Error accessing map pixels.  We cannot enable the elevation overlay.<br/><br/>' +
-                    globalCORSWarning);
-            return;
-        }
-        if ($('#elevationToggle').parent().hasClass('active')) {
-            $('#elevationToggle').parent().removeClass('active');
-            doShadedRelief(false);
-        } else {
-            $('#elevationToggle').parent().addClass('active');
-            doShadedRelief(true);
-        }
-    });
-    $('#elevationReset').click(function() {
-        $('#vert').val($('#vert').attr('data-default'));
-        $('#sunEl').val($('#sunEl').attr('data-default'));
-        $('#sunAz').val($('#sunAz').attr('data-default'));
-        $('#shadeOpacity').val($('#shadeOpacity').attr('data-default'));
-        if (rasterElevation !== null) {
-            rasterElevation.changed();
-        }
-    });
-    $('#shadeOpacity').change(function() {
-        if (layerElevation !== null) {
-            layerElevation.setOpacity( $('#shadeOpacity').val() / 100.0 );
-        }
-    });
-
-
-    $('#elevationAlphaToggle').click(function() {
-        if ($('#elevationAlphaToggle').parent().hasClass('active')) {
-            $('#elevationAlphaToggle').parent().removeClass('active');
-            doElevationAlpha(false);
-        } else {
-            $('#elevationAlphaToggle').parent().addClass('active');
-            doElevationAlpha(true);
-        }
-    });
-    var updateElevationAlphaOpacity = function() {
-        $('#elevationAlphaOpacityOut').html($('#elevationAlphaOpacity').val());
-        if (layerElevationAlpha !== null) {
-            layerElevationAlpha.setOpacity( $('#elevationAlphaOpacity').val() / 100.0 );
-        }
-    };
-    $('#elevationAlphaOpacity').change(function() {
-        updateElevationAlphaOpacity();
-    });
     updateElevationAlphaOpacity();
-    
-    $('#elevationStaticToggle').click(function() {
-        if ($('#elevationStaticToggle').parent().hasClass('active')) {
-            $('#elevationStaticToggle').parent().removeClass('active');
-            doElevationStatic(false);
-        } else {
-            $('#elevationStaticToggle').parent().addClass('active');
-            doElevationStatic(true);
-        }
-    });
-    var updateElevationStaticOpacity = function() {
-        $('#elevationStaticOpacityOut').html($('#elevationStaticOpacity').val());
-        if (layerShadedReliefStatic !== null) {
-            layerShadedReliefStatic.setOpacity( $('#elevationStaticOpacity').val() / 100.0 );
-        }
-    };
-    $('#elevationStaticOpacity').change(function() {
-        updateElevationStaticOpacity();
-    });
     updateElevationStaticOpacity();
-
-    
-    $('#btnHelp').click(function() {
-        doTour(false);
-    });
-
-    $('#btnCheckUpdate').click(function() {
-        doCheckUpdate();
-    });
-    $('#btnAbout').click(function() {
-        doAbout();
-    });
-
-
-    // don't close dropdowns when an item in them is clicked
-    $('.menu-stay .dropdown-menu').on({
-        'click': function(e) {
-            e.stopPropagation();
-        }
-    });
-    
-    // put the world info
-    $('#worldInfo').html(
-        '<span id="worldName" class="badge mytooltip" title="World Name">' + worldName + '</span>' +
-            '<span id="creationTime" class="label mytooltip" title="Imagery Creation Date">' + creationTime + '</span>'
-    );
+    updateShadeOpacity();
 
     // setup tooltips
     $('.mytooltip').tooltip({
@@ -3245,13 +2292,18 @@ $(function() {
         container: 'body'
     });
 
-    if ( useTilesFlag ) {
+    if (useTilesFlag) {
         // remove dynamic shaded relief -- currently does not work in tile mode
         $('.dynamicShadedRelief').hide();
     }
-    
+
     // setup hotkeys
     $(document).on('keydown', function(evt) {
+        // do not handle keyboard events that happen in inputs
+        if (String(evt.target.tagName).toLowerCase() === 'input') {
+            return;
+        }
+
         var key = String.fromCharCode(evt.which);
         // escape key will quit any special modes
         if ( evt.keyCode == 27 ) {

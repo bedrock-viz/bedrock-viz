@@ -1,0 +1,21 @@
+.layer-jump-entry-box-wrapper {
+    position: absolute;
+    bottom: 165px;
+    right: 49px;
+    z-index: 101;
+    border: 1px solid #222;
+    border-right: none;
+    background: #337ab7;
+    padding-left: 5px;
+    padding-top: 2px;
+}
+
+.layer-jump-entry-box-wrapper .btn {
+    border-radius: 0;
+}
+
+.layer-current-display {
+    display: block;
+    text-align: center;
+    font-size: 16px;
+}
