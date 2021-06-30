@@ -6,6 +6,7 @@
 
   NBT support
 */
+#include <iostream>
 
 #include <cstdio>
 #include <fstream>
@@ -841,6 +842,7 @@ namespace mcpe_viz
         int32_t idFull;
         int32_t tileId;
         int32_t dimensionId;
+        int64_t uniqueId;
         bool playerLocalFlag;
         bool playerRemoteFlag;
         std::string playerType;
@@ -867,6 +869,7 @@ namespace mcpe_viz
             idShort = 0;
             idFull = 0;
             tileId = -1;
+            uniqueId = -1;
             dimensionId = -1;
             playerLocalFlag = false;
             playerRemoteFlag = false;
@@ -1041,6 +1044,7 @@ namespace mcpe_viz
 
                 if (has_key(playerIdToName, playerId)) {
                     sprintf(tmpstring, "\"playerName\":\"%s\"", playerIdToName[playerId].c_str());
+                    log::info("    mapped to {}", playerIdToName[playerId]);
                     list.push_back(std::string(tmpstring));
                 }
                 else {
@@ -1048,7 +1052,7 @@ namespace mcpe_viz
                     list.push_back(std::string(tmpstring));
                     // we log it to screen so that people have an easier time adding new player name mappings
                     if (playerId.length() > 0) {
-                        log::info("Unmapped remote player: {}", playerId);
+                        log::info("    Unmapped remote player: {}", playerId);
                     }
                 }
             }
@@ -1605,7 +1609,7 @@ namespace mcpe_viz
 
     int32_t parseNbt_entity(int32_t dimensionId, const std::string& dimName, MyNbtTagList& tagList,
         bool playerLocalFlag, bool playerRemoteFlag,
-        const std::string& playerType, const std::string& playerId)
+        const std::string& playerType, const std::string& playerId, std::shared_ptr<PlayerInfo> player)
     {
         ParsedEntityList entityList;
         entityList.clear();
@@ -1680,7 +1684,26 @@ namespace mcpe_viz
                         entity->addEnderChestItem(iitem);
                     }
                 }
+
+                if (tc.has_key("UniqueID", nbt::tag_type::Long)) {
+                    entity->uniqueId = tc["UniqueID"].as<nbt::tag_long>().get();
+                }
+
+                auto localOrRemote = "?Unknown?";
+                if (playerRemoteFlag) {
+                    localOrRemote = "Remote";
+                }
+                else if (playerLocalFlag) {
+                    localOrRemote = "Local";
+                }
+
+                log::info("{} Player {}, unique:{}", localOrRemote, playerId, entity->uniqueId);
+                if (player) {
+                    player->uniqueId = entity->uniqueId;
+                    player->playerId = playerId;
+                }
             }
+
             else {
 
                 // non-player entity
@@ -2489,6 +2512,157 @@ namespace mcpe_viz
     typedef std::vector< std::unique_ptr<ParsedVillageVillager> > ParsedVillageVillagerList;
 
 
+    class ParsedVillageInfo {
+    public:
+        Point3d<int32_t> pos;
+        int32_t x0;
+        int32_t x1;
+        int32_t y0;
+        int32_t y1;
+        int32_t z0;
+        int32_t z1;
+        std::map<int64_t, int32_t> players;
+        std::vector<Point3d<int32_t>> villagers;
+        std::vector<Point3d<int32_t>> golems;
+        std::vector<Point3d<int32_t>> d2;
+        std::vector<Point3d<int32_t>> cats;
+
+        ParsedVillageInfo()
+        {
+            clear();
+        }
+
+        void clear()
+        {
+            pos.clear();
+            players.clear();
+            x0 = x1 = y0 = y1 = z0 = z1 = 0;
+        }
+
+        int32_t set_info(nbt::tag_compound& tc)
+        {
+            x0 = tc["X0"].as<nbt::tag_int>().get();
+            x1 = tc["X1"].as<nbt::tag_int>().get();
+            y0 = tc["Y0"].as<nbt::tag_int>().get();
+            y1 = tc["Y1"].as<nbt::tag_int>().get();
+            z0 = tc["Z0"].as<nbt::tag_int>().get();
+            z1 = tc["Z1"].as<nbt::tag_int>().get();
+            pos.set((x1+x0)/2, (y1+y0)/2, (z1+z0)/2);
+            return 0;
+        }
+
+        int32_t set_dwellers(nbt::tag_compound& tc) {
+            if (tc.has_key("Dwellers", nbt::tag_type::List)) {
+                nbt::tag_list dlist = tc["Dwellers"].as<nbt::tag_list>();
+
+                if (dlist.size() >= 4) {
+                    for (int i = 0; i < 4; i++) {
+                        nbt::tag_compound c = dlist[i].as<nbt::tag_compound>();
+                        nbt::tag_list l = c["actors"].as<nbt::tag_list>();
+
+                        for (const auto& it : l) {
+                            nbt::tag_compound dc = it.as<nbt::tag_compound>();
+                            nbt::tag_list pos = dc["last_saved_pos"].as<nbt::tag_list>();
+                            Point3d<int32_t> p3d;
+                            p3d.set(
+                                pos[0].as<nbt::tag_int>().get(),
+                                pos[1].as<nbt::tag_int>().get(),
+                                pos[2].as<nbt::tag_int>().get()
+                            );
+                            switch(i) {
+                                case 0:
+                                    villagers.push_back(p3d);
+                                    break;
+                                case 1:
+                                    golems.push_back(p3d);
+                                    break;
+                                case 2:
+                                    d2.push_back(p3d);
+                                    break;
+                                case 3:
+                                    cats.push_back(p3d);
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+        
+        int32_t set_players(nbt::tag_compound& tc) {
+            if (tc.has_key("Players", nbt::tag_type::List)) {
+                nbt::tag_list plist = tc["Players"].as<nbt::tag_list>();
+
+                for (const auto& it : plist) {
+                    nbt::tag_compound pc = it.as<nbt::tag_compound>();
+                    players[pc["ID"].as<nbt::tag_long>().get()] = pc["S"].as<nbt::tag_int>().get();
+                }
+            }
+            return 0;
+        }
+
+        int32_t set_poi(nbt::tag_compound& tc) {
+            return 0;
+        }
+
+        std::string toGeoJSON(MyNbtPlayerMap &playerMap)
+        {
+            std::vector<std::string> list;
+            std::vector<std::string> templist;
+            //todobig - something better than this :)
+            char tmpstring[8192];
+
+            // note: we fake this as a tile entity so that it is easy to deal with in js
+            list.push_back(std::string("\"TileEntity\":\"true\""));
+
+            list.push_back("\"Name\":\"Village\"");
+
+            sprintf(tmpstring, "\"Pos\":[%s]", pos.toGeoJSON().c_str());
+            list.push_back(std::string(tmpstring));
+
+            for (auto const& x : players) {
+                std::string playerId = playerMap[x.first]->playerId;
+                std::string playerName = playerId;
+                if (has_key(playerIdToName, playerId)) {
+                    playerName = playerIdToName[playerId];
+                }
+                sprintf(tmpstring, "\"%s's Reputation\": %d", playerName.c_str(), x.second);
+                list.push_back(std::string(tmpstring));
+            }
+
+            sprintf(tmpstring, "\"Villager Count\": %ld", villagers.size());
+            list.push_back(std::string(tmpstring));
+            sprintf(tmpstring, "\"Iron Golem Count\": %ld", golems.size());
+            list.push_back(std::string(tmpstring));
+            sprintf(tmpstring, "\"Cat Count\": %ld", cats.size());
+            list.push_back(std::string(tmpstring));
+
+            if (list.size() > 0) {
+                std::string s = "";
+
+                sprintf(tmpstring, "\"Dimension\":\"%d\"", 0);
+                list.push_back(std::string(tmpstring));
+
+                double ix, iy;
+                worldPointToGeoJSONPoint(0, pos.x, pos.z, ix, iy);
+                s += makeGeojsonHeader(ix, iy, false);
+
+                int32_t i = int32_t(list.size());
+                for (const auto& iter : list) {
+                    s += iter;
+                    if (--i > 0) {
+                        s += ",";
+                    }
+                }
+                s += "}}";
+                return s;
+            }
+
+            return std::string("");
+        }
+    };
+
     class ParsedVillage {
     public:
         Point3d<int32_t> pos;
@@ -2740,6 +2914,48 @@ namespace mcpe_viz
         }
     };
     typedef std::vector< std::unique_ptr<ParsedVillage> > ParsedVillageList;
+
+    int32_t parseNbt_village(MyNbtTagList &info_tags,
+                             MyNbtTagList &player_tags,
+                             MyNbtTagList &dweller_tags,
+                             MyNbtTagList &poi_tags,
+                             MyNbtPlayerMap &playerMap) {
+        std::unique_ptr<ParsedVillageInfo> village(new ParsedVillageInfo());
+        village->clear();
+
+        village->set_info(info_tags[0].second->as<nbt::tag_compound>());
+        village->set_players(player_tags[0].second->as<nbt::tag_compound>());
+        village->set_dwellers(dweller_tags[0].second->as<nbt::tag_compound>());
+        village->set_poi(poi_tags[0].second->as<nbt::tag_compound>());
+
+        std::string json = village->toGeoJSON(playerMap);
+        if (json.size() > 0) {
+            listGeoJSON.push_back(json);
+        }
+        
+        return 0;
+    }
+
+    int32_t parseNbt_village_info(MyNbtTagList& tagList)
+    {
+        for (size_t i = 0; i < tagList.size(); i++) {
+            if (tagList[i].second->get_type() == nbt::tag_type::Compound) {
+                nbt::tag_compound tc = tagList[i].second->as<nbt::tag_compound>();
+
+                std::unique_ptr<ParsedVillageInfo> village(new ParsedVillageInfo());
+                village->clear();
+                //village->set(tc);
+
+                //log::info("ParsedVillageInfo: {}", village->toString());
+
+                std::string json = ""; //village->toGeoJSON();
+                if (json.size() > 0) {
+                    listGeoJSON.push_back(json);
+                }
+            }
+        }
+        return 0;
+    }
 
     int32_t parseNbt_mVillages(MyNbtTagList& tagList)
     {
