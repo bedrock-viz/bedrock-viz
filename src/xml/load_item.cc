@@ -45,6 +45,17 @@ namespace mcpe_viz
                         var_name, extradata);
                     return -1;
                 }
+                auto var_unames = j.attribute("uname").as_string();
+                auto var_uname_list = mysplit(var_unames, ';');
+                for (auto& var_uname : var_uname_list) {
+                    /* there are a LOT of item variants that we don't know the proper
+                     * uname for yet. They just have place holders in the xml waiting to
+                     * be filled in. Skip those placeholders so we don't get conflicts.
+                     */
+                    if (var_uname != "minecraft:") {
+                        item->addUname(var_uname);
+                    }
+                }
             }
         }
         return 0;
