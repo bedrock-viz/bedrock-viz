@@ -2489,7 +2489,7 @@ namespace mcpe_viz
             std::vector<std::string> list;
             char tmpstring[1025];
 
-            sprintf(tmpstring, "\"id\":%lld", id);
+            sprintf(tmpstring, "\"id\":%lld", (long long int)id);
             list.push_back(std::string(tmpstring));
 
             if (list.size() > 0) {
