@@ -1677,6 +1677,7 @@
       <itemvariant extradata="0x5" name="Bucket, Pufferfish" uname="minecraft:pufferfish_bucket" />
       <itemvariant extradata="0x8" name="Bucket, Water" uname="minecraft:water_bucket" />
       <itemvariant extradata="0xa" name="Bucket, Lava" uname="minecraft:lava_bucket" />
+      <itemvariant extradata="0xc" name="Bucket, Axolotl" uname="minecraft:axolotl_bucket" />
     </item>
     <!-- item id="0x146" name="TBD - Water Bucket" uname="minecraft:" -->
     <!-- item id="0x147" name="TBD - Lava Bucket" uname="minecraft:" -->
@@ -2079,18 +2080,18 @@
     <item id="0x1dd" name="Sweet Berries" uname="minecraft:sweet_berries" />
     <item id="0x1F2" name="Camera" uname="minecraft:camera" /> <!-- EDU -->
     <item id="0x1F3" name="Salt" uname="minecraft:compound" />
-    <item id="0x1F4" name="Record, 13" uname="minecraft:record_13" />
-    <item id="0x1F5" name="Record, Cat" uname="minecraft:record_cat" />
-    <item id="0x1F6" name="Record, Blocks" uname="minecraft:record_blocks" />
-    <item id="0x1F7" name="Record, Chirp" uname="minecraft:record_chirp" />
-    <item id="0x1F8" name="Record, Far" uname="minecraft:record_far" />
-    <item id="0x1F9" name="Record, Mall" uname="minecraft:record_mall" />
-    <item id="0x1FA" name="Record, Mellohi" uname="minecraft:record_mellohi" />
-    <item id="0x1FB" name="Record, Stal" uname="minecraft:record_stal" />
-    <item id="0x1FC" name="Record, Strad" uname="minecraft:record_strad" />
-    <item id="0x1FD" name="Record, Ward" uname="minecraft:record_ward" />
-    <item id="0x1FE" name="Record, 11" uname="minecraft:record_11" />
-    <item id="0x1FF" name="Record, Wait" uname="minecraft:record_wait" />
+    <item id="0x1F4" name="Record, 13" uname="minecraft:record_13;minecract:music_disc_13" />
+    <item id="0x1F5" name="Record, Cat" uname="minecraft:record_cat;minecract:music_disc_cat" />
+    <item id="0x1F6" name="Record, Blocks" uname="minecraft:record_blocks;minecract:music_disc_blocks" />
+    <item id="0x1F7" name="Record, Chirp" uname="minecraft:record_chirp;minecract:music_disc_chirp" />
+    <item id="0x1F8" name="Record, Far" uname="minecraft:record_far;minecract:music_disc_far" />
+    <item id="0x1F9" name="Record, Mall" uname="minecraft:record_mall;minecract:music_disc_mall" />
+    <item id="0x1FA" name="Record, Mellohi" uname="minecraft:record_mellohi;minecract:music_disc_mellohi" />
+    <item id="0x1FB" name="Record, Stal" uname="minecraft:record_stal;minecract:music_disc_stal" />
+    <item id="0x1FC" name="Record, Strad" uname="minecraft:record_strad;minecract:music_disc_strad" />
+    <item id="0x1FD" name="Record, Ward" uname="minecraft:record_ward;minecract:music_disc_ward" />
+    <item id="0x1FE" name="Record, 11" uname="minecraft:record_11;minecract:music_disc_11" />
+    <item id="0x1FF" name="Record, Wait" uname="minecraft:record_wait;minecract:music_disc_wait" />
     <item id="0x201" name="Shield" uname="minecraft:shield" />
     <item id="0x2d0" name="Campfire" uname="minecraft:campfire" />
     <item id="0x2de" name="Suspicious Stew" uname="minecraft:suspicious_stew" />
@@ -2109,10 +2110,11 @@
     <item id="0x2ef" name="Netherite Boots" uname="minecraft:netherite_boots" />
     <item id="0x2f0" name="Netherite Scrap" uname="minecraft:netherite_scrap" />
     <item id="0x2F5" name="Warped Fungus on a Stick" uname="minecraft:warped_fungus_on_a_stick" />
+    <item id="0x2F7" name="Record, Pigstep" uname="minecraft:record_pigstep;minecract:music_disc_pigstep" />
 
+<!-- these item ids are NOT RIGHT, we need to find out what they're supposed to be and fit them in above -->
     <item id="0x400" name="amethyst shard" uname="minecraft:amethyst_shard" />
     <item id="0x401" name="copper ingot" uname="minecraft:copper_ingot" />
-    <item id="0x402" name="creeper banner pattern" uname="minecraft:creeper_banner_pattern" />
     <item id="0x403" name="filled map" uname="minecraft:filled_map" />
     <item id="0x404" name="glow berries" uname="minecraft:glow_berries" />
     <item id="0x405" name="glow ink sac" uname="minecraft:glow_ink_sac" />
@@ -2123,8 +2125,6 @@
     <item id="0x40a" name="raw iron" uname="minecraft:raw_iron" />
     <item id="0x40b" name="spyglass" uname="minecraft:spyglass" />
     <item id="0x40c" name="structure void" uname="minecraft:structure_void" />
-
-
 
   </itemlist>
 
