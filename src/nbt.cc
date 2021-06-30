@@ -1044,6 +1044,7 @@ namespace mcpe_viz
 
                 if (has_key(playerIdToName, playerId)) {
                     sprintf(tmpstring, "\"playerName\":\"%s\"", playerIdToName[playerId].c_str());
+                    log::info("    mapped to {}", playerIdToName[playerId]);
                     list.push_back(std::string(tmpstring));
                 }
                 else {
@@ -1051,7 +1052,7 @@ namespace mcpe_viz
                     list.push_back(std::string(tmpstring));
                     // we log it to screen so that people have an easier time adding new player name mappings
                     if (playerId.length() > 0) {
-                        log::info("Unmapped remote player: {}", playerId);
+                        log::info("    Unmapped remote player: {}", playerId);
                     }
                 }
             }
@@ -1688,7 +1689,15 @@ namespace mcpe_viz
                     entity->uniqueId = tc["UniqueID"].as<nbt::tag_long>().get();
                 }
 
-                std::cout << "Player " << playerId << ", unique:" << entity->uniqueId << std::endl;
+                auto localOrRemote = "?Unknown?";
+                if (playerRemoteFlag) {
+                    localOrRemote = "Remote";
+                }
+                else if (playerLocalFlag) {
+                    localOrRemote = "Local";
+                }
+
+                log::info("{} Player {}, unique:{}", localOrRemote, playerId, entity->uniqueId);
                 if (player) {
                     player->uniqueId = entity->uniqueId;
                     player->playerId = playerId;
