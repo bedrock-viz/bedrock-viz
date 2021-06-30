@@ -348,7 +348,7 @@ namespace mcpe_viz
         const char* cdata;
         std::string dimName, chunkstr;
 
-        std::map<int64_t, std::shared_ptr<PlayerInfo>> playerMap;
+        MyNbtPlayerMap playerMap;
         std::vector<std::string> villages;
 
         leveldb::Iterator* iter = db->NewIterator(levelDbReadOptions);
