@@ -268,7 +268,7 @@ namespace mcpe_viz {
                     sprintf(tmpstring, "%s/%s.%d.%d.png", dirOutput.c_str(), mybasename(filename).c_str(),
                         tileCounterY, i);
                     std::string fname = tmpstring;
-                    pngOut[i].init(fname, "MCPE Viz Image Tile", tileWidth, tileHeight, tileHeight, rgbaFlag, true);
+                    pngOut[i].init(fname, "Bedrock Viz Image Tile", tileWidth, tileHeight, tileHeight, rgbaFlag, true);
 
                     // clear buffer
                     memset(&buf[i][0], 0, tileWidth * tileHeight * bpp);

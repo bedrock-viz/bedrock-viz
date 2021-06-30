@@ -856,14 +856,13 @@ namespace mcpe_viz
 
         std::string dirOut = (control.outputDir / "tiles").generic_string();
         local_mkdir(dirOut);
-        log::info("Creating tiles for {}...", mybasename(fn));
+        if (control.verboseFlag) {
+            log::info("  Creating tiles for {}...", mybasename(fn));
+        } else {
+            log::trace("Creating tiles for {}...", mybasename(fn));
+        }
         PngTiler pngTiler(fn, control.tileWidth, control.tileHeight, dirOut);
-        if (pngTiler.doTile() == 0) {
-            // all is good
-        }
-        else {
-            // todobig - error
-        }
+        pngTiler.doTile();
 
         return 0;
     }
@@ -876,6 +875,7 @@ namespace mcpe_viz
         }
 
         for (int32_t dimid = 0; dimid < kDimIdCount; dimid++) {
+            log::info("Splitting images to tiles: Dimension '{}' ({})...", dimDataList[dimid]->getName(), dimid);
             doOutput_Tile_image(control.fnLayerTop[dimid]);
             doOutput_Tile_image(control.fnLayerBiome[dimid]);
             doOutput_Tile_image(control.fnLayerHeight[dimid]);
