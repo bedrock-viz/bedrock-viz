@@ -887,6 +887,9 @@ namespace mcpe_viz
             doOutput_Tile_image(control.fnLayerGrass[dimid]);
             doOutput_Tile_image(control.fnLayerShadedRelief[dimid]);
             for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
+                if (cy % 32 == 0) {
+                    log::info("  Layer {} of {}", cy, MAX_BLOCK_HEIGHT);
+                }
                 doOutput_Tile_image(control.fnLayerRaw[dimid][cy]);
             }
         }
