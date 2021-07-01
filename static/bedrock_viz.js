@@ -2867,7 +2867,8 @@ function doCheckUpdate_getChangeLog(newVersion, releaseData) {
     var newVersionHighlight = releaseData['name'];
 
     // try to take the version off the front since it's redundant when displayed
-    var res = releaseData['name'].match(/v{newVersion}\s*-\s*(.+)/);
+    var re = new RegExp('v' + newVersion + '\\s*-\\s*(.+)');
+    var res = newVersionHighlight.match(re);
     if ( res ) {
         newVersionHighlight = res[1];
     }
