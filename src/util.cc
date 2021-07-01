@@ -94,7 +94,7 @@ namespace mcpe_viz {
         memset(buf, 0, destW * destH * bppDest);
 
         PngWriter pngOut;
-        if (pngOut.init(fnDest, "MCPE Viz Oversampled Image", destW, destH, destH, true, true) != 0) {
+        if (pngOut.init(fnDest, "Bedrock Viz Oversampled Image", destW, destH, destH, true, true) != 0) {
             log::error("Failed to create dest png (fn={})", fnDest);
             delete[] buf;
             pngSrc.close();
