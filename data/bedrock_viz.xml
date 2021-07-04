@@ -124,7 +124,7 @@
       <blockvariant blockdata="0x1" name="Sponge, Wet" />
     </block>
     <block id="0x14" name="Glass" uname="minecraft:glass" color="0xf0f0f0" opaque="0" spawnable="0" />
-    <block id="0x15" name="Lapis Lazuli Ore" uname="minecraft:lapis_ore" color="0xb5c2d6" />
+    <block id="0x15" name="Lapis Lazuli Ore" uname="minecraft:lapis_ore" color="0x0547a8" />
     <block id="0x16" name="Lapis Lazuli Block" uname="minecraft:lapis_block" color="0x0547a9" />
     <block id="0x17" name="Dispenser" uname="minecraft:dispenser" color="0x929292" opaque="0" spawnable="0" /> <!-- *S *E 0.14 -->
     <block id="0x18" name="Sandstone" uname="minecraft:sandstone" color="0xfbf8b4"> <!-- *B -->
@@ -473,6 +473,7 @@
     <block id="0x8E" name="Potatos" uname="minecraft:potatoes" color="0xb4af1c" solid="0" opaque="0" spawnable="0" /> <!-- *S *I -->
     <block id="0x8F" name="Button, Wooden" uname="minecraft:oak_button;minecraft:wooden_button" color="0xcfbe7a" solid="0" opaque="0" spawnable="0" /> <!-- *S 0.13 -->
     <block id="0x90" name="Mob Head" uname="minecraft:skull" color="0xe030e0" solid="0"> <!-- *I *S *E 0.13 todo - parse type and direction etc -->
+      <blockvariant blockdata="0x00" name="Mob Head" />
       <blockvariant blockdata="0x01" name="Mob Head, On the floor" />
       <blockvariant blockdata="0x02" name="Mob Head, On a wall, facing North" />
       <blockvariant blockdata="0x03" name="Mob Head, On a wall, facing South" />
@@ -1396,6 +1397,152 @@
     <block id="0x22E" name="Cracked Nether Bricks" uname="minecraft:cracked_nether_bricks" color="0x230214" />
     <block id="0x22F" name="Quartz Bricks" uname="minecraft:quartz_bricks" color="0xE8E7E8" />
 
+    <block id="0x231" name="Powder Snow" uname="minecraft:powder_snow" color="0xfdfdff" />
+    <block id="0x232" name="Sculk Sensor" uname="minecraft:sculk_sensor" color="0x108010" />
+    <block id="0x233" name="Pointed Dripstone" uname="minecraft:pointed_dripstone" color="0x83685A" />
+    <block id="0x236" name="Copper Ore" uname="minecraft:copper_ore" color="0xB96042" />
+    <block id="0x237" name="Lightning Rod" uname="minecraft:lightning_rod" color="0xB96043" />
+    <block id="0x23C" name="Dripstone Block" uname="minecraft:dripstone_block" color="0x83685B" />
+    <block id="0x23D" name="Rooted Dirt" uname="minecraft:dirt_with_roots" color="0x7c5a05" />
+    <block id="0x23E" name="Hanging Roots" uname="minecraft:hanging_roots" color="0x7a5804" />
+    <block id="0x23F" name="Moss Block" uname="minecraft:moss_block" color="0x5E722F" />
+    <block id="0x240" name="Spore Blossom" uname="minecraft:spore_blossom" color="0x9E726F" />
+    <block id="0x241" name="Cave Vines" uname="minecraft:cave_vines" color="0x63812E" />
+    <block id="0x242" name="Big Dripleaf" uname="minecraft:big_dripleaf" color="0x769536" />
+    <block id="0x243" name="Azalea Leaves" uname="minecraft:azalea_leaves" color="0x5E732F" />
+    <block id="0x244" name="Flowered Azalea Leaves" uname="minecraft:azalea_leaves_flowered" color="0x8E735F" />
+    <block id="0x245" name="Clacite" uname="minecraft:calcite" color="0xC3C4C0" />
+    <block id="0x246" name="Amethyst Block" uname="minecraft:amethyst_block" color="0x624891" />
+    <block id="0x247" name="Budding Amethyst" uname="minecraft:budding_amethyst" color="0x644a93" />
+    <block id="0x248" name="Amethyst Cluster" uname="minecraft:amethyst_cluster" color="0x644a94" />
+    <block id="0x249" name="Large Amethyst Bud" uname="minecraft:large_amethyst_bud" color="0x644a95" />
+    <block id="0x24A" name="Medium Amethyst Bud" uname="minecraft:medium_amethyst_bud" color="0x644a96" />
+    <block id="0x24B" name="Small Amethyst Bud" uname="minecraft:small_amethyst_bud" color="0x644a97" />
+    <block id="0x24C" name="Tuff" uname="minecraft:tuff" color="0x474842" />
+    <block id="0x24D" name="Tinted Glass" uname="minecraft:tinted_glass" color="0x111111" />
+    <block id="0x24E" name="Moss Carpet" uname="minecraft:moss_carpet" color="0x5E722E" />
+    <block id="0x24F" name="Small Dripleaf" uname="minecraft:small_dripleaf_block" color="0x769535" />
+    <block id="0x250" name="Azalea" uname="minecraft:azalea" color="0x8E715F" />
+    <block id="0x251" name="Flowering Azalea" uname="minecraft:flowering_azalea" color="0x5E712F" />
+    <block id="0x252" name="Glow Frame" uname="minecraft:glow_frame" color="0xe66a30" />
+    <block id="0x253" name="Copper Block" uname="minecraft:copper_block" color="0xB96044" />
+    <block id="0x254" name="Exposed Copper" uname="minecraft:exposed_copper" color="0xAA8572" />
+    <block id="0x255" name="Weathered Copper" uname="minecraft:weathered_copper" color="0x92A88A" />
+    <block id="0x256" name="Oxidized Copper" uname="minecraft:oxidized_copper" color="0x67A48A" />
+    <block id="0x257" name="Waxed Copper" uname="minecraft:waxed_copper" color="0xB86044" />
+    <block id="0x258" name="Waxed Exposed Copper" uname="minecraft:waxed_exposed_copper" color="0xA98572" />
+    <block id="0x259" name="Waxed Weathered Copper" uname="minecraft:waxed_weathered_copper" color="0x91A88A" />
+    <block id="0x25A" name="Cut Copper" uname="minecraft:cut_copper" color="0xB96045" />
+    <block id="0x25B" name="Exposed Cut Copper" uname="minecraft:exposed_cut_copper" color="0xAA8573" />
+    <block id="0x25C" name="Weathered Cut Copper" uname="minecraft:weathered_cut_copper" color="0x92A88B" />
+    <block id="0x25D" name="Oxidized Cut Copper" uname="minecraft:oxidized_cut_copper" color="0x67A48B" />
+    <block id="0x25E" name="Waxed Cut Copper" uname="minecraft:waxed_cut_copper" color="0xB86045" />
+    <block id="0x25F" name="Waxed Exposed Cut Copper" uname="minecraft:waxed_exposed_cut_copper" color="0xA98573" />
+    <block id="0x260" name="Waxed Weathered Cut Copper" uname="minecraft:waxed_weathered_cut_copper" color="0x91A88B" />
+    <block id="0x261" name="Cut Copper Stairs" uname="minecraft:cut_copper_stairs" color="0xB96046" />
+    <block id="0x262" name="Exposed Cut Copper Stairs" uname="minecraft:exposed_cut_copper_stairs" color="0xAA8574" />
+    <block id="0x263" name="Weathered Cut Copper Stairs" uname="minecraft:weathered_cut_copper_stairs" color="0x92A88C" />
+    <block id="0x264" name="Oxidized Cut Copper Stairs" uname="minecraft:oxidized_cut_copper_stairs" color="0x67A48C" />
+    <block id="0x265" name="Waxed Cut Copper Stairs" uname="minecraft:waxed_cut_copper_stairs" color="0xB86046" />
+    <block id="0x266" name="Waxed Exposed Cut Copper Stairs" uname="minecraft:waxed_exposed_cut_copper_stairs" color="0xA98574" />
+    <block id="0x267" name="Waxed Weathered Cut Copper Stairs" uname="minecraft:waxed_weathered_cut_copper_stairs" color="0x91A88C" />
+    <block id="0x268" name="Cut Copper Slab" uname="minecraft:cut_copper_slab" color="0xB96047" />
+    <block id="0x269" name="Exposed Cut Copper Slab" uname="minecraft:exposed_cut_copper_slab" color="0xAA8575" />
+    <block id="0x26A" name="Weathered Cut Copper Slab" uname="minecraft:weathered_cut_copper_slab" color="0x92A88D" />
+    <block id="0x26B" name="Oxidized Cut Copper Slab" uname="minecraft:oxidized_cut_copper_slab" color="0x67A48D" />
+    <block id="0x26C" name="Waxed Cut Copper Slab" uname="minecraft:waxed_cut_copper_slab" color="0xB86047" />
+    <block id="0x26D" name="Waxed Exposed Cut Copper Slab" uname="minecraft:waxed_exposed_cut_copper_slab" color="0xA98575" />
+    <block id="0x26E" name="Waxed Weathered Cut Copper Slab" uname="minecraft:waxed_weathered_cut_copper_slab" color="0x91A88D" />
+    <block id="0x26F" name="Cut Copper Double Slab" uname="minecraft:double_cut_copper_slab" color="0xB96048" />
+    <block id="0x270" name="Exposed Cut Copper Double Slab" uname="minecraft:exposed_double_cut_copper_slab" color="0xAA8576" />
+    <block id="0x271" name="Weathered Cut Copper Double Slab" uname="minecraft:weathered_double_cut_copper_slab" color="0x92A88E" />
+    <block id="0x272" name="Oxidized Cut Copper Double Slab" uname="minecraft:oxidized_double_cut_copper_slab" color="0x67A48E" />
+    <block id="0x273" name="Waxed Cut Copper Double Slab" uname="minecraft:waxed_double_cut_copper_slab" color="0xB86048" />
+    <block id="0x274" name="Waxed Exposed Cut Copper Double Slab" uname="minecraft:waxed_exposed_double_cut_copper_slab" color="0xA98576" />
+    <block id="0x275" name="Waxed Weathered Cut Copper Double Slab" uname="minecraft:waxed_weathered_double_cut_copper_slab" color="0x91A88E" />
+    <block id="0x276" name="Cave Vines, Body with Berries" uname="minecraft:cave_vines_body_with_berries" color="0x83866C" />
+    <block id="0x277" name="Cave Vines, Head with Berries" uname="minecraft:cave_vines_head_with_berries" color="0x83866B" />
+    <block id="0x278" name="Smooth Basalt" uname="minecraft:smooth_basalt" color="0x343437" />
+    <block id="0x279" name="Deepslate" uname="minecraft:deepslate" color="0x373738" />
+    <block id="0x27A" name="Cobbled Deepslate" uname="minecraft:cobbled_deepslate" color="0x373739" />
+    <block id="0x27B" name="Cobbled Deepslate Slab" uname="minecraft:cobbled_deepslate_slab" color="0x37373A" />
+    <block id="0x27C" name="Cobbled Deepslate Stairs" uname="minecraft:cobbled_deepslate_stairs" color="0x37373B" />
+    <block id="0x27D" name="Cobbled Deepslate Wall" uname="minecraft:cobbled_deepslate_wall" color="0x37373C" />
+    <block id="0x27E" name="Polished Deepslate" uname="minecraft:polished_deepslate" color="0x383839" />
+    <block id="0x27F" name="Polished Deepslate Slab" uname="minecraft:polished_deepslate_slab" color="0x38383A" />
+    <block id="0x280" name="Polished Deepslate Stairs" uname="minecraft:polished_deepslate_stairs" color="0x38383B" />
+    <block id="0x281" name="Polished Deepslate Wall" uname="minecraft:polished_deepslate_wall" color="0x38383C" />
+    <block id="0x282" name="Deepslate Tiles" uname="minecraft:deepslate_tiles" color="0x393939" />
+    <block id="0x283" name="Deepslate Tile Slab" uname="minecraft:deepslate_tile_slab" color="0x39393a" />
+    <block id="0x284" name="Deepslate Tile Stairs" uname="minecraft:deepslate_tile_stairs" color="0x39393b" />
+    <block id="0x285" name="Deepslate Tile Wall" uname="minecraft:deepslate_tile_wall" color="0x39393c" />
+    <block id="0x286" name="Deepslate Bricks" uname="minecraft:deepslate_bricks" color="0x3a3a39" />
+    <block id="0x287" name="Deepslate Brick Slab" uname="minecraft:deepslate_brick_slab" color="0x3a3a3a" />
+    <block id="0x288" name="Deepslate Brick Stairs" uname="minecraft:deepslate_brick_stairs" color="0x3a3a3b" />
+    <block id="0x289" name="Deepslate Brick Wall" uname="minecraft:deepslate_brick_wall" color="0x3a3a3c" />
+    <block id="0x28A" name="Chiseled Deepslate" uname="minecraft:chiseled_deepslate" color="0x363738" />
+    <block id="0x28B" name="Cobbled Deepslate Double Slab" uname="minecraft:cobbled_deepslate_double_slab" color="0x37373d" />
+    <block id="0x28C" name="Polished Deepslate Double Slab" uname="minecraft:polished_deepslate_double_slab" color="0x38383d" />
+    <block id="0x28D" name="Deepslate Tile Double Slab" uname="minecraft:deepslate_tile_double_slab" color="0x39393d" />
+    <block id="0x28E" name="Deepslate Brick Double Slab" uname="minecraft:deepslate_brick_double_slab" color="0x3a3a3d" />
+    <block id="0x28F" name="Deepslate Lapis Lazuli Ore" uname="minecraft:deepslate_lapis_ore" color="0x0446a9" />
+    <block id="0x290" name="Deepslate Iron Ore" uname="minecraft:deepslate_iron_ore" color="0xdabd21" />
+    <block id="0x291" name="Deepslate Gold Ore" uname="minecraft:deepslate_gold_ore" color="0xf4f63b" />
+    <block id="0x292" name="Deepslate Redstone Ore" uname="minecraft:deepslate_redstone_ore" color="0xaa2728" />
+    <block id="0x293" name="Glowing Deepslate Redstone Ore" uname="minecraft:lit_deepslate_redstone_ore" color="0xaa2729" />
+    <block id="0x294" name="Deepslate Diamond Ore" uname="minecraft:deepslate_diamond_ore" color="0x76dbd8" />
+    <block id="0x295" name="Deepslate Coal Ore" uname="minecraft:deepslate_coal_ore" color="0x4f4f50" />
+    <block id="0x296" name="Deepslate Emerald Ore" uname="minecraft:deepslate_emerald_ore" color="0x76d07d" />
+    <block id="0x297" name="Deepslate Copper Ore" uname="minecraft:deepslate_copper_ore" color="0xB85f42" />
+    <block id="0x298" name="Cracked Deepslate Tiles" uname="minecraft:cracked_deepslate_tiles" color="0x39393e" />
+    <block id="0x299" name="Cracked Deepslate Bricks" uname="minecraft:cracked_deepslate_bricks" color="0x3a3a3e" />
+    <block id="0x29A" name="Glow Lichen" uname="minecraft:glow_lichen" color="0x778778" />
+    <block id="0x29B" name="Candle" uname="minecraft:candle" color="0xD1AD64" />
+    <!-- candles get virtual dcolor of -1B -1R  -->
+    <block id="0x29C" name="White Candle" uname="minecraft:white_candle" color="0xDCDDC" />
+    <block id="0x29D" name="Orange Candle" uname="minecraft:orange_candle" color="0xDA7D3D" />
+    <block id="0x29E" name="Magenta Candle" uname="minecraft:magenta_candle" color="0xB250BB" />
+    <block id="0x29F" name="Light Blue Candle" uname="minecraft:light_blue_candle" color="0x6A8AC8" />
+    <block id="0x2A0" name="Yellow Candle" uname="minecraft:yellow_candle" color="0xB0A626" />
+    <block id="0x2A1" name="Lime Candle" uname="minecraft:lime_candle" color="0x40AE37" />
+    <block id="0x2A2" name="Pink Candle" uname="minecraft:pink_candle" color="0xCF8498" />
+    <block id="0x2A3" name="Gray Candle" uname="minecraft:gray_candle" color="0x3F403F" />
+    <block id="0x2A4" name="Light Gray Candle" uname="minecraft:light_gray_candle" color="0x99A1A0" />
+    <block id="0x2A5" name="Cyan Candle" uname="minecraft:cyan_candle" color="0x2D6E88" />
+    <block id="0x2A6" name="Purple Candle" uname="minecraft:purple_candle" color="0x7D3DB4" />
+    <block id="0x2A7" name="Blue Candle" uname="minecraft:blue_candle" color="0x2D388C" />
+    <block id="0x2A8" name="Brown Candle" uname="minecraft:brown_candle" color="0x4D321E" />
+    <block id="0x2A9" name="Green Candle" uname="minecraft:green_candle" color="0x34461A" />
+    <block id="0x2AA" name="Red Candle" uname="minecraft:red_candle" color="0x95342F" />
+    <block id="0x2AB" name="Black Candle" uname="minecraft:black_candle" color="0x181615" />
+    <!-- cake with candles get virtual dcolor of -1R  -->
+    <block id="0x2AC" name="Cake with Candle" uname="minecraft:candle_cake" color="0xD0AD65" />
+    <block id="0x2AD" name="Cake with White Candle" uname="minecraft:white_candle_cake" color="0xDCDDD" />
+    <block id="0x2AE" name="Cake with Orange Candle" uname="minecraft:orange_candle_cake" color="0xDA7D3E" />
+    <block id="0x2AF" name="Cake with Magenta Candle" uname="minecraft:magenta_candle_cake" color="0xB250BC" />
+    <block id="0x2B0" name="Cake with Light Blue Candle" uname="minecraft:light_blue_candle_cake" color="0x6A8AC9" />
+    <block id="0x2B1" name="Cake with Yellow Candle" uname="minecraft:yellow_candle_cake" color="0xB0A627" />
+    <block id="0x2B2" name="Cake with Lime Candle" uname="minecraft:lime_candle_cake" color="0x40AE38" />
+    <block id="0x2B3" name="Cake with Pink Candle" uname="minecraft:pink_candle_cake" color="0xCF8499" />
+    <block id="0x2B4" name="Cake with Gray Candle" uname="minecraft:gray_candle_cake" color="0x3F4040" />
+    <block id="0x2B5" name="Cake with Light Gray Candle" uname="minecraft:light_gray_candle_cake" color="0x99A1A1" />
+    <block id="0x2B6" name="Cake with Cyan Candle" uname="minecraft:cyan_candle_cake" color="0x2D6E89" />
+    <block id="0x2B7" name="Cake with Purple Candle" uname="minecraft:purple_candle_cake" color="0x7D3DB5" />
+    <block id="0x2B8" name="Cake with Blue Candle" uname="minecraft:blue_candle_cake" color="0x2D388D" />
+    <block id="0x2B9" name="Cake with Brown Candle" uname="minecraft:brown_candle_cake" color="0x4E321F" />
+    <block id="0x2BA" name="Cake with Green Candle" uname="minecraft:green_candle_cake" color="0x34461B" />
+    <block id="0x2BB" name="Cake with Red Candle" uname="minecraft:red_candle_cake" color="0x953430" />
+    <block id="0x2BC" name="Cake with Black Candle" uname="minecraft:black_candle_cake" color="0x181616" />
+    <block id="0x2BD" name="Waxed Oxidized Copper" uname="minecraft:waxed_oxidized_copper" color="0x66A48A" />
+    <block id="0x2BE" name="Waxed Oxidized Cut Copper" uname="minecraft:waxed_oxidized_cut_copper" color="0x66A48B" />
+    <block id="0x2BF" name="Waxed Oxidized Cut Copper Stairs" uname="minecraft:waxed_oxidized_cut_copper_stairs" color="0x66A48C" />
+    <block id="0x2C0" name="Waxed Oxidized Cut Copper Slab" uname="minecraft:waxed_oxidized_cut_copper_slab" color="0x66A48D" />
+    <block id="0x2C1" name="Waxed Oxidized Double Cut Copper Slab" uname="minecraft:waxed_oxidized_double_cut_copper_slab" color="0x66A48E" />
+    <block id="0x2C2" name="Block of Raw Iron" uname="minecraft:raw_iron_block" color="0x8B715C" />
+    <block id="0x2C3" name="Block of Raw Copper" uname="minecraft:raw_copper_block" color="0xB96040" />
+    <block id="0x2C4" name="Block of Raw Gold" uname="minecraft:raw_gold_block" color="0xBB9329" />
+    <block id="0x2C5" name="Infested Deepslate" uname="minecraft:infested_deepslate" color="0x474748" />
+
   </blocklist>
 
   <!--
@@ -1530,6 +1677,7 @@
       <itemvariant extradata="0x5" name="Bucket, Pufferfish" uname="minecraft:pufferfish_bucket" />
       <itemvariant extradata="0x8" name="Bucket, Water" uname="minecraft:water_bucket" />
       <itemvariant extradata="0xa" name="Bucket, Lava" uname="minecraft:lava_bucket" />
+      <itemvariant extradata="0xc" name="Bucket, Axolotl" uname="minecraft:axolotl_bucket" />
     </item>
     <!-- item id="0x146" name="TBD - Water Bucket" uname="minecraft:" -->
     <!-- item id="0x147" name="TBD - Lava Bucket" uname="minecraft:" -->
@@ -1731,6 +1879,8 @@
       <itemvariant extradata="0x7E" name="Spawn Egg, Zoglin" uname="minecraft:zoglin_spawn_egg" />
       <itemvariant extradata="0x7F" name="Spawn Egg, Piglin Brute" uname="minecraft:piglin_brute_spawn_egg" /> <!-- 1.16 -->
       <itemvariant extradata="0x80" name="Spawn Egg, Goat" uname="minecraft:goat_spawn_egg" /> <!-- 1.17 -->
+      <itemvariant extradata="0x81" name="Spawn Egg, Glow Squid" uname="minecraft:glow_squid_spawn_egg" /> <!-- 1.17 -->
+      <itemvariant extradata="0x82" name="Spawn Egg, Axolotl" uname="minecraft:axolotl_spawn_egg" /> <!-- 1.17 -->
     </item>
     <item id="0x180" name="Bottle o' Enchanting" uname="minecraft:experience_bottle" />
     <item id="0x181" name="Fire Charge" uname="minecraft:fire_charge" /> <!-- 0.15 -->
@@ -1930,18 +2080,18 @@
     <item id="0x1dd" name="Sweet Berries" uname="minecraft:sweet_berries" />
     <item id="0x1F2" name="Camera" uname="minecraft:camera" /> <!-- EDU -->
     <item id="0x1F3" name="Salt" uname="minecraft:compound" />
-    <item id="0x1F4" name="Record, 13" uname="minecraft:record_13" />
-    <item id="0x1F5" name="Record, Cat" uname="minecraft:record_cat" />
-    <item id="0x1F6" name="Record, Blocks" uname="minecraft:record_blocks" />
-    <item id="0x1F7" name="Record, Chirp" uname="minecraft:record_chirp" />
-    <item id="0x1F8" name="Record, Far" uname="minecraft:record_far" />
-    <item id="0x1F9" name="Record, Mall" uname="minecraft:record_mall" />
-    <item id="0x1FA" name="Record, Mellohi" uname="minecraft:record_mellohi" />
-    <item id="0x1FB" name="Record, Stal" uname="minecraft:record_stal" />
-    <item id="0x1FC" name="Record, Strad" uname="minecraft:record_strad" />
-    <item id="0x1FD" name="Record, Ward" uname="minecraft:record_ward" />
-    <item id="0x1FE" name="Record, 11" uname="minecraft:record_11" />
-    <item id="0x1FF" name="Record, Wait" uname="minecraft:record_wait" />
+    <item id="0x1F4" name="Record, 13" uname="minecraft:record_13;minecract:music_disc_13" />
+    <item id="0x1F5" name="Record, Cat" uname="minecraft:record_cat;minecract:music_disc_cat" />
+    <item id="0x1F6" name="Record, Blocks" uname="minecraft:record_blocks;minecract:music_disc_blocks" />
+    <item id="0x1F7" name="Record, Chirp" uname="minecraft:record_chirp;minecract:music_disc_chirp" />
+    <item id="0x1F8" name="Record, Far" uname="minecraft:record_far;minecract:music_disc_far" />
+    <item id="0x1F9" name="Record, Mall" uname="minecraft:record_mall;minecract:music_disc_mall" />
+    <item id="0x1FA" name="Record, Mellohi" uname="minecraft:record_mellohi;minecract:music_disc_mellohi" />
+    <item id="0x1FB" name="Record, Stal" uname="minecraft:record_stal;minecract:music_disc_stal" />
+    <item id="0x1FC" name="Record, Strad" uname="minecraft:record_strad;minecract:music_disc_strad" />
+    <item id="0x1FD" name="Record, Ward" uname="minecraft:record_ward;minecract:music_disc_ward" />
+    <item id="0x1FE" name="Record, 11" uname="minecraft:record_11;minecract:music_disc_11" />
+    <item id="0x1FF" name="Record, Wait" uname="minecraft:record_wait;minecract:music_disc_wait" />
     <item id="0x201" name="Shield" uname="minecraft:shield" />
     <item id="0x2d0" name="Campfire" uname="minecraft:campfire" />
     <item id="0x2de" name="Suspicious Stew" uname="minecraft:suspicious_stew" />
@@ -1960,6 +2110,22 @@
     <item id="0x2ef" name="Netherite Boots" uname="minecraft:netherite_boots" />
     <item id="0x2f0" name="Netherite Scrap" uname="minecraft:netherite_scrap" />
     <item id="0x2F5" name="Warped Fungus on a Stick" uname="minecraft:warped_fungus_on_a_stick" />
+    <item id="0x2F7" name="Record, Pigstep" uname="minecraft:record_pigstep;minecract:music_disc_pigstep" />
+
+<!-- these item ids are NOT RIGHT, we need to find out what they're supposed to be and fit them in above -->
+    <item id="0x400" name="amethyst shard" uname="minecraft:amethyst_shard" />
+    <item id="0x401" name="copper ingot" uname="minecraft:copper_ingot" />
+    <item id="0x403" name="filled map" uname="minecraft:filled_map" />
+    <item id="0x404" name="glow berries" uname="minecraft:glow_berries" />
+    <item id="0x405" name="glow ink sac" uname="minecraft:glow_ink_sac" />
+    <item id="0x406" name="lodestone compass" uname="minecraft:lodestone_compass" />
+    <item id="0x407" name="oak sign" uname="minecraft:oak_sign" />
+    <item id="0x408" name="raw copper" uname="minecraft:raw_copper" />
+    <item id="0x409" name="raw gold" uname="minecraft:raw_gold" />
+    <item id="0x40a" name="raw iron" uname="minecraft:raw_iron" />
+    <item id="0x40b" name="spyglass" uname="minecraft:spyglass" />
+    <item id="0x40c" name="structure void" uname="minecraft:structure_void" />
+
   </itemlist>
 
   <!--
