@@ -5,6 +5,7 @@
   GPL'ed code - see LICENSE
 
  */
+#include <algorithm> //for std::sort
 #include <cstdio>
 #include <filesystem>
 #include <string>
@@ -34,6 +35,10 @@
 using namespace boost::program_options;
 using namespace std;
 
+bool compareNamedItems(const mcpe_viz::Named* left, const mcpe_viz::Named* right)
+{
+    return *left < *right;
+}
 
 int main(int argc, char** argv)
 {
@@ -117,7 +122,9 @@ int main(int argc, char** argv)
 
     unordered_map<Colored::ColorType, string> biomeColorMap;
 
-    for(auto& biome : mcpe_viz::Biome::list()) {
+    auto biomeList = mcpe_viz::Biome::list();
+    sort(biomeList.begin(), biomeList.end(), compareNamedItems);
+    for(auto& biome : biomeList) {
         if (biome->is_color_set()) {
             // check for conflicts...
             auto found = biomeColorMap.find(biome->colorAsLocalInt());
@@ -152,7 +159,9 @@ int main(int argc, char** argv)
 
     unordered_map<Colored::ColorType, string> blockColorMap;
 
-    for(auto& block : mcpe_viz::Block::list()) {
+    auto blockList = mcpe_viz::Block::list();
+    sort(blockList.begin(), blockList.end(), compareNamedItems);
+    for(auto& block : blockList) {
         bool hasVariants = block->hasVariants();
 
         if (block->is_color_set()) {

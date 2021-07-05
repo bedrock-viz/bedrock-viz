@@ -14,6 +14,12 @@ namespace mcpe_viz {
             : name{std::move(name)}
         {
         }
+        // overloading the < operator allows sort to
+        // alphabetize lists of Named objects
+        bool operator<(const Named& other) const
+        {
+            return name < other.name;
+        }
     };
 
     class Colored {
