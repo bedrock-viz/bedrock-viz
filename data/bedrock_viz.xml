@@ -2080,18 +2080,18 @@
     <item id="0x1dd" name="Sweet Berries" uname="minecraft:sweet_berries" />
     <item id="0x1F2" name="Camera" uname="minecraft:camera" /> <!-- EDU -->
     <item id="0x1F3" name="Salt" uname="minecraft:compound" />
-    <item id="0x1F4" name="Record, 13" uname="minecraft:record_13;minecract:music_disc_13" />
-    <item id="0x1F5" name="Record, Cat" uname="minecraft:record_cat;minecract:music_disc_cat" />
-    <item id="0x1F6" name="Record, Blocks" uname="minecraft:record_blocks;minecract:music_disc_blocks" />
-    <item id="0x1F7" name="Record, Chirp" uname="minecraft:record_chirp;minecract:music_disc_chirp" />
-    <item id="0x1F8" name="Record, Far" uname="minecraft:record_far;minecract:music_disc_far" />
-    <item id="0x1F9" name="Record, Mall" uname="minecraft:record_mall;minecract:music_disc_mall" />
-    <item id="0x1FA" name="Record, Mellohi" uname="minecraft:record_mellohi;minecract:music_disc_mellohi" />
-    <item id="0x1FB" name="Record, Stal" uname="minecraft:record_stal;minecract:music_disc_stal" />
-    <item id="0x1FC" name="Record, Strad" uname="minecraft:record_strad;minecract:music_disc_strad" />
-    <item id="0x1FD" name="Record, Ward" uname="minecraft:record_ward;minecract:music_disc_ward" />
-    <item id="0x1FE" name="Record, 11" uname="minecraft:record_11;minecract:music_disc_11" />
-    <item id="0x1FF" name="Record, Wait" uname="minecraft:record_wait;minecract:music_disc_wait" />
+    <item id="0x1F4" name="Record, 13" uname="minecraft:record_13;minecraft:music_disc_13" />
+    <item id="0x1F5" name="Record, Cat" uname="minecraft:record_cat;minecraft:music_disc_cat" />
+    <item id="0x1F6" name="Record, Blocks" uname="minecraft:record_blocks;minecraft:music_disc_blocks" />
+    <item id="0x1F7" name="Record, Chirp" uname="minecraft:record_chirp;minecraft:music_disc_chirp" />
+    <item id="0x1F8" name="Record, Far" uname="minecraft:record_far;minecraft:music_disc_far" />
+    <item id="0x1F9" name="Record, Mall" uname="minecraft:record_mall;minecraft:music_disc_mall" />
+    <item id="0x1FA" name="Record, Mellohi" uname="minecraft:record_mellohi;minecraft:music_disc_mellohi" />
+    <item id="0x1FB" name="Record, Stal" uname="minecraft:record_stal;minecraft:music_disc_stal" />
+    <item id="0x1FC" name="Record, Strad" uname="minecraft:record_strad;minecraft:music_disc_strad" />
+    <item id="0x1FD" name="Record, Ward" uname="minecraft:record_ward;minecraft:music_disc_ward" />
+    <item id="0x1FE" name="Record, 11" uname="minecraft:record_11;minecraft:music_disc_11" />
+    <item id="0x1FF" name="Record, Wait" uname="minecraft:record_wait;minecraft:music_disc_wait" />
     <item id="0x201" name="Shield" uname="minecraft:shield" />
     <item id="0x2d0" name="Campfire" uname="minecraft:campfire" />
     <item id="0x2de" name="Suspicious Stew" uname="minecraft:suspicious_stew" />
@@ -2110,7 +2110,7 @@
     <item id="0x2ef" name="Netherite Boots" uname="minecraft:netherite_boots" />
     <item id="0x2f0" name="Netherite Scrap" uname="minecraft:netherite_scrap" />
     <item id="0x2F5" name="Warped Fungus on a Stick" uname="minecraft:warped_fungus_on_a_stick" />
-    <item id="0x2F7" name="Record, Pigstep" uname="minecraft:record_pigstep;minecract:music_disc_pigstep" />
+    <item id="0x2F7" name="Record, Pigstep" uname="minecraft:record_pigstep;minecraft:music_disc_pigstep" />
 
 <!-- these item ids are NOT RIGHT, we need to find out what they're supposed to be and fit them in above -->
     <item id="0x400" name="amethyst shard" uname="minecraft:amethyst_shard" />
