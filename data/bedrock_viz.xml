@@ -1099,7 +1099,7 @@
       <blockvariant blockdata="0xd" name="Horn Coral Wall Fan facing west" />
       <blockvariant blockdata="0xc" name="Horn Coral Wall Fan facing south" />
     </block>
-    <block id="0x189" name="kelp" uname="minecraft:kelp" color="0x233410" opaque="0" spawnable="0">
+    <block id="0x189" name="Kelp" uname="minecraft:kelp" color="0x233410" opaque="0" spawnable="0">
       <blockvariant blockdata="0x0" name="Kelp" />
       <blockvariant blockdata="0x1" name="Kelp" />
       <blockvariant blockdata="0x2" name="Kelp" />
@@ -1257,7 +1257,7 @@
     <block id="0x1BE" name="Acacia Wall Sign" uname="minecraft:acacia_wall_sign" color="0x70702e" />
     <block id="0x1BF" name="Darkoak Standing Sign" uname="minecraft:darkoak_standing_sign" color="0x68722a" />
     <block id="0x1C0" name="Darkoak Wall Sign" uname="minecraft:darkoak_wall_sign" color="0x68722d" />
-    <block id="0x1c1" name="lectern" uname="minecraft:lectern" color="0x895c27" />
+    <block id="0x1c1" name="Lectern" uname="minecraft:lectern" color="0x895c27" />
     <block id="0x1c2" name="Grindstone" uname="minecraft:grindstone" color="0x808180" />
     <block id="0x1c3" name="Blast Furnace" uname="minecraft:blast_furnace" color="0xe54e27" />
     <block id="0x1c4" name="Stonecutter Block" uname="minecraft:stonecutter_block" color="0x8a8080" />
