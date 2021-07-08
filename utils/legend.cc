@@ -11,6 +11,7 @@
 #include <string>
 #include <cstdint>
 #include <iostream>
+#include <iomanip>
 
 #include <leveldb/db.h>
 #include <leveldb/cache.h>
