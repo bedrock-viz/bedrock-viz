@@ -7,8 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  Ubuntu_18_04:
-    runs-on: ubuntu-18.04
+  Ubuntu:
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
@@ -19,12 +19,6 @@ jobs:
       run: |
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install python3 libpng++-dev zlib1g-dev g++-8 libboost-program-options-dev wget lcov libjson-perl libperlio-gzip-perl
-        # LCOV 1.13 has some issues with parsing gcc 8+ gcda files
-        wget http://archive.ubuntu.com/ubuntu/pool/universe/l/lcov/lcov_1.14-2_all.deb
-        sudo dpkg -i lcov_1.14-2_all.deb 
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 90
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
-        sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-8 90
         g++ --version
         gcov --version
     
@@ -36,8 +30,6 @@ jobs:
     - name: Build
       run: |
         mkdir build && cd build
-        export CC=/usr/bin/gcc-8
-        export CXX=/usr/bin/g++-8
         cmake -DBUILD_TESTS=ON -DCODE_COVERAGE=ON ..
         make
 
