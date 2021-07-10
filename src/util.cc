@@ -94,7 +94,7 @@ namespace mcpe_viz {
         memset(buf, 0, destW * destH * bppDest);
 
         PngWriter pngOut;
-        if (pngOut.init(fnDest, "MCPE Viz Oversampled Image", destW, destH, destH, true, true) != 0) {
+        if (pngOut.init(fnDest, "Bedrock Viz Oversampled Image", destW, destH, destH, true, true) != 0) {
             log::error("Failed to create dest png (fn={})", fnDest);
             delete[] buf;
             pngSrc.close();
@@ -268,7 +268,7 @@ namespace mcpe_viz {
                     sprintf(tmpstring, "%s/%s.%d.%d.png", dirOutput.c_str(), mybasename(filename).c_str(),
                         tileCounterY, i);
                     std::string fname = tmpstring;
-                    pngOut[i].init(fname, "MCPE Viz Image Tile", tileWidth, tileHeight, tileHeight, rgbaFlag, true);
+                    pngOut[i].init(fname, "Bedrock Viz Image Tile", tileWidth, tileHeight, tileHeight, rgbaFlag, true);
 
                     // clear buffer
                     memset(&buf[i][0], 0, tileWidth * tileHeight * bpp);

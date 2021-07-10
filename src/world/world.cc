@@ -13,6 +13,8 @@
 #include <leveldb/cache.h>
 #include <leveldb/env.h>
 
+#include <iostream>
+
 
 namespace
 {
@@ -366,6 +368,9 @@ namespace mcpe_viz
         const char* cdata;
         std::string dimName, chunkstr;
 
+        MyNbtPlayerMap playerMap;
+        std::vector<std::string> villages;
+
         leveldb::Iterator* iter = db->NewIterator(levelDbReadOptions);
         for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
 
@@ -404,7 +409,9 @@ namespace mcpe_viz
                 log::trace("Local Player value:");
                 ret = parseNbt("Local Player: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
-                    parseNbt_entity(-1, "", tagList, true, false, "Local Player", "");
+                    std::shared_ptr<PlayerInfo> player_info(new PlayerInfo());
+                    parseNbt_entity(-1, "", tagList, true, false, "Local Player", "", player_info);
+                    playerMap[player_info->uniqueId] = player_info;
                 }
             }
             else if ((key_size >= 7) && (strncmp(key, "player_", 7) == 0)) {
@@ -415,7 +422,9 @@ namespace mcpe_viz
 
                 ret = parseNbt("Remote Player: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
-                    parseNbt_entity(-1, "", tagList, false, true, "Remote Player", playerRemoteId);
+                    std::shared_ptr<PlayerInfo> player_info(new PlayerInfo());
+                    parseNbt_entity(-1, "", tagList, false, true, "Remote Player", playerRemoteId, player_info);
+                    playerMap[player_info->uniqueId] = player_info;
                 }
             }
             else if (strncmp(key, "villages", key_size) == 0) {
@@ -429,6 +438,18 @@ namespace mcpe_viz
                 ret = parseNbt("mVillages: ", cdata, int32_t(cdata_size), tagList);
                 if (ret == 0) {
                     parseNbt_mVillages(tagList);
+                }
+            }
+            else if (strncmp(key, "VILLAGE_", 8) == 0) {
+                // VILLAGE_07315855-d0e6-4fac-8b20-0c07cfad3d29_POI
+                char vid[37];
+                char rectype[9];
+                memcpy(vid, key + 8, 36);
+                vid[36] = '\0';
+                memcpy(rectype, key+45, key_size-45);
+                rectype[key_size-45] = '\0';
+                if (strncmp(rectype, "INFO", 5) == 0) {
+                    villages.push_back(vid);
                 }
             }
             else if (strncmp(key, "game_flatworldlayers", key_size) == 0) {
@@ -822,6 +843,24 @@ namespace mcpe_viz
                 printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), true);
             }
         }
+        for (auto vid : villages) {
+            std::string data;
+            MyNbtTagList info_tags, player_tags, dweller_tags, poi_tags;
+            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_INFO"), &data);
+            ret = parseNbt("village_info: ", data.data(), data.size(), info_tags);
+            if (ret != 0) continue;
+            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_PLAYERS"), &data);
+            ret = parseNbt("village_players: ", data.data(), data.size(), player_tags);
+            if (ret != 0) continue;
+            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_DWELLERS"), &data);
+            ret = parseNbt("village_dwellers: ", data.data(), data.size(), dweller_tags);
+            if (ret != 0) continue;
+            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_POI"), &data);
+            ret = parseNbt("village_poi: ", data.data(), data.size(), poi_tags);
+            if (ret != 0) continue;
+
+            parseNbt_village(info_tags, player_tags, dweller_tags, poi_tags, playerMap);
+        }
         log::info("Read {} records", recordCt);
         log::info("Status: {}", iter->status().ToString());
 
@@ -841,14 +880,13 @@ namespace mcpe_viz
 
         std::string dirOut = (control.outputDir / "tiles").generic_string();
         local_mkdir(dirOut);
-        log::info("Creating tiles for {}...", mybasename(fn));
+        if (control.verboseFlag) {
+            log::info("  Creating tiles for {}...", mybasename(fn));
+        } else {
+            log::trace("Creating tiles for {}...", mybasename(fn));
+        }
         PngTiler pngTiler(fn, control.tileWidth, control.tileHeight, dirOut);
-        if (pngTiler.doTile() == 0) {
-            // all is good
-        }
-        else {
-            // todobig - error
-        }
+        pngTiler.doTile();
 
         return 0;
     }
@@ -861,6 +899,7 @@ namespace mcpe_viz
         }
 
         for (int32_t dimid = 0; dimid < kDimIdCount; dimid++) {
+            log::info("Splitting images to tiles: Dimension '{}' ({})...", dimDataList[dimid]->getName(), dimid);
             doOutput_Tile_image(control.fnLayerTop[dimid]);
             doOutput_Tile_image(control.fnLayerBiome[dimid]);
             doOutput_Tile_image(control.fnLayerHeight[dimid]);
@@ -872,6 +911,9 @@ namespace mcpe_viz
             doOutput_Tile_image(control.fnLayerGrass[dimid]);
             doOutput_Tile_image(control.fnLayerShadedRelief[dimid]);
             for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
+                if (cy % 32 == 0) {
+                    log::info("  Layer {} of {}", cy, MAX_BLOCK_HEIGHT);
+                }
                 doOutput_Tile_image(control.fnLayerRaw[dimid][cy]);
             }
         }

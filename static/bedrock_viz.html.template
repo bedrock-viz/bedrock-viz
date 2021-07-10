@@ -201,6 +201,7 @@
 	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="SignBlank">Sign (Blank)</a></li>
 	    <li role="separator" class="divider"></li>
 	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Chest">Chest</a></li>
+	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Barrel">Barrel</a></li>
 	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="ShulkerBox">Shulker Box</a></li>
 	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="EnderChest">Ender Chest</a></li>
 	    <li><a href="#" class="tileEntityToggle" data-type="O" data-id="Hopper">Hopper</a></li>

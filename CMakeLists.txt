@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(bedrock-viz VERSION 0.1.2)
+project(bedrock-viz VERSION 0.1.4)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -83,6 +83,10 @@ file(COPY static DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 add_executable(${BIN_NAME} src/main.cc)
 target_link_libraries(${BIN_NAME} PRIVATE ${LIB_NAME})
 target_include_directories(${BIN_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
+add_executable(legend utils/legend.cc)
+target_link_libraries(legend PRIVATE ${LIB_NAME})
+target_include_directories(legend PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
 install(TARGETS ${BIN_NAME} DESTINATION bin)
 install(DIRECTORY data/ DESTINATION share/bedrock-viz/data)

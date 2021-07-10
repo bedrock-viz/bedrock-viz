@@ -2,12 +2,31 @@
 
 ## Repo Info
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
-- Maintained by   : [jasper-wan](https://github.com/jasper-wan)
+- Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
-- Latest highlight: Quality of life and mapping accuracy improvements
-- Latest release  : 0.1.3
+- Latest highlight: Caves & Cliffs: Blocks & Items; and tooling to make life easier
+- Latest release  : 0.1.4
 
-## bedrock_viz changelog
+## bedrock-viz changelog
+
+v0.1.4 - 2021.07.04
+- Viewer changes
+  - Barrels are now an option to display in the Objects menu, with full inventory.
+  - Villages will now show the Village center, as well as the Villagers when the corresponding items are enabled.
+  - Version checking logic improved to only look at released versions.
+- Parser changes
+  - 1.17 blocks and entities added to the xml file, plus some changes from 1.16 that were missed.
+  - New utility to parse the xml data, check for conflicting colors and write out a legend file
+  - Local config files now actually work the way the docs said they did!
+  - Barrels are recognized as containers!
+  - Item variants are now registered by uname so they can be found if that's all that is available from the db.
+  - Add support for the new village data format!
+  - Dialed down the verbosity when splitting tiles.
+- Housekeeping
+  - fix a couple more instances where mcpe-viz had not been renamed to bedrock-viz
+- Fixes in this release from:
+  - [cabbey](https://github.com/cabbey)
+  - [geoffholden](https://github.com/geoffholden) (first time contributor)
 
 v0.1.3 - 2021.01.01
 

@@ -119,7 +119,6 @@ var globalItemStyleSelector = null;
 var globalItemStyleCount = 0;
 
 var globalWarnSlimeChunks = false;
-var globalWarnVillage = false;
 
 var showChunkCoordinatesFlag = false;
 var chunkGridFlag = false;
@@ -953,13 +952,6 @@ function doFeaturePopover(features, id, coordinate) {
     stitle += '</div>';
 
     if (name === 'Village') {
-        
-        if ( !globalWarnVillage ) {
-            doModal('Villages',
-                    '<i>Warning:</i> MCPE only tracks villages that you are near when you exit the game.  You will <b>not</b> see villages that are outside your area.  If you want to see info on them, go near them, exit the game, and then re-run bedrock_viz.');
-            globalWarnVillage = true;
-        }
-
         // remove old items
         srcVillageVectorPoints.clear();
 
@@ -2806,7 +2798,7 @@ function doTour(aboutFlag) {
             {
                 title: 'About Bedrock Viz',
                 content: '' +
-                    '<a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">Bedrock Viz on github<br/>' +
+                    '<a href="https://github.com/bedrock-viz/bedrock-viz" target="_blank">Bedrock Viz is developed on GitHub</a><br/>' +
                     'Version ' + creationBedrockVizVersion + '<br/>' +
                     'Please be sure to check back often for updates!</a><br/>' +
                     '<br/>' +
@@ -2815,7 +2807,7 @@ function doTour(aboutFlag) {
                     '<li><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a></li>' +
                     '<li><a href="http://bootstraptour.com/" target="_blank">Bootstrap Tour</a></li>' +
                     '<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>' +
-                    '<li><a href="https://github.com/Plethora777/mcpe_viz" target="_blank">Fork of MCPE Viz by Plethora777</li>' +
+                    '<li>Fork of <a href="https://github.com/Plethora777/mcpe_viz" target="_blank">MCPE Viz by Plethora777</a></li>' +
                     '</ul>' +
                     'Block and Item images are borrowed from the <a href="http://minecraft.gamepedia.com/" target="_blank">Minecraft Wiki</a>.  The textures themselves are copyright Mojang.'
             }
@@ -2840,8 +2832,7 @@ function doModal(title, body) {
     $('.modal').modal({});
 }
 
-function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
-    // todo - make the update checks come from https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest for the latest version info.
+function showUpdateInfo(newVersion, newVersionHighlight, releaseData) {
     // todobig - make this a bootstrap dialog box that has a clickable link
     var isCurrent = newVersion == creationBedrockVizVersion;
     var title;
@@ -2855,7 +2846,7 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
     else
     {
         title = 'You are running the latest version';
-        msg = 'You are running the latest version: <b>v' + creationBedrockVizVersion + '</b><br/><br/>';
+        msg = 'You are running the latest released version: <b>v' + creationBedrockVizVersion + '</b><br/><br/>';
     }
 
     msg += '<div class="panel panel-default">' +
@@ -2865,42 +2856,29 @@ function showUpdateInfo(newVersion, newVersionHighlight, changeLog) {
            'View Changelog' +
            '</a></h4></div>' +
            '<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">' +
-           '<div class="panel-body"><div class="pre-scrollable">' + changeLog + '</div></div>' +
+           '<div class="panel-body"><div class="pre-scrollable"><pre>' + releaseData['body'] + '</pre></div></div>' +
            '</div></div>' + 
-           (!isCurrent ? '<a target="_blank" href="https://github.com/bedrock-viz/bedrock-viz">Click here to go to GitHub and grab the update</a>' : '');
+           (!isCurrent ? '<a target="_blank" href="' + releaseData['html_url'] + '">Click here to go to GitHub and grab the update</a>' : '');
 
     doModal( title, msg);
 }
 
-function doCheckUpdate_getChangeLog(newVersion) {
-    // get data from github
-    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+function doCheckUpdate_getChangeLog(newVersion, releaseData) {
+    var newVersionHighlight = releaseData['name'];
 
-    $.ajax({
-        type: 'GET',
-        url: url,
-        dataType: 'text',
-        cache: false,
-        success: function(result, textStatus, jqxhr) {
-            
-            // parse this: Latest Highlight: New stuff added");
-            var newVersionHighlight = '(See ChangeLog on GitHub)';
-            var res = result.match(/Latest highlight\s*:\s*(.+)/);
-            if ( res ) {
-                newVersionHighlight = res[1];
-            }
+    // try to take the version off the front since it's redundant when displayed
+    var re = new RegExp('v' + newVersion + '\\s*-\\s*(.+)');
+    var res = newVersionHighlight.match(re);
+    if ( res ) {
+        newVersionHighlight = res[1];
+    }
 
-            showUpdateInfo(newVersion, newVersionHighlight, marked(result));
-        },
-        error: function(jqXHR, textStatus, errorThrown, execptionObject) {
-            showUpdateInfo(newVersion, '(Sorry, we had a problem checking the ChangeLog -- See ChangeLog on GitHub)', '(See ChangeLog on GitHub)');
-        }
-    });
+    showUpdateInfo(newVersion, newVersionHighlight, releaseData);
 }
 
 function doCheckUpdate() {
-    // get data from github
-    var url = 'https://raw.githubusercontent.com/bedrock-viz/bedrock-viz/master/CHANGELOG.md';
+    // get data from the latest published github release
+    var url = 'https://api.github.com/repos/bedrock-viz/bedrock-viz/releases/latest';
 
     $.ajax({
         type: 'GET',
@@ -2908,11 +2886,15 @@ function doCheckUpdate() {
         dataType: 'text',
         cache: false,
         success: function(result, textStatus, jqxhr) {
-            
-            // parse this: Latest release: X.Y.Z
-            var res = result.match(/Latest release\s*:\s*(\S+)/);
-            if ( res ) {
-                doCheckUpdate_getChangeLog(res[1]);
+            var releaseData = JSON.parse(result);
+            if ( releaseData ) {
+                var release = releaseData['tag_name'];
+                // try to take the v off the front to match our built in version
+                var res = releaseData['tag_name'].match(/v(\S+)/);
+                if (res) {
+                    release = res[1];
+                }
+                doCheckUpdate_getChangeLog(release, releaseData);
             } else {
                 doModal('Error', 'Sorry, failed to find version info on GitHub.');
             }
