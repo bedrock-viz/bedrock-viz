@@ -380,11 +380,11 @@ namespace mcpe_viz {
             }
         }
 
-        bool nothingLoaded = true;
+        bool nothingLoaded = false;
 
         // search first for the base file
         if (!searchForAndLoadConfigFile("bedrock_viz.cfg")) {
-            nothingLoaded = false;
+            nothingLoaded = true;
             log::error("Could not find main config file to load");
         }
 
