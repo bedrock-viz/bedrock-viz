@@ -43,8 +43,9 @@ Additional Features:
 
 For Windows 10 users:
 
-* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.3/bedrock-viz_v0.1.3_win64.zip) and unzip that file
+* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.4/bedrock-viz_v0.1.4_win64.zip) and unzip that file
 * Inside you will find `bedrock-viz.exe`
+* Run `bedrock-viz.exe` in your favorite terminal program (such as `Command Prompt` or `Power Shell`)
 
 For macOS users(requires macOS 10.15 and above):
 * Install via homeberw:
@@ -53,7 +54,7 @@ For macOS users(requires macOS 10.15 and above):
   ```
 
 For Linux users:
-* [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.3/bedrock-viz_v0.1.3_linux.tar.gz) and compiling from source
+* [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.4/bedrock-viz_v0.1.4_linux.tar.gz) and compiling from source
 
 **DO NOT RUN THIS ON YOUR ORIGINAL WORLD SAVES**
 
@@ -77,7 +78,7 @@ Note: Replace "path-to-your-world-file-dir/" with the actual directory which con
 
 **DO NOT RUN THIS ON YOUR ORIGINAL MCPE DATA FILES; MAKE A BACKUP COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY!**
 
-This will produce a bunch of image files and "out1.html". Open "out1.html" in your browser.
+This will produce a bunch of image files and "index.html" in the directory `out1`. Open "index.html" in your browser.
 
 
 ## Web App
