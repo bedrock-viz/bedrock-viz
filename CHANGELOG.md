@@ -9,6 +9,18 @@
 
 ## bedrock-viz changelog
 
+v0.1.5 - TBD
+- Parser changes
+  - fixed bogus message about no config files found when there actually WAS one found.
+  - added missing Cursed enchantments.
+- Housekeeping
+  - fixed Docker buildfile to build atop Ubuntu 20.04
+  - fixed build documenation to support more modern Ubuntu than 18.04 (18.04 is still supported too, just not letting it hold us back)
+
+- Fixes in this release from:
+  - [cabbey](https://github.com/cabbey)
+  - [DazWorrall](https://github.com/DazWorrall) (first time contributor)
+
 v0.1.4 - 2021.07.04
 - Viewer changes
   - Barrels are now an option to display in the Objects menu, with full inventory.
