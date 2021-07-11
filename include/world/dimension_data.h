@@ -50,14 +50,14 @@ namespace mcpe_viz {
         CheckSpawnList listCheckSpawn;
         SchematicList listSchematic;
 
-        DimensionData_LevelDB() {
+        DimensionData_LevelDB(int32_t startX, int32_t startZ) {
             name = "(UNKNOWN)";
             dimId = -1;
             chunkBoundsValid = false;
-            minChunkX = 0;
-            maxChunkX = 0;
-            minChunkZ = 0;
-            maxChunkZ = 0;
+            minChunkX = startX;
+            maxChunkX = startX;
+            minChunkZ = startZ;
+            maxChunkZ = startZ;
             worldName = "(UNKNOWN)";
             worldSpawnX = worldSpawnZ = 0;
             worldSeed = 0;
@@ -82,8 +82,9 @@ namespace mcpe_viz {
 
         void setDimId(int32_t id) { dimId = id; }
 
-        void unsetChunkBoundsValid() {
-            minChunkX = minChunkZ = maxChunkX = maxChunkZ = 0;
+        void unsetChunkBoundsValid(int32_t startX, int32_t startZ) {
+            minChunkX = maxChunkX = startX;
+            minChunkZ = maxChunkZ = startZ;
             chunkBoundsValid = false;
         }
 

@@ -57,6 +57,9 @@ namespace mcpe_viz {
         bool quietFlag;
         char helpFlags;
         bool tryDbRepair;
+
+        std::vector<bool> limitX, limitZ;
+        std::vector<int> limitXMin, limitXMax, limitZMin, limitZMax;
         int32_t movieX, movieY, movieW, movieH;
 
         int32_t heightMode;
@@ -111,6 +114,13 @@ namespace mcpe_viz {
 
             // todo - cmdline option for this?
             heightMode = kHeightModeTop;
+
+            limitX.resize(kDimIdCount);
+            limitZ.resize(kDimIdCount);
+            limitXMin.resize(kDimIdCount);
+            limitXMax.resize(kDimIdCount);
+            limitZMin.resize(kDimIdCount);
+            limitZMax.resize(kDimIdCount);
 
             for (int32_t did = 0; did < kDimIdCount; did++) {
                 fnLayerTop[did] = "";
