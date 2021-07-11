@@ -35,21 +35,21 @@ namespace
         return true;
     }
 
-    bool limitedChunkPos(int32_t chunkX, int32_t chunkZ)
+    bool limitedChunkPos(int32_t did, int32_t chunkX, int32_t chunkZ)
     {
         if (!legalChunkPos(chunkX, chunkZ)) {
             return false;
         }
-        if (mcpe_viz::control.limitX && chunkX < mcpe_viz::control.limitXMin) {
+        if (mcpe_viz::control.limitX[did] && chunkX < mcpe_viz::control.limitXMin[did]) {
             return false;
         }
-        if (mcpe_viz::control.limitX && chunkX > mcpe_viz::control.limitXMax) {
+        if (mcpe_viz::control.limitX[did] && chunkX > mcpe_viz::control.limitXMax[did]) {
             return false;
         }
-        if (mcpe_viz::control.limitZ && chunkZ < mcpe_viz::control.limitZMin) {
+        if (mcpe_viz::control.limitZ[did] && chunkZ < mcpe_viz::control.limitZMin[did]) {
             return false;
         }
-        if (mcpe_viz::control.limitZ && chunkZ > mcpe_viz::control.limitZMax) {
+        if (mcpe_viz::control.limitZ[did] && chunkZ > mcpe_viz::control.limitZMax[did]) {
             return false;
         }
         return true;
@@ -87,9 +87,9 @@ namespace mcpe_viz
         dbOptions->compression = leveldb::kZlibRawCompression;
 
         for (int32_t i = 0; i < kDimIdCount; i++) {
-            dimDataList.push_back(std::make_unique<DimensionData_LevelDB>(control.limitXMin, control.limitZMin));
+            dimDataList.push_back(std::make_unique<DimensionData_LevelDB>(control.limitXMin[i], control.limitZMin[i]));
             dimDataList[i]->setDimId(i);
-            dimDataList[i]->unsetChunkBoundsValid(control.limitXMin, control.limitZMin);
+            dimDataList[i]->unsetChunkBoundsValid(control.limitXMin[i], control.limitZMin[i]);
             dimDataList[i]->setName(kDimIdNames[i]);
         }
     }
@@ -210,7 +210,7 @@ namespace mcpe_viz
 
         // clear bounds
         for (int32_t i = 0; i < kDimIdCount; i++) {
-            dimDataList[i]->unsetChunkBoundsValid(control.limitXMin, control.limitZMin);
+            dimDataList[i]->unsetChunkBoundsValid(control.limitXMin[i], control.limitZMin[i]);
         }
 
         int32_t chunkX = -1, chunkZ = -1, chunkDimId = -1, chunkType = -1;
@@ -241,7 +241,7 @@ namespace mcpe_viz
                 // sanity checks
                 if (chunkType == 0x30) {
                     // pre-0.17 chunk block data
-                    if (limitedChunkPos(chunkX, chunkZ)) {
+                    if (limitedChunkPos(0, chunkX, chunkZ)) {
                         dimDataList[0]->addToChunkBounds(chunkX, chunkZ);
                     }
                 }
@@ -254,7 +254,7 @@ namespace mcpe_viz
 
                 // sanity checks
                 if (chunkType == 0x2f) {
-                    if (limitedChunkPos(chunkX, chunkZ)) {
+                    if (limitedChunkPos(0, chunkX, chunkZ)) {
                         dimDataList[0]->addToChunkBounds(chunkX, chunkZ);
                     }
                 }
@@ -268,7 +268,7 @@ namespace mcpe_viz
 
                 // sanity checks
                 if (chunkType == 0x30) {
-                    if (limitedChunkPos(chunkX, chunkZ)) {
+                    if (limitedChunkPos(chunkDimId, chunkX, chunkZ)) {
                         dimDataList[chunkDimId]->addToChunkBounds(chunkX, chunkZ);
                     }
                 }
@@ -282,7 +282,7 @@ namespace mcpe_viz
 
                 // sanity checks
                 if (chunkType == 0x2f) {
-                    if (limitedChunkPos(chunkX, chunkZ)) {
+                    if (limitedChunkPos(chunkDimId, chunkX, chunkZ)) {
                         dimDataList[chunkDimId]->addToChunkBounds(chunkX, chunkZ);
                     }
                 }
@@ -600,7 +600,7 @@ namespace mcpe_viz
                     continue;
                 }
 
-                if (!limitedChunkPos(chunkX, chunkZ)) {
+                if (!limitedChunkPos(chunkDimId, chunkX, chunkZ)) {
                     continue;
                 }
 

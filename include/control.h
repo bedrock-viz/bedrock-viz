@@ -54,8 +54,8 @@ namespace mcpe_viz {
         char helpFlags;
         bool tryDbRepair;
 
-        bool limitX, limitZ;
-        int32_t limitXMin, limitXMax, limitZMin, limitZMax;
+        std::vector<bool> limitX, limitZ;
+        std::vector<int> limitXMin, limitXMax, limitZMin, limitZMax;
         int32_t movieX, movieY, movieW, movieH;
 
         int32_t heightMode;
@@ -102,9 +102,6 @@ namespace mcpe_viz {
             tryDbRepair = false;
             movieX = movieY = movieW = movieH = 0;
 
-            limitX = limitZ = false;
-            limitXMin = limitXMax = limitZMin = limitZMax = 0;
-
             leveldbFilter = 10;
             leveldbBlockSize = 4096;
 
@@ -121,6 +118,13 @@ namespace mcpe_viz {
             // The End
             dimYBottom[kDimIdTheEnd] = 0;
             dimYTop[kDimIdTheEnd] = 127;
+
+            limitX.resize(kDimIdCount);
+            limitZ.resize(kDimIdCount);
+            limitXMin.resize(kDimIdCount);
+            limitXMax.resize(kDimIdCount);
+            limitZMin.resize(kDimIdCount);
+            limitZMax.resize(kDimIdCount);
 
             for (int32_t did = 0; did < kDimIdCount; did++) {
                 fnLayerTop[did] = "";
