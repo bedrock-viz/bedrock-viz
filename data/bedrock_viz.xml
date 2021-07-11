@@ -2389,17 +2389,17 @@
     <enchantment id="0x02" name="Feather Falling" officialName="feather_falling" />
     <enchantment id="0x03" name="Blast Protection" officialName="blast_protection" />
     <enchantment id="0x04" name="Projectile Protection" officialName="projectile_protection" />
-    <enchantment id="0x06" name="Respiration" officialName="respiration" />
-    <enchantment id="0x08" name="Aqua Affinity" officialName="aqua_affinity" />
     <enchantment id="0x05" name="Thorns" officialName="thorns" />
+    <enchantment id="0x06" name="Respiration" officialName="respiration" />
     <enchantment id="0x07" name="Depth Strider" officialName="depth_strider" />
+    <enchantment id="0x08" name="Aqua Affinity" officialName="aqua_affinity" />
     <enchantment id="0x09" name="Sharpness" officialName="sharpness" />
-    <enchantment id="0x0a" name="Smite" officialName="smite" />
-    <enchantment id="0x0b" name="Bane of Arthropods" officialName="bane_of_arthropods" />
-    <enchantment id="0x0c" name="Knockback" officialName="knockback" />
-    <enchantment id="0x0d" name="Fire Aspect" officialName="fire_aspect" />
-    <enchantment id="0x0e" name="Looting" officialName="looting" />
-    <enchantment id="0x0f" name="Efficiency" officialName="efficiency" />
+    <enchantment id="0x0A" name="Smite" officialName="smite" />
+    <enchantment id="0x0B" name="Bane of Arthropods" officialName="bane_of_arthropods" />
+    <enchantment id="0x0C" name="Knockback" officialName="knockback" />
+    <enchantment id="0x0D" name="Fire Aspect" officialName="fire_aspect" />
+    <enchantment id="0x0E" name="Looting" officialName="looting" />
+    <enchantment id="0x0F" name="Efficiency" officialName="efficiency" />
     <enchantment id="0x10" name="Silk Touch" officialName="silk_touch" />
     <enchantment id="0x11" name="Unbreaking" officialName="unbreaking" />
     <enchantment id="0x12" name="Fortune" officialName="fortune" />
@@ -2409,15 +2409,17 @@
     <enchantment id="0x16" name="Infinity" officialName="infinity" />
     <enchantment id="0x17" name="Luck of the Sea" officialName="luck_of_the_sea" />
     <enchantment id="0x18" name="Lure" officialName="lure" />
-    <enchantment id="0x1a" name="Mending" officialName="mending" />
     <enchantment id="0x19" name="Frost Walker" officialName="frost_walker" />
-    <enchantment id="0x1d" name="Impaling" officialName="impaling" />
-    <enchantment id="0x20" name="Channeling" officialName="channeling" />
+    <enchantment id="0x1A" name="Mending" officialName="mending" />
+    <enchantment id="0x1B" name="Curse of Binding" officialName="binding" />
+    <enchantment id="0x1C" name="Curse of Vanishing" officialName="vanishing" />
+    <enchantment id="0x1D" name="Impaling" officialName="impaling" />
+    <enchantment id="0x1E" name="Riptide" officialName="riptide" />
     <enchantment id="0x1F" name="Loyalty" officialName="loyalty" />
-    <enchantment id="0x21" name="Multishot" officialName="Multishot" />
-    <enchantment id="0x22" name="Piercing" officialName="Piercing" />
-    <enchantment id="0x23" name="Quick Charge" officialName="Quick Charge" />
-    <enchantment id="0x1E" name="Riptide" officialName="Riptide" />
+    <enchantment id="0x20" name="Channeling" officialName="channeling" />
+    <enchantment id="0x21" name="Multishot" officialName="multishot" />
+    <enchantment id="0x22" name="Piercing" officialName="piercing" />
+    <enchantment id="0x23" name="Quick Charge" officialName="quick_charge" />
     <enchantment id="0x24" name="Soul Speed" officialName="soul_speed" />
   </enchantmentlist>
 
