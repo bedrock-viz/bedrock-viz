@@ -7,8 +7,8 @@ on:
     branches: [ master ]
 
 jobs:
-  Ubuntu_18_04:
-    runs-on: ubuntu-18.04
+  Ubuntu:
+    runs-on: ubuntu-20.04
 
     steps:
     - uses: actions/checkout@v2
@@ -19,12 +19,6 @@ jobs:
       run: |
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install python3 libpng++-dev zlib1g-dev g++-8 libboost-program-options-dev wget lcov libjson-perl libperlio-gzip-perl
-        # LCOV 1.13 has some issues with parsing gcc 8+ gcda files
-        wget http://archive.ubuntu.com/ubuntu/pool/universe/l/lcov/lcov_1.14-2_all.deb
-        sudo dpkg -i lcov_1.14-2_all.deb 
-        sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 90
-        sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 90
-        sudo update-alternatives --install /usr/bin/gcov gcov /usr/bin/gcov-8 90
         g++ --version
         gcov --version
     
@@ -36,8 +30,6 @@ jobs:
     - name: Build
       run: |
         mkdir build && cd build
-        export CC=/usr/bin/gcc-8
-        export CXX=/usr/bin/g++-8
         cmake -DBUILD_TESTS=ON -DCODE_COVERAGE=ON ..
         make
 
@@ -97,7 +89,7 @@ jobs:
       run: |
         git config --global core.autocrlf false
         git config --global core.eol lf
-
+        
     - uses: actions/checkout@v2
       with:
         submodules: true
@@ -108,19 +100,14 @@ jobs:
     - name: Install requirements
       run: |
         vcpkg install zlib:x64-windows libpng:x64-windows boost-program-options:x64-windows
-
+    
     - name: Patch libraries
       run: |
         git apply -p0 patches/leveldb-1.22.patch
         git apply -p0 patches/pugixml-disable-install.patch
-
+    
     - name: Build
       run: |
         mkdir build && cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -G "Visual Studio 16 2019" -A x64
-        msbuild bedrock-viz.sln /p:Configuration=Release /p:Platform=x64
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: win-x64-release
-        path: build/Release
+        msbuild bedrock-viz.sln
