@@ -111,3 +111,25 @@ jobs:
         mkdir build && cd build
         cmake .. -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake -G "Visual Studio 16 2019" -A x64
         msbuild bedrock-viz.sln
+
+  Docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: downcase REPO
+      run: |
+        echo "repo_downcase=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
+    - name: Docker build
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: ./Dockerfile
+        tags: ghcr.io/${{ env.repo_downcase }}:${{ github.sha }}
