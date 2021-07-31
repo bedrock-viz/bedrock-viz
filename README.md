@@ -56,6 +56,12 @@ For macOS users(requires macOS 10.15 and above):
 For Linux users:
 * [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.4/bedrock-viz_v0.1.4_linux.tar.gz) and compiling from source
 
+Alternatively, bedrock-viz is available as a Docker container. Usage example:
+
+```
+docker run --rm -v /path/to/public_html:/out -v /path/to/world:/world ghcr.io/bedrock-viz/bedrock-viz --db /world --out /out --html-all
+```
+
 **DO NOT RUN THIS ON YOUR ORIGINAL WORLD SAVES**
 
 **MAKE A BACKUP COPY OF YOUR DATA AND RUN THIS AGAINST THAT COPY ONLY**
