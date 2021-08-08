@@ -420,18 +420,6 @@ namespace mcpe_viz
                     parseNbt_mVillages(tagList);
                 }
             }
-            else if (strncmp(key, "VILLAGE_", 8) == 0) {
-                // VILLAGE_07315855-d0e6-4fac-8b20-0c07cfad3d29_POI
-                char vid[37];
-                char rectype[9];
-                memcpy(vid, key + 8, 36);
-                vid[36] = '\0';
-                memcpy(rectype, key+45, key_size-45);
-                rectype[key_size-45] = '\0';
-                if (strncmp(rectype, "INFO", 5) == 0) {
-                    villages.push_back(vid);
-                }
-            }
             else if (strncmp(key, "game_flatworldlayers", key_size) == 0) {
                 // todobig -- what is it?
                 // example data (standard flat): 5b 37 2c 33 2c 33 2c 32 5d
