@@ -113,8 +113,8 @@
 #sidebar .sidebar-group-heading {
     width: 100%;
     background-color: #ababab;
-    padding: 10px;
-    font-size: 18px;
+    padding: 8px;
+    font-size: 14px;
 }
 
 #sidebar .sidebar-group-heading img {
@@ -127,7 +127,7 @@
 }
 
 #sidebar .sidebar-content-group {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 #sidebar .sidebar-content-group p {
@@ -156,23 +156,20 @@
 #sidebar .entity-toggle {
     display: inline-block;
     float: left;
-    height: 64px;
-    width: 64px;
-    background-color: #434343;
+    height: 74px;
+    width: 74px;
     cursor: pointer;
-    padding: 8px;
+    padding: 1px;
     margin-right: 8px;
     border-radius: 16px;
     background-size: cover;
     background-repeat: no-repeat;
     font-size: 10px;
-    color: white;
-    text-shadow: 1px 1px 1px #000;
+    color: black;
     overflow: hidden;
     text-align: center;
     margin-bottom: 8px;
     border: 4px solid #878787;
-    white-space: normal;
 }
 
 #sidebar .entity-toggle:hover {
@@ -191,4 +188,23 @@
 #sidebar .entity-toggle.active:active {
     background-color: #ff9797;
     border-color: #ff3131;
+}
+
+#sidebar .entity-toggle .entity-image {
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    border: 0px;
+    pointer-events: none;
+}
+
+
+#sidebar .entity-toggle .entity-label {
+    display: block;
+    pointer-events: none;
+    margin-left: 5px;
+    margin-right: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

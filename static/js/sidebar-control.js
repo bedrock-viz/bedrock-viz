@@ -486,8 +486,18 @@ let SidebarControl = function(opt_options) {
                         'data-id': item.id,
                         'title': item.label
                     })
-                    .css('backgroundImage', `url(${item.icon})`)
-                    .html(item.label);
+                    .html();
+                const $thisItemImage = $(document.createElement('img'));
+                $thisItemImage
+                	.addClass('entity-image')
+                	.attr('src', item.icon)
+                	.html();
+                const $thisItemLabel = $(document.createElement('div'));
+                $thisItemLabel
+                	.addClass('entity-label')
+                	.html(item.label);
+				$thisItem.append($thisItemImage);
+                $thisItem.append($thisItemLabel);
 
                 // check that the icon is going to load, if it doesn't, fall back to Unknown.png
                 if (checkIconLoad) {
