@@ -147,6 +147,8 @@ var doCheckPlayerDistanceFlag = false;
 
 var globalAboutMessage;
 
+var shiftedKey = false;
+
 // this removes the hideous blurriness when zoomed in
 var setCanvasSmoothingMode = function(evt) {
     evt.context.mozImageSmoothingEnabled = false;
@@ -2291,6 +2293,11 @@ $(function() {
             return;
         }
 
+		if (evt.which == 16)
+		{
+			shiftedKey = true;
+		}
+
         var key = String.fromCharCode(evt.which);
         // escape key will quit any special modes
         if ( evt.keyCode == 27 ) {
@@ -2312,8 +2319,32 @@ $(function() {
         else if ( key === 'N' ) {
             $('#showNetherCoordinatesToggle').click();
         }
+        // Page Up/Down will change level - Shift-Page Up/Down change level by 10
+        else if ( key === "&" ) {
+			const layer = layerRawIndex + (shiftedKey ? 10 : 1);
+			layersControl.doJumpToLayer(layer);
+		}
+        // Page Up will change level - Shift-PageUp change level by 10
+        else if ( key === "(" ) {
+			const layer = layerRawIndex - (shiftedKey ? 10 : 1);
+			layersControl.doJumpToLayer(layer);
+		}
+
+
         // todobig -- more keyboard toggles/controls here
     });
+
+	$(document).on('keyup', function(evt) {
+        // do not handle keyboard events that happen in inputs
+        if (String(evt.target.tagName).toLowerCase() === 'input') {
+            return;
+        }
+
+		if (evt.which == 16)
+		{
+			shiftedKey = false;
+		}
+	});
 
     // fix map size
     window.addEventListener('resize', fixContentHeight);
