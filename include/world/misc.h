@@ -17,8 +17,8 @@ namespace mcpe_viz {
     uint8_t getBlockSkyLight_LevelDB_v3(const char* p, size_t plen, int32_t x, int32_t z, int32_t y);
     uint8_t getBlockBlockLight_LevelDB_v3(const char* p, size_t plen, int32_t x, int32_t z, int32_t y);
     int32_t
-        setupBlockVars_v7(const char* cdata, int32_t& blocksPerWord, int32_t& bitsPerBlock, bool& paddingFlag,
-            int32_t& offsetBlockInfoList, int32_t& extraOffset);
+        setupBlockVars_v7(const char* cdata, int32_t& blocksPerWord, int32_t& bitsPerBlock, int32_t& blockOffset,
+            int32_t& paletteOffset);
 //    uint8_t
 //        getBlockId_LevelDB_v7(const char* p, int blocksPerWord, int bitsPerBlock, int32_t x, int32_t z, int32_t y);
     uint8_t getColData_Height_LevelDB_v3(const char* buf, int32_t x, int32_t z);
