@@ -286,7 +286,7 @@ namespace mcpe_viz {
         case 0x8:
         case 0x10:
             bitsPerBlock = v >> 1;
-            blocksPerWord = floor(32 / bitsPerBlock);
+            blocksPerWord = floor(32.0 / bitsPerBlock);
             wordCount = ceil(4096.0 / blocksPerWord);
             paletteOffset = wordCount * 4 + blockOffset;
             break;
