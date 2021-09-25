@@ -277,14 +277,17 @@ namespace mcpe_viz {
         }
         
         switch (v) {
-        case 0x1:
-        case 0x2:
-        case 0x3:
-        case 0x4:
-        case 0x5:
-        case 0x6:
-        case 0x8:
+        case 0x01:
+        case 0x02:
+        case 0x03:
+        case 0x04:
+        case 0x05:
+        case 0x06:
+        case 0x08:
+        case 0x0a:
+        case 0x0c:
         case 0x10:
+        case 0x20:
             bitsPerBlock = v >> 1;
             blocksPerWord = floor(32.0 / bitsPerBlock);
             wordCount = ceil(4096.0 / blocksPerWord);
