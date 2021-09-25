@@ -4,8 +4,8 @@
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
 - Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
-- Latest highlight: Caves & Cliffs: Blocks & Items; and tooling to make life easier
-- Latest release  : 0.1.4
+- Latest highlight: keeping up with Mojang; 1.17.30 storage format changes
+- Latest release  : 0.1.5
 
 ## bedrock-viz changelog
 
@@ -13,6 +13,7 @@ v0.1.5 - 2021.09.26
 - Viewer changes
   - quick update to work on touch based mobile devices better
 - Parser changes
+  - added support for the storage changes introduced with minecraft 1.17.30 - Thanks Desterly!
   - fixed bogus message about no config files found when there actually WAS one found.
   - added missing Cursed enchantments.
 - Housekeeping
@@ -21,6 +22,7 @@ v0.1.5 - 2021.09.26
 - Fixes in this release from:
   - [cabbey](https://github.com/cabbey)
   - [DazWorrall](https://github.com/DazWorrall) (first time contributor)
+  - [Desterly](https://github.com/Desterly) (first time contributor)
   - [geoffholden](https://github.com/geoffholden)
 
 v0.1.4 - 2021.07.04
