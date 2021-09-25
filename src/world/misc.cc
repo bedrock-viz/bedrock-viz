@@ -247,67 +247,51 @@ namespace mcpe_viz {
     // todomajor -- see tomcc gist re multiple storages in ONE cubick chunk in version == 8
 
     int32_t
-        setupBlockVars_v7(const char* cdata, int32_t& blocksPerWord, int32_t& bitsPerBlock, bool& paddingFlag,
-            int32_t& offsetBlockInfoList, int32_t& extraOffset) {
+        setupBlockVars_v7(const char* cdata, int32_t& blocksPerWord, int32_t& bitsPerBlock, int32_t& blockOffset,
+            int32_t& paletteOffset) {
 
         int32_t v = -1;
+        int32_t wordCount = -1;
 
-        if (cdata[0] == 0x01) {
+        // Check sub-chunk version
+        switch (cdata[0]) {
+        case 0x01:
+            // v1 - [version:byte][block storage]
             v = cdata[1];
-            extraOffset = 0;
-        }
-        else {
-            // this is version 8+, cdata[1] contains the number of storage groups in this cubic chunk (can be more than 1)
-            v = cdata[2];
-            extraOffset = 1;
-        }
-
-        switch (v) {
-        case 0x02:
-            blocksPerWord = 32;
-            bitsPerBlock = 1;
-            offsetBlockInfoList = 512;
-            break;
-        case 0x04:
-            blocksPerWord = 16;
-            bitsPerBlock = 2;
-            offsetBlockInfoList = 1024;
-            break;
-        case 0x06:
-            blocksPerWord = 10;
-            bitsPerBlock = 3;
-            paddingFlag = true;
-            offsetBlockInfoList = 1640;
+            blockOffset = 1;
             break;
         case 0x08:
-            blocksPerWord = 8;
-            bitsPerBlock = 4;
-            offsetBlockInfoList = 2048;
+            // v8 - [version:byte][num_storages:byte][block storage1]...[blockStorageN]
+            v = cdata[2];
+            blockOffset = 3;
             break;
-        case 0x0a:
-            blocksPerWord = 6;
-            bitsPerBlock = 5;
-            paddingFlag = true;
-            offsetBlockInfoList = 2732;
-            break;
-        case 0x0c:
-            blocksPerWord = 5;
-            bitsPerBlock = 6;
-            paddingFlag = true;
-            offsetBlockInfoList = 3280;
-            break;
-        case 0x10:
-            blocksPerWord = 4;
-            bitsPerBlock = 8;
-            offsetBlockInfoList = (4096 / blocksPerWord) * 4;
-            break;
-        case 0x20:
-            blocksPerWord = 2;
-            bitsPerBlock = 16;
-            offsetBlockInfoList = (4096 / blocksPerWord) * 4;
+        case 0x09:
+            // v9 - [version:byte][num_storages:byte][sub_chunk_index:byte][block storage1]...[blockStorageN]
+            v = cdata[3];
+            blockOffset = 4;
             break;
         default:
-            log::error("Unknown chunk cdata[1] value = {}", v);
+            log::error("Invalid SubChunk version found ({})",
+                cdata[0]);
+            return -1;
+        }
+        
+        switch (v) {
+        case 0x1:
+        case 0x2:
+        case 0x3:
+        case 0x4:
+        case 0x5:
+        case 0x6:
+        case 0x8:
+        case 0x10:
+            bitsPerBlock = v >> 1;
+            blocksPerWord = floor(32 / bitsPerBlock);
+            wordCount = ceil(4096.0 / blocksPerWord);
+            paletteOffset = wordCount * 4 + blockOffset;
+            break;
+        default:
+            log::error("Unknown SubChunk palette value (value = {})", v);
             return -1;
         }
         return 0;
@@ -319,22 +303,24 @@ namespace mcpe_viz {
 
         // some details here: https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37
 
+        // determine location of chunk palette
         int32_t blocksPerWord = -1;
         int32_t bitsPerBlock = -1;
-        bool paddingFlag = false;
-        int32_t offsetBlockInfoList = -1;
-        int32_t extraOffset = -1;
+        int32_t blockOffset = -1;
+        int32_t paletteOffset = -1;
 
         memset(emuchunk, 0, NUM_BYTES_CHUNK_V3 * sizeof(int16_t));
 
-        if (setupBlockVars_v7(cdata, blocksPerWord, bitsPerBlock, paddingFlag, offsetBlockInfoList, extraOffset) != 0) {
+        if (setupBlockVars_v7(cdata, blocksPerWord, bitsPerBlock, blockOffset, paletteOffset) !=
+            0) {
             return -1;
         }
 
         // read chunk palette and associate old-school block id's
         MyNbtTagList tagList;
-        int xoff = offsetBlockInfoList + 6 + extraOffset;
-        parseNbtQuiet(&cdata[xoff], int32_t(cdata_size) - xoff, cdata[offsetBlockInfoList + 3], tagList);
+        int xoff = paletteOffset + 4;
+
+        parseNbtQuiet(&cdata[xoff], int32_t(cdata_size - xoff), cdata[paletteOffset], tagList);
 
         std::vector<int32_t> chunkBlockPalette_BlockId(tagList.size());
         std::vector<int32_t> chunkBlockPalette_BlockData(tagList.size());
@@ -384,12 +370,12 @@ namespace mcpe_viz {
         for (int32_t cy = 0; cy < 16; cy++) {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
-                    paletteBlockId = getBlockId_LevelDB_v7(&cdata[2 + extraOffset], blocksPerWord, bitsPerBlock, cx, cz,
-                        cy);
+                    paletteBlockId = getBlockId_LevelDB_v7(&cdata[blockOffset],
+                        blocksPerWord, bitsPerBlock, cx, cz, cy);
 
                     // look up blockId
                     //todonow error checking
-                    if (paletteBlockId < chunkBlockPalette_BlockId.size()) {
+                    if (paletteBlockId <= chunkBlockPalette_BlockId.size()) {
                         blockId = chunkBlockPalette_BlockId[paletteBlockId];
                         blockData = chunkBlockPalette_BlockData[paletteBlockId];
                     }
