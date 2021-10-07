@@ -277,6 +277,12 @@ namespace mcpe_viz {
         }
         
         switch (v) {
+        case 0x00:
+            // occasional 0 size bits per block
+            bitsPerBlock = 0;
+            blocksPerWord = 0;
+            paletteOffset = 0;
+            break;
         case 0x01:
         case 0x02:
         case 0x03:
