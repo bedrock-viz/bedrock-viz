@@ -701,6 +701,7 @@ namespace mcpe_viz
                     // todo - what is this?
                     break;
 
+                case 0x2C:
                 case 0x76:
                     // "Version"
                 {
@@ -709,8 +710,9 @@ namespace mcpe_viz
                     
                     // chunk versions have changed many times since this was originally included. 
                     // it seems unnecessary to keep track of this for anything other than trace information
-                    log::trace("{} 0x76 chunk (world format version): v={}"
+                    log::trace("{} 0x{:x} chunk (world format version): v={}"
                         ,dimName
+                        ,chunkType
                         ,int(cdata[0]));
                     /*
                     if (control.verboseFlag || ((cdata[0] != 2) && (cdata[0] != 3) && (cdata[0] != 9))) {
