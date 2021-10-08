@@ -611,7 +611,7 @@ namespace mcpe_viz
                 case 0x31:
                     // "BlockEntity"
                     // tile entity record (e.g. a chest)
-                    log::debug("{} 0x31 chunk (tile entity data):", dimName);
+                    log::trace("{} 0x31 chunk (tile entity data):", dimName);
                     ret = parseNbt("0x31-te: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_tileEntity(chunkDimId, dimName + "-", tagList);
@@ -621,7 +621,7 @@ namespace mcpe_viz
                 case 0x32:
                     // "Entity"
                     // entity record (e.g. a mob)
-                    log::debug("{} 0x32 chunk (entity data):", dimName);
+                    log::trace("{} 0x32 chunk (entity data):", dimName);
                     ret = parseNbt("0x32-e: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_entity(chunkDimId, dimName + "-", tagList, false, false, "", "");
@@ -640,7 +640,7 @@ namespace mcpe_viz
 
                 case 0x34:
                     // "BlockExtraData"
-                    log::debug("{} 0x34 chunk (TODO - MYSTERY RECORD - BlockExtraData)",
+                    log::trace("{} 0x34 chunk (TODO - MYSTERY RECORD - BlockExtraData)",
                         dimName.c_str());
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
@@ -658,7 +658,7 @@ namespace mcpe_viz
 
                 case 0x35:
                     // "BiomeState"
-                    log::debug("{} 0x35 chunk (BiomeState)",
+                    log::trace("{} 0x35 chunk (BiomeState)",
                         dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
@@ -685,13 +685,16 @@ namespace mcpe_viz
 
                 case 0x39:
                     // Bounding boxes for structure spawns stored in binary format
-                    log::debug("{} 0x39 chunk (HardCodedSpawnAreas)", dimName);
+                    log::trace("{} 0x39 chunk (HardCodedSpawnAreas)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - probably used for outposts and things of that nature
                     break;
-
+                case 0x3a:
+                    // Tick counters - not used
+                    log::trace("{} 0x3a chunk (RandomTicks"), dimName);
+                    break;
                 case 0x3b:
                     // Appears to be a list of checksums for chunk data. Upcoming in 1.16
                     log::trace("{} 0x3b chunk (checksum?)", dimName);
