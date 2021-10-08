@@ -693,7 +693,7 @@ namespace mcpe_viz
                     break;
                 case 0x3a:
                     // Tick counters - not used
-                    log::trace("{} 0x3a chunk (RandomTicks"), dimName);
+                    log::trace("{} 0x3a chunk (RandomTicks)", dimName);
                     break;
                 case 0x3b:
                     // Appears to be a list of checksums for chunk data. Upcoming in 1.16
