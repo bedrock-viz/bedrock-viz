@@ -336,8 +336,8 @@ namespace mcpe_viz {
         // read chunk palette and associate old-school block id's
         MyNbtTagList tagList;
         int xoff = paletteOffset+4;
-
-        parseNbtQuiet(&cdata[xoff], int32_t(cdata_size - xoff), cdata[paletteOffset], tagList);
+        int tagsToRead = *((int*)&cdata[paletteOffset]);
+        parseNbtQuiet(&cdata[xoff], int32_t(cdata_size - xoff), tagsToRead, tagList);
         //parseNbt("chunk-palette",&cdata[xoff], cdata_size-xoff, tagList);
 
         std::vector<int32_t> chunkBlockPalette_BlockId(tagList.size());
