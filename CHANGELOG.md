@@ -13,6 +13,7 @@ v0.1.6 - SomeDate
 - Parser changes
   - support 0 length palette types in sub-chunks introduced with 1.17.30
   - reduce log noise related to data we don't actually use
+  - fix crash when trying to output a player's reputation for a village
 - Fixes in this release from:
   - [Desterly](https://github.com/Desterly)
 
