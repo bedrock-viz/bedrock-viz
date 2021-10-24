@@ -4,10 +4,16 @@
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
 - Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
-- Latest highlight: keeping up with Mojang; 1.17.30 storage format changes
-- Latest release  : 0.1.5
+- Latest highlight: Some pithy summary here
+- Latest release  : 0.1.6
 
 ## bedrock-viz changelog
+
+v0.1.6 - SomeDate
+- Parser changes
+  - support 0 length palette types in sub-chunks introduced with 1.17.30
+- Fixes in this release from:
+  - [Desterly](https://github.com/Desterly)
 
 v0.1.5 - 2021.09.26
 - Viewer changes
