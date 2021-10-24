@@ -2618,13 +2618,16 @@ namespace mcpe_viz
             list.push_back(std::string(tmpstring));
 
             for (auto const& x : players) {
-                std::string playerId = playerMap[x.first]->playerId;
-                std::string playerName = playerId;
-                if (has_key(playerIdToName, playerId)) {
-                    playerName = playerIdToName[playerId];
+                auto player = playerMap[x.first];
+                if (player) {
+                    std::string playerId = player->playerId;
+                    std::string playerName = playerId;
+                    if (has_key(playerIdToName, playerId)) {
+                        playerName = playerIdToName[playerId];
+                    }
+                    sprintf(tmpstring, "\"%s's Reputation\": %d", playerName.c_str(), x.second);
+                    list.push_back(std::string(tmpstring));
                 }
-                sprintf(tmpstring, "\"%s's Reputation\": %d", playerName.c_str(), x.second);
-                list.push_back(std::string(tmpstring));
             }
 
             sprintf(tmpstring, "\"Villager Count\": %ld", villagers.size());
