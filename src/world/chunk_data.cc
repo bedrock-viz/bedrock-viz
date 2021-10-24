@@ -336,8 +336,8 @@ namespace mcpe_viz {
         // read chunk palette and associate old-school block id's
         MyNbtTagList tagList;
         int xoff = paletteOffset+4;
-
-        parseNbtQuiet(&cdata[xoff], int32_t(cdata_size - xoff), cdata[paletteOffset], tagList);
+        int tagsToRead = *((int*)&cdata[paletteOffset]);
+        parseNbtQuiet(&cdata[xoff], int32_t(cdata_size - xoff), tagsToRead, tagList);
         //parseNbt("chunk-palette",&cdata[xoff], cdata_size-xoff, tagList);
 
         std::vector<int32_t> chunkBlockPalette_BlockId(tagList.size());
@@ -387,9 +387,15 @@ namespace mcpe_viz {
         for (int32_t cy = 0; cy < 16; cy++) {
             for (int32_t cx = 0; cx < 16; cx++) {
                 for (int32_t cz = 0; cz < 16; cz++) {
-                    
-                    paletteBlockId = getBlockId_LevelDB_v7(&cdata[blockOffset],
-                        blocksPerWord, bitsPerBlock, cx, cz, cy);
+                    // Subchunks usually have a defined size - in cases where the size is 0, 
+                    // the block id's are also 0. (1.17.30+)                    
+                    if (blocksPerWord != 0 && bitsPerBlock != 0) {
+                        paletteBlockId = getBlockId_LevelDB_v7(&cdata[blockOffset],
+                            blocksPerWord, bitsPerBlock, cx, cz, cy);
+                    }
+                    else {
+                        paletteBlockId = 0;
+                    }
 
                     // look up blockId
                     // TODO error checking
