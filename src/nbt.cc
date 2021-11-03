@@ -2558,14 +2558,15 @@ namespace mcpe_viz
 
                         for (const auto& it : l) {
                             nbt::tag_compound dc = it.as<nbt::tag_compound>();
-                            nbt::tag_list pos = dc["last_saved_pos"].as<nbt::tag_list>();
-                            Point3d<int32_t> p3d;
-                            p3d.set(
-                                pos[0].as<nbt::tag_int>().get(),
-                                pos[1].as<nbt::tag_int>().get(),
-                                pos[2].as<nbt::tag_int>().get()
-                            );
-                            switch(i) {
+                            if (dc.has_key("last_saved_pos", nbt::tag_type::List)) {
+                                nbt::tag_list pos = dc["last_saved_pos"].as<nbt::tag_list>();
+                                Point3d<int32_t> p3d;
+                                p3d.set(
+                                    pos[0].as<nbt::tag_int>().get(),
+                                    pos[1].as<nbt::tag_int>().get(),
+                                    pos[2].as<nbt::tag_int>().get()
+                                );
+                                switch (i) {
                                 case 0:
                                     villagers.push_back(p3d);
                                     break;
@@ -2578,6 +2579,7 @@ namespace mcpe_viz
                                 case 3:
                                     cats.push_back(p3d);
                                     break;
+                                }
                             }
                         }
                     }
