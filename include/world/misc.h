@@ -69,10 +69,16 @@ namespace mcpe_viz {
 
     inline uint8_t getBlockId_LevelDB_v7(const char* p, int blocksPerWord, int bitsPerBlock,
                                   int32_t x, int32_t z, int32_t y) {
-            int blockPos = (((x * 16) + z) * 16) + y;
-            int wordStart = blockPos / blocksPerWord;
-            int bitOffset = (blockPos % blocksPerWord) * bitsPerBlock;
-            int bitStart = wordStart * 4 * 8 + bitOffset;
-            return getBitsFromBytes(p, bitStart, bitsPerBlock);
+        if (blocksPerWord == 0) {
+            // This feels wrong, but what else can we use when the blocks per word is zero?
+            // This prevents a math exception (divide by zero) and does not *seem* to have any
+            // negative impact on the generated maps.
+            return 0;
+        }
+        int blockPos = (((x * 16) + z) * 16) + y;
+        int wordStart = blockPos / blocksPerWord;
+        int bitOffset = (blockPos % blocksPerWord) * bitsPerBlock;
+        int bitStart = wordStart * 4 * 8 + bitOffset;
+        return getBitsFromBytes(p, bitStart, bitsPerBlock);
     }
 }
