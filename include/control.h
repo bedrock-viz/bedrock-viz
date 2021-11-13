@@ -28,10 +28,7 @@ namespace mcpe_viz {
         std::string fnLayerHeight[kDimIdCount];
         std::string fnLayerHeightGrayscale[kDimIdCount];
         std::string fnLayerHeightAlpha[kDimIdCount];
-        std::string fnLayerBlockLight[kDimIdCount];
-        std::string fnLayerSkyLight[kDimIdCount];
         std::string fnLayerSlimeChunks[kDimIdCount];
-        std::string fnLayerGrass[kDimIdCount];
         std::string fnLayerShadedRelief[kDimIdCount];
         std::string fnLayerRaw[kDimIdCount][MAX_BLOCK_HEIGHT + 1];
 
@@ -42,12 +39,9 @@ namespace mcpe_viz {
 		int doHtml;
 		bool doTiles;
 		std::vector<int> doImageBiome;
-		std::vector<int> doImageGrass;
 		std::vector<int> doImageHeightCol;
 		std::vector<int> doImageHeightColGrayscale;
 		std::vector<int> doImageHeightColAlpha;
-		std::vector<int> doImageLightBlock;
-		std::vector<int> doImageLightSky;
 		std::vector<int> doImageSlimeChunks;
 		std::vector<int> doImageShadedRelief;
         bool autoTileFlag;
@@ -85,12 +79,9 @@ namespace mcpe_viz {
             doHtml = 0;
             doTiles = true;
             doImageBiome = kDimIdNone;
-            doImageGrass = kDimIdNone;
             doImageHeightCol = kDimIdNone;
             doImageHeightColGrayscale = kDimIdNone;
             doImageHeightColAlpha = kDimIdNone;
-            doImageLightBlock = kDimIdNone;
-            doImageLightSky = kDimIdNone;
             doImageSlimeChunks = kDimIdNone;
             doImageShadedRelief = kDimIdNone;
             noForceGeoJSONFlag = false;
@@ -118,11 +109,8 @@ namespace mcpe_viz {
                 fnLayerHeight[did] = "";
                 fnLayerHeightGrayscale[did] = "";
                 fnLayerHeightAlpha[did] = "";
-                fnLayerBlockLight[did] = "";
-                fnLayerSkyLight[did] = "";
                 fnLayerSlimeChunks[did] = "";
                 fnLayerShadedRelief[did] = "";
-                fnLayerGrass[did] = "";
                 for (int32_t i = 0; i <= MAX_BLOCK_HEIGHT; i++) {
                     fnLayerRaw[did][i] = "";
                 }

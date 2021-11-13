@@ -23,7 +23,6 @@ Additional Features:
 * Create a powerful Google Maps-like web app viewer for your world.
   * Browse through all 256 layers of your world (Overworld and Nether) from bedrock to build limit.
   * Examine the location and details of mobs and items in your world.
-  * Show blocks where mobs can spawn.
   * Visualize chunk boundaries -- consider it an extremely cumbersome F3/debug mode!
   * Find slime chunks -- well, probably... slime chunk finding code is currently a bit weird in MCPE, it appears to work, but please be sure to confirm slimes are spawning in a chunk before you do a ton of work :)
   * Explore the biomes of your world.
@@ -33,9 +32,7 @@ Additional Features:
 * Create many types of images:
   * All layers of your world
   * Biomes in your world (very interesting!)
-  * Block light in your world (kind of like an image from space at night)
   * Block height in your world (kind of like a topographic map)
-  * Grass color in your world (it's neater than it sounds)
 
 * Create movies of all layers from bedrock to build limit (*ffmpeg* required)
 
@@ -113,8 +110,6 @@ Web App Usage Notes:
   * Show Mobs and Objects -- click on an entry and the map will be updated with labeled points.  You can toggle on as many different types as you like.  Click on the points or labels to get more info on the item.  Note that labels are not drawn when you are zoomed out.
   * Enable elevation overlay (shaded relief)
   * Enable chunk grid overlay
-
-You can visualize areas that are mob spawnable using the bedrock-viz command-line switch '--check-spawn'.  For example, '--check-spawn=0,-1,-152,180' will find all spawnable blocks in the overworld centered at -1,-152 with a radius of 180.  In the web app, you can toggle the "Spawnable" blocks on using the option on the "Blocks" menu.  The icons for the spawnable area are purple dots by default.  You can click on these dots to see the details.  You can then click on the "Pos" element to go to that layer (if you ran bedrock-viz with --html-all).  When you are viewing a raw layer (e.g. layer 12) as opposed to "Overview", the icons will change into green up arrows (indicating the spwanable block is above this layer), red down arrows (indicating the spawnable block is below this layer), or white squares (indicating the spawnable block is on this layer).  Keep in mind that the spawnable block is *above* the solid block the mob could spawn on.
 
 
 ## Web App Notes
