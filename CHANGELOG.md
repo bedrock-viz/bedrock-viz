@@ -14,6 +14,7 @@ v0.1.6 - SomeDate
   - support 0 length palette types in sub-chunks introduced with 1.17.30
   - reduce log noise related to data we don't actually use
   - fix crash when trying to output a player's reputation for a village
+  - fix crash when village dwellers don't have a position set in the database
 - Fixes in this release from:
   - [Desterly](https://github.com/Desterly)
 
