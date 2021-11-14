@@ -9,7 +9,12 @@
 
   * block and item id wrangler
   * occasional release engineer
+  * general hacker
   
+* [Desterly](https://github.com/Desterly)
+
+  * nbt block format whisperer 
+
 * [DazWorrall](https://github.com/DazWorrall)
 
   * Primary contributor
