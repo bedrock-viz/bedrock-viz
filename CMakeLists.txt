@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(bedrock-viz VERSION 0.1.5)
+project(bedrock-viz VERSION 0.1.6)
 
 set(CMAKE_CXX_STANDARD 17)
 
