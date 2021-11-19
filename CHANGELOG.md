@@ -9,14 +9,27 @@
 
 ## bedrock-viz changelog
 
-v0.1.6 - 2021.11.14
+v0.1.6 - 2021.11.18
+
+__Happy 10th Birthday to all the Villagers and The End Dragon!__
+
+Today marks 10 years since Minecraft 1.0.0 was released on 2011.11.18, it introduced us to Villagers, added The End,
+and it's "Boss". [Wattles](https://www.youtube.com/c/wattlesplays/about) did [a great throwback video](https://youtu.be/R2y-S7xFbbE) on it.
 - Parser changes
   - support 0 length palette types in sub-chunks introduced with 1.17.30
   - reduce log noise related to data we don't actually use
   - fix crash when trying to output a player's reputation for a village
   - fix crash when village dwellers don't have a position set in the database
+  - Housekeeping
+    - removed options that don't actually work.
+      - `--blocklight` and `--skylight` relied on data that is no longer written to the world database.
+      - `--grass` color is largely driven by the Biome now, not a recorded value in the world database.
+      - `--check-spawnable` depended on the light values above, which we no longer have, so it hasn't worked for a while.
+- Viewer changes
+  - removed display options for things that aren't generated any longer (see above.)
 - Fixes in this release from:
   - [Desterly](https://github.com/Desterly)
+  - [cabbey](https://github.com/cabbey)
 
 v0.1.5 - 2021.09.26
 - Viewer changes
