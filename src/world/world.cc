@@ -886,10 +886,7 @@ namespace mcpe_viz
             doOutput_Tile_image(control.fnLayerHeight[dimid]);
             doOutput_Tile_image(control.fnLayerHeightGrayscale[dimid]);
             doOutput_Tile_image(control.fnLayerHeightAlpha[dimid]);
-            doOutput_Tile_image(control.fnLayerBlockLight[dimid]);
-            doOutput_Tile_image(control.fnLayerSkyLight[dimid]);
             doOutput_Tile_image(control.fnLayerSlimeChunks[dimid]);
-            doOutput_Tile_image(control.fnLayerGrass[dimid]);
             doOutput_Tile_image(control.fnLayerShadedRelief[dimid]);
             for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
                 if (cy % 32 == 0) {
@@ -1051,9 +1048,7 @@ namespace mcpe_viz
                 fprintf(fp, "  fnLayerHeightAlpha: '%s',\n", makeTileURL(control.fnLayerHeightAlpha[did]).c_str());
                 fprintf(fp, "  fnLayerShadedRelief: '%s',\n",
                     makeTileURL(control.fnLayerShadedRelief[did]).c_str());
-                fprintf(fp, "  fnLayerBlockLight: '%s',\n", makeTileURL(control.fnLayerBlockLight[did]).c_str());
                 fprintf(fp, "  fnLayerSlimeChunks: '%s',\n", makeTileURL(control.fnLayerSlimeChunks[did]).c_str());
-                fprintf(fp, "  fnLayerGrass: '%s',\n", makeTileURL(control.fnLayerGrass[did]).c_str());
 
                 fprintf(fp, "  listLayers: [\n");
                 for (int32_t i = 0; i <= MAX_BLOCK_HEIGHT; i++) {

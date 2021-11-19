@@ -426,8 +426,6 @@ namespace mcpe_viz {
 			("hide-top", "Hide a block from top block (did=dimension id, bid=block id)")
 			("force-top", "Force a block to top block (did=dimension id, bid=block id)")
 			("geojson-block", "Add block to GeoJSON file for use in web app (did=dimension id, bid=block id)")
-			("check-spawn", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
-			("checks-spawnable", "Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)")
 			("schematic", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			("schematic-get", "Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)")
 			// ("render-dimension", "Render map images for specified dimensions")
@@ -435,8 +433,6 @@ namespace mcpe_viz {
 				->multitoken()->zero_tokens(), "Create all image types")
 			("biome", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
 				->multitoken()->zero_tokens(), "Create a biome map image")
-			("grass", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
-				->multitoken()->zero_tokens(), "Create a grass color map image")
 			("height-col", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
 				->multitoken()->zero_tokens(), "Create a height column map image (red is below sea; gray is sea; green is above sea)")
 			("height-col-gs", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
@@ -445,10 +441,6 @@ namespace mcpe_viz {
 				->multitoken()->zero_tokens(), "Create a height column map image (alpha)")
 			("shaded-relief", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
 				->multitoken()->zero_tokens(), "Create a shaded relief image")
-			("blocklight", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
-				->multitoken()->zero_tokens(), "Create a block light map image")
-			("skylight", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
-				->multitoken()->zero_tokens(), "Create a sky light map image")
 			("slime-chunk", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
 				->multitoken()->zero_tokens(), "Create a slime chunk map image")
 			("slices", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
@@ -614,42 +606,6 @@ namespace mcpe_viz {
 					errct++;
 				}
 			}
-			// --check-spawn did,x,z,dist
-			// --check-spawnable did,x,z,dist
-			if (vm.count("check-spawn") || vm.count("check-spawnable")) {
-				log::warn("--spawnable is no longer supported because the new chunk format (circa beta 1.2.x) no longer stores block light info");
-				errct++;
-
-				bool pass = false;
-				int32_t dimId, checkX, checkZ, checkDistance;
-				std::string optarg;
-				if (vm.count("check-spawn")) {
-					optarg = vm["check-spawn"].as<std::string>();
-				}
-				if (vm.count("check-spawnable")) {
-					optarg = vm["check-spawnable"].as<std::string>();
-				}
-				if (sscanf(optarg.c_str(), "%d,%d,%d,%d", &dimId, &checkX, &checkZ, &checkDistance) == 4) {
-					pass = true;
-				}
-
-				if (pass) {
-					// todo - check params
-
-					if (dimId < kDimIdOverworld || dimId >= kDimIdCount) {
-						pass = false;
-					}
-
-					if (pass) {
-						world->dimDataList[dimId]->addCheckSpawn(checkX, checkZ, checkDistance);
-					}
-				}
-
-				if (!pass) {
-					log::error("Failed to parse --check-spawn {}", optarg.c_str());
-					errct++;
-				}
-			}
 			// --schematic did,x1,y1,z1,x2,y2,z2,fnpart
 			// --schematic-get did,x1,y1,z1,x2,y2,z2,fnpart
 			if (vm.count("schematic") || vm.count("schematic-get")) {
@@ -718,30 +674,24 @@ namespace mcpe_viz {
 			if (vm.count("html-most")) {
 				control.doHtml = true;
 				control.doImageBiome =
-					control.doImageGrass =
 					control.doImageHeightCol =
 					control.doImageHeightColGrayscale =
 					control.doImageHeightColAlpha =
 					control.doImageShadedRelief =
-					control.doImageLightBlock =
-					control.doImageLightSky =
-					control.doImageSlimeChunks =
 						kDimIdAll;
+                control.doImageSlimeChunks = kDimJustOverworld;
 			}
 			// --html-all
 			if (vm.count("html-all")) {
 				control.doHtml = true;
 				control.doImageBiome =
-					control.doImageGrass =
 					control.doImageHeightCol =
 					control.doImageHeightColGrayscale =
 					control.doImageHeightColAlpha =
 					control.doImageShadedRelief =
-					control.doImageLightBlock =
-					control.doImageLightSky =
-					control.doImageSlimeChunks =
-						kDimIdAll;
-					control.doSlices = kDimIdAll;
+					control.doSlices =
+                        kDimIdAll;
+                control.doImageSlimeChunks = kDimJustOverworld;
 			}
 			// --no-force-geojson
 			if (vm.count("no-force-geojson")) {
@@ -750,10 +700,6 @@ namespace mcpe_viz {
 			// --biome[=did]
 			if (vm.count("biome")) {
 				control.doImageBiome = parseDimIdOptArgs(vm["biome"].as<std::vector<std::string>>());
-			}
-			// --grass[=did]
-			if (vm.count("grass")) {
-				control.doImageGrass = parseDimIdOptArgs(vm["grass"].as<std::vector<std::string>>());
 			}
 			// --height-col[=did]
 			if (vm.count("height-col")) {
@@ -771,14 +717,6 @@ namespace mcpe_viz {
 			if (vm.count("shaded-relief")) {
 				control.doImageShadedRelief = parseDimIdOptArgs(vm["shaded-relief"].as<std::vector<std::string>>());
 			}
-			// --blocklight[=did]
-			if (vm.count("blocklight")) {
-				control.doImageLightBlock = parseDimIdOptArgs(vm["blocklight"].as<std::vector<std::string>>());
-			}
-			// --skylight[=did]
-			if (vm.count("skylight")) {
-				control.doImageLightSky = parseDimIdOptArgs(vm["skylight"].as<std::vector<std::string>>());
-			}
 			// --slime-chunk[=did]
 			if (vm.count("slime-chunk")) {
 				control.doImageSlimeChunks = parseDimIdOptArgs(vm["slime-chunk"].as<std::vector<std::string>>());
@@ -786,13 +724,10 @@ namespace mcpe_viz {
 			// --all-image[=did]
 			if (vm.count("all-image")) {
 				control.doImageBiome =
-					control.doImageGrass =
 					control.doImageHeightCol =
 					control.doImageHeightColGrayscale =
 					control.doImageHeightColAlpha =
 					control.doImageShadedRelief =
-					control.doImageLightBlock =
-					control.doImageLightSky =
 					control.doImageSlimeChunks =
 					parseDimIdOptArgs(vm["all-image"].as<std::vector<std::string>>());
 			}
@@ -929,7 +864,6 @@ int main(int argc, char** argv)
     // todobig - we could call this deepParseDb() and only do it if the user wanted it
     if (true || mcpe_viz::control.doDetailParseFlag) {
         world->dbParse();
-        world->checkSpawnable();
     }
     world->doOutput();
     world->dbClose();

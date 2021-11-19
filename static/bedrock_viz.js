@@ -2012,16 +2012,6 @@ function setLayerById(id) {
             globalLayerMode = 0; globalLayerId = 3;
             $('#imageSelectName').html('Height (Grayscale)');
         }
-    } else if (id === 4) {
-        if (setLayer(dimensionInfo[globalDimensionId].fnLayerBlockLight, extraHelp) === 0) {
-            globalLayerMode = 0; globalLayerId = 4;
-            $('#imageSelectName').html('Block Light');
-        }
-    } else if (id === 5) {
-        if (setLayer(dimensionInfo[globalDimensionId].fnLayerGrass, extraHelp) === 0) {
-            globalLayerMode = 0; globalLayerId = 5;
-            $('#imageSelectName').html('Grass Color');
-        }
     } else {
         // default is overview map
         if (setLayer(dimensionInfo[globalDimensionId].fnLayerTop, '') === 0) {
@@ -2743,8 +2733,6 @@ function doTour(aboutFlag) {
                     '<li><b>Biome</b> is an image of the biomes in your world.</li>' +
                     '<li><b>Height</b> is an image of the heights of the highest blocks in your world.  Red is below sea level, Green is above.</li>' +
                     '<li><b>Height (Grayscale)</b> is an image of the heights of the highest blocks in your world in grayscale.</li>' +
-                    '<li><b>Block Light</b> is an image of the block light levels of the highest blocks in your world.</li>' +
-                    '<li><b>Grass Color</b> is an image of the color of grass in all parts of your world.</li>' +
                     '</ul>'
             },
             {

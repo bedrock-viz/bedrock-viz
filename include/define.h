@@ -46,6 +46,7 @@ namespace mcpe_viz {
     };
 
 	const std::vector<int> kDimIdAll{kDimIdOverworld, kDimIdNether, kDimIdTheEnd};
+    const std::vector<int> kDimJustOverworld{kDimIdOverworld};
     const std::vector<std::string> kDimIdAllStrings {"0","1","2"};
     const std::string kDimIdAllStr = "0 1 2";
     const std::vector<std::string> kDimIdNames {"overworld","nether","the-end"};

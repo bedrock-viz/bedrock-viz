@@ -89,8 +89,6 @@
 	    <li><a href="#" class="imageSelect" data-id="1">Biome</a></li>
 	    <li><a href="#" class="imageSelect" data-id="2">Height</a></li>
 	    <li><a href="#" class="imageSelect" data-id="3">Height (Grayscale)</a></li>
-	    <li><a href="#" class="imageSelect" data-id="4">Block Light</a></li>
-	    <li><a href="#" class="imageSelect" data-id="5">Grass Color</a></li>
 	  </ul>
 	</div>
 	
