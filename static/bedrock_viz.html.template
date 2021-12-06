@@ -47,7 +47,13 @@
 	      <span id="layerNumber">Go to Layer</span>
 	      <span class="caret"></span></button>
 	    <ul class="dropdown-menu">
-	      <li><a href="#" class="layerGoto" data-id="255" href="#">Layer 255 (Build Limit)</a></li>
+	      <li><a href="#" class="layerGoto" data-id="320" href="#">Layer 320 (Build Limit)</a></li>
+	      <li><a href="#" class="layerGoto" data-id="310" href="#">Layer 310</a></li>
+	      <li><a href="#" class="layerGoto" data-id="300" href="#">Layer 300</a></li>
+	      <li><a href="#" class="layerGoto" data-id="290" href="#">Layer 290</a></li>
+	      <li><a href="#" class="layerGoto" data-id="280" href="#">Layer 280</a></li>
+	      <li><a href="#" class="layerGoto" data-id="270" href="#">Layer 270</a></li>
+	      <li><a href="#" class="layerGoto" data-id="260" href="#">Layer 260</a></li>
 	      <li><a href="#" class="layerGoto" data-id="250" href="#">Layer 250</a></li>
 	      <li><a href="#" class="layerGoto" data-id="240" href="#">Layer 240</a></li>
 	      <li><a href="#" class="layerGoto" data-id="230" href="#">Layer 230</a></li>
@@ -74,7 +80,14 @@
 	      <li><a href="#" class="layerGoto" data-id="30" href="#">Layer 30</a></li>
 	      <li><a href="#" class="layerGoto" data-id="20" href="#">Layer 20</a></li>
 	      <li><a href="#" class="layerGoto" data-id="10" href="#">Layer 10</a></li>
-	      <li><a href="#" class="layerGoto" data-id="0" href="#">Layer 0 (Bedrock)</a></li>
+	      <li><a href="#" class="layerGoto" data-id="0" href="#">Layer 0</a></li>
+	      <li><a href="#" class="layerGoto" data-id="-10" href="#">Layer -10</a></li>
+	      <li><a href="#" class="layerGoto" data-id="-20" href="#">Layer -20</a></li>
+	      <li><a href="#" class="layerGoto" data-id="-30" href="#">Layer -30</a></li>
+	      <li><a href="#" class="layerGoto" data-id="-40" href="#">Layer -40</a></li>
+	      <li><a href="#" class="layerGoto" data-id="-50" href="#">Layer -50</a></li>
+	      <li><a href="#" class="layerGoto" data-id="-60" href="#">Layer -60</a></li>
+	      <li><a href="#" class="layerGoto" data-id="-64" href="#">Layer -64 (Bedrock)</a></li>
 	    </ul>
 	  </div>
 	  <button type="button" class="btn btn-primary mytooltip" id="layerNext" title="Go to Higher Layer">&uarr;</button>
