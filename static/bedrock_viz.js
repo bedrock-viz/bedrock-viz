@@ -2570,7 +2570,7 @@ function layerMove(delta) {
     //this_.getMap().getView().setRotation(0);
     layerRawIndex += delta;
     if (layerRawIndex < -64) { layerRawIndex = -64; }
-    if (layerRawIndex > 320) { layerRawIndex = 320; }
+    if (layerRawIndex > 319) { layerRawIndex = 319; }
     layerGoto(layerRawIndex);
 }
 
@@ -2578,8 +2578,8 @@ function layerGoto(layer) {
     // we make sure that layer is an integer (mob positions can have decimal points)
     layer = Math.floor(layer);
     if (layer < -64) { layer = -64; }
-    if (layer > 320) { layer = 320; }
-    if (setLayer(dimensionInfo[globalDimensionId].listLayers[layer], 'You need to run bedrock_viz with --html-all') === 0) {
+    if (layer > 319) { layer = 319; }
+    if (setLayer(dimensionInfo[globalDimensionId].listLayers[layer + 64], 'You need to run bedrock_viz with --html-all') === 0) {
         globalLayerMode = 1;
         layerRawIndex = layer;
         $('#layerNumber').html('' + layer);

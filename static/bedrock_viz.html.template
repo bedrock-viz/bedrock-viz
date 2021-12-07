@@ -47,7 +47,7 @@
 	      <span id="layerNumber">Go to Layer</span>
 	      <span class="caret"></span></button>
 	    <ul class="dropdown-menu">
-	      <li><a href="#" class="layerGoto" data-id="320" href="#">Layer 320 (Build Limit)</a></li>
+	      <li><a href="#" class="layerGoto" data-id="319" href="#">Layer 319 (Build Limit)</a></li>
 	      <li><a href="#" class="layerGoto" data-id="310" href="#">Layer 310</a></li>
 	      <li><a href="#" class="layerGoto" data-id="300" href="#">Layer 300</a></li>
 	      <li><a href="#" class="layerGoto" data-id="290" href="#">Layer 290</a></li>

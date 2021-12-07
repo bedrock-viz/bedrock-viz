@@ -11,6 +11,7 @@
 #include "minecraft/v2/block.h"
 
 #include <random>
+#include <algorithm>
 
 namespace
 {
@@ -28,6 +29,7 @@ namespace
 namespace
 {
     using mcpe_viz::MAX_BLOCK_HEIGHT;
+    using mcpe_viz::MIN_BLOCK_HEIGHT;
     using mcpe_viz::kColorDefault;
     using mcpe_viz::local_htobe32;
 
@@ -99,22 +101,22 @@ namespace
         {
             memset(this->value, 0, sizeof(this->value));
             // create red-green ramp; red to black and then black to green
-            makeHslRamp(this->value, 0, 61, 0.0, 0.0, 0.9, 0.9, 0.8, 0.1);
-            makeHslRamp(this->value, 63, MAX_BLOCK_HEIGHT, 0.4, 0.4, 0.9, 0.9, 0.1, 0.8);
+            makeHslRamp(this->value, 0 - MIN_BLOCK_HEIGHT, 61 - MIN_BLOCK_HEIGHT, 0.0, 0.0, 0.9, 0.9, 0.8, 0.1);
+            makeHslRamp(this->value, 63 - MIN_BLOCK_HEIGHT, MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT, 0.4, 0.4, 0.9, 0.9, 0.1, 0.8);
             // force 62 (sea level) to gray
-            this->value[62] = 0x303030;
+            this->value[62 - MIN_BLOCK_HEIGHT] = 0x303030;
 
             // fill 128..255 with purple (we should never see this color)
-            for (int32_t i = (MAX_BLOCK_HEIGHT + 1); i < 256; i++) {
+            for (int32_t i = (MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT + 1); i < 384; i++) {
                 this->value[i] = kColorDefault;
             }
 
             // convert palette
-            for (int32_t i = 0; i < 256; i++) {
+            for (int32_t i = 0; i < 384; i++) {
                 this->value[i] = local_htobe32(this->value[i]);
             }
         }
-        int32_t value[256];
+        int32_t value[384];
     };
 
     Palette& get_palette()
@@ -154,14 +156,14 @@ namespace mcpe_viz {
 
         int32_t bpp = 3;
         bool rgbaFlag = false;
-        uint8_t lut[256];
+        uint8_t lut[384];
 
         if (imageMode == kImageModeHeightColAlpha) {
             bpp = 4;
             rgbaFlag = true;
             // todobig - experiment with other ways to do this lut for height alpha
             double vmax = (double)MAX_BLOCK_HEIGHT * (double)MAX_BLOCK_HEIGHT;
-            for (int32_t i = 0; i <= MAX_BLOCK_HEIGHT; i++) {
+            for (int32_t i = 0; i <= (MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT); i++) {
                 // todobig make the offset (32) a cmdline param
                 double ti = ((MAX_BLOCK_HEIGHT + 1) + 32) - i;
                 double v = ((double)(ti * ti) / vmax) * 255.0;
@@ -250,29 +252,29 @@ namespace mcpe_viz {
                         else if (imageMode == kImageModeHeightCol) {
                             // get height value and use red-black-green palette
                             if (control.heightMode == kHeightModeTop) {
-                                uint8_t c = it->topBlockY[cx][cz];
+                                int16_t c = it->topBlockY[cx][cz];
                                 //color = palRedBlackGreen[c];
-                                color = get_palette().value[c];
+                                color = get_palette().value[c - MIN_BLOCK_HEIGHT];
                             }
                             else {
-                                uint8_t c = it->heightCol[cx][cz];
-                                color = get_palette().value[c];
+                                int16_t c = it->heightCol[cx][cz];
+                                color = get_palette().value[c - MIN_BLOCK_HEIGHT];
                             }
                         }
                         else if (imageMode == kImageModeHeightColGrayscale) {
                             // get height value and make it grayscale
                             if (control.heightMode == kHeightModeTop) {
-                                uint8_t c = it->topBlockY[cx][cz];
+                                uint8_t c = ((it->topBlockY[cx][cz] - MIN_BLOCK_HEIGHT) * 2) / 3;
                                 color = (c << 24) | (c << 16) | (c << 8);
                             }
                             else {
-                                uint8_t c = it->heightCol[cx][cz];
+                                uint8_t c = ((it->heightCol[cx][cz] - MIN_BLOCK_HEIGHT) * 2) / 3;
                                 color = (c << 24) | (c << 16) | (c << 8);
                             }
                         }
                         else if (imageMode == kImageModeHeightColAlpha) {
                             // get height value and make it alpha
-                            uint8_t c;
+                            int16_t c;
                             if (control.heightMode == kHeightModeTop) {
                                 c = it->topBlockY[cx][cz];
                             }
@@ -280,7 +282,7 @@ namespace mcpe_viz {
                                 c = it->heightCol[cx][cz];
                             }
                             // c = (90 - (int32_t)it->heightCol[cx][cz]) * 2;
-                            c = lut[c];
+                            c = lut[c - MIN_BLOCK_HEIGHT];
                             color = ((c & 0xff) << 24);
                         }
                         else if (imageMode == kImageModeBlockLight) {
@@ -475,8 +477,8 @@ namespace mcpe_viz {
         int16_t* emuchunk = new int16_t[NUM_BYTES_CHUNK_V3];
 
         // create png helpers
-        PngWriter png[MAX_BLOCK_HEIGHT + 1];
-        for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
+        PngWriter png[(MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT) + 1];
+        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
             std::string fnameTmp = fnBase + ".slice.full.";
             fnameTmp += name;
             fnameTmp += ".";
@@ -484,29 +486,30 @@ namespace mcpe_viz {
             fnameTmp += keybuf;
             fnameTmp += ".png";
 
-            control.fnLayerRaw[dimId][cy] = fnameTmp;
+            control.fnLayerRaw[dimId][cy - MIN_BLOCK_HEIGHT] = fnameTmp;
 
-            if (png[cy].init(fnameTmp, makeImageDescription(-1, cy), imageW, imageH, 16, false, true) != 0) {
+            if (png[cy - MIN_BLOCK_HEIGHT].init(fnameTmp, makeImageDescription(-1, cy), imageW, imageH, 16, false, true) != 0) {
                 delete[] emuchunk;
                 return -1;
             }
         }
 
         // create row buffers
-        uint8_t* rbuf[MAX_BLOCK_HEIGHT + 1];
-        for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
-            rbuf[cy] = new uint8_t[(imageW * 3) * 16];
+        uint8_t* rbuf[(MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT) + 1];
+        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
+            rbuf[cy - MIN_BLOCK_HEIGHT] = new uint8_t[(imageW * 3) * 16];
             // setup row pointers
             for (int32_t cz = 0; cz < 16; cz++) {
-                png[cy].row_pointers[cz] = &rbuf[cy][(cz * imageW) * 3];
+                png[cy - MIN_BLOCK_HEIGHT].row_pointers[cz] = &rbuf[cy - MIN_BLOCK_HEIGHT][(cz * imageW) * 3];
             }
         }
 
         // create a helper buffer which contains topBlockY for the entire image
-        uint8_t currTopBlockY = MAX_BLOCK_HEIGHT;
+        int16_t currTopBlockY = MAX_BLOCK_HEIGHT;
         size_t bsize = (size_t)imageW * (size_t)imageH;
-        uint8_t* tbuf = new uint8_t[bsize];
-        memset(tbuf, MAX_BLOCK_HEIGHT, bsize);
+        int16_t* tbuf = new int16_t[bsize];
+        //memset(tbuf, MAX_BLOCK_HEIGHT, bsize);
+        std::fill(tbuf, tbuf+bsize, MAX_BLOCK_HEIGHT);
         for (const auto& it : chunks) {
             int32_t ix = (it.second->chunkX + chunkOffsetX) * 16;
             int32_t iz = (it.second->chunkZ + chunkOffsetZ) * 16;
@@ -641,7 +644,7 @@ namespace mcpe_viz {
 
                     // we need to iterate over all possible y cubic chunks here...
                     int32_t cubicFoundCount = 0;
-                    for (int8_t cubicy = 0; cubicy < MAX_CUBIC_Y; cubicy++) {
+                    for (int8_t cubicy = MIN_CUBIC_Y; cubicy < MAX_CUBIC_Y; cubicy++) {
 
                         // todobug - this fails around level 112? on another1 -- weird -- run a valgrind to see where we're messing up
                         //check valgrind output
@@ -725,7 +728,7 @@ namespace mcpe_viz {
                                             // however, we do NOT do this for the nether. because: the nether
 
                                             // we need to copy this pixel from another layer
-                                            memcpy(&rbuf[cy][((cz * imageW) + imageX + cx) * 3],
+                                            memcpy(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3],
                                                 &rbuf[currTopBlockY][((cz * imageW) + imageX + cx) * 3],
                                                 3);
 
@@ -778,12 +781,12 @@ namespace mcpe_viz {
                                             }
 
 #ifdef PIXEL_COPY_MEMCPY
-                                            memcpy(&rbuf[cy][((cz * imageW) + imageX + cx) * 3], &pcolor[1], 3);
+                                            memcpy(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3], &pcolor[1], 3);
 #else
                                             // todo - any use in optimizing the offset calc?
-                                            rbuf[cy][((cz * imageW) + imageX + cx) * 3] = pcolor[1];
-                                            rbuf[cy][((cz * imageW) + imageX + cx) * 3 + 1] = pcolor[2];
-                                            rbuf[cy][((cz * imageW) + imageX + cx) * 3 + 2] = pcolor[3];
+                                            rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3] = pcolor[1];
+                                            rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3 + 1] = pcolor[2];
+                                            rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3 + 2] = pcolor[3];
 #endif
                                         }
                                     }
@@ -804,12 +807,12 @@ namespace mcpe_viz {
                                             // however, we do NOT do this for the nether. because: the nether
 
                                             // we need to copy this pixel from another layer
-                                            memcpy(&rbuf[cy][((cz * imageW) + imageX + cx) * 3],
-                                                &rbuf[currTopBlockY][((cz * imageW) + imageX + cx) * 3],
+                                            memcpy(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3],
+                                                &rbuf[currTopBlockY - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3],
                                                 3);
                                         }
                                         else {
-                                            memset(&rbuf[cy][((cz * imageW) + imageX + cx) * 3], 0, 3);
+                                            memset(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3], 0, 3);
                                         }
                                     }
                                 }
@@ -824,9 +827,9 @@ namespace mcpe_viz {
                         // slogger.msg(kLogInfo1,"WARNING: Did not find chunk in leveldb x=%d z=%d status=%s\n", chunkX, chunkZ, dstatus.ToString().c_str());
 
                         // we need to clear this area
-                        for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
+                        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
                             for (int32_t cz = 0; cz < 16; cz++) {
-                                memset(&rbuf[cy][((cz * imageW) + imageX) * 3], 0, 16 * 3);
+                                memset(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX) * 3], 0, 16 * 3);
                             }
                         }
                         // todonow - need this?
@@ -838,14 +841,14 @@ namespace mcpe_viz {
 
             // put the png rows
             // todo - png lib is SLOW - worth it to alloc a larger window (16-row increments) and write in batches?
-            for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
-                png_write_rows(png[cy].png, png[cy].row_pointers, 16);
+            for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
+                png_write_rows(png[cy - MIN_BLOCK_HEIGHT].png, png[cy - MIN_BLOCK_HEIGHT].row_pointers, 16);
             }
         }
 
-        for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
-            delete[] rbuf[cy];
-            png[cy].close();
+        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
+            delete[] rbuf[cy - MIN_BLOCK_HEIGHT];
+            png[cy - MIN_BLOCK_HEIGHT].close();
         }
 
         delete[] tbuf;
@@ -900,7 +903,7 @@ namespace mcpe_viz {
 
         int32_t color;
         const char* pcolor = (const char*)&color;
-        for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
+        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
             // todo - make this part a func so that user can ask for specific slices from the cmdline?
             log::info("  Layer {}", cy);
             for (const auto& it : chunks) {

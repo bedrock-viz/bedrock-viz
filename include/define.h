@@ -6,8 +6,10 @@
 namespace mcpe_viz {
     // maximum build height -- as of MCPE 0.13 it is 127
     const int32_t MAX_BLOCK_HEIGHT_127 = 127;
-    const int32_t MAX_BLOCK_HEIGHT = 255;
+    const int32_t MAX_BLOCK_HEIGHT = 319;
+    const int32_t MIN_BLOCK_HEIGHT = -64;
 
+    const int32_t MIN_CUBIC_Y = MIN_BLOCK_HEIGHT / 16;
     const int32_t MAX_CUBIC_Y = (MAX_BLOCK_HEIGHT + 1) / 16;
 
     const int32_t NUM_BYTES_CHUNK_V3 = 10241;

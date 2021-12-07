@@ -30,7 +30,7 @@ namespace mcpe_viz {
         std::string fnLayerHeightAlpha[kDimIdCount];
         std::string fnLayerSlimeChunks[kDimIdCount];
         std::string fnLayerShadedRelief[kDimIdCount];
-        std::string fnLayerRaw[kDimIdCount][MAX_BLOCK_HEIGHT + 1];
+        std::string fnLayerRaw[kDimIdCount][(MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT) + 1];
 
         bool doDetailParseFlag;
 		std::vector<int> doMovie;

@@ -888,11 +888,11 @@ namespace mcpe_viz
             doOutput_Tile_image(control.fnLayerHeightAlpha[dimid]);
             doOutput_Tile_image(control.fnLayerSlimeChunks[dimid]);
             doOutput_Tile_image(control.fnLayerShadedRelief[dimid]);
-            for (int32_t cy = 0; cy <= MAX_BLOCK_HEIGHT; cy++) {
+            for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
                 if (cy % 32 == 0) {
                     log::info("  Layer {} of {}", cy, MAX_BLOCK_HEIGHT);
                 }
-                doOutput_Tile_image(control.fnLayerRaw[dimid][cy]);
+                doOutput_Tile_image(control.fnLayerRaw[dimid][cy - MIN_BLOCK_HEIGHT]);
             }
         }
 
@@ -1051,8 +1051,8 @@ namespace mcpe_viz
                 fprintf(fp, "  fnLayerSlimeChunks: '%s',\n", makeTileURL(control.fnLayerSlimeChunks[did]).c_str());
 
                 fprintf(fp, "  listLayers: [\n");
-                for (int32_t i = 0; i <= MAX_BLOCK_HEIGHT; i++) {
-                    fprintf(fp, "    '%s',\n", makeTileURL(control.fnLayerRaw[did][i]).c_str());
+                for (int32_t i = MIN_BLOCK_HEIGHT; i <= MAX_BLOCK_HEIGHT; i++) {
+                    fprintf(fp, "    '%s',\n", makeTileURL(control.fnLayerRaw[did][i - MIN_BLOCK_HEIGHT]).c_str());
                 }
                 fprintf(fp, "  ]\n");
                 if ((did + 1) < kDimIdCount) {
