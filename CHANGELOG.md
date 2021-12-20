@@ -4,19 +4,64 @@
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
 - Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
-- Latest highlight: Caves & Cliffs: Blocks & Items; and tooling to make life easier
-- Latest release  : 0.1.4
+- Latest highlight: Trying to drink from the NBT change firehose
+- Latest release  : 0.1.6
 
-## bedrock_viz changelog
+## bedrock-viz changelog
+
+v0.1.6 - 2021.11.18
+
+__Happy 10th Birthday to all the Villagers and The End Dragon!__
+
+Today marks 10 years since Minecraft 1.0.0 was released on 2011.11.18, it introduced us to Villagers, added The End,
+and it's "Boss". [Wattles](https://www.youtube.com/c/wattlesplays/about) did [a great throwback video](https://youtu.be/R2y-S7xFbbE) on it.
+- Parser changes
+  - support 0 length palette types in sub-chunks introduced with 1.17.30
+  - reduce log noise related to data we don't actually use
+  - fix crash when trying to output a player's reputation for a village
+  - fix crash when village dwellers don't have a position set in the database
+  - Housekeeping
+    - removed options that don't actually work.
+      - `--blocklight` and `--skylight` relied on data that is no longer written to the world database.
+      - `--grass` color is largely driven by the Biome now, not a recorded value in the world database.
+      - `--check-spawnable` depended on the light values above, which we no longer have, so it hasn't worked for a while.
+- Viewer changes
+  - removed display options for things that aren't generated any longer (see above.)
+- Fixes in this release from:
+  - [Desterly](https://github.com/Desterly)
+  - [cabbey](https://github.com/cabbey)
+
+v0.1.5 - 2021.09.26
+- Viewer changes
+  - quick update to work on touch based mobile devices better
+- Parser changes
+  - added support for the storage changes introduced with minecraft 1.17.30 - Thanks Desterly!
+  - fixed bogus message about no config files found when there actually WAS one found.
+  - added missing Cursed enchantments.
+- Housekeeping
+  - fixed Docker buildfile to build atop Ubuntu 20.04
+  - fixed build documenation to support more modern Ubuntu than 18.04 (18.04 is still supported too, just not letting it hold us back)
+- Fixes in this release from:
+  - [cabbey](https://github.com/cabbey)
+  - [DazWorrall](https://github.com/DazWorrall) (first time contributor)
+  - [Desterly](https://github.com/Desterly) (first time contributor)
+  - [geoffholden](https://github.com/geoffholden)
 
 v0.1.4 - 2021.07.04
 - Viewer changes
   - Barrels are now an option to display in the Objects menu, with full inventory.
+  - Villages will now show the Village center, as well as the Villagers when the corresponding items are enabled.
+  - Version checking logic improved to only look at released versions.
 - Parser changes
-  - new utility to parse the xml data, check for conflicting colors and write out a legend file
-  - local config files now actually work the way the docs said they did!
-  - Barrels are recognized as containers
-  - item variants are now registered by uname so they can be found if that's all that is available from the db
+  - 1.17 blocks and entities added to the xml file, plus some changes from 1.16 that were missed.
+  - New utility to parse the xml data, check for conflicting colors and write out a legend file
+  - Local config files now actually work the way the docs said they did!
+  - Barrels are recognized as containers!
+  - Item variants are now registered by uname so they can be found if that's all that is available from the db.
+  - Add support for the new village data format!
+  - Dialed down the verbosity when splitting tiles.
+- Housekeeping
+  - fix a couple more instances where mcpe-viz had not been renamed to bedrock-viz
 - Fixes in this release from:
   - [cabbey](https://github.com/cabbey)
   - [geoffholden](https://github.com/geoffholden) (first time contributor)

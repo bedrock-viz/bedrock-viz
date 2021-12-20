@@ -155,7 +155,7 @@ html, body, .container-fluid, #map {
 }
 
 .dropdown-menu {
-    max-height: calc(100vh - 50px);
+    max-height: calc(100vh - 200px);
     overflow-y: auto;
 }
 

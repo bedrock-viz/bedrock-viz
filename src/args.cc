@@ -45,8 +45,6 @@ Extended Options:
     --force-top=did,bid      Force a block to top block (did=dimension id, bid=block id)
     --geojson-block=did,bid  Add block to GeoJSON file for use in web app (did=dimension id, bid=block id)
 
-    --check-spawn[able] did,x,z,dist
-                             Add spawnable blocks to the geojson file (did=dimension id; checks a circle of radius 'dist' centered on x,z)
     --schematic[-get] did,x1,y1,z1,x2,y2,z2,fnpart
                              Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)
     Note: [=did] are optional dimension-ids - if not specified, do all dimensions 
@@ -55,13 +53,10 @@ Extended Options:
     --grid[=did]             Display chunk grid on top of images
     --all-image[=did]        Create all image types
     --biome[=did]            Create a biome map image
-    --grass[=did]            Create a grass color map image
     --height-col[=did]       Create a height column map image (red is below sea; gray is sea; green is above sea)
     --height-col-gs[=did]    Create a height column map image (grayscale)
     --height-col-alpha[=did] Create a height column map image (alpha)
     --shaded-relief[=did]    Create a shaded relief image
-    --blocklight[=did]       Create a block light map image
-    --skylight[=did]         Create a sky light map image
     --slime-chunk[=did]      Create a slime chunk map image
 
     --no-force-geojson       Don't load geojson in html because we are going to use a web server (or Firefox)

@@ -1208,11 +1208,6 @@ namespace mcpe_viz {
             control.fnLayerBiome[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".biome.png");
             generateImage(control.fnLayerBiome[dimId], kImageModeBiome);
         }
-        if (checkDoForDim(control.doImageGrass)) {
-            log::info("  Generate Grass Image");
-            control.fnLayerGrass[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".grass.png");
-            generateImage(control.fnLayerGrass[dimId], kImageModeGrass);
-        }
         if (checkDoForDim(control.doImageHeightCol)) {
             log::info("  Generate Height Column Image");
             control.fnLayerHeight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".height_col.png");
@@ -1229,16 +1224,6 @@ namespace mcpe_viz {
             control.fnLayerHeightAlpha[dimId] = std::string(
                 dirOut + "/" + fnBase + "." + name + ".height_col_alpha.png");
             generateImage(control.fnLayerHeightAlpha[dimId], kImageModeHeightColAlpha);
-        }
-        if (checkDoForDim(control.doImageLightBlock)) {
-            log::info("  Generate Block Light Image");
-            control.fnLayerBlockLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_block.png");
-            generateImage(control.fnLayerBlockLight[dimId], kImageModeBlockLight);
-        }
-        if (checkDoForDim(control.doImageLightSky)) {
-            log::info("  Generate Sky Light Image");
-            control.fnLayerSkyLight[dimId] = std::string(dirOut + "/" + fnBase + "." + name + ".light_sky.png");
-            generateImage(control.fnLayerSkyLight[dimId], kImageModeSkyLight);
         }
         if (checkDoForDim(control.doImageSlimeChunks)) {
             log::info("  Generate Slime Chunks Image");
