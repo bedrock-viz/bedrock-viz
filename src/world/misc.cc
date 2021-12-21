@@ -1,6 +1,7 @@
 #include "world/misc.h"
 
 #include "define.h"
+#include "math.h"
 #include "nbt.h"
 #include "logger.h"
 #include "utils/unknown_recorder.h"
