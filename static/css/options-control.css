@@ -1,0 +1,28 @@
+.option-toggle {
+    padding: 4px 2px;
+    cursor: pointer;
+}
+
+.option-toggle:hover {
+    background-color: rgba(84, 181, 255, 0.5);
+}
+
+.option-toggle.toggleable:before {
+    content: "\2610";
+    display: inline-block;
+}
+
+.option-toggle.toggleable.active:before {
+    content: "\2611";
+}
+
+.options-slider {
+    margin-top: 12px;
+}
+
+li.input-group {
+    margin-top: 4px;
+}
+li.input-group:first-of-type {
+    margin-top: 0;
+}

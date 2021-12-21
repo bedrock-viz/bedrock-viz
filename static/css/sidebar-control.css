@@ -1,0 +1,210 @@
+#sidebar {
+    width: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0px;
+    left: 0;
+    z-index: 100;
+    box-shadow: 3px 0 4px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    pointer-events: none;
+    background-color: white;
+    border-right: 1px solid #999999;
+    transition: width 0.8s ease;
+}
+
+#sidebar.open {
+    width: 474px;
+    pointer-events: all;
+}
+
+#sidebar #sidebar-toggle {
+    transition: left 0.8s ease;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    background-color: white;
+    border: 1px solid #999999;
+    border-left: none;
+    box-shadow: 3px 0 4px rgba(0, 0, 0, 0.3);
+    width: 24px;
+    height: 48px;
+    pointer-events: all;
+    cursor: pointer;
+}
+
+#sidebar #sidebar-toggle:hover {
+    background-color: #efefef;
+}
+
+#sidebar #sidebar-toggle img {
+    transform: scaleX(-1);
+    position: relative;
+    top: 25%;
+}
+
+#sidebar.open #sidebar-toggle {
+    left: 473px;
+}
+
+#sidebar.open #sidebar-toggle img {
+    transform: none;
+}
+
+#sidebar #sidebar-content {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    right: 12px;
+    bottom: 12px;
+    white-space: nowrap;
+}
+
+#sidebar .sidebar-header-wrapper {
+    text-align: center;
+    margin-bottom: 12px;
+    white-space: nowrap;
+}
+
+#sidebar .sidebar-header-wrapper img {
+    height: 50px;
+}
+
+#sidebar .sidebar-header-wrapper .sidebar-brand {
+    display: inline-block;
+    font-size: 3rem;
+    vertical-align: middle;
+    margin-left: 6px;
+}
+
+#sidebar .sidebar-filter-wrapper {
+    margin-top: 18px;
+}
+
+#sidebar .sidebar-filter-wrapper label {
+    margin-right: 8px;
+}
+#sidebar .sidebar-filter-wrapper input {
+    border-color: rgb(118, 118, 118);
+    border-right: none;
+    width: 240px;
+    padding: 6px;
+}
+
+#sidebar .sidebar-filter-clear {
+    background-color: white;
+    border-color: rgb(118, 118, 118);
+    border-style: solid;
+    border-left: none;
+    outline: none;
+    padding: 6px;
+}
+
+#sidebar .sidebar-quick-link-wrapper {
+    margin-top: 8px;
+}
+
+#sidebar .sidebar-quick-link-wrapper a {
+    padding: 2px;
+}
+
+#sidebar .sidebar-group-heading {
+    width: 100%;
+    background-color: #ababab;
+    padding: 8px;
+    font-size: 14px;
+}
+
+#sidebar .sidebar-group-heading img {
+    float: right;
+    transform: rotate(270deg);
+}
+
+#sidebar .sidebar-group-heading img.open {
+    transform: rotate(90deg);
+}
+
+#sidebar .sidebar-content-group {
+    margin-bottom: 8px;
+}
+
+#sidebar .sidebar-content-group p {
+    white-space: normal;
+}
+
+#sidebar .feature-toggle-all-wrapper {
+    display: block;
+    margin-bottom: 12px;
+    text-align: right;
+    padding: 0 8px;
+}
+
+#sidebar .entity-toggle-wrapper {
+    width: calc(6 * 72px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#sidebar .entity-toggle-wrapper:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+#sidebar .entity-toggle {
+    display: inline-block;
+    float: left;
+    height: 74px;
+    width: 74px;
+    cursor: pointer;
+    padding: 1px;
+    margin-right: 8px;
+    border-radius: 16px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-size: 10px;
+    color: black;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 8px;
+    border: 4px solid #878787;
+}
+
+#sidebar .entity-toggle:hover {
+    background-color: #b3ff97;
+    border-color: #46ff31;
+    box-shadow: inset 1px 2px 5px rgba(0,0,0,0.8);
+}
+
+#sidebar .entity-toggle.active,
+#sidebar .entity-toggle.active:hover {
+    background-color: #54b5ff;
+    border-color: #165b8f;
+    box-shadow: inset 1px 2px 5px rgba(0,0,0,0.8);
+}
+
+#sidebar .entity-toggle.active:active {
+    background-color: #ff9797;
+    border-color: #ff3131;
+}
+
+#sidebar .entity-toggle .entity-image {
+    display: inline-block;
+    height: 50px;
+    width: 50px;
+    border: 0px;
+    pointer-events: none;
+}
+
+
+#sidebar .entity-toggle .entity-label {
+    display: block;
+    pointer-events: none;
+    margin-left: 5px;
+    margin-right: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
