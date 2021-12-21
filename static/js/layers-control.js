@@ -100,7 +100,7 @@ const LayersControl = function(opt_options) {
      * Sets the active layer to the specified layer number
      * @param layerNumber the layer number to go to
      */
-    function doJumpToLayer(layerNumber) {
+    this.doJumpToLayer = function(layerNumber) {
         layerGoto(layerNumber);
         $layerCurrentDisplay.html(layerRawIndex);
     }

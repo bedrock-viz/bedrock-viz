@@ -456,12 +456,6 @@ const sidebarControlConfig = [
                 type: 'tile',
             },
             {
-                icon: 'images/bedrock_viz.block.458.0.png',
-                id: 'Barrel',
-                label: 'Barrel',
-                type: 'tile',
-            },
-            {
                 icon: 'images/sidebar-assets/Shulker_Box.gif',
                 id: 'ShulkerBox',
                 label: 'Shulker Box',
