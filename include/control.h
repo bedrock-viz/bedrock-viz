@@ -44,6 +44,8 @@ namespace mcpe_viz {
 		std::vector<int> doImageHeightColAlpha;
 		std::vector<int> doImageSlimeChunks;
 		std::vector<int> doImageShadedRelief;
+        int dimYBottom[kDimIdCount];
+        int dimYTop[kDimIdCount];
         bool autoTileFlag;
         bool noForceGeoJSONFlag;
         bool shortRunFlag;
@@ -103,6 +105,17 @@ namespace mcpe_viz {
             // todo - cmdline option for this?
             heightMode = kHeightModeTop;
 
+            // default top/bottom Y levels
+            // Overworld
+            dimYBottom[kDimIdOverworld] = -64;
+            dimYTop[kDimIdOverworld] = 319;
+            // Nether
+            dimYBottom[kDimIdNether] = 0;
+            dimYTop[kDimIdNether] = 127;
+            // The End
+            dimYBottom[kDimIdTheEnd] = 0;
+            dimYTop[kDimIdTheEnd] = 127;
+
             for (int32_t did = 0; did < kDimIdCount; did++) {
                 fnLayerTop[did] = "";
                 fnLayerBiome[did] = "";
@@ -111,8 +124,8 @@ namespace mcpe_viz {
                 fnLayerHeightAlpha[did] = "";
                 fnLayerSlimeChunks[did] = "";
                 fnLayerShadedRelief[did] = "";
-                for (int32_t i = 0; i <= MAX_BLOCK_HEIGHT; i++) {
-                    fnLayerRaw[did][i] = "";
+                for (int32_t i = dimYBottom[did]; i <= dimYTop[did]; i++) {
+                    fnLayerRaw[did][i - dimYBottom[did]] = "";
                 }
             }
         }

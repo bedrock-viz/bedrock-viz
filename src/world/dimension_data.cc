@@ -477,8 +477,10 @@ namespace mcpe_viz {
         int16_t* emuchunk = new int16_t[NUM_BYTES_CHUNK_V3];
 
         // create png helpers
-        PngWriter png[(MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT) + 1];
-        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
+        int dimensionBottomY = control.dimYBottom[dimId];
+        int dimensionTopY = control.dimYTop[dimId];
+        PngWriter png[(dimensionTopY - dimensionBottomY) + 1];
+        for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
             std::string fnameTmp = fnBase + ".slice.full.";
             fnameTmp += name;
             fnameTmp += ".";
@@ -486,30 +488,29 @@ namespace mcpe_viz {
             fnameTmp += keybuf;
             fnameTmp += ".png";
 
-            control.fnLayerRaw[dimId][cy - MIN_BLOCK_HEIGHT] = fnameTmp;
+            control.fnLayerRaw[dimId][cy - dimensionBottomY] = fnameTmp;
 
-            if (png[cy - MIN_BLOCK_HEIGHT].init(fnameTmp, makeImageDescription(-1, cy), imageW, imageH, 16, false, true) != 0) {
+            if (png[cy - dimensionBottomY].init(fnameTmp, makeImageDescription(-1, cy), imageW, imageH, 16, false, true) != 0) {
                 delete[] emuchunk;
                 return -1;
             }
         }
 
         // create row buffers
-        uint8_t* rbuf[(MAX_BLOCK_HEIGHT - MIN_BLOCK_HEIGHT) + 1];
-        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
-            rbuf[cy - MIN_BLOCK_HEIGHT] = new uint8_t[(imageW * 3) * 16];
+        uint8_t* rbuf[(dimensionTopY - dimensionBottomY) + 1];
+        for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
+            rbuf[cy - dimensionBottomY] = new uint8_t[(imageW * 3) * 16];
             // setup row pointers
             for (int32_t cz = 0; cz < 16; cz++) {
-                png[cy - MIN_BLOCK_HEIGHT].row_pointers[cz] = &rbuf[cy - MIN_BLOCK_HEIGHT][(cz * imageW) * 3];
+                png[cy - dimensionBottomY].row_pointers[cz] = &rbuf[cy - dimensionBottomY][(cz * imageW) * 3];
             }
         }
 
         // create a helper buffer which contains topBlockY for the entire image
-        int16_t currTopBlockY = MAX_BLOCK_HEIGHT;
+        int16_t currTopBlockY = dimensionTopY;
         size_t bsize = (size_t)imageW * (size_t)imageH;
         int16_t* tbuf = new int16_t[bsize];
-        //memset(tbuf, MAX_BLOCK_HEIGHT, bsize);
-        std::fill(tbuf, tbuf+bsize, MAX_BLOCK_HEIGHT);
+        std::fill(tbuf, tbuf+bsize, dimensionTopY);
         for (const auto& it : chunks) {
             int32_t ix = (it.second->chunkX + chunkOffsetX) * 16;
             int32_t iz = (it.second->chunkZ + chunkOffsetZ) * 16;
@@ -583,8 +584,8 @@ namespace mcpe_viz {
                                     // however, we do NOT do this for the nether. because: the nether
 
                                     // we need to copy this pixel from another layer
-                                    memcpy(&rbuf[cy][((cz * imageW) + imageX + cx) * 3],
-                                        &rbuf[currTopBlockY][((cz * imageW) + imageX + cx) * 3],
+                                    memcpy(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
+                                        &rbuf[currTopBlockY - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
                                         3);
 
                                 }
@@ -616,7 +617,7 @@ namespace mcpe_viz {
                                     }
 
 #ifdef PIXEL_COPY_MEMCPY
-                                    memcpy(&rbuf[cy][((cz * imageW) + imageX + cx) * 3], &pcolor[1], 3);
+                                    memcpy(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX + cx) * 3], &pcolor[1], 3);
 #else
                                     // todo - any use in optimizing the offset calc?
                                     rbuf[cy][((cz * imageW) + imageX + cx) * 3] = pcolor[1];
@@ -627,10 +628,15 @@ namespace mcpe_viz {
                             }
 
                             // to support 256h worlds, for v2 chunks, we need to make 128..255 the same as 127
-                            // todo - could optimize this
-                            for (int cy = 128; cy <= MAX_BLOCK_HEIGHT; cy++) {
-                                memcpy(&rbuf[cy][((cz * imageW) + imageX + cx) * 3],
-                                    &rbuf[127][((cz * imageW) + imageX + cx) * 3], 3);
+                            // todo - could optimize this, is it needed with the top values?
+                            for (int cy = 128; cy <= dimensionTopY; cy++) {
+                                memcpy(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
+                                    &rbuf[127 - dimensionBottomY][((cz * imageW) + imageX + cx) * 3], 3);
+                            }
+                            // and I guess below zero too?
+                            for (int cy = dimensionBottomY; cy < 0; cy++) {
+                                memcpy(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
+                                       &rbuf[0 - dimensionBottomY][((cz * imageW) + imageX + cx) * 3], 3);
                             }
 
                         }
@@ -644,8 +650,17 @@ namespace mcpe_viz {
 
                     // we need to iterate over all possible y cubic chunks here...
                     int32_t cubicFoundCount = 0;
-                    for (int8_t cubicy = MIN_CUBIC_Y; cubicy < MAX_CUBIC_Y; cubicy++) {
-
+                    int32_t dimMinCubicY = dimensionBottomY / 16;
+                    int32_t dimMaxCubicY = dimensionTopY / 16;
+                    // the above cubics are the in world Y values, eg -4..20
+                    // the below cubics are the in leveldb Y values, eg 0..24
+                    // NOTE: I'm assuming other dimensions with negative Y values will zero index like overworld does.
+                    // for now, since they have 0 for minimum Y it's a no-op.
+                    int32_t dbMinCubicY = 0;
+                    int32_t dbMaxCubicY = dimMaxCubicY - dimMinCubicY;
+                    for (int8_t cubicy = dbMinCubicY; cubicy < dbMaxCubicY; cubicy++) {
+                        // so we iterrate on the LEVEL DB's Y, but then adjust it to get the WORLD Y
+                        int8_t worldCubicY = cubicy + dimMinCubicY;
                         // todobug - this fails around level 112? on another1 -- weird -- run a valgrind to see where we're messing up
                         //check valgrind output
 
@@ -707,7 +722,7 @@ namespace mcpe_viz {
                                 for (int32_t cz = 0; cz < 16; cz++) {
                                     currTopBlockY = tbuf[(imageZ + cz) * imageW + imageX + cx];
                                     for (int32_t ccy = 0; ccy < 16; ccy++) {
-                                        int32_t cy = cubicy * 16 + ccy;
+                                        int32_t cy = worldCubicY * 16 + ccy;
 
                                         // todo - if we use this, we get blockdata errors... somethings not right
                                         if (wordModeFlag) {
@@ -728,8 +743,8 @@ namespace mcpe_viz {
                                             // however, we do NOT do this for the nether. because: the nether
 
                                             // we need to copy this pixel from another layer
-                                            memcpy(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3],
-                                                &rbuf[currTopBlockY][((cz * imageW) + imageX + cx) * 3],
+                                            memcpy(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
+                                                &rbuf[currTopBlockY - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
                                                 3);
 
                                         }
@@ -781,7 +796,7 @@ namespace mcpe_viz {
                                             }
 
 #ifdef PIXEL_COPY_MEMCPY
-                                            memcpy(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3], &pcolor[1], 3);
+                                            memcpy(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX + cx) * 3], &pcolor[1], 3);
 #else
                                             // todo - any use in optimizing the offset calc?
                                             rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3] = pcolor[1];
@@ -800,19 +815,23 @@ namespace mcpe_viz {
                                 for (int32_t cz = 0; cz < 16; cz++) {
                                     currTopBlockY = tbuf[(imageZ + cz) * imageW + imageX + cx];
                                     for (int32_t ccy = 0; ccy < 16; ccy++) {
-                                        int32_t cy = cubicy * 16 + ccy;
+                                        int32_t cy = worldCubicY * 16 + ccy;
                                         if ((cy > currTopBlockY) && (dimId != kDimIdNether)) {
                                             // special handling for air -- keep existing value if we are above top block
                                             // the idea is to show air underground, but hide it above so that the map is not all black pixels @ y=MAX_BLOCK_HEIGHT
                                             // however, we do NOT do this for the nether. because: the nether
 
                                             // we need to copy this pixel from another layer
-                                            memcpy(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3],
-                                                &rbuf[currTopBlockY - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3],
+                                            memcpy(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
+                                                &rbuf[currTopBlockY - dimensionBottomY][((cz * imageW) + imageX + cx) * 3],
                                                 3);
                                         }
                                         else {
-                                            memset(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX + cx) * 3], 0, 3);
+                                            if (cy <= dimensionTopY) {
+                                                memset(&(rbuf[cy - dimensionBottomY])[((cz * imageW) + imageX + cx) * 3], 0, 3);
+                                            } else {
+
+                                            }
                                         }
                                     }
                                 }
@@ -827,9 +846,9 @@ namespace mcpe_viz {
                         // slogger.msg(kLogInfo1,"WARNING: Did not find chunk in leveldb x=%d z=%d status=%s\n", chunkX, chunkZ, dstatus.ToString().c_str());
 
                         // we need to clear this area
-                        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
+                        for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
                             for (int32_t cz = 0; cz < 16; cz++) {
-                                memset(&rbuf[cy - MIN_BLOCK_HEIGHT][((cz * imageW) + imageX) * 3], 0, 16 * 3);
+                                memset(&rbuf[cy - dimensionBottomY][((cz * imageW) + imageX) * 3], 0, 16 * 3);
                             }
                         }
                         // todonow - need this?
@@ -841,14 +860,14 @@ namespace mcpe_viz {
 
             // put the png rows
             // todo - png lib is SLOW - worth it to alloc a larger window (16-row increments) and write in batches?
-            for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
-                png_write_rows(png[cy - MIN_BLOCK_HEIGHT].png, png[cy - MIN_BLOCK_HEIGHT].row_pointers, 16);
+            for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
+                png_write_rows(png[cy - dimensionBottomY].png, png[cy - dimensionBottomY].row_pointers, 16);
             }
         }
 
-        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
-            delete[] rbuf[cy - MIN_BLOCK_HEIGHT];
-            png[cy - MIN_BLOCK_HEIGHT].close();
+        for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
+            delete[] rbuf[cy - dimensionBottomY];
+            png[cy - dimensionBottomY].close();
         }
 
         delete[] tbuf;
@@ -903,7 +922,7 @@ namespace mcpe_viz {
 
         int32_t color;
         const char* pcolor = (const char*)&color;
-        for (int32_t cy = MIN_BLOCK_HEIGHT; cy <= MAX_BLOCK_HEIGHT; cy++) {
+        for (int32_t cy = control.dimYBottom[dimId]; cy <= control.dimYTop[dimId]; cy++) {
             // todo - make this part a func so that user can ask for specific slices from the cmdline?
             log::info("  Layer {}", cy);
             for (const auto& it : chunks) {
@@ -1028,7 +1047,7 @@ namespace mcpe_viz {
             fnameTmp += xtmp;
             fnameTmp += ".png";
 
-            control.fnLayerRaw[dimId][cy] = fnameTmp;
+            control.fnLayerRaw[dimId][cy - control.dimYBottom[dimId]] = fnameTmp;
 
             outputPNG(fnameTmp, makeImageDescription(-1, cy), buf, cropW, cropH, false);
         }

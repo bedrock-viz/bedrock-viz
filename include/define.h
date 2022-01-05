@@ -4,12 +4,23 @@
 #include <string>
 
 namespace mcpe_viz {
-    // maximum build height -- as of MCPE 0.13 it is 127
+    // absolutely block limits. Note that every dimension has unique dynamic
+    // limits in control.dimYBottom and control.dimYTop, which should generally
+    // be what is used for loops. These are still useful for allocation of
+    // worst case scenarios, but should generally not be used if you know what
+    // dimension you are working with.
     const int32_t MAX_BLOCK_HEIGHT_127 = 127;
     const int32_t MAX_BLOCK_HEIGHT = 319;
     const int32_t MIN_BLOCK_HEIGHT = -64;
 
+    /**
+     * @deprecated - need to calculate these by dimension, and adjust for zero indexing
+     * @see generateSlices::worldCubicY for example of how to do it. (the code just above it actually)
+     */
     const int32_t MIN_CUBIC_Y = MIN_BLOCK_HEIGHT / 16;
+    /**
+     * @deprecated
+     */
     const int32_t MAX_CUBIC_Y = (MAX_BLOCK_HEIGHT + 1) / 16;
 
     const int32_t NUM_BYTES_CHUNK_V3 = 10241;
