@@ -651,7 +651,7 @@ namespace mcpe_viz {
                     // we need to iterate over all possible y cubic chunks here...
                     int32_t cubicFoundCount = 0;
                     int32_t dimMinCubicY = dimensionBottomY / 16;
-                    int32_t dimMaxCubicY = dimensionTopY / 16;
+                    int32_t dimMaxCubicY = dimensionTopY + 1 / 16;
                     // the above cubics are the in world Y values, eg -4..20
                     // the below cubics are the in leveldb Y values, eg 0..24
                     // NOTE: I'm assuming other dimensions with negative Y values will zero index like overworld does.
