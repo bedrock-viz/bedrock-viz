@@ -651,14 +651,14 @@ namespace mcpe_viz {
                     // we need to iterate over all possible y cubic chunks here...
                     int32_t cubicFoundCount = 0;
                     int32_t dimMinCubicY = dimensionBottomY / 16;
-                    int32_t dimMaxCubicY = dimensionTopY + 1 / 16;
+                    int32_t dimMaxCubicY = dimensionTopY / 16;
                     // the above cubics are the in world Y values, eg -4..20
                     // the below cubics are the in leveldb Y values, eg 0..24
                     // NOTE: I'm assuming other dimensions with negative Y values will zero index like overworld does.
                     // for now, since they have 0 for minimum Y it's a no-op.
                     int32_t dbMinCubicY = 0;
                     int32_t dbMaxCubicY = dimMaxCubicY - dimMinCubicY;
-                    for (int8_t cubicy = dbMinCubicY; cubicy < dbMaxCubicY; cubicy++) {
+                    for (int8_t cubicy = dbMinCubicY; cubicy <= dbMaxCubicY; cubicy++) {
                         // so we iterrate on the LEVEL DB's Y, but then adjust it to get the WORLD Y
                         int8_t worldCubicY = cubicy + dimMinCubicY;
                         // todobug - this fails around level 112? on another1 -- weird -- run a valgrind to see where we're messing up
