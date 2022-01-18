@@ -852,14 +852,16 @@ namespace mcpe_viz {
 
             // put the png rows
             // todo - png lib is SLOW - worth it to alloc a larger window (16-row increments) and write in batches?
-            for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
-                png_write_rows(png[cy - dimensionBottomY].png, png[cy - dimensionBottomY].row_pointers, 16);
+            // y here is already shifted by dimensionBottomY so we don't have to subtract it every loop
+            for (int32_t y = 0; y <= dimensionTopY - dimensionBottomY; y++) {
+                png_write_rows(png[y].png, png[y].row_pointers, 16);
             }
         }
 
-        for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
-            delete[] rbuf[cy - dimensionBottomY];
-            png[cy - dimensionBottomY].close();
+        // y here is already shifted by dimensionBottomY so we don't have to subtract it every loop
+        for (int32_t y = 0; y <= dimensionTopY - dimensionBottomY; y++) {
+            delete[] rbuf[y];
+            png[y].close();
         }
 
         delete[] tbuf;
