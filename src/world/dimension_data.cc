@@ -652,15 +652,7 @@ namespace mcpe_viz {
                     int32_t cubicFoundCount = 0;
                     int32_t dimMinCubicY = dimensionBottomY / 16;
                     int32_t dimMaxCubicY = dimensionTopY / 16;
-                    // the above cubics are the in world Y values, eg -4..20
-                    // the below cubics are the in leveldb Y values, eg 0..24
-                    // NOTE: I'm assuming other dimensions with negative Y values will zero index like overworld does.
-                    // for now, since they have 0 for minimum Y it's a no-op.
-                    int32_t dbMinCubicY = 0;
-                    int32_t dbMaxCubicY = dimMaxCubicY - dimMinCubicY;
-                    for (int8_t cubicy = dbMinCubicY; cubicy <= dbMaxCubicY; cubicy++) {
-                        // so we iterrate on the LEVEL DB's Y, but then adjust it to get the WORLD Y
-                        int8_t worldCubicY = cubicy + dimMinCubicY;
+                    for (int32_t cubicY = dimMinCubicY; cubicY <= dimMaxCubicY; cubicY++) {
                         // todobug - this fails around level 112? on another1 -- weird -- run a valgrind to see where we're messing up
                         //check valgrind output
 
@@ -670,7 +662,7 @@ namespace mcpe_viz {
                             memcpy(&keybuf[0], &chunkX, sizeof(int32_t));
                             memcpy(&keybuf[4], &chunkZ, sizeof(int32_t));
                             memcpy(&keybuf[8], &kt_v3, sizeof(uint8_t));
-                            memcpy(&keybuf[9], &cubicy, sizeof(uint8_t));
+                            memcpy(&keybuf[9], &cubicY, sizeof(uint8_t));
                             keybuflen = 10;
                         }
                         else {
@@ -679,7 +671,7 @@ namespace mcpe_viz {
                             memcpy(&keybuf[4], &chunkZ, sizeof(int32_t));
                             memcpy(&keybuf[8], &kw, sizeof(int32_t));
                             memcpy(&keybuf[12], &kt_v3, sizeof(uint8_t));
-                            memcpy(&keybuf[13], &cubicy, sizeof(uint8_t));
+                            memcpy(&keybuf[13], &cubicY, sizeof(uint8_t));
                             keybuflen = 14;
                         }
 
@@ -722,7 +714,7 @@ namespace mcpe_viz {
                                 for (int32_t cz = 0; cz < 16; cz++) {
                                     currTopBlockY = tbuf[(imageZ + cz) * imageW + imageX + cx];
                                     for (int32_t ccy = 0; ccy < 16; ccy++) {
-                                        int32_t cy = worldCubicY * 16 + ccy;
+                                        int32_t cy = cubicY * 16 + ccy;
 
                                         // todo - if we use this, we get blockdata errors... somethings not right
                                         if (wordModeFlag) {
@@ -815,7 +807,7 @@ namespace mcpe_viz {
                                 for (int32_t cz = 0; cz < 16; cz++) {
                                     currTopBlockY = tbuf[(imageZ + cz) * imageW + imageX + cx];
                                     for (int32_t ccy = 0; ccy < 16; ccy++) {
-                                        int32_t cy = worldCubicY * 16 + ccy;
+                                        int32_t cy = cubicY * 16 + ccy;
                                         if ((cy > currTopBlockY) && (dimId != kDimIdNether)) {
                                             // special handling for air -- keep existing value if we are above top block
                                             // the idea is to show air underground, but hide it above so that the map is not all black pixels @ y=MAX_BLOCK_HEIGHT
