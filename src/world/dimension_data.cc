@@ -479,7 +479,7 @@ namespace mcpe_viz {
         // create png helpers
         int dimensionBottomY = control.dimYBottom[dimId];
         int dimensionTopY = control.dimYTop[dimId];
-        PngWriter png[(dimensionTopY - dimensionBottomY) + 1];
+        PngWriter* png = new PngWriter[(dimensionTopY - dimensionBottomY + 1)];
         for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
             std::string fnameTmp = fnBase + ".slice.full.";
             fnameTmp += name;
@@ -497,7 +497,7 @@ namespace mcpe_viz {
         }
 
         // create row buffers
-        uint8_t* rbuf[(dimensionTopY - dimensionBottomY) + 1];
+        uint8_t** rbuf = new uint8_t*[(dimensionTopY - dimensionBottomY) + 1];
         for (int32_t cy = dimensionBottomY; cy <= dimensionTopY; cy++) {
             rbuf[cy - dimensionBottomY] = new uint8_t[(imageW * 3) * 16];
             // setup row pointers
@@ -865,10 +865,10 @@ namespace mcpe_viz {
         }
 
         delete[] tbuf;
-
-        // slogger.msg(kLogInfo1,"    Chunk Info: Found = %d / Not Found (our list) = %d / Not Found (leveldb) = %d\n", foundCt, notFoundCt1, notFoundCt2);
-
+        delete[] rbuf;
+        delete[] png;
         delete[] emuchunk;
+
         return 0;
     }
 
