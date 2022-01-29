@@ -82,7 +82,7 @@ jobs:
         make
   
   Windows:
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
     - name: Set git to use LF
