@@ -2600,8 +2600,8 @@ function layerGoto(layer) {
     var max = dimensionInfo[globalDimensionId].topLayer;
 
     // bound the layer within the dimensions limits
-    if (layerRawIndex < min) { layerRawIndex = min; }
-    if (layerRawIndex > max) { layerRawIndex = max; }
+    if (layer < min) { layer = min; }
+    if (layer > max) { layer = max; }
     // offset into the list by the min, to map -64 to 0 for overworld
     if (setLayer(dimensionInfo[globalDimensionId].listLayers[layer - min], 'You need to run bedrock_viz with --html-all') === 0) {
         globalLayerMode = 1;
