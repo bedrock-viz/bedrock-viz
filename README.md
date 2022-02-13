@@ -40,7 +40,7 @@ Additional Features:
 
 For Windows 10 users:
 
-* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.6/bedrock-viz_v0.1.6_win10-64.zip) and unzip that file
+* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.7/bedrock-viz_v0.1.7_win10-64.zip) and unzip that file
 * Inside you will find `bedrock-viz.exe`
 * Run `bedrock-viz.exe` in your favorite terminal program (such as `Command Prompt` or `Power Shell`)
 
@@ -51,7 +51,7 @@ For macOS users(requires macOS 10.15 and above):
   ```
 
 For Linux users:
-* [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.6/bedrock-viz_v0.1.6_linux.tar.gz) and compiling from source
+* [Download the source](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.7/bedrock-viz_v0.1.7_linux.tar.gz) and compiling from source
 
 **DO NOT RUN THIS ON YOUR ORIGINAL WORLD SAVES**
 
