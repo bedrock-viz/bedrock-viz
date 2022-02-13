@@ -4,10 +4,27 @@
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
 - Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
-- Latest highlight: Trying to drink from the NBT change firehose
-- Latest release  : 0.1.6
+- Latest highlight: Going deep and high! All the Y values now....
+- Latest release  : 0.1.7
 
 ## bedrock-viz changelog
+
+v0.1.7 - 2022.02.13
+
+- Parser changes
+  - support the wider Y values, -64 to 319
+  - make each dimension have unique top/bottom Y levels
+- Viewer changes
+  - cope with negative levels in mapping
+  - dynamically update the level drop down list based on the dimension displayed
+- **Known to still be quasi non-functional**
+  - biome maps
+    - old (pre-1.18) areas with single biomes still work
+    - new areas will be a colorful chaotic static in the biome map
+- Fixes in this release from:
+  - [geoffholden](https://github.com/geoffholden)
+  - [cabbey](https://github.com/cabbey)
+  - [Desterly](https://github.com/Desterly)
 
 v0.1.6 - 2021.11.18
 
