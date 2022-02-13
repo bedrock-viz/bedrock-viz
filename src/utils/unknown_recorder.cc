@@ -106,9 +106,10 @@ namespace mcpe_viz {
             log::warn("Unknown block id: {} (0x{:x})", i, i);
         }
 
-        for (auto& i : sUnknownBiomeId) {
-            log::warn("Unknown biome id: {} (0x{:x})", i, i);
-        }
+// comment out for 0.1.7 release
+//        for (auto& i : sUnknownBiomeId) {
+//            log::warn("Unknown biome id: {} (0x{:x})", i, i);
+//        }
 
         for (auto& i: sUnknownItemId) {
             log::warn("Unknown item id: {} (0x{:x})", i, i);
