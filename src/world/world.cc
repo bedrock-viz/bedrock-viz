@@ -87,9 +87,9 @@ namespace mcpe_viz
         dbOptions->compression = leveldb::kZlibRawCompression;
 
         for (int32_t i = 0; i < kDimIdCount; i++) {
-            dimDataList.push_back(std::make_unique<DimensionData_LevelDB>(control.limitXMin[i], control.limitZMin[i]));
+            dimDataList.push_back(std::make_unique<DimensionData_LevelDB>());
             dimDataList[i]->setDimId(i);
-            dimDataList[i]->unsetChunkBoundsValid(control.limitXMin[i], control.limitZMin[i]);
+            dimDataList[i]->unsetChunkBoundsValid();
             dimDataList[i]->setName(kDimIdNames[i]);
         }
     }
@@ -210,7 +210,7 @@ namespace mcpe_viz
 
         // clear bounds
         for (int32_t i = 0; i < kDimIdCount; i++) {
-            dimDataList[i]->unsetChunkBoundsValid(control.limitXMin[i], control.limitZMin[i]);
+            dimDataList[i]->unsetChunkBoundsValid();
         }
 
         int32_t chunkX = -1, chunkZ = -1, chunkDimId = -1, chunkType = -1;

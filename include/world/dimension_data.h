@@ -2,6 +2,7 @@
 
 #include <string>
 #include <cstdint>
+#include <climits>
 #include <utility>
 #include <map>
 #include <memory>
@@ -50,14 +51,14 @@ namespace mcpe_viz {
         CheckSpawnList listCheckSpawn;
         SchematicList listSchematic;
 
-        DimensionData_LevelDB(int32_t startX, int32_t startZ) {
+        DimensionData_LevelDB() {
             name = "(UNKNOWN)";
             dimId = -1;
             chunkBoundsValid = false;
-            minChunkX = startX;
-            maxChunkX = startX;
-            minChunkZ = startZ;
-            maxChunkZ = startZ;
+            minChunkX = INT32_MAX;
+            maxChunkX = INT32_MIN;
+            minChunkZ = INT32_MAX;
+            maxChunkZ = INT32_MIN;
             worldName = "(UNKNOWN)";
             worldSpawnX = worldSpawnZ = 0;
             worldSeed = 0;
@@ -82,9 +83,11 @@ namespace mcpe_viz {
 
         void setDimId(int32_t id) { dimId = id; }
 
-        void unsetChunkBoundsValid(int32_t startX, int32_t startZ) {
-            minChunkX = maxChunkX = startX;
-            minChunkZ = maxChunkZ = startZ;
+        void unsetChunkBoundsValid() {
+            minChunkX = INT32_MAX;
+            maxChunkX = INT32_MIN;
+            minChunkZ = INT32_MAX;
+            maxChunkZ = INT32_MIN;
             chunkBoundsValid = false;
         }
 
