@@ -493,6 +493,62 @@ namespace mcpe_viz {
         return 0;
     }
 
+    int32_t ChunkData_LevelDB::_do_chunk_biome_3d(int32_t tchunkX, int32_t tchunkZ, const char* cdata, size_t cdatalen)
+    {
+        chunkX = tchunkX;
+        chunkZ = tchunkZ;
+
+        int32_t offset = 512; // Skip the height map for now
+        while (offset < cdatalen) {
+            uint8_t header = cdata[offset++];
+            if ((header & 0x01) != 0x01) {
+                log::warn("Failure parsing 3D biome! (x={}, z={}, offset={}, header={})", tchunkX, tchunkZ, offset, header);
+                return 0;
+            }
+            if (header == 0xff) {
+                continue;
+            }
+
+            int32_t bitsPerBlock = header >> 1;
+            int32_t blocksPerWord = floor(32.0 / bitsPerBlock);
+            int32_t wordCount = ceil(4096.0 / blocksPerWord);
+            int32_t paletteOffset = wordCount * 4 + offset;
+
+            if (bitsPerBlock == 0) {
+                for (int32_t cx = 0; cx < 16; cx++) {
+                    for (int32_t cz = 0; cz < 16; cz++) {
+                        grassAndBiome[cx][cz] = (int16_t)(*(int32_t *)(cdata + offset));
+                    }
+                }
+                offset += 4;
+                continue;
+            }
+
+            int32_t * palette = (int32_t *)(cdata + paletteOffset);
+            int32_t palette_length = *palette;
+            palette++;
+
+            uint8_t palette_entry = 0;
+            for (int32_t cy = 0; cy < 16; cy++) {
+                for (int32_t cx = 0; cx < 16; cx++) {
+                    for (int32_t cz = 0; cz < 16; cz++) {
+                        if (blocksPerWord != 0 && bitsPerBlock != 0) {
+                            palette_entry = getBlockId_LevelDB_v7(&cdata[offset],
+                                blocksPerWord, bitsPerBlock, cx, cz, cy);
+                            grassAndBiome[cx][cz] = (uint8_t)palette[palette_entry];
+                        }
+                        else {
+                            grassAndBiome[cx][cz] = 0;
+                        }
+                    }
+                }
+            }
+            offset = (paletteOffset + 4) + 4 * palette_length;
+
+        }
+        return 0;
+    }
+
     int32_t ChunkData_LevelDB::checkSpawnable(leveldb::DB* db, int32_t dimId, const CheckSpawnList& listCheckSpawn)
     {
         if (chunkFormatVersion != 3 || !checkSpawnFlag) {
