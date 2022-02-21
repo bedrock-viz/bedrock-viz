@@ -63,6 +63,8 @@ namespace mcpe_viz {
 
         int32_t _do_chunk_biome_v3(int32_t tchunkX, int32_t tchunkZ, const char* cdata, int32_t cdatalen);
 
+        int32_t _do_chunk_biome_3d(int32_t tchunkX, int32_t tchunkZ, const char* cdata, size_t cdatalen);
+
         int32_t checkSpawnable(leveldb::DB* db, int32_t dimId, const CheckSpawnList& listCheckSpawn);
     };
 

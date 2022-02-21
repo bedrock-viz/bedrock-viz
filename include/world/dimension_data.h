@@ -176,13 +176,27 @@ namespace mcpe_viz {
             case 3:
                 // 0.17 and later?
                 // we need to process all sub-chunks, not just blindy add them
+                {
 
-                ChunkKey chunkKey(chunkX, chunkZ);
-                if (!chunks_has_key(chunks, chunkKey)) {
-                    chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
+                    ChunkKey chunkKey(chunkX, chunkZ);
+                    if (!chunks_has_key(chunks, chunkKey)) {
+                        chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
+                    }
+
+                    return chunks[chunkKey]->_do_chunk_biome_v3(chunkX, chunkZ, cdata, cdatalen);
                 }
+                break;
+            case 4:
+                // 1.18
+                {
+                    ChunkKey chunkKey(chunkX, chunkZ);
+                    if (!chunks_has_key(chunks, chunkKey)) {
+                        chunks[chunkKey] = std::unique_ptr<ChunkData_LevelDB>(new ChunkData_LevelDB());
+                    }
+                    return chunks[chunkKey]->_do_chunk_biome_3d(chunkX, chunkZ, cdata, cdatalen);
+                }
+                break;
 
-                return chunks[chunkKey]->_do_chunk_biome_v3(chunkX, chunkZ, cdata, cdatalen);
             }
             log::error("Unknown chunk format ({})", tchunkFormatVersion);
             return -1;

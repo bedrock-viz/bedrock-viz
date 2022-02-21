@@ -23,6 +23,7 @@ namespace mcpe_viz {
 //        getBlockId_LevelDB_v7(const char* p, int blocksPerWord, int bitsPerBlock, int32_t x, int32_t z, int32_t y);
     uint8_t getColData_Height_LevelDB_v3(const char* buf, int32_t x, int32_t z);
     uint32_t getColData_GrassAndBiome_LevelDB_v3(const char* buf, int32_t buflen, int32_t x, int32_t z);
+    uint32_t getColData_Biome_LevelDB_3d(const char* buf, int32_t buflen, int32_t x, int32_t z);
     int32_t _calcOffsetBlock_LevelDB_v3_fullchunk(int32_t x, int32_t z, int32_t y);
     uint8_t getData_LevelDB_v3_fullchunk(const char* p, int32_t x, int32_t z, int32_t y);
 
