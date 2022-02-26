@@ -807,6 +807,7 @@ namespace mcpe_viz
                 {
                     dimDataList[chunkDimId]->addChunkColumnData(4, chunkX, chunkZ, cdata, int32_t(cdata_size));
                 }
+                break;
 
 
                 /*
