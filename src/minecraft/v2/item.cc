@@ -68,7 +68,7 @@ namespace mcpe_viz
             log::error("Item id={} name={} id is too big to store", id, name);
             store = false;
         }
-        if (instance[id] != nullptr) {
+        else if (instance[id] != nullptr) {
             log::error("Item id={} name={} already exists", id, name);
             return nullptr;
         }
