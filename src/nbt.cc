@@ -2156,9 +2156,18 @@ namespace mcpe_viz
                     // todo - has a LIST of items in the cauldron?; PotionId; SplashPotion
                 }
                 else if (tileEntity->id == "ItemFrame") {
-                    // todo - new for 0.14
-                    // todo - anything interesting?
-                    // todo - Item; ItemDropChance; ItemRotation
+                    // todo - ItemRotation
+                    if (tc.has_key("Item", nbt::tag_type::Compound)) {
+                        tileEntity->containerFlag = true;
+                    }
+                    parseFlag = true;
+                }
+                else if (tileEntity->id == "GlowItemFrame") {
+                    // todo - ItemRotation
+                    if (tc.has_key("Item", nbt::tag_type::Compound)) {
+                        tileEntity->containerFlag = true;
+                    }
+                    parseFlag = true;
                 }
                 else if (tileEntity->id == "Comparator") {
                     // todo - new for 0.14
@@ -2202,10 +2211,15 @@ namespace mcpe_viz
                 }
 
                 if (tileEntity->containerFlag) {
-                    nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
-                    for (const auto& iter : items) {
-                        nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
-                        tileEntity->addItem(iitem);
+                    if (tc.has_key("Items", nbt::tag_type::List)) {
+                        nbt::tag_list items = tc["Items"].as<nbt::tag_list>();
+                        for (const auto& iter : items) {
+                            nbt::tag_compound iitem = iter.as<nbt::tag_compound>();
+                            tileEntity->addItem(iitem);
+                        }
+                    } else if (tc.has_key("Item", nbt::tag_type::Compound)) {
+                       nbt::tag_compound item = tc["Item"].as<nbt::tag_compound>();
+                       tileEntity->addItem(item);
                     }
                 }
 
