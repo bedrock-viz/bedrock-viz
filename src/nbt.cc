@@ -2534,7 +2534,7 @@ namespace mcpe_viz
         std::map<int64_t, int32_t> players;
         std::vector<Point3d<int32_t>> villagers;
         std::vector<Point3d<int32_t>> golems;
-        std::vector<Point3d<int32_t>> d2;
+        std::vector<Point3d<int32_t>> raiders;
         std::vector<Point3d<int32_t>> cats;
 
         ParsedVillageInfo()
@@ -2588,7 +2588,7 @@ namespace mcpe_viz
                                     golems.push_back(p3d);
                                     break;
                                 case 2:
-                                    d2.push_back(p3d);
+                                    raiders.push_back(p3d);
                                     break;
                                 case 3:
                                     cats.push_back(p3d);
@@ -2651,6 +2651,8 @@ namespace mcpe_viz
             sprintf(tmpstring, "\"Iron Golem Count\": %ld", golems.size());
             list.push_back(std::string(tmpstring));
             sprintf(tmpstring, "\"Cat Count\": %ld", cats.size());
+            list.push_back(std::string(tmpstring));
+            sprintf(tmpstring, "\"Raiders Count\": %ld", raiders.size());
             list.push_back(std::string(tmpstring));
 
             if (list.size() > 0) {
