@@ -414,8 +414,40 @@ namespace mcpe_viz {
 		return dimIds;
 	}
 
+	int32_t parseLimitArgs(const std::vector<std::string>& limitStrings, std::vector<bool>& limit, std::vector<int32_t>& limitMin, std::vector<int32_t>& limitMax) {
+		int32_t errct = 0;
 
-    int32_t parse_args(int argc, char** argv) {
+		for (auto limitString : limitStrings) {
+			int32_t did = 0, min = 0, max = 0;
+			if (sscanf(limitString.c_str(), "%d,%d,%d", &did, &min, &max) == 3) {
+				if (did < 0 || did >= kDimIdCount) {
+					log::warn("Limit's dimension ID ({}) out of range.", did);
+					log::error("Failed to parse --limit-x ({})", limitString.c_str());
+					errct++;
+				}
+				else {
+					if (max < min) {
+						log::warn("X Limits appear to be reversed, swapping...");
+						auto tmp = min;
+						min = max;
+						max = tmp;
+					}
+					limit[did] = true;
+					limitMin[did] = min;
+					limitMax[did] = max;
+				}
+			}
+			else {
+				log::error("Failed to parse --limit ({})", limitString.c_str());
+				errct++;
+			}
+		}
+
+		return errct;
+	}
+
+
+	int32_t parse_args(int argc, char** argv) {
 		options_description desc{"Options"};
 		desc.add_options()
 			("db", value<std::string>(), "Directory which holds world files (level.dat is in this dir)")
@@ -450,6 +482,8 @@ namespace mcpe_viz {
 			("movie-dim", "Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)")
 			("grid", value<std::vector<std::string>>()->implicit_value(kDimIdAllStrings, kDimIdAllStr)
 				->multitoken()->zero_tokens(), "Display chunk grid on top of images")
+			("limit-x", value<std::vector<std::string>>(), "did,min,max of X chunk coordinates for dimension")
+			("limit-z", value<std::vector<std::string>>(), "did,min,max of Z chunk coordinates for dimension")
 			("html", "Create html and javascript files to use as a fancy viewer")
 			("html-most", "Create html, javascript, and most image files to use as a fancy viewer")
 			("html-all", "Create html, javascript, and *all* image files to use as a fancy viewer")
@@ -645,6 +679,24 @@ namespace mcpe_viz {
 			// --grid[=did]
 			if (vm.count("grid")) {
 				control.doGrid = parseDimIdOptArgs(vm["grid"].as<std::vector<std::string>>());
+			}
+			// --limit-x did,min,max
+			if (vm.count("limit-x")) {
+				auto errc = parseLimitArgs(
+					vm["limit-x"].as<std::vector<std::string>>(),
+					control.limitX,
+					control.limitXMin,
+					control.limitXMax);
+				errct += errc;
+			}
+			// --limit-z did,min,max
+			if (vm.count("limit-z")) {
+				auto errc = parseLimitArgs(
+					vm["limit-z"].as<std::vector<std::string>>(),
+					control.limitZ,
+					control.limitZMin,
+					control.limitZMax);
+				errct += errc;
 			}
 			// --html
 			if (vm.count("html")) {

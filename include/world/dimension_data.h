@@ -2,6 +2,7 @@
 
 #include <string>
 #include <cstdint>
+#include <climits>
 #include <utility>
 #include <map>
 #include <memory>
@@ -54,10 +55,10 @@ namespace mcpe_viz {
             name = "(UNKNOWN)";
             dimId = -1;
             chunkBoundsValid = false;
-            minChunkX = 0;
-            maxChunkX = 0;
-            minChunkZ = 0;
-            maxChunkZ = 0;
+            minChunkX = INT32_MAX;
+            maxChunkX = INT32_MIN;
+            minChunkZ = INT32_MAX;
+            maxChunkZ = INT32_MIN;
             worldName = "(UNKNOWN)";
             worldSpawnX = worldSpawnZ = 0;
             worldSeed = 0;
@@ -83,7 +84,10 @@ namespace mcpe_viz {
         void setDimId(int32_t id) { dimId = id; }
 
         void unsetChunkBoundsValid() {
-            minChunkX = minChunkZ = maxChunkX = maxChunkZ = 0;
+            minChunkX = INT32_MAX;
+            maxChunkX = INT32_MIN;
+            minChunkZ = INT32_MAX;
+            maxChunkZ = INT32_MIN;
             chunkBoundsValid = false;
         }
 

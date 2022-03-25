@@ -1983,6 +1983,9 @@ function setLayer(fn, extraHelp) {
         disableLayerSmoothing(layerMain);
     } else {
         layerMain.setSource(srcLayerMain);
+        if ( useTilesFlag ) {
+          layerMain.setExtent(extent);
+        }
     }
 
     if ( vectorPoints ) {
