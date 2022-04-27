@@ -371,6 +371,8 @@ namespace mcpe_viz
         MyNbtPlayerMap playerMap;
         std::vector<std::string> villages;
 
+        std::vector<uint64_t> actorIds;
+
         leveldb::Iterator* iter = db->NewIterator(levelDbReadOptions);
         for (iter->SeekToFirst(); iter->Valid(); iter->Next()) {
 
@@ -520,6 +522,37 @@ namespace mcpe_viz
                 //          if ( ret == 0 ) {
                 //            parseNbt_portals(tagList);
                 //          }
+            }
+            else if (strncmp(key, "digp", 4) == 0) {
+                // Actor Digest
+                if (key_size == 12) {
+                    // overworld chunk
+                    chunkX = myParseInt32(key, 4);
+                    chunkZ = myParseInt32(key, 8);
+                    chunkDimId = kDimIdOverworld;
+                } else if (key_size == 16) {
+                    // non-overworld chunk
+                    chunkX = myParseInt32(key, 4);
+                    chunkZ = myParseInt32(key, 8);
+                    chunkDimId = myParseInt32(key, 12);
+                }
+
+                // we check for corrupt chunks
+                if (!legalChunkPos(chunkX, chunkZ)) {
+                    log::warn("Found a chunk with invalid chunk coordinates cx={} cz={}", chunkX, chunkZ);
+                    continue;
+                }
+
+                if (!limitedChunkPos(chunkDimId, chunkX, chunkZ)) {
+                    continue;
+                }
+
+                for (uint32_t i = 0; i < cdata_size; i += 8) {
+                    actorIds.push_back(*(uint64_t *)(cdata + i));
+                }
+            }
+            else if (strncmp(key, "actorprefix", 11) == 0) {
+                continue;
             }
             else if (key_size == 9 || key_size == 10 || key_size == 13 || key_size == 14) {
 
@@ -848,6 +881,20 @@ namespace mcpe_viz
                 printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), true);
             }
         }
+
+        for (auto actorId : actorIds) {
+            std::string data;
+            char key[19] = "actorprefix";
+            memcpy(key+11, &actorId, 8);
+            MyNbtTagList actor_tags;
+            db->Get(levelDbReadOptions, leveldb::Slice(key, 19), &data);
+            ret = parseNbt("actor: ", data.data(), data.size(), actor_tags);
+
+            if (ret == 0) {
+                parseNbt_entity(kDimIdOverworld, "actor", actor_tags, false, false, "", "");
+            }
+        }
+
         for (auto vid : villages) {
             std::string data;
             MyNbtTagList info_tags, player_tags, dweller_tags, poi_tags;
