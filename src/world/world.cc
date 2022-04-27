@@ -894,6 +894,7 @@ namespace mcpe_viz
                 parseNbt_entity(kDimIdOverworld, "actor", actor_tags, false, false, "", "");
             }
         }
+        actorIds.clear();
 
         for (auto vid : villages) {
             std::string data;
