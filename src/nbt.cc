@@ -1706,6 +1706,11 @@ namespace mcpe_viz
 
                 // todo - other interesting bits?
 
+                if (tc.has_key("LastDimensionId", nbt::tag_type::Int)) {
+                    entity->dimensionId = tc["LastDimensionId"].as<nbt::tag_int>().get();
+                    actualDimensionId = entity->dimensionId;
+                }
+
                 if (tc.has_key("ItemInHand", nbt::tag_type::Compound)) {
                     entity->doItemInHand(tc["ItemInHand"].as<nbt::tag_compound>());
                 }
