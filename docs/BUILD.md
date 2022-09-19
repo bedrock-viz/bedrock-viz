@@ -40,6 +40,8 @@ If all goes well, there will be a "bedrock-viz" in `build/`
 
 * boost `sudo apt install libboost-program-options-dev`
 
+* `sudo apt install -y build-essential`
+
 * we use C++ 17 filesystem library, so if you are on an old distro like Ubuntu 18.04, you will need to add g++-8: `sudo apt install g++-8`
 
 ### How to compile
