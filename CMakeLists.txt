@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(bedrock-viz VERSION 0.1.7)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 option(BUILD_TESTS "Build unit tests" OFF)
 option(CODE_COVERAGE "Enable coverage reporting" OFF)
