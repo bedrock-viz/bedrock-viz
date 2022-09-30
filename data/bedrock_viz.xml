@@ -959,124 +959,124 @@
     <block id="0x109" name="Stripped Oak Log" uname="minecraft:stripped_oak_log" color="0xa47845" />
     <block id="0x10a" name="Blue Ice" uname="minecraft:blue_ice" color="0x6acaea" />
 
-    <block id="0x10B" name="Hydrogen" uname="minecraft:element_1 " color="0xB675AD" />
-    <block id="0x10C" name="Helium" uname="minecraft:element_2 " color="0xB675AE" />
-    <block id="0x10D" name="Lithium" uname="minecraft:element_3 " color="0xB675AF" />
-    <block id="0x10E" name="Beryllium" uname="minecraft:element_4 " color="0xB675B0" />
-    <block id="0x10F" name="Boron" uname="minecraft:element_5 " color="0xB675B1" />
-    <block id="0x110" name="Carbon" uname="minecraft:element_6 " color="0xB675B2" />
-    <block id="0x111" name="Nitrogen" uname="minecraft:element_7 " color="0xB675B3" />
-    <block id="0x112" name="Oxygen" uname="minecraft:element_8 " color="0xB675B4" />
-    <block id="0x113" name="Fluorine" uname="minecraft:element_9 " color="0xB675B5" />
-    <block id="0x114" name="Neon" uname="minecraft:element_10 " color="0xB675B6" />
-    <block id="0x115" name="Sodium" uname="minecraft:element_11 " color="0xB675B7" />
-    <block id="0x116" name="Magnesium" uname="minecraft:element_12 " color="0xB675B8" />
-    <block id="0x117" name="Aluminum" uname="minecraft:element_13 " color="0xB675B9" />
-    <block id="0x118" name="Silicon" uname="minecraft:element_14 " color="0xB675BA" />
-    <block id="0x119" name="Phosphorus" uname="minecraft:element_15 " color="0xB675BB" />
-    <block id="0x11A" name="Sulfur" uname="minecraft:element_16 " color="0xB675BC" />
-    <block id="0x11B" name="Chlorine" uname="minecraft:element_17 " color="0xB675BD" />
-    <block id="0x11C" name="Argon" uname="minecraft:element_18 " color="0xB675BE" />
-    <block id="0x11D" name="Potassium" uname="minecraft:element_19 " color="0xB675BF" />
-    <block id="0x11E" name="Calcium" uname="minecraft:element_20 " color="0xB675C0" />
-    <block id="0x11F" name="Scandium" uname="minecraft:element_21 " color="0xB675C1" />
-    <block id="0x120" name="Titanium" uname="minecraft:element_22 " color="0xB675C2" />
-    <block id="0x121" name="Vanadium" uname="minecraft:element_23 " color="0xB675C3" />
-    <block id="0x122" name="Chromium" uname="minecraft:element_24 " color="0xB675C4" />
-    <block id="0x123" name="Manganese" uname="minecraft:element_25 " color="0xB675C5" />
-    <block id="0x124" name="Iron" uname="minecraft:element_26 " color="0xB675C6" />
-    <block id="0x125" name="Cobalt" uname="minecraft:element_27 " color="0xB675C7" />
-    <block id="0x126" name="Nickel" uname="minecraft:element_28 " color="0xB675C8" />
-    <block id="0x127" name="Copper" uname="minecraft:element_29 " color="0xB675C9" />
-    <block id="0x128" name="Zinc" uname="minecraft:element_30 " color="0xB675CA" />
-    <block id="0x129" name="Gallium" uname="minecraft:element_31 " color="0xB675CB" />
-    <block id="0x12A" name="Germanium" uname="minecraft:element_32 " color="0xB675CC" />
-    <block id="0x12B" name="Arsenic" uname="minecraft:element_33 " color="0xB675CD" />
-    <block id="0x12C" name="Selenium" uname="minecraft:element_34 " color="0xB675CE" />
-    <block id="0x12D" name="Bromine" uname="minecraft:element_35 " color="0xB675CF" />
-    <block id="0x12E" name="Krypton" uname="minecraft:element_36 " color="0xB675D0" />
-    <block id="0x12F" name="Rubidium" uname="minecraft:element_37 " color="0xB675D1" />
-    <block id="0x130" name="Strontium" uname="minecraft:element_38 " color="0xB675D2" />
-    <block id="0x131" name="Yttrium" uname="minecraft:element_39 " color="0xB675D3" />
-    <block id="0x132" name="Zirconium" uname="minecraft:element_40 " color="0xB675D4" />
-    <block id="0x133" name="Niobium" uname="minecraft:element_41 " color="0xB675D5" />
-    <block id="0x134" name="Molybdenum" uname="minecraft:element_42 " color="0xB675D6" />
-    <block id="0x135" name="Technetium" uname="minecraft:element_43 " color="0xB675D7" />
-    <block id="0x136" name="Ruthenium" uname="minecraft:element_44 " color="0xB675D8" />
-    <block id="0x137" name="Rhodium" uname="minecraft:element_45 " color="0xB675D9" />
-    <block id="0x138" name="Palladium" uname="minecraft:element_46 " color="0xB675DA" />
-    <block id="0x139" name="Silver" uname="minecraft:element_47 " color="0xB675DB" />
-    <block id="0x13A" name="Cadmium" uname="minecraft:element_48 " color="0xB675DC" />
-    <block id="0x13B" name="Indium" uname="minecraft:element_49 " color="0xB675DD" />
-    <block id="0x13C" name="Tin" uname="minecraft:element_50 " color="0xB675DE" />
-    <block id="0x13D" name="Antimony" uname="minecraft:element_51 " color="0xB675DF" />
-    <block id="0x13E" name="Tellurium" uname="minecraft:element_52 " color="0xB675E0" />
-    <block id="0x13F" name="Iodine" uname="minecraft:element_53 " color="0xB675E1" />
-    <block id="0x140" name="Xenon" uname="minecraft:element_54 " color="0xB675E2" />
-    <block id="0x141" name="Cesium" uname="minecraft:element_55 " color="0xB675E3" />
-    <block id="0x142" name="Barium" uname="minecraft:element_56 " color="0xB675E4" />
-    <block id="0x143" name="Lanthanum" uname="minecraft:element_57 " color="0xB675E5" />
-    <block id="0x144" name="Cerium" uname="minecraft:element_58 " color="0xB675E6" />
-    <block id="0x145" name="Praseodymium" uname="minecraft:element_59 " color="0xB675E7" />
-    <block id="0x146" name="Neodymium" uname="minecraft:element_60 " color="0xB675E8" />
-    <block id="0x147" name="Promethium" uname="minecraft:element_61 " color="0xB675E9" />
-    <block id="0x148" name="Samarium" uname="minecraft:element_62 " color="0xB675EA" />
-    <block id="0x149" name="Europium" uname="minecraft:element_63 " color="0xB675EB" />
-    <block id="0x14A" name="Gadolinium" uname="minecraft:element_64 " color="0xB675EC" />
-    <block id="0x14B" name="Terbium" uname="minecraft:element_65 " color="0xB675ED" />
-    <block id="0x14C" name="Dysprosium" uname="minecraft:element_66 " color="0xB675EE" />
-    <block id="0x14D" name="Holmium" uname="minecraft:element_67 " color="0xB675EF" />
-    <block id="0x14E" name="Erbium" uname="minecraft:element_68 " color="0xB675F0" />
-    <block id="0x14F" name="Thulium" uname="minecraft:element_69 " color="0xB675F1" />
-    <block id="0x150" name="Ytterbium" uname="minecraft:element_70 " color="0xB675F2" />
-    <block id="0x151" name="Lutetium" uname="minecraft:element_71 " color="0xB675F3" />
-    <block id="0x152" name="Hafnium" uname="minecraft:element_72 " color="0xB675F4" />
-    <block id="0x153" name="Tantalum" uname="minecraft:element_73 " color="0xB675F5" />
-    <block id="0x154" name="Tungsten" uname="minecraft:element_74 " color="0xB675F6" />
-    <block id="0x155" name="Rhenium" uname="minecraft:element_75 " color="0xB675F7" />
-    <block id="0x156" name="Osmium" uname="minecraft:element_76 " color="0xB675F8" />
-    <block id="0x157" name="Iridium" uname="minecraft:element_77 " color="0xB675F9" />
-    <block id="0x158" name="Platinum" uname="minecraft:element_78 " color="0xB675FA" />
-    <block id="0x159" name="Gold" uname="minecraft:element_79 " color="0xB675FB" />
-    <block id="0x15A" name="Mercury" uname="minecraft:element_80 " color="0xB675FC" />
-    <block id="0x15B" name="Thallium" uname="minecraft:element_81 " color="0xB675FD" />
-    <block id="0x15C" name="Lead" uname="minecraft:element_82 " color="0xB675FE" />
-    <block id="0x15D" name="Bismuth" uname="minecraft:element_83 " color="0xB675FF" />
-    <block id="0x15E" name="Polonium" uname="minecraft:element_84 " color="0xB67600" />
-    <block id="0x15F" name="Astatine" uname="minecraft:element_85 " color="0xB67601" />
-    <block id="0x160" name="Radon" uname="minecraft:element_86 " color="0xB67602" />
-    <block id="0x161" name="Francium" uname="minecraft:element_87 " color="0xB67603" />
-    <block id="0x162" name="Radium" uname="minecraft:element_88 " color="0xB67604" />
-    <block id="0x163" name="Actinium" uname="minecraft:element_89 " color="0xB67605" />
-    <block id="0x164" name="Thorium" uname="minecraft:element_90 " color="0xB67606" />
-    <block id="0x165" name="Protactinium" uname="minecraft:element_91 " color="0xB67607" />
-    <block id="0x166" name="Uranium" uname="minecraft:element_92 " color="0xB67608" />
-    <block id="0x167" name="Neptunium" uname="minecraft:element_93 " color="0xB67609" />
-    <block id="0x168" name="Plutonium" uname="minecraft:element_94 " color="0xB6760A" />
-    <block id="0x169" name="Americium" uname="minecraft:element_95 " color="0xB6760B" />
-    <block id="0x16A" name="Curium" uname="minecraft:element_96 " color="0xB6760C" />
-    <block id="0x16B" name="Berkelium" uname="minecraft:element_97 " color="0xB6760D" />
-    <block id="0x16C" name="Californium" uname="minecraft:element_98 " color="0xB6760E" />
-    <block id="0x16D" name="Einsteinium" uname="minecraft:element_99 " color="0xB6760F" />
-    <block id="0x16E" name="Fermium" uname="minecraft:element_100 " color="0xB67610" />
-    <block id="0x16F" name="Mendelevium" uname="minecraft:element_101 " color="0xB67611" />
-    <block id="0x170" name="Nobelium" uname="minecraft:element_102 " color="0xB67612" />
-    <block id="0x171" name="Lawrencium" uname="minecraft:element_103 " color="0xB67613" />
-    <block id="0x172" name="Rutherfordium" uname="minecraft:element_104 " color="0xB67614" />
-    <block id="0x173" name="Dubnium" uname="minecraft:element_105 " color="0xB67615" />
-    <block id="0x174" name="Seaborgium" uname="minecraft:element_106 " color="0xB67616" />
-    <block id="0x175" name="Bohrium" uname="minecraft:element_107 " color="0xB67617" />
-    <block id="0x176" name="Hassium" uname="minecraft:element_108 " color="0xB67618" />
-    <block id="0x177" name="Meitnerium" uname="minecraft:element_109 " color="0xB67619" />
-    <block id="0x178" name="Darmstadtium" uname="minecraft:element_110 " color="0xB6761A" />
-    <block id="0x179" name="Roentgenium" uname="minecraft:element_111 " color="0xB6761B" />
-    <block id="0x17A" name="Copernicium" uname="minecraft:element_112 " color="0xB6761C" />
-    <block id="0x17B" name="Nihonium" uname="minecraft:element_113 " color="0xB6761D" />
-    <block id="0x17C" name="Flerovium" uname="minecraft:element_114 " color="0xB6761E" />
-    <block id="0x17D" name="Moscovium" uname="minecraft:element_115 " color="0xB6761F" />
-    <block id="0x17E" name="Livermorium" uname="minecraft:element_116 " color="0xB67620" />
-    <block id="0x17F" name="Tennessine" uname="minecraft:element_117 " color="0xB67621" />
-    <block id="0x180" name="Oganesson" uname="minecraft:element_118 " color="0xB67622" />
+    <block id="0x10B" name="Hydrogen" uname="minecraft:element_1" color="0xB675AD" />
+    <block id="0x10C" name="Helium" uname="minecraft:element_2" color="0xB675AE" />
+    <block id="0x10D" name="Lithium" uname="minecraft:element_3" color="0xB675AF" />
+    <block id="0x10E" name="Beryllium" uname="minecraft:element_4" color="0xB675B0" />
+    <block id="0x10F" name="Boron" uname="minecraft:element_5" color="0xB675B1" />
+    <block id="0x110" name="Carbon" uname="minecraft:element_6" color="0xB675B2" />
+    <block id="0x111" name="Nitrogen" uname="minecraft:element_7" color="0xB675B3" />
+    <block id="0x112" name="Oxygen" uname="minecraft:element_8" color="0xB675B4" />
+    <block id="0x113" name="Fluorine" uname="minecraft:element_9" color="0xB675B5" />
+    <block id="0x114" name="Neon" uname="minecraft:element_10" color="0xB675B6" />
+    <block id="0x115" name="Sodium" uname="minecraft:element_11" color="0xB675B7" />
+    <block id="0x116" name="Magnesium" uname="minecraft:element_12" color="0xB675B8" />
+    <block id="0x117" name="Aluminum" uname="minecraft:element_13" color="0xB675B9" />
+    <block id="0x118" name="Silicon" uname="minecraft:element_14" color="0xB675BA" />
+    <block id="0x119" name="Phosphorus" uname="minecraft:element_15" color="0xB675BB" />
+    <block id="0x11A" name="Sulfur" uname="minecraft:element_16" color="0xB675BC" />
+    <block id="0x11B" name="Chlorine" uname="minecraft:element_17" color="0xB675BD" />
+    <block id="0x11C" name="Argon" uname="minecraft:element_18" color="0xB675BE" />
+    <block id="0x11D" name="Potassium" uname="minecraft:element_19" color="0xB675BF" />
+    <block id="0x11E" name="Calcium" uname="minecraft:element_20" color="0xB675C0" />
+    <block id="0x11F" name="Scandium" uname="minecraft:element_21" color="0xB675C1" />
+    <block id="0x120" name="Titanium" uname="minecraft:element_22" color="0xB675C2" />
+    <block id="0x121" name="Vanadium" uname="minecraft:element_23" color="0xB675C3" />
+    <block id="0x122" name="Chromium" uname="minecraft:element_24" color="0xB675C4" />
+    <block id="0x123" name="Manganese" uname="minecraft:element_25" color="0xB675C5" />
+    <block id="0x124" name="Iron" uname="minecraft:element_26" color="0xB675C6" />
+    <block id="0x125" name="Cobalt" uname="minecraft:element_27" color="0xB675C7" />
+    <block id="0x126" name="Nickel" uname="minecraft:element_28" color="0xB675C8" />
+    <block id="0x127" name="Copper" uname="minecraft:element_29" color="0xB675C9" />
+    <block id="0x128" name="Zinc" uname="minecraft:element_30" color="0xB675CA" />
+    <block id="0x129" name="Gallium" uname="minecraft:element_31" color="0xB675CB" />
+    <block id="0x12A" name="Germanium" uname="minecraft:element_32" color="0xB675CC" />
+    <block id="0x12B" name="Arsenic" uname="minecraft:element_33" color="0xB675CD" />
+    <block id="0x12C" name="Selenium" uname="minecraft:element_34" color="0xB675CE" />
+    <block id="0x12D" name="Bromine" uname="minecraft:element_35" color="0xB675CF" />
+    <block id="0x12E" name="Krypton" uname="minecraft:element_36" color="0xB675D0" />
+    <block id="0x12F" name="Rubidium" uname="minecraft:element_37" color="0xB675D1" />
+    <block id="0x130" name="Strontium" uname="minecraft:element_38" color="0xB675D2" />
+    <block id="0x131" name="Yttrium" uname="minecraft:element_39" color="0xB675D3" />
+    <block id="0x132" name="Zirconium" uname="minecraft:element_40" color="0xB675D4" />
+    <block id="0x133" name="Niobium" uname="minecraft:element_41" color="0xB675D5" />
+    <block id="0x134" name="Molybdenum" uname="minecraft:element_42" color="0xB675D6" />
+    <block id="0x135" name="Technetium" uname="minecraft:element_43" color="0xB675D7" />
+    <block id="0x136" name="Ruthenium" uname="minecraft:element_44" color="0xB675D8" />
+    <block id="0x137" name="Rhodium" uname="minecraft:element_45" color="0xB675D9" />
+    <block id="0x138" name="Palladium" uname="minecraft:element_46" color="0xB675DA" />
+    <block id="0x139" name="Silver" uname="minecraft:element_47" color="0xB675DB" />
+    <block id="0x13A" name="Cadmium" uname="minecraft:element_48" color="0xB675DC" />
+    <block id="0x13B" name="Indium" uname="minecraft:element_49" color="0xB675DD" />
+    <block id="0x13C" name="Tin" uname="minecraft:element_50" color="0xB675DE" />
+    <block id="0x13D" name="Antimony" uname="minecraft:element_51" color="0xB675DF" />
+    <block id="0x13E" name="Tellurium" uname="minecraft:element_52" color="0xB675E0" />
+    <block id="0x13F" name="Iodine" uname="minecraft:element_53" color="0xB675E1" />
+    <block id="0x140" name="Xenon" uname="minecraft:element_54" color="0xB675E2" />
+    <block id="0x141" name="Cesium" uname="minecraft:element_55" color="0xB675E3" />
+    <block id="0x142" name="Barium" uname="minecraft:element_56" color="0xB675E4" />
+    <block id="0x143" name="Lanthanum" uname="minecraft:element_57" color="0xB675E5" />
+    <block id="0x144" name="Cerium" uname="minecraft:element_58" color="0xB675E6" />
+    <block id="0x145" name="Praseodymium" uname="minecraft:element_59" color="0xB675E7" />
+    <block id="0x146" name="Neodymium" uname="minecraft:element_60" color="0xB675E8" />
+    <block id="0x147" name="Promethium" uname="minecraft:element_61" color="0xB675E9" />
+    <block id="0x148" name="Samarium" uname="minecraft:element_62" color="0xB675EA" />
+    <block id="0x149" name="Europium" uname="minecraft:element_63" color="0xB675EB" />
+    <block id="0x14A" name="Gadolinium" uname="minecraft:element_64" color="0xB675EC" />
+    <block id="0x14B" name="Terbium" uname="minecraft:element_65" color="0xB675ED" />
+    <block id="0x14C" name="Dysprosium" uname="minecraft:element_66" color="0xB675EE" />
+    <block id="0x14D" name="Holmium" uname="minecraft:element_67" color="0xB675EF" />
+    <block id="0x14E" name="Erbium" uname="minecraft:element_68" color="0xB675F0" />
+    <block id="0x14F" name="Thulium" uname="minecraft:element_69" color="0xB675F1" />
+    <block id="0x150" name="Ytterbium" uname="minecraft:element_70" color="0xB675F2" />
+    <block id="0x151" name="Lutetium" uname="minecraft:element_71" color="0xB675F3" />
+    <block id="0x152" name="Hafnium" uname="minecraft:element_72" color="0xB675F4" />
+    <block id="0x153" name="Tantalum" uname="minecraft:element_73" color="0xB675F5" />
+    <block id="0x154" name="Tungsten" uname="minecraft:element_74" color="0xB675F6" />
+    <block id="0x155" name="Rhenium" uname="minecraft:element_75" color="0xB675F7" />
+    <block id="0x156" name="Osmium" uname="minecraft:element_76" color="0xB675F8" />
+    <block id="0x157" name="Iridium" uname="minecraft:element_77" color="0xB675F9" />
+    <block id="0x158" name="Platinum" uname="minecraft:element_78" color="0xB675FA" />
+    <block id="0x159" name="Gold" uname="minecraft:element_79" color="0xB675FB" />
+    <block id="0x15A" name="Mercury" uname="minecraft:element_80" color="0xB675FC" />
+    <block id="0x15B" name="Thallium" uname="minecraft:element_81" color="0xB675FD" />
+    <block id="0x15C" name="Lead" uname="minecraft:element_82" color="0xB675FE" />
+    <block id="0x15D" name="Bismuth" uname="minecraft:element_83" color="0xB675FF" />
+    <block id="0x15E" name="Polonium" uname="minecraft:element_84" color="0xB67600" />
+    <block id="0x15F" name="Astatine" uname="minecraft:element_85" color="0xB67601" />
+    <block id="0x160" name="Radon" uname="minecraft:element_86" color="0xB67602" />
+    <block id="0x161" name="Francium" uname="minecraft:element_87" color="0xB67603" />
+    <block id="0x162" name="Radium" uname="minecraft:element_88" color="0xB67604" />
+    <block id="0x163" name="Actinium" uname="minecraft:element_89" color="0xB67605" />
+    <block id="0x164" name="Thorium" uname="minecraft:element_90" color="0xB67606" />
+    <block id="0x165" name="Protactinium" uname="minecraft:element_91" color="0xB67607" />
+    <block id="0x166" name="Uranium" uname="minecraft:element_92" color="0xB67608" />
+    <block id="0x167" name="Neptunium" uname="minecraft:element_93" color="0xB67609" />
+    <block id="0x168" name="Plutonium" uname="minecraft:element_94" color="0xB6760A" />
+    <block id="0x169" name="Americium" uname="minecraft:element_95" color="0xB6760B" />
+    <block id="0x16A" name="Curium" uname="minecraft:element_96" color="0xB6760C" />
+    <block id="0x16B" name="Berkelium" uname="minecraft:element_97" color="0xB6760D" />
+    <block id="0x16C" name="Californium" uname="minecraft:element_98" color="0xB6760E" />
+    <block id="0x16D" name="Einsteinium" uname="minecraft:element_99" color="0xB6760F" />
+    <block id="0x16E" name="Fermium" uname="minecraft:element_100" color="0xB67610" />
+    <block id="0x16F" name="Mendelevium" uname="minecraft:element_101" color="0xB67611" />
+    <block id="0x170" name="Nobelium" uname="minecraft:element_102" color="0xB67612" />
+    <block id="0x171" name="Lawrencium" uname="minecraft:element_103" color="0xB67613" />
+    <block id="0x172" name="Rutherfordium" uname="minecraft:element_104" color="0xB67614" />
+    <block id="0x173" name="Dubnium" uname="minecraft:element_105" color="0xB67615" />
+    <block id="0x174" name="Seaborgium" uname="minecraft:element_106" color="0xB67616" />
+    <block id="0x175" name="Bohrium" uname="minecraft:element_107" color="0xB67617" />
+    <block id="0x176" name="Hassium" uname="minecraft:element_108" color="0xB67618" />
+    <block id="0x177" name="Meitnerium" uname="minecraft:element_109" color="0xB67619" />
+    <block id="0x178" name="Darmstadtium" uname="minecraft:element_110" color="0xB6761A" />
+    <block id="0x179" name="Roentgenium" uname="minecraft:element_111" color="0xB6761B" />
+    <block id="0x17A" name="Copernicium" uname="minecraft:element_112" color="0xB6761C" />
+    <block id="0x17B" name="Nihonium" uname="minecraft:element_113" color="0xB6761D" />
+    <block id="0x17C" name="Flerovium" uname="minecraft:element_114" color="0xB6761E" />
+    <block id="0x17D" name="Moscovium" uname="minecraft:element_115" color="0xB6761F" />
+    <block id="0x17E" name="Livermorium" uname="minecraft:element_116" color="0xB67620" />
+    <block id="0x17F" name="Tennessine" uname="minecraft:element_117" color="0xB67621" />
+    <block id="0x180" name="Oganesson" uname="minecraft:element_118" color="0xB67622" />
 
     <block id="0x181" name="Sea Grass" uname="minecraft:seagrass" color="0x35461C" opaque="1" spawnable="0" >
       <blockvariant blockdata="0x0" name="Sea Grass0" />
