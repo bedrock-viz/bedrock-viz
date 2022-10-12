@@ -164,7 +164,7 @@
       <blockvariant blockdata="0x7" name="Piston (6-sided)" />
       <blockvariant blockdata="0x8" name="Piston (Extended)" />
     </block>
-    <block id="0x22" name="Piston Head" uname="minecraft:pistonarmcollision;minecraft:pistonArmCollision" color="0x8f8d4c" solid="0" opaque="0" spawnable="0" /> <!-- *S 0.15 -->
+    <block id="0x22" name="Piston Head" uname="minecraft:pistonarmcollision;minecraft:pistonArmCollision;minecraft:piston_arm_collision" color="0x8f8d4c" solid="0" opaque="0" spawnable="0" /> <!-- *S 0.15 -->
     <block id="0x23" name="Wool" uname="minecraft:wool"> <!-- *B -->
       <blockvariant blockdata="0x0" color="0xDDDDDD" dcolor="1" name="Wool, White" />
       <blockvariant blockdata="0x1" color="0xDB7D3E" dcolor="1" name="Wool, Orange" />
@@ -1293,7 +1293,7 @@
     <block id="0x1d5" name="Lit Blast Furnace" uname="minecraft:lit_blast_furnace" color="0xfd570b" />
     <block id="0x1d6" name="Light Block" uname="minecraft:light_block" color="0xfd572b" />
     <block id="0x1d7" name="Wither Rose" uname="minecraft:wither_rose" color="0xa52a3a" />
-    <block id="0x1d8" name="Sticky Piston Head " uname="minecraft:stickypistonarmcollision" color="0x8b9e9b" />
+    <block id="0x1d8" name="Sticky Piston Head " uname="minecraft:stickypistonarmcollision;minecraft:sticky_piston_arm_collision" color="0x8b9e9b" />
     <block id="0x1d9" name="Bee Nest" uname="minecraft:bee_nest" color="0x585757" />
     <block id="0x1da" name="BeeHive" uname="minecraft:beehive" color="0x585758" />
     <block id="0x1db" name="Honey Block" uname="minecraft:honey_block" color="0x585759" />
@@ -1574,9 +1574,6 @@
     <block name="Mangrove Propagule" uname="minecraft:mangrove_propagule" color="0x2C421F" />
     <block name="Mangrove Roots" uname="minecraft:mangrove_roots" color="0x342C22" />
     <block name="Muddy Mangrove Roots" uname="minecraft:muddy_mangrove_roots" color="0x342C23" />
-
-    <block name="piston_arm_collision" uname="minecraft:piston_arm_collision" color="0x" />
-    <block name="sticky_piston_arm_collision" uname="minecraft:sticky_piston_arm_collision" color="0x" />
 
     <block name="Reinforced Deepslate" uname="minecraft:reinforced_deepslate" color="0x767C63" />
 
