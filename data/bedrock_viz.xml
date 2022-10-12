@@ -1727,6 +1727,7 @@
       <itemvariant extradata="0xa" name="Bucket, Lava" uname="minecraft:lava_bucket" />
       <itemvariant extradata="0xb" name="Bucket, Powdered Snow" uname="minecraft:powder_snow_bucket" />
       <itemvariant extradata="0xc" name="Bucket, Axolotl" uname="minecraft:axolotl_bucket" />
+      <itemvariant extradata="0xd" name="Bucket, Tadpole" uname="minecraft:tadpole_bucket" />
     </item>
     <!-- item id="0x146" name="TBD - Water Bucket" uname="minecraft:" -->
     <!-- item id="0x147" name="TBD - Lava Bucket" uname="minecraft:" -->
@@ -1996,6 +1997,7 @@
       <itemvariant extradata="0x04" name="Banner Pattern, Field Masoned" uname="minecraft:field_masoned_banner_pattern" />
       <itemvariant extradata="0x05" name="Banner Pattern, Bordure Indented" uname="minecraft:bordure_indented_banner_pattern" />
       <itemvariant extradata="0x06" name="Banner Pattern, Snout" uname="minecraft:piglin_banner_pattern" />
+      <itemvariant extradata="0x07" name="Banner Pattern, Globe" uname="minecraft:globe_banner_pattern" />
 	</item>
     <!-- item id="0x1B3" name="TBD - Beetroot Seeds (MCPC)" uname="minecraft:" -->
     <!-- item id="0x1B4" name="TBD - Beetroot Soup (MCPC)" uname="minecraft:" -->
