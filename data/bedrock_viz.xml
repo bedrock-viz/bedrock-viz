@@ -203,7 +203,7 @@
     <block id="0x28" name="Red Mushroom" uname="minecraft:red_mushroom" color="0xfe9c9c" solid="0" opaque="0" spawnable="0" />
     <block id="0x29" name="Block of Gold" uname="minecraft:gold_block" color="0xfcfe50" />
     <block id="0x2A" name="Block of Iron" uname="minecraft:iron_block" color="0xdddddb" />
-    <block id="0x2B" name="Double Stone Slab" uname="minecraft:double_stone_slab" color="0x919191">
+    <block id="0x2B" name="Double Stone Slab" uname="minecraft:double_stone_slab;minecraft:double_stone_block_slab" color="0x919191">
       <blockvariant blockdata="0x0" name="Double Slab, Stone" />
       <blockvariant blockdata="0x1" name="Double Slab, Sandstone" />
       <blockvariant blockdata="0x2" name="Double Slab, Wooden" />
@@ -216,7 +216,7 @@
       <blockvariant blockdata="0x9" name="Double Slab, Smooth Sandstone" />
       <blockvariant blockdata="0xf" name="Double Slab, Tile Quartz" />
     </block>
-    <block id="0x2C" name="Stone Slab" uname="minecraft:stone_slab" color="0x909090" opaque="0" spawnable="0"> <!-- *B -->
+    <block id="0x2C" name="Stone Slab" uname="minecraft:stone_slab;minecraft:stone_block_slab" color="0x909090" opaque="0" spawnable="0"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Slab, Stone" />
       <blockvariant blockdata="0x1" name="Slab, Sandstone" />
       <blockvariant blockdata="0x2" name="Slab, Wooden" />
@@ -402,7 +402,7 @@
     <block id="0x81" name="Emerald Ore" uname="minecraft:emerald_ore" color="0x77d17d" />
     <block id="0x82" name="Ender Chest" uname="minecraft:ender_chest" color="0x484848" /> <!-- 0.17 -->
     <block id="0x83" name="Tripwire Hook" uname="minecraft:tripwire_hook" color="0x454545" solid="0" /> <!-- *S 0.13 -->
-    <block id="0x84" name="Tripwire" uname="minecraft:tripwire;minecraft:tripWire" color="0xa7a7a7" solid="0" /> <!-- *I *S 0.13 -->
+    <block id="0x84" name="Tripwire" uname="minecraft:tripwire;minecraft:tripWire;minecraft:trip_wire" color="0xa7a7a7" solid="0" /> <!-- *I *S 0.13 -->
     <block id="0x85" name="Block of Emerald" uname="minecraft:emerald_block" color="0x6dbc73" />
     <block id="0x86" name="Stairs, Spruce Wood" uname="minecraft:spruce_stairs" color="0x696a29" spawnable="0"> <!-- *S -->
       <blockvariant blockdata="0x0" name="Stairs, Spruce Wood, East" />
@@ -645,7 +645,7 @@
       <blockvariant blockdata="0x1" color="0x004040" name="Prismarine, Dark" /> <!-- 0.16 -->
       <blockvariant blockdata="0x2" color="0x006060" name="Prismarine, Bricks" /> <!-- 0.16 -->
     </block>
-    <block id="0xA9" name="Sea Lantern" uname="minecraft:sealantern" color="0x00cccc" opaque="1" spawnable="1" /> <!-- *S 0.16 --> <!-- todo color -->
+    <block id="0xA9" name="Sea Lantern" uname="minecraft:sealantern;minecraft:sea_lantern" color="0x00cccc" opaque="1" spawnable="1" /> <!-- *S 0.16 --> <!-- todo color -->
     <block id="0xAA" name="Hay Bale" uname="minecraft:hay_block" color="0xd8d385" />
     <block id="0xAB" name="Carpet" uname="minecraft:carpet" solid="0" opaque="0" spawnable="0"> <!-- *S *B -->
       <blockvariant blockdata="0x0" color="0xDDDDDD" dcolor="7" name="Carpet, White" />
@@ -702,7 +702,7 @@
       <blockvariant blockdata="0x6" name="Stairs, Red Sandstone, South (Upside-down)" spawnable="1" />
       <blockvariant blockdata="0x7" name="Stairs, Red Sandstone, North (Upside-down)" spawnable="1" />
     </block>
-    <block id="0xB5" name="Double Stone Slab(2)" uname="minecraft:double_stone_slab2" color="0xcebe8f">
+    <block id="0xB5" name="Double Stone Slab(2)" uname="minecraft:double_stone_slab2;minecraft:double_stone_block_slab2" color="0xcebe8f">
       <blockvariant blockdata="0x0" name="Double Slab, Red Sandstone" />
       <blockvariant blockdata="0x1" name="Double Slab, Purpur" />
       <blockvariant blockdata="0x2" name="Double Slab, Prismarine" />
@@ -720,7 +720,7 @@
       <blockvariant blockdata="0xE" name="Double Slab, Mossy Cobblestone" />
       <blockvariant blockdata="0xF" name="Double Slab, Smooth Sandstone" />
     </block>
-    <block id="0xB6" name="Stone Slab(2)" uname="minecraft:stone_slab2" color="0xcfbe88" opaque="0" spawnable="0"> <!-- *B -->
+    <block id="0xB6" name="Stone Slab(2)" uname="minecraft:stone_slab2;minecraft:stone_block_slab2" color="0xcfbe88" opaque="0" spawnable="0"> <!-- *B -->
       <blockvariant blockdata="0x0" name="Slab, Red Sandstone" />
       <blockvariant blockdata="0x1" name="Slab, Purpur" />
       <blockvariant blockdata="0x2" name="Slab, Prismarine" />
@@ -1140,7 +1140,7 @@
     <block id="0x19e" name="Turtle Egg" uname="minecraft:turtle_egg" color="0x4d8845" />
     <block id="0x19f" name="Bubble Column" uname="minecraft:bubble_column" color="0x02cffd" liquid="1" solid="0" opaque="0" spawnable="0" />
     <block id="0x1a0" name="Barrier" uname="minecraft:barrier" color="0xf80a31" />
-    <block id="0x1a1" name="Stone Slab(3)" uname="minecraft:stone_slab3" color="0xefe9a5" opaque="0" spawnable="0">
+    <block id="0x1a1" name="Stone Slab(3)" uname="minecraft:stone_slab3;minecraft:stone_block_slab3" color="0xefe9a5" opaque="0" spawnable="0">
       <blockvariant blockdata="0x0" name="Slab, End Brick" />
       <blockvariant blockdata="0x1" name="Slab, Smooth Red Sandstone" />
       <blockvariant blockdata="0x2" name="Slab, Polished Andesite" />
@@ -1161,7 +1161,7 @@
     <block id="0x1a2" name="Bamboo" uname="minecraft:bamboo" color="0x1DCE32" />
     <block id="0x1a3" name="Bamboo Sapling" uname="minecraft:bamboo_sapling" color="0x1DCE33" />
     <block id="0x1a4" name="Scaffolding" uname="minecraft:scaffolding" color="0xc5b023" />
-    <block id="0x1a5" name="Stone Slab(4)" uname="minecraft:stone_slab4" color="0x8b9e91" opaque="0" spawnable="0">
+    <block id="0x1a5" name="Stone Slab(4)" uname="minecraft:stone_slab4;minecraft:stone_block_slab4" color="0x8b9e91" opaque="0" spawnable="0">
       <blockvariant blockdata="0x0" name="Slab, Mossy Stone Brick" />
       <blockvariant blockdata="0x1" name="Slab, Smooth Quartz" />
       <blockvariant blockdata="0x2" name="Slab, Stone" />
@@ -1179,7 +1179,7 @@
       <!--blockvariant blockdata="0xE" name="Upper Slab, " spawnable="1" /-->
       <!--blockvariant blockdata="0xF" name="Upper Slab, " spawnable="1" /-->
     </block>
-    <block id="0x1a6" name="Double Stone Slab(3)" uname="minecraft:double_stone_slab3" color="0xded99d">
+    <block id="0x1a6" name="Double Stone Slab(3)" uname="minecraft:double_stone_slab3;minecraft:double_stone_block_slab3" color="0xded99d">
       <blockvariant blockdata="0x0" name="Double Slab, End Stone Brick" />
       <blockvariant blockdata="0x1" name="Double Slab, Smooth Red Sandstone" />
       <blockvariant blockdata="0x2" name="Double Slab, Polished Andesite" />
@@ -1189,7 +1189,7 @@
       <blockvariant blockdata="0x6" name="Double Slab, Granite" />
       <blockvariant blockdata="0x7" name="Double Slab, Polished Granite" />
     </block>
-    <block id="0x1A7" name="Double Stone Slab(4)" uname="minecraft:double_stone_slab4" color="0x8a9e98">
+    <block id="0x1A7" name="Double Stone Slab(4)" uname="minecraft:double_stone_slab4;minecraft:double_stone_block_slab4" color="0x8a9e98">
       <blockvariant blockdata="0x0" name="Double Slab, Mossy Stone Brick" />
       <blockvariant blockdata="0x1" name="Double Slab, Smooth Quartz" />
       <blockvariant blockdata="0x2" name="Double Slab, Stone" />
@@ -1538,11 +1538,59 @@
     <block id="0x2BF" name="Waxed Oxidized Cut Copper Stairs" uname="minecraft:waxed_oxidized_cut_copper_stairs" color="0x66A48C" />
     <block id="0x2C0" name="Waxed Oxidized Cut Copper Slab" uname="minecraft:waxed_oxidized_cut_copper_slab" color="0x66A48D" />
     <block id="0x2C1" name="Waxed Oxidized Double Cut Copper Slab" uname="minecraft:waxed_oxidized_double_cut_copper_slab" color="0x66A48E" />
-    <block id="0x2C2" name="Block of Raw Iron" uname="minecraft:raw_iron_block" color="0x8B715C" />
-    <block id="0x2C3" name="Block of Raw Copper" uname="minecraft:raw_copper_block" color="0xB96040" />
-    <block id="0x2C4" name="Block of Raw Gold" uname="minecraft:raw_gold_block" color="0xBB9329" />
+    <block id="0x2C2" name="Block of Raw Iron" uname="minecraft:raw_iron_block;minecraft:raw_iron" color="0x8B715C" />
+    <block id="0x2C3" name="Block of Raw Copper" uname="minecraft:raw_copper_block;minecraft:raw_copper" color="0xB96040" />
+    <block id="0x2C4" name="Block of Raw Gold" uname="minecraft:raw_gold_block;minecraft:raw_gold" color="0xBB9329" />
     <block id="0x2C5" name="Infested Deepslate" uname="minecraft:infested_deepslate" color="0x474748" />
 
+    <block name="Mud" uname="minecraft:mud" color="0x1F0F1D" />
+    <block name="Packed Mud" uname="minecraft:packed_mud" color="0x6F533F" />
+    <block name="Mud Bricks" uname="minecraft:mud_bricks" color="0x604739" />
+    <block name="Mud Brick Slab" uname="minecraft:mud_brick_slab" color="0x60473A" />
+    <block name="Mud Brick Stairs" uname="minecraft:mud_brick_stairs" color="0x60473B" />
+    <block name="Mud Brick Double Slab" uname="minecraft:mud_brick_double_slab" color="0x60473C" />
+    <block name="Mud Brick Wall" uname="minecraft:mud_brick_wall" color="0x60473D" />
+
+    <block name="Mangrove Wood" uname="minecraft:mangrove_wood" color="0x342B19" />
+    <block name="Mangrove Log" uname="minecraft:mangrove_log" color="0x342B1A" />
+    <block name="Stripped Mangrove Wood" uname="minecraft:stripped_mangrove_wood" color="0x562422" />
+    <block name="Stripped Mangrove Log" uname="minecraft:stripped_mangrove_log" color="0x562423" />
+
+    <block name="Mangrove Button" uname="minecraft:mangrove_button" color="0x6A352F" />
+    <block name="Mangrove Door" uname="minecraft:mangrove_door" color="0x6A3530" />
+    <block name="Mangrove Double Slab" uname="minecraft:mangrove_double_slab" color="0x6A3531" />
+    <block name="Mangrove Fence" uname="minecraft:mangrove_fence" color="0x6A3532" />
+    <block name="Mangrove Fence Gate" uname="minecraft:mangrove_fence_gate" color="0x6A3533" />
+    <block name="Mangrove Planks" uname="minecraft:mangrove_planks" color="0x6A3534" />
+    <block name="Mangrove Pressure Plate" uname="minecraft:mangrove_pressure_plate" color="0x6A3535" />
+    <block name="Mangrove Sign" uname="minecraft:mangrove_sign" color="0x6A3536" />
+    <block name="Mangrove Standing Sign" uname="minecraft:mangrove_standing_sign" color="0x6A3537" />
+    <block name="Mangrove Wall Sign" uname="minecraft:mangrove_wall_sign" color="0x6A3538" />
+    <block name="Mangrove Slab" uname="minecraft:mangrove_slab" color="0x6A3539" />
+    <block name="Mangrove Stairs" uname="minecraft:mangrove_stairs" color="0x6A353A" />
+    <block name="Mangrove Trapdoor" uname="minecraft:mangrove_trapdoor" color="0x6A353B" />
+
+    <block name="Mangrove Leaves" uname="minecraft:mangrove_leaves" color="0x2C421E" />
+    <block name="Mangrove Propagule" uname="minecraft:mangrove_propagule" color="0x2C421F" />
+    <block name="Mangrove Roots" uname="minecraft:mangrove_roots" color="0x342C22" />
+    <block name="Muddy Mangrove Roots" uname="minecraft:muddy_mangrove_roots" color="0x342C23" />
+
+    <block name="piston_arm_collision" uname="minecraft:piston_arm_collision" color="0x" />
+    <block name="sticky_piston_arm_collision" uname="minecraft:sticky_piston_arm_collision" color="0x" />
+
+    <block name="Reinforced Deepslate" uname="minecraft:reinforced_deepslate" color="0x767C63" />
+
+    <block name="Sculk" uname="minecraft:sculk" color="0x053539" />
+    <block name="Sculk Catalyst" uname="minecraft:sculk_catalyst" color="0x053538" />
+    <block name="Sculk Shrieker" uname="minecraft:sculk_shrieker" color="0x053537" />
+    <block name="Sculk Vein" uname="minecraft:sculk_vein" color="0x053536" />
+
+
+    <block name="Frog Spawn" uname="minecraft:frog_spawn" color="0x777799" />
+    <block name="Ochre Froglight" uname="minecraft:ochre_froglight" color="0xCBA458" />
+    <block name="Verdant Froglight" uname="minecraft:verdant_froglight" color="0x78A65D" />
+    <block name="Pearlescent Froglight" uname="minecraft:pearlescent_froglight" color="0xAF8AB9" />
+    
   </blocklist>
 
   <!--
@@ -1666,7 +1714,7 @@
       <itemvariant extradata="0" name="Golden Apple" uname="minecraft:" />
       <itemvariant extradata="1" name="Golden Apple, Enchanted" uname="minecraft:" />
     </item>
-    <item id="0x143" name="Oak Sign" uname="minecraft:sign" />
+    <item id="0x143" name="Oak Sign" uname="minecraft:sign;minecraft:oak_sign" />
     <item id="0x144" name="Oak Door" uname="minecraft:wooden_door" />
     <item id="0x145" name="Bucket">
       <itemvariant extradata="0x0" name="Bucket, Empty" uname="minecraft:bucket" />
@@ -1677,6 +1725,7 @@
       <itemvariant extradata="0x5" name="Bucket, Pufferfish" uname="minecraft:pufferfish_bucket" />
       <itemvariant extradata="0x8" name="Bucket, Water" uname="minecraft:water_bucket" />
       <itemvariant extradata="0xa" name="Bucket, Lava" uname="minecraft:lava_bucket" />
+      <itemvariant extradata="0xb" name="Bucket, Powdered Snow" uname="minecraft:powder_snow_bucket" />
       <itemvariant extradata="0xc" name="Bucket, Axolotl" uname="minecraft:axolotl_bucket" />
     </item>
     <!-- item id="0x146" name="TBD - Water Bucket" uname="minecraft:" -->
@@ -1738,7 +1787,7 @@
     <item id="0x163" name="Bed" uname="minecraft:bed" />
     <item id="0x164" name="Redstone Repeater" uname="minecraft:repeater" />
     <item id="0x165" name="Cookie" uname="minecraft:cookie" />
-    <item id="0x166" name="Map, Filled" uname="minecraft:map" /> <!-- todo more data to harvest here? -->
+    <item id="0x166" name="Map, Filled" uname="minecraft:map;minecraft:filled_map" /> <!-- todo more data to harvest here? -->
     <item id="0x167" name="Shears" uname="minecraft:shears" /> <!-- *D -->
     <item id="0x168" name="Melon Slice" uname="minecraft:melon_slice" />
     <item id="0x169" name="Pumpkin Seeds" uname="minecraft:pumpkin_seeds" />
@@ -2097,7 +2146,7 @@
     <item id="0x2de" name="Suspicious Stew" uname="minecraft:suspicious_stew" />
     <item id="0x2e0" name="Honeycomb" uname="minecraft:honeycomb" />
     <item id="0x2e1" name="Honey Bottle" uname="minecraft:honey_bottle" />
-    <item id="0x2e5" name="Lodestonecompass" uname="minecraft:lodestonecompass" />
+    <item id="0x2e5" name="Lodestone Compass" uname="minecraft:lodestonecompass;minecraft:lodestone_compass" />
     <item id="0x2e6" name="Netherite Ingot" uname="minecraft:netherite_ingot" />
     <item id="0x2e7" name="Netherite Sword" uname="minecraft:netherite_sword" />
     <item id="0x2e8" name="Netherite Shovel" uname="minecraft:netherite_shovel" />
@@ -2112,19 +2161,12 @@
     <item id="0x2F5" name="Warped Fungus on a Stick" uname="minecraft:warped_fungus_on_a_stick" />
     <item id="0x2F7" name="Record, Pigstep" uname="minecraft:record_pigstep;minecraft:music_disc_pigstep" />
 
-<!-- these item ids are NOT RIGHT, we need to find out what they're supposed to be and fit them in above -->
-    <item id="0x400" name="amethyst shard" uname="minecraft:amethyst_shard" />
-    <item id="0x401" name="copper ingot" uname="minecraft:copper_ingot" />
-    <item id="0x403" name="filled map" uname="minecraft:filled_map" />
-    <item id="0x404" name="glow berries" uname="minecraft:glow_berries" />
-    <item id="0x405" name="glow ink sac" uname="minecraft:glow_ink_sac" />
-    <item id="0x406" name="lodestone compass" uname="minecraft:lodestone_compass" />
-    <item id="0x407" name="oak sign" uname="minecraft:oak_sign" />
-    <item id="0x408" name="raw copper" uname="minecraft:raw_copper" />
-    <item id="0x409" name="raw gold" uname="minecraft:raw_gold" />
-    <item id="0x40a" name="raw iron" uname="minecraft:raw_iron" />
-    <item id="0x40b" name="spyglass" uname="minecraft:spyglass" />
-    <item id="0x40c" name="structure void" uname="minecraft:structure_void" />
+    <item name="Amethyst Shard" uname="minecraft:amethyst_shard" />
+    <item name="Copper Ingot" uname="minecraft:copper_ingot" />
+    <item name="Glow Berries" uname="minecraft:glow_berries" />
+    <item name="Glow Ink Sac" uname="minecraft:glow_ink_sac" />
+    <item name="Spyglass" uname="minecraft:spyglass" />
+    <item name="Structure Void" uname="minecraft:structure_void" />
 
   </itemlist>
 
