@@ -547,7 +547,7 @@ namespace mcpe_viz
             armorFlag = false;
             blockFlag = false;
             nameBasedFlag = false;
-            id = -1;
+            id = UNKNOWN_ID;
             slot = -1;
             damage = -1;
             count = -1;
@@ -594,7 +594,7 @@ namespace mcpe_viz
                                 blockFlag = false;
                             }
                             else {
-                                id = -1;
+                                record_unknow_uname(name);
                             }
                         }
                     }
@@ -611,12 +611,9 @@ namespace mcpe_viz
                                 blockFlag = true;
                             }
                             else {
-                                id = -1;
+                                record_unknow_uname(name);
                             }
                         }
-                    }
-                    if (id < 0) {
-                        record_unknow_uname(name);
                     }
                 }
             }
@@ -647,7 +644,7 @@ namespace mcpe_viz
                     }
                 }
             }
-            if (id >= 0) {
+            if (id != UNKNOWN_ID || nameBasedFlag) {
                 valid = true;
             }
             return 0;
@@ -2103,8 +2100,26 @@ namespace mcpe_viz
                 else if (tileEntity->id == "EnchantTable") {
                     // todo - anything interesting?
                 }
-                else if (tileEntity->id == "Furnace") {
+                else if (tileEntity->id == "Lectern") {
                     // todo - anything interesting?
+                }
+                else if (tileEntity->id == "Furnace" || tileEntity->id == "BlastFurnace") {
+                    // todo - anything interesting?
+                }
+                else if (tileEntity->id == "Campfire" || tileEntity->id == "SoulCampfire") {
+                    // todo - anything interesting?
+                    // has ItemTimeN (n=1..4) with cook times
+                    if (tc.has_key("Items", nbt::tag_type::List)) {
+                        tileEntity->containerFlag = true;
+                        parseFlag = true;
+                    }
+                }
+                else if (tileEntity->id == "Smoker" ) {
+                    // todo - anything interesting? has BurnDuration. BurnTime, CookTime, StoredXPint
+                    if (tc.has_key("Items", nbt::tag_type::List)) {
+                        tileEntity->containerFlag = true;
+                        parseFlag = true;
+                    }
                 }
                 else if (tileEntity->id == "MobSpawner") {
                     tileEntity->addMobSpawner(tc);
@@ -2209,6 +2224,22 @@ namespace mcpe_viz
                         tileEntity->containerFlag = true;
                         parseFlag = true;
                     }
+                }
+                else if (tileEntity->id == "Beehive" || tileEntity->id == "Beenest") {
+                    // Anything we need to know about these? has value "ShouldSpawnBees"
+                }
+
+                else if (tileEntity->id == "SculkShrieker" || tileEntity->id == "SculkCatalyst" || tileEntity->id == "SculkSensor") {
+                    // Anything we need to know about these?
+                }
+                else if (tileEntity->id == "Lodestone") {
+                    // todo - anything interesting?
+                }
+                else if (tileEntity->id == "SporeBlossom") {
+                    // todo - anything interesting?
+                }
+                else if (tileEntity->id == "Bell") {
+                    // todo - anything interesting? has Direction, Ringing and Ticks values
                 }
 
                 else {

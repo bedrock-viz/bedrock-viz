@@ -41,6 +41,11 @@ bool compareNamedItems(const mcpe_viz::Named* left, const mcpe_viz::Named* right
     return *left < *right;
 }
 
+int compareNamedItemsInMapParts(pair<const mcpe_viz::WithId::IdType, const mcpe_viz::Named*> left, pair<const mcpe_viz::WithId::IdType, const mcpe_viz::Named*> right)
+{
+    return left.second->name.compare(right.second->name);
+}
+
 int main(int argc, char** argv)
 {
     using namespace mcpe_viz;
@@ -160,9 +165,14 @@ int main(int argc, char** argv)
 
     unordered_map<Colored::ColorType, string> blockColorMap;
 
-    auto blockList = mcpe_viz::Block::list();
-    sort(blockList.begin(), blockList.end(), compareNamedItems);
-    for(auto& block : blockList) {
+    auto blockList = mcpe_viz::Block::all();
+    // use ordered map's ordering to sort by name.
+    std::map<string, const Block*> blocksByName;
+    for(auto& mapItem : blockList) {
+        blocksByName[mapItem.second->name] = mapItem.second;
+    }
+    for(auto& mapItem : blocksByName) {
+        auto block = mapItem.second;
         bool hasVariants = block->hasVariants();
 
         if (block->is_color_set()) {

@@ -379,10 +379,10 @@ namespace mcpe_viz {
 
         // report items that need to have their color set properly (in the XML file)
         if (imageMode == kImageModeTerrain) {
-            for(auto& i: Block::list()) {
-                if (i->color_set_need_count != 0) {
+            for(auto& i: Block::all()) {
+                if (i.first != -1 && i.second->color_set_need_count != 0) {
                     log::info("    Need pixel color for: 0x{:x} '{}' (count={})",
-                        i->id, i->name, i->color_set_need_count);
+                        i.second->id, i.second->name, i.second->color_set_need_count);
                 }
             }
         }
@@ -1282,8 +1282,10 @@ namespace mcpe_viz {
         doOutput_Schematic(db);
 
         // reset
-        for(auto& i: Block::list()) {
-            i->color_set_need_count = 0;
+        for(auto& i: Block::all()) {
+            if (i.second != nullptr) {
+                i.second->color_set_need_count = 0;
+            }
         }
 
         return 0;

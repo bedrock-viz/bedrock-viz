@@ -1,7 +1,7 @@
 #include "minecraft/v2/block.h"
 #include "config.h"
 #include "util.h"
-#include "utils/pointer_array.h"
+#include "define.h"
 
 #include <unordered_map>
 #include <vector>
@@ -9,15 +9,13 @@
 
 namespace
 {
-    using mcpe_viz::PointerArray;
-    using Wrapper = PointerArray<mcpe_viz::Block, mcpe_viz::kMaxBlockCount>;
-
-    std::vector<const mcpe_viz::Block*> sBlocks;
+    std::map<const mcpe_viz::WithId::IdType, const mcpe_viz::Block*> allBlocksById;
     std::unordered_map<std::string, mcpe_viz::Block*> unameBlockMap;
 }
 
 namespace mcpe_viz
 {
+    WithId::IdType Block::lastAssignedBlockId = mcpe_viz::kMaxLegacyBlockId + 1;
 
     void Block::addUname(const std::string& uname)
     {
@@ -31,10 +29,14 @@ namespace mcpe_viz
         }
     }
 
-    const Block* Block::get(IdType id)
+    const Block* Block::get(const IdType& id)
     {
-        auto& instance = Wrapper::value();
-        return instance[id];
+        try {
+            auto blockPtr = allBlocksById.at(id);
+            return blockPtr;
+        } catch (std::out_of_range& outOfRange) {
+            return nullptr;
+        }
     }
 
     const Block* Block::getByUname(const std::string& uname)
@@ -51,20 +53,25 @@ namespace mcpe_viz
 
     Block* Block::add(IdType id, const std::string& name)
     {
-        auto& instance = Wrapper::value();
-        if (instance[id] != nullptr) {
-            log::error("Block id={}(0x{:x} name={} already exists", id, id, name);
+        if (id == UNKNOWN_ID) {
+            id = lastAssignedBlockId++;
+        }
+
+        auto const block = new Block(id, name);
+
+        if (allBlocksById[id] != nullptr) {
+            log::error("Block id={}(0x{:x}) name={} already exists", id, id, name);
             return nullptr;
         }
-        auto const block = new Block(id, name);
-        instance[id] = block;
-        sBlocks.emplace_back(block);
+
+        allBlocksById[id] = block;
+
         return block;
     }
 
-    const std::vector<const Block*>& Block::list()
+    std::map<const WithId::IdType, const Block*> Block::all()
     {
-        return sBlocks;
+        return allBlocksById;
     }
 
     Block::Variant* Block::addVariant(Block::Variant::DataType data, const std::string& name)

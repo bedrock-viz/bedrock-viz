@@ -2,6 +2,7 @@
 #include "minecraft/v2/item.h"
 #include "logger.h"
 #include "util.h"
+#include "define.h"
 
 namespace mcpe_viz
 {
@@ -10,15 +11,22 @@ namespace mcpe_viz
         for (auto& i: node.children("item")) {
             std::string name{ i.attribute("name").as_string() };
 
-            auto id = i.attribute("id").as_int(-1);
+            auto id = i.attribute("id").as_int(UNKNOWN_ID);
 
-            if (id == -1 || name.empty()) {
-                log::error("add item failed(name={}, id={}({:x})",
-                    name, id, id);
+            if (name.empty()) {
+                log::error("add item failed, no name id=0x{:x}",
+                    id);
                 return -1;
             }
 
+            if (id >= mcpe_viz::kMaxLegacyItemId) {
+                log::warn("found item with out of range id, name={}, id=0x{:x}, max is 0x{:x}; ignored id",
+                          name, id, mcpe_viz::kMaxLegacyItemId);
+                id = UNKNOWN_ID;
+            }
+
             auto item = Item::add(id, name);
+
             if (item == nullptr) {
                 log::error("add item failed(name={}, id={}({:x})",
                     name, id, id);

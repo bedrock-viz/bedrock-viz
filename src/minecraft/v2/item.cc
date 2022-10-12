@@ -1,23 +1,22 @@
 #include "minecraft/v2/item.h"
 #include "config.h"
 #include "util.h"
-#include "utils/pointer_array.h"
 #include "utils/unknown_recorder.h"
+#include "define.h"
 
 #include <iostream>
 #include <unordered_map>
 
 namespace
 {
-    using mcpe_viz::PointerArray;
-    using Wrapper = PointerArray<mcpe_viz::Item, mcpe_viz::kMaxItemCount>;
-
-    std::vector<const mcpe_viz::Item*> sItems;
+    std::map<const mcpe_viz::WithId::IdType, const mcpe_viz::Item*> allItemsById;
     std::unordered_map<std::string, mcpe_viz::Item*> unameItemMap;
 }
 
 namespace mcpe_viz
 {
+    WithId::IdType Item::lastAssignedItemId = mcpe_viz::kMaxLegacyItemId + 1;
+
     void Item::addUname(const std::string& uname)
     {
         if (unameItemMap.find(uname) != unameItemMap.end()) {
@@ -45,8 +44,12 @@ namespace mcpe_viz
 
     const Item* Item::get(const IdType& id)
     {
-        auto& instance = Wrapper::value();
-        return instance[id];
+        try {
+            auto itemPtr = allItemsById.at(id);
+            return itemPtr;
+        } catch (std::out_of_range& outOfRange) {
+            return nullptr;
+        }
     }
 
     const Item* Item::getByUname(const std::string& uname)
@@ -60,33 +63,37 @@ namespace mcpe_viz
         return nullptr;
     }
 
-    Item* Item::add(const IdType& id, const std::string& name)
+    Item* Item::add(IdType id, const std::string& name)
     {
-        auto& instance = Wrapper::value();
-        if (instance[id] != nullptr) {
+        if (id == UNKNOWN_ID) {
+            id = lastAssignedItemId++;
+        }
+
+        auto const item = new Item(id, name);
+
+        if (allItemsById[id] != nullptr) {
             log::error("Item id={} name={} already exists", id, name);
             return nullptr;
         }
-        auto const item = new Item(id, name);
-        instance[id] = item;
-        sItems.emplace_back(item);
+
+        allItemsById[id] = item;
+
         return item;
     }
 
     void Item::clearList() {
         unameItemMap.clear();
-        sItems.clear();
-        for(size_t i = 0; i < Wrapper::value().size(); ++i) {
-            // TODO: Fix nullptr issues due to data structures
-            Item* item = Wrapper::value()[i];
-            Wrapper::value()[i] = nullptr;
-            delete item;
+        for(auto& item : allItemsById) {
+            delete item.second;
+            item.second = nullptr;
         }
+
+        allItemsById.clear();
     }
 
-    const std::vector<const Item*>& Item::list()
+    std::map<const WithId::IdType, const Item*> Item::all()
     {
-        return sItems;
+        return allItemsById;
     }
 
     std::string Item::queryName(const IdType& id, const Variant::DataType& data)
