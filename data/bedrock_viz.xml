@@ -1720,7 +1720,7 @@
       <itemvariant extradata="0x0" name="Bucket, Empty" uname="minecraft:bucket" />
       <itemvariant extradata="0x1" name="Bucket, Milk" uname="minecraft:milk_bucket" />
       <itemvariant extradata="0x2" name="Bucket, Cod" uname="minecraft:cod_bucket" />
-      <itemvariant extradata="0x3" name="Bucket, Salmon" uname="minecraft:salom_bucket" />
+      <itemvariant extradata="0x3" name="Bucket, Salmon" uname="minecraft:salmon_bucket" />
       <itemvariant extradata="0x4" name="Bucket, Tropical Fish" uname="minecraft:tropical_fish_bucket" />
       <itemvariant extradata="0x5" name="Bucket, Pufferfish" uname="minecraft:pufferfish_bucket" />
       <itemvariant extradata="0x8" name="Bucket, Water" uname="minecraft:water_bucket" />
@@ -1729,8 +1729,6 @@
       <itemvariant extradata="0xc" name="Bucket, Axolotl" uname="minecraft:axolotl_bucket" />
       <itemvariant extradata="0xd" name="Bucket, Tadpole" uname="minecraft:tadpole_bucket" />
     </item>
-    <!-- item id="0x146" name="TBD - Water Bucket" uname="minecraft:" -->
-    <!-- item id="0x147" name="TBD - Lava Bucket" uname="minecraft:" -->
     <item id="0x148" name="Minecart" uname="minecraft:minecart" />
     <item id="0x149" name="Saddle" uname="minecraft:saddle" />
     <item id="0x14A" name="Door, Iron" uname="minecraft:iron_door" />
@@ -1742,7 +1740,8 @@
       <itemvariant extradata="0x2" name="Boat, Birch Wood" uname="minecraft:birch_boat" />
       <itemvariant extradata="0x3" name="Boat, Jungle Wood" uname="minecraft:jungle_boat" />
       <itemvariant extradata="0x4" name="Boat, Acacia Wood" uname="minecraft:acacia_boat" />
-      <itemvariant extradata="0x5" name="Boat, Dark Oak aWood" uname="minecraft:dark_oak_boat" />
+      <itemvariant extradata="0x5" name="Boat, Dark Oak Wood" uname="minecraft:dark_oak_boat" />
+      <itemvariant extradata="0x6" name="Boat, Mangrove" uname="minecraft:mangrove_boat" />
     </item>
     <item id="0x14E" name="Leather" uname="minecraft:leather" />
     <item id="0x14F" name="Kelp" uname="minecraft:kelp" />
@@ -2169,6 +2168,9 @@
     <item name="Glow Ink Sac" uname="minecraft:glow_ink_sac" />
     <item name="Spyglass" uname="minecraft:spyglass" />
     <item name="Structure Void" uname="minecraft:structure_void" />
+    <item name="Echo Shard" uname="minecraft:echo_shard" />
+    <item name="Goat Horn" uname="minecraft:goat_horn" />
+    <item name="Recovery Compass" uname="minecraft:recovery_compass" />
 
   </itemlist>
 
