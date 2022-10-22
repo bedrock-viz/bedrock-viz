@@ -12,7 +12,7 @@
 [![Discord](https://img.shields.io/discord/726889889806942310?logo=discord&logoColor=white&style=plastic)](https://discord.gg/dWhQNvbPw6)
 
 
-A fork of [mcpe_viz](https://github.com/Plethora777/mcpe_viz.git), now maintained by [Jasper Wan](https://github.com/jasper-wan).
+A fork of [mcpe_viz](https://github.com/Plethora777/mcpe_viz.git).
 
 Bedrock Viz is a tool that parses Minecraft Bedrock Edition world files.  It creates overview images from the world files, and reports *lots* of details on your world.
 

@@ -19,11 +19,6 @@
 
   * Primary contributor
   * dockerfile
-  
-* [jasper-wan](https://github.com/jasper-wan)
-
-  * Maintainer and primary contributor
-  * New features development
 
 * [PaulGrahek](https://github.com/paulgrahek)
 
@@ -34,6 +29,11 @@
 * [picotazo](https://github.com/picotazo)  
 
   * new blocks and entities xml
+
+* [SCP-R](https://github.com/scp-r)
+
+  * Maintainer and primary contributor
+  * New features development
 
 * [tomnolan](http://github.com/tomnolan)
 
