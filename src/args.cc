@@ -47,6 +47,10 @@ Extended Options:
 
     --schematic[-get] did,x1,y1,z1,x2,y2,z2,fnpart
                              Create a schematic file (fnpart) from (x1,y1,z1) to (x2,y2,z2) in dimension (did)
+                             
+    --limit-x=did,min,max    Limit generation in dimension did to chunks between min and max (x chunk coordinate)
+    --limit-z=did,min,max    Limit generation in dimension did to chunks between min and max (z chunk coordinate)
+
     Note: [=did] are optional dimension-ids - if not specified, do all dimensions 
     Dimension IDs: 0=Overworld; 1=Nether, 2=End
     Example: --biome=0 1, --biome 0 --biome 1

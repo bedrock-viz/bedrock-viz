@@ -34,6 +34,8 @@
 | `shaded-relief[=did]`                          | Create a shaded relief image |
 | `slime-chunk[=did]`                            | Create a slime chunk map image |
 | `no-force-geojson`                             | Don't load geojson in html because we are going to use a web server (or Firefox) |
+|  limit-x=did,min,max                           | Limit generation in dimension did to chunks between min and max (x chunk coordinate) |
+|  limit-z=did,min,max                           | Limit generation in dimension did to chunks between min and max (z chunk coordinate) |
 | `shortrun`                                     | Debug testing parameter - process only first 1000 records |
 | `leveldb-filter=i`                             | Bloom filter supposed to improve disk performance (default: 10) |
 | `leveldb-block-size=i`                         | The block size of leveldb (default: 4096) |
