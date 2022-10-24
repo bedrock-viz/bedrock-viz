@@ -827,6 +827,21 @@ namespace mcpe_viz
                 }
                 break;
 
+                case 0x2b:
+                    // 1.18 3D biome data
+                    // 512 bytes -> heightmap
+                    // Paletted biome data per subcunk (16x16x16) from bottom up
+                    //   1 byte header - 0xff means non-existant
+                    //     bit 0 - always 1?
+                    //     bits 7..1: bits per value for array (can be 0)
+                    //   n byte array (n = 4096/8 * bits per value)
+                    //   int32 palette length
+                    //   palette entries (int32)
+                {
+                    dimDataList[chunkDimId]->addChunkColumnData(4, chunkX, chunkZ, cdata, int32_t(cdata_size));
+                }
+                break;
+
 
                 /*
    todohere todonow
