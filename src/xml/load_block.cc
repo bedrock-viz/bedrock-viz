@@ -2,6 +2,7 @@
 #include "minecraft/v2/block.h"
 #include "logger.h"
 #include "util.h"
+#include "define.h"
 
 namespace mcpe_viz
 {
@@ -9,13 +10,19 @@ namespace mcpe_viz
     {
         for (auto& i: node.children("block")) {
             std::string name{ i.attribute("name").as_string()};
-            auto id = i.attribute("id").as_int(-1);
+            auto id = i.attribute("id").as_int(UNKNOWN_ID);
             
 
-            if (id == -1 || name.empty()) {
-                log::error("add block failed(name={}, id={}",
-                    name, id);
+            if (name.empty()) {
+                log::error("add block failed, no name id=0x{:x}",
+                    id);
                 return -1;
+            }
+
+            if (id >= mcpe_viz::kMaxLegacyBlockId) {
+                log::warn("found block with out of range id, name={}, id=0x{:x}, max is 0x{:x}; ignored id",
+                    name, id, mcpe_viz::kMaxLegacyBlockId);
+                id = UNKNOWN_ID;
             }
 
             auto block = Block::add(id, name);

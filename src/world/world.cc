@@ -1166,21 +1166,21 @@ namespace mcpe_viz
             );
 
             fprintf(fp, "var blockColorLUT = {\n");
-            for(auto& i: Block::list()) {
-                if (i->hasVariants()) {
-                    for(auto& v: i->getVariants()) {
+            for(auto& i: Block::all()) {
+                if (i.second->hasVariants()) {
+                    for(auto& v: i.second->getVariants()) {
                         fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n",
                                 local_be32toh(v.second->color()),
                                 escapeString(v.second->name, "'").c_str(),
-                                i->id, v.second->data
+                                i.second->id, v.second->data
                         );
                     }
                 }
                 else {
-                    if (i->is_color_set()) {
+                    if (i.second->is_color_set()) {
                         fprintf(fp, "'%d': { name: '%s', id: %d, blockdata: %d },\n",
-                                local_be32toh(i->color()), escapeString(i->name, "'").c_str(),
-                                i->id, 0
+                                local_be32toh(i.second->color()), escapeString(i.second->name, "'").c_str(),
+                                i.second->id, 0
                         );
                     }
                 }

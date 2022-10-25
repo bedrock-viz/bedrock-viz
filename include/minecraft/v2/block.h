@@ -25,6 +25,7 @@ namespace mcpe_viz {
     private:
         std::map<Variant::DataType, Variant*> variants_;
     public:
+        static IdType lastAssignedBlockId;
 
         Block(IdType id, const std::string& name)
             : BaseObject{id, name}
@@ -106,10 +107,10 @@ namespace mcpe_viz {
             return variant->spawnable;
         }
 
-        static const Block* get(IdType id);
+        static const Block* get(const IdType& id);
         static const Block* getByUname(const std::string& uname);
         static Block* add(IdType id, const std::string& name);
-        static const std::vector<const Block*>& list();
+        static std::map<const IdType, const Block*> all();
 
         static std::string queryName(const IdType& id, const Variant::DataType& data);
         static std::string queryName(const IdType& id);

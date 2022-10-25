@@ -66,4 +66,6 @@ namespace mcpe_viz {
     const std::vector<int> kDimIdNone{};
 
     const int32_t kColorDefault = 0xff00ff;
+
+    const int32_t UNKNOWN_ID = -1;
 }
