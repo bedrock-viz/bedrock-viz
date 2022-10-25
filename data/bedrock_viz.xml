@@ -908,7 +908,7 @@
     </block>
     <block id="0xF8" name="Update Game Block (update!) [note 1]" uname="minecraft:info_update" color="0xCC0001" /> <!-- todo -->
     <block id="0xF9" name="Update Game Block (ate!upd)" uname="minecraft:info_update2" color="0xCC0100" /> <!-- todo -->
-    <block id="0xFA" name="Block moved by Piston" uname="minecraft:movingblock;minecraft:movingBlock" color="0x8a9d9a" opaque="0" spawnable="0" /> <!-- *S *E 0.16? -->
+    <block id="0xFA" name="Block moved by Piston" uname="minecraft:movingblock;minecraft:movingBlock;minecraft:moving_block" color="0x8a9d9a" opaque="0" spawnable="0" /> <!-- *S *E 0.16? -->
     <block id="0xFB" name="Observer" uname="minecraft:observer" color="0xa13d3d" opaque="0" spawnable="0"> <!-- *S *E 0.15 -->
       <blockvariant blockdata="0x0" name="Observer (Down)" />
       <blockvariant blockdata="0x1" name="Observer (Up)" />
