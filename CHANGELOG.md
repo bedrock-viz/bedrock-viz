@@ -2,12 +2,17 @@
 
 ## Repo Info
 - Repository      : https://github.com/bedrock-viz/bedrock-viz/
-- Maintained by   : [jasper-wan](https://github.com/jasper-wan), [et al](https://github.com/orgs/bedrock-viz/people)
+- Maintained by   : [SCP-R](https://github.com/scp-r), [et al](https://github.com/orgs/bedrock-viz/people)
 - Contributions   : [Contributors](./CONTRIBUTORS.md)
 - Latest highlight: Going deep and high! All the Y values now....
-- Latest release  : 0.1.7
+- Latest release  : 0.1.8
 
 ## bedrock-viz changelog
+
+v0.1.8 - 2023.01.02
+
+- Parser changes
+  - added basic support for minecraft 1.19
 
 v0.1.7 - 2022.02.13
 
@@ -100,7 +105,7 @@ v0.1.3 - 2021.01.01
   - Improvements to the release processing scripts and source control
   - A lot of re-structuring of the codebase has happened to make it more developer friendly
 - Fixes in this release from:
-  - [jasper-wan](https://github.com/jasper-wan)
+  - [SCP-R](https://github.com/scp-r)
   - [paulgrahek](https://github.com/paulgrahek)
   - [cabbey](https://github.com/cabbey) (first time contributor, new dev team member)
   - [hoersten](https://github.com/hoersten) (first time contributor)

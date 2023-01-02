@@ -1,6 +1,6 @@
 /*
   bedrock_viz openlayers viewer
-    maintained by   : https://github.com/jasper-wan
+    maintained by   : https://github.com/scp-r
     contributions by: https://github.com/paulgrahek, https://github.com/tomnolan, https://github.com/bazfp, https://github.com/DazWorrall
     forked from     : https://github.com/Plethora777/mcpe_viz
   
