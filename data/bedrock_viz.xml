@@ -1542,43 +1542,43 @@
     <block id="0x2C3" name="Block of Raw Copper" uname="minecraft:raw_copper_block" color="0xB96040" />
     <block id="0x2C4" name="Block of Raw Gold" uname="minecraft:raw_gold_block" color="0xBB9329" />
     <block id="0x2C5" name="Infested Deepslate" uname="minecraft:infested_deepslate" color="0x474748" />
-    <!-- 1.19 New Blocks. TODO: fix colors-->
-    <block id="0x2C9" name="Sculk" uname="minecraft:sculk" color="0x0012C9" />
-    <block id="0x2CA" name="Sculk Vein" uname="minecraft:sculk_vein" color="0x0012CA" />
-    <block id="0x2CB" name="Sculk Catalyst" uname="minecraft:sculk_catalyst" color="0x0012CB" />
-    <block id="0x2CC" name="Sculk Shrieker" uname="minecraft:sculk_shrieker" color="0x0012CC" />
-    <block id="0x2D1" name="Reinforced Deepslate" uname="minecraft:reinforced_deepslate" color="0x0012D1" />
-    <block id="0x2D3" name="Frog Spawn" uname="minecraft:frog_spawn" color="0x0012D3" />
-    <block id="0x2D4" name="Pearlescent Froglight" uname="minecraft:pearlescent_froglight" color="0x0012D4" />
-    <block id="0x2D5" name="Verdant Froglight" uname="minecraft:verdant_froglight" color="0x0012D5" />
-    <block id="0x2D6" name="Ochre Froglight" uname="minecraft:ochre_froglight" color="0x0012D6" />
-    <block id="0x2D7" name="Mangrove Leaves" uname="minecraft:mangrove_leaves" color="0x0012D7" />
-    <block id="0x2D8" name="Mud" uname="minecraft:mud" color="0x0012D8" />
-    <block id="0x2D9" name="Mangrove Propagule" uname="minecraft:mangrove_propagule" color="0x0012D9" />
-    <block id="0x2DA" name="Mud Bricks" uname="minecraft:mud_bricks" color="0x0012DA" />
-    <block id="0x2DC" name="Packed Mud" uname="minecraft:packed_mud" color="0x0012DC" />
-    <block id="0x2DD" name="Mud Brick Slab" uname="minecraft:mud_brick_slab" color="0x0012DD" />
-    <block id="0x2DE" name="Mud Brick Double Slab" uname="minecraft:mud_brick_double_slab" color="0x0012DE" />
-    <block id="0x2DF" name="Mud Brick Stairs" uname="minecraft:mud_brick_stairs" color="0x0012DF" />
-    <block id="0x2E0" name="Mud Brick Wall" uname="minecraft:mud_brick_wall" color="0x0012E0" />
-    <block id="0x2E1" name="Mangrove Roots" uname="minecraft:mangrove_roots" color="0x0012E1" />
-    <block id="0x2E2" name="Muddy Mangrove Roots" uname="minecraft:muddy_mangrove_roots" color="0x0012E2" />
-    <block id="0x2E3" name="Mangrove Log" uname="minecraft:mangrove_log" color="0x0012E3" />
-    <block id="0x2E4" name="Stripped Mangrove Log" uname="minecraft:stripped_mangrove_log" color="0x0012E4" />
-    <block id="0x2E5" name="Mangrove Planks" uname="minecraft:mangrove_planks" color="0x0012E5" />
-    <block id="0x2E6" name="Mangrove Button" uname="minecraft:mangrove_button" color="0x0012E6" />
-    <block id="0x2E7" name="Mangrove Stairs" uname="minecraft:mangrove_stairs" color="0x0012E7" />
-    <block id="0x2E8" name="Mangrove Slab" uname="minecraft:mangrove_slab" color="0x0012E8" />
-    <block id="0x2E9" name="Mangrove Pressure Plate" uname="minecraft:mangrove_pressure_plate" color="0x0012E9" />
-    <block id="0x2EA" name="Mangrove Fence" uname="minecraft:mangrove_fence" color="0x0012EA" />
-    <block id="0x2EB" name="Mangrove Fence Gate" uname="minecraft:mangrove_fence_gate" color="0x0012EB" />
-    <block id="0x2EC" name="Mangrove Door" uname="minecraft:mangrove_door" color="0x0012EC" />
-    <block id="0x2ED" name="Mangrove Standing Sign" uname="minecraft:mangrove_standing_sign" color="0x0012ED" />
-    <block id="0x2EE" name="Mangrove Wall Sign" uname="minecraft:mangrove_wall_sign" color="0x0012EE" />
-    <block id="0x2EF" name="Mangrove Trapdoor" uname="minecraft:mangrove_trapdoor" color="0x0012EF" />
-    <block id="0x2F0" name="Mangrove Wood" uname="minecraft:mangrove_wood" color="0x0012F0" />
-    <block id="0x2F1" name="Stripped Mangrove Wood" uname="minecraft:stripped_mangrove_wood" color="0x0012F1" />
-    <block id="0x2F2" name="Mangrove Double Slab" uname="minecraft:mangrove_double_slab" color="0x0012F2" />
+    <!-- 1.19 New Blocks. -->
+    <block id="0x2C9" name="Sculk" uname="minecraft:sculk" color="0x0D1A1F" />
+    <block id="0x2CA" name="Sculk Vein" uname="minecraft:sculk_vein" color="0x044454" />
+    <block id="0x2CB" name="Sculk Catalyst" uname="minecraft:sculk_catalyst" color="0x042C34" />
+    <block id="0x2CC" name="Sculk Shrieker" uname="minecraft:sculk_shrieker" color="0xD4D4B4" />
+    <block id="0x2D1" name="Reinforced Deepslate" uname="minecraft:reinforced_deepslate" color="0x3E3C3C" />
+    <block id="0x2D3" name="Frog Spawn" uname="minecraft:frog_spawn" color="0x74645C" />
+    <block id="0x2D4" name="Pearlescent Froglight" uname="minecraft:pearlescent_froglight" color="0xD0B6CA" />
+    <block id="0x2D5" name="Verdant Froglight" uname="minecraft:verdant_froglight" color="0xD4ECD4" />
+    <block id="0x2D6" name="Ochre Froglight" uname="minecraft:ochre_froglight" color="0xFCECB4" />
+    <block id="0x2D7" name="Mangrove Leaves" uname="minecraft:mangrove_leaves" color="0x6C6C6C" />
+    <block id="0x2D8" name="Mud" uname="minecraft:mud" color="0x44443F" />
+    <block id="0x2D9" name="Mangrove Propagule" uname="minecraft:mangrove_propagule" color="0x50BB54" />
+    <block id="0x2DA" name="Mud Bricks" uname="minecraft:mud_bricks" color="0x967656" />
+    <block id="0x2DC" name="Packed Mud" uname="minecraft:packed_mud" color="0x8C644C" />
+    <block id="0x2DD" name="Mud Brick Slab" uname="minecraft:mud_brick_slab" color="0x977656" />
+    <block id="0x2DE" name="Mud Brick Double Slab" uname="minecraft:mud_brick_double_slab" color="0x967756" />
+    <block id="0x2DF" name="Mud Brick Stairs" uname="minecraft:mud_brick_stairs" color="0x967657" />
+    <block id="0x2E0" name="Mud Brick Wall" uname="minecraft:mud_brick_wall" color="0x977756" />
+    <block id="0x2E1" name="Mangrove Roots" uname="minecraft:mangrove_roots" color="0x4C3C24" />
+    <block id="0x2E2" name="Muddy Mangrove Roots" uname="minecraft:muddy_mangrove_roots" color="0x3B3B3D" />
+    <block id="0x2E3" name="Mangrove Log" uname="minecraft:mangrove_log" color="0x692929" />
+    <block id="0x2E4" name="Stripped Mangrove Log" uname="minecraft:stripped_mangrove_log" color="0x743C34" />
+    <block id="0x2E5" name="Mangrove Planks" uname="minecraft:mangrove_planks" color="0x723632" />
+    <block id="0x2E6" name="Mangrove Button" uname="minecraft:mangrove_button" color="0x733632" />
+    <block id="0x2E7" name="Mangrove Stairs" uname="minecraft:mangrove_stairs" color="0x723732" />
+    <block id="0x2E8" name="Mangrove Slab" uname="minecraft:mangrove_slab" color="0x723633" />
+    <block id="0x2E9" name="Mangrove Pressure Plate" uname="minecraft:mangrove_pressure_plate" color="0x733732" />
+    <block id="0x2EA" name="Mangrove Fence" uname="minecraft:mangrove_fence" color="0x733633" />
+    <block id="0x2EB" name="Mangrove Fence Gate" uname="minecraft:mangrove_fence_gate" color="0x723733" />
+    <block id="0x2EC" name="Mangrove Door" uname="minecraft:mangrove_door" color="0x6B2C2B" />
+    <block id="0x2ED" name="Mangrove Standing Sign" uname="minecraft:mangrove_standing_sign" color="0x753C33" />
+    <block id="0x2EE" name="Mangrove Wall Sign" uname="minecraft:mangrove_wall_sign" color="0x763C33" />
+    <block id="0x2EF" name="Mangrove Trapdoor" uname="minecraft:mangrove_trapdoor" color="0x8D4D3D" />
+    <block id="0x2F0" name="Mangrove Wood" uname="minecraft:mangrove_wood" color="0x4E3C24" />
+    <block id="0x2F1" name="Stripped Mangrove Wood" uname="minecraft:stripped_mangrove_wood" color="0x7C3434" />
+    <block id="0x2F2" name="Mangrove Double Slab" uname="minecraft:mangrove_double_slab" color="0x743632" />
   </blocklist>
 
   <!--
