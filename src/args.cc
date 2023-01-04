@@ -27,7 +27,6 @@ Options:
     --movie[=did]            Create movie of layers
     --movie-dim x,y,w,h      Integers describing the bounds of the movie (UL X, UL Y, WIDTH, HEIGHT)
 
-    --xml fn                 XML file containing data definitions
     --cfg fn                 CFG file containing parsing configuration
 
     --detail                 Log extensive details about the world to the log file

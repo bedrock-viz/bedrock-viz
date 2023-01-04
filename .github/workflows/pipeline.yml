@@ -25,37 +25,12 @@ jobs:
     - name: Patch libraries
       run: |
         git apply -p0 patches/leveldb-1.22.patch
-        git apply -p0 patches/pugixml-disable-install.patch
 
     - name: Build
       run: |
         mkdir build && cd build
         cmake -DBUILD_TESTS=ON -DCODE_COVERAGE=ON ..
         make
-
-    - name: Test
-      continue-on-error: true
-      run: |
-        ./build/bedrock-viz-test --gtest_output="xml:unittests.xml" --gtest_filter="Unit*:*.Unit*"
-        ./build/bedrock-viz-test --gtest_output="xml:integrationtests.xml" --gtest_filter="Integration*:*.Integration*"
-        ./build/bedrock-viz-test --gtest_output="xml:ungroupedtests.xml" --gtest_filter="-Unit*:*.Unit*:Integration*:*.Integration*"
-
-    - name: Upload Test Report
-      env:
-        REPORT_CI_TOKEN: ${{secrets.REPORT_CI_TOKEN}}
-      run: | 
-        curl -s https://report.ci/upload.py | python3 - --include='*.xml' --framework=gtest 
-    
-    - name: Generate Coverage Report
-      run: | 
-        lcov --base-directory . --directory build -c -o coverage.info
-        lcov --remove coverage.info '/usr/*' '*/third_party/*' '*/tests/*' --output-file coverage.info
-        lcov --list coverage.info
-
-    - name: Upload Coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with: 
-        file: coverage.info
 
   macOS_10_15:
     runs-on: macos-10.15
@@ -73,7 +48,6 @@ jobs:
     - name: Patch libraries
       run: |
         git apply -p0 patches/leveldb-1.22.patch
-        git apply -p0 patches/pugixml-disable-install.patch
 
     - name: Build
       run: |
@@ -104,7 +78,6 @@ jobs:
     - name: Patch libraries
       run: |
         git apply -p0 patches/leveldb-1.22.patch
-        git apply -p0 patches/pugixml-disable-install.patch
     
     - name: Build
       run: |

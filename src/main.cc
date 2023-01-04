@@ -219,7 +219,7 @@
 #include "world/world.h"
 #include "utils/fs.h"
 #include "global.h"
-#include "xml/loader.h"
+#include "data_loader.h"
 
 
 using namespace boost::program_options;
@@ -452,7 +452,6 @@ namespace mcpe_viz {
 		desc.add_options()
 			("db", value<std::string>(), "Directory which holds world files (level.dat is in this dir)")
 			("outdir", value<std::string>(), "Directory for output files. Defaults to \"./output/\"")
-			("xml", value<std::string>(), "XML file containing data definitions")
 			("cfg", value<std::string>(), "CFG file containing parsing configuration")
 			("detail", "Log extensive details about the world to the log file")
 			("hide-top", "Hide a block from top block (did=dimension id, bid=block id)")
@@ -524,10 +523,6 @@ namespace mcpe_viz {
 			//--outdir dir
 			if (vm.count("outdir")) {
 				control.outputDir = vm["outdir"].as<std::string>();
-			}
-			// --xml fn
-			if (vm.count("xml")) {
-				control.fnXml = vm["xml"].as<std::string>();
 			}
 			// --cfg fn
 			if (vm.count("cfg")) {
@@ -831,12 +826,6 @@ namespace mcpe_viz {
 				control.helpFlags = HelpFlags::Basic | HelpFlags::Extended | HelpFlags::Experimental;
 				return -1;
 			}
-			// unknown option
-		//            default: {
-		//                log::error("Unrecognized option: '{}'", optc);
-		//                return -1;
-		//            }
-		//            }
 		}
 		catch (const error &ex) {
 			log::error(ex.what());
@@ -892,21 +881,9 @@ int main(int argc, char** argv)
     auto console_log_level = control.quietFlag ? Level::Warn : (control.verboseFlag ? Level::Debug : Level::Info);
     auto file_log_level = control.verboseFlag ? Level::Trace : Level::Debug;
 
-    setup_logger_stage_2(control.logFile(), console_log_level, file_log_level);
+    setup_logger_stage_2(console_log_level);
 
-    {
-        int ret = 0;
-        if (control.fnXml.empty()) {
-            ret = load_xml(data_path("bedrock_viz.xml").generic_string());
-        }
-        else {
-            ret = load_xml(control.fnXml);
-        }
-        if (ret != 0) {
-            log::error("Failed to load xml file");
-            return -1;
-        }
-    }
+    load_data();
     
     loadConfigFiles();
     

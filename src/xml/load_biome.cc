@@ -1,4 +1,3 @@
-#include "xml/load_biome.h"
 #include "minecraft/v2/biome.h"
 #include "logger.h"
 namespace mcpe_viz

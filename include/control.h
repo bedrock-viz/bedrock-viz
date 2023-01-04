@@ -14,11 +14,8 @@ namespace mcpe_viz {
         std::filesystem::path outputDir;
         std::string dirLeveldb;
         std::string fnCfg;
-        std::string fnXml;
 
         std::filesystem::path fnHtml() const { return this->outputDir / "index.html"; }
-        // new logger output file
-        std::filesystem::path logFile() const { return this->outputDir / "bedrock_viz.log"; }
         std::filesystem::path fnJs() const { return this->outputDir / "output.js"; }
         std::filesystem::path fnGeoJSON() const { return this->outputDir / "output.geojson";  }
 
@@ -74,7 +71,6 @@ namespace mcpe_viz {
 
         void init() {
             dirLeveldb = "";
-            fnXml = "";
             outputDir = std::filesystem::path("output");
             doDetailParseFlag = false;
 

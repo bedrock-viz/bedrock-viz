@@ -45,7 +45,6 @@ set(NBT_BUILD_TESTS OFF CACHE INTERNAL "Don't build nbt++ tests")
 
 add_subdirectory(third_party/libnbtplusplus)
 add_subdirectory(third_party/spdlog)
-add_subdirectory(third_party/pugixml)
 
 find_package(PNG REQUIRED)
 find_package(ZLIB REQUIRED)
@@ -59,7 +58,6 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/third_party/leveldb/include
   ${PROJECT_SOURCE_DIR}/third_party/libnbtplusplus/include
   ${PROJECT_SOURCE_DIR}/third_party/spdlog/include
-  ${PROJECT_SOURCE_DIR}/third_party/pugixml/include
 )
 
 target_include_directories(${LIB_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
@@ -72,7 +70,7 @@ endif()
 
 target_link_libraries(${LIB_NAME} 
   coverage_config
-  leveldb spdlog nbt++ pugixml::static
+  leveldb spdlog nbt++
   ${PNG_LIBRARIES} 
   ${ZLIB_LIBRARIES} 
   ${Boost_LIBRARIES}
@@ -92,42 +90,3 @@ target_include_directories(legend PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 install(TARGETS ${BIN_NAME} DESTINATION bin)
 install(DIRECTORY data/ DESTINATION share/bedrock-viz/data)
 install(DIRECTORY static/ DESTINATION share/bedrock-viz/static)
-
-# From LevelDB's CMakeLists.txt
-if(BUILD_TESTS)
-  enable_testing()
-  set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-  set(BUILD_GMOCK OFF CACHE INTERNAL "Don't bulid gmock")
-
-  # This project is tested using GoogleTest.
-  add_subdirectory("third_party/googletest")
-
-  set(test_target_name "bedrock-viz-test")
-  add_executable("${test_target_name}" 
-      "${TEST_FILES}"
-    )
-
-  if(MSVC)
-    # TODO remove all insecure c functions
-    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
-  endif(MSVC)
-
-  target_link_libraries("${test_target_name}" 
-    gtest
-    leveldb spdlog nbt++ pugixml::static
-    ${PNG_LIBRARIES} 
-    ${ZLIB_LIBRARIES} 
-    ${CMAKE_THREAD_LIBS_INIT}
-    ${LIB_NAME}
-  )
-  
-  if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    # GCC requires -lstdc++fs to use <filesystem>
-    target_link_libraries("${test_target_name}" stdc++fs)
-  endif()
-
-  target_include_directories(${test_target_name} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
-  add_test(NAME "UnitTests" COMMAND "${test_target_name}")
-  add_test(NAME "IntegrationTests" COMMAND "${test_target_name}")
-  add_test(NAME "MiscTests" COMMAND "${test_target_name}")
-endif(BUILD_TESTS)

@@ -1,4 +1,3 @@
-#include "xml/load_block.h"
 #include "minecraft/v2/block.h"
 #include "logger.h"
 #include "util.h"

@@ -2,12 +2,6 @@
 
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/bedrock-viz/bedrock-viz?include_prereleases&logo=github&logoColor=white&style=plastic)](https://github.com/bedrock-viz/bedrock-viz/releases)
 [![GitHub last commit](https://img.shields.io/github/last-commit/bedrock-viz/bedrock-viz?logo=github&logoColor=white&style=plastic)](https://github.com/bedrock-viz/bedrock-viz/commits/master)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/bedrock-viz/bedrock-viz/Pipeline?logo=github&logoColor=white&style=plastic)](https://github.com/bedrock-viz/bedrock-viz/actions/workflows/pipeline.yml)
-[![GitHub issues](https://img.shields.io/github/issues-raw/bedrock-viz/bedrock-viz?logo=github&logoColor=white&style=plastic)](https://github.com/bedrock-viz/bedrock-viz/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/bedrock-viz/bedrock-viz?logo=github&logoColor=white&style=plastic)](https://github.com/bedrock-viz/bedrock-viz/pulls)
-
-[![ReportCI](https://report.ci/badge/gh/bedrock-viz/bedrock-viz?branch=master)](https://report.ci/reports/gh/bedrock-viz/bedrock-viz)
-[![Codecov](https://img.shields.io/codecov/c/github/bedrock-viz/bedrock-viz?label=codecov&logo=codecov&logoColor=white&style=plastic)](https://codecov.io/gh/bedrock-viz/bedrock-viz)
 
 [![Discord](https://img.shields.io/discord/726889889806942310?logo=discord&logoColor=white&style=plastic)](https://discord.gg/dWhQNvbPw6)
 

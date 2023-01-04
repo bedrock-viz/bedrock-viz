@@ -21,7 +21,6 @@ git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
 # patch
 cd bedrock-viz
 git apply -p0 patches/leveldb-1.22.patch
-git apply -p0 patches/pugixml-disable-install.patch
 # make
 mkdir build && cd build
 cmake ..
@@ -51,7 +50,6 @@ git clone --recursive https://github.com/bedrock-viz/bedrock-viz.git
 # patch
 cd bedrock-viz
 git apply -p0 patches/leveldb-1.22.patch
-git apply -p0 patches/pugixml-disable-install.patch
 # make
 mkdir build && cd build
 cmake ..
@@ -103,7 +101,6 @@ cd bedrock-viz
 
 # patch
 git apply -p0 patches/leveldb-1.22.patch
-git apply -p0 patches/pugixml-disable-install.patch
 # make
 mkdir build
 cd build
