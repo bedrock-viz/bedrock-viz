@@ -40,7 +40,7 @@ Additional Features:
 
 For Windows users:
 
-* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.7/bedrock-viz_v0.1.8_win_x64.zip) and unzip that file
+* [Download the zip file](https://github.com/bedrock-viz/bedrock-viz/releases/download/v0.1.8/bedrock-viz_v0.1.8_win_x64.zip) and unzip that file
 * Inside you will find `bedrock-viz.exe`
 * Run `bedrock-viz.exe` in your favorite terminal program (such as `Command Prompt` or `Power Shell`)
 
