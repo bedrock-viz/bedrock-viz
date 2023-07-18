@@ -2312,6 +2312,10 @@
     <entity id="0x7E" uname="minecraft:zoglin" name="Zoglin" etype="P" />
     <entity id="0x7F" uname="minecraft:piglin_brute" name="Piglin Brute" etype="H" />
     <entity id="0x80" uname="minecraft:goat" name="Goat" etype="P" />  <!-- 1.17 -->
+    <entity id="0x83" uname="minecraft:warden" name="Warden" etype="H" />
+    <entity id="0x84" uname="minecraft:frog" name="Frog" etype="P" />
+    <entity id="0x85" uname="minecraft:tadpole" name="Tadpole" etype="P" />
+    <entity id="0x86" uname="minecraft:allay" name="Allay" etype="P" />
   </entitylist>
 
   <!--
