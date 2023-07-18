@@ -1917,7 +1917,7 @@
       <itemvariant extradata="0x80" name="Spawn Egg, Goat" uname="minecraft:goat_spawn_egg" /> <!-- 1.17 -->
       <itemvariant extradata="0x81" name="Spawn Egg, Glow Squid" uname="minecraft:glow_squid_spawn_egg" /> <!-- 1.17 -->
       <itemvariant extradata="0x82" name="Spawn Egg, Axolotl" uname="minecraft:axolotl_spawn_egg" /> <!-- 1.17 -->
-      <itemvariant extradata="0x83" name="Spawn Egg, Wither" uname="minecraft:wither_spawn_egg" />
+      <itemvariant extradata="0x83" name="Spawn Egg, Warden" uname="minecraft:warden_spawn_egg" />
       <itemvariant extradata="0x84" name="Spawn Egg, Frog" uname="minecraft:frog_spawn_egg" />
       <itemvariant extradata="0x85" name="Spawn Egg, Tadpole" uname="minecraft:tadpole_spawn_egg" />
       <itemvariant extradata="0x86" name="Spawn Egg, Allay" uname="minecraft:Allay_spawn_egg" />
