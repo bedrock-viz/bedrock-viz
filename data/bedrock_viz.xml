@@ -1920,7 +1920,7 @@
       <itemvariant extradata="0x83" name="Spawn Egg, Warden" uname="minecraft:warden_spawn_egg" />
       <itemvariant extradata="0x84" name="Spawn Egg, Frog" uname="minecraft:frog_spawn_egg" />
       <itemvariant extradata="0x85" name="Spawn Egg, Tadpole" uname="minecraft:tadpole_spawn_egg" />
-      <itemvariant extradata="0x86" name="Spawn Egg, Allay" uname="minecraft:Allay_spawn_egg" />
+      <itemvariant extradata="0x86" name="Spawn Egg, Allay" uname="minecraft:allay_spawn_egg" />
     </item>
     <item id="0x180" name="Bottle o' Enchanting" uname="minecraft:experience_bottle" />
     <item id="0x181" name="Fire Charge" uname="minecraft:fire_charge" /> <!-- 0.15 -->
