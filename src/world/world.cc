@@ -731,22 +731,41 @@ namespace mcpe_viz
                     break;
 
                 case 0x36:
-                    // new for v1.2?
+		    // FinalizedState
                     log::trace("{} 0x36 chunk (FinalizedState)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
-                    // todo - what is this?
-                    // appears to be a single 4-byte integer?
+		    // From https://cran.r-project.org/web/packages/rbedrock/rbedrock.pdf
+		    // 0 NeedsInstaticking Chunk needs to be ticked
+                    // 1 NeedsPopulation Chunk needs to be populated with mobs
+                    // 2 Done Chunk generation is fully complete
                     break;
 
                 case 0x39:
                     // Bounding boxes for structure spawns stored in binary format
                     log::trace("{} 0x39 chunk (HardCodedSpawnAreas)", dimName);
+		    // Last byte of the cdata maps to the following
+		    // 1: "Fortress", 3: "Monument", 5: "Villager Outpost", 2: "Witch Hut"
+		    switch (*(cdata + cdata_size - 1)) {
+			    case 1:
+                                log::info("{} Found Fortress", dimName);
+				break;
+			    case 2:
+                                log::info("{} Found Witch Hut", dimName);
+				break;
+			    case 3:
+                                log::info("{} Found Ocean Monument", dimName);
+				break;
+			    case 5:
+                                log::info("{} Found Pillager Outpost", dimName);
+				break;
+			    default:
+				log::info("{} Found unknown structure", dimName);
+		    }
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
-                    // todo - probably used for outposts and things of that nature
                     break;
                 case 0x3a:
                     // Tick counters - not used
