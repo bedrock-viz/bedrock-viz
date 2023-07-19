@@ -554,6 +554,12 @@ namespace mcpe_viz
             else if (strncmp(key, "actorprefix", 11) == 0) {
                 continue;
             }
+	    else if(strncmp(key, "LevelChunkMetaDataDictionary", 28) == 0) {
+                log::debug("Found LevelChunkMetaDataDictionary");
+                if (control.verboseFlag) {
+                    printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                }
+	    }
             else if (key_size == 9 || key_size == 10 || key_size == 13 || key_size == 14) {
 
                 // these are probably chunk records, we parse the key and determine what we've got
@@ -715,8 +721,7 @@ namespace mcpe_viz
 
                 case 0x35:
                     // "BiomeState"
-                    log::trace("{} 0x35 chunk (BiomeState)",
-                        dimName);
+                    log::trace("{} 0x35 chunk (BiomeState)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -731,7 +736,7 @@ namespace mcpe_viz
                     break;
 
                 case 0x36:
-		    // FinalizedState
+		    // "FinalizedState"
                     log::trace("{} 0x36 chunk (FinalizedState)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
@@ -743,6 +748,7 @@ namespace mcpe_viz
                     break;
 
                 case 0x39:
+		    // "HardCodedSpawnAreas"
                     // Bounding boxes for structure spawns stored in binary format
                     log::trace("{} 0x39 chunk (HardCodedSpawnAreas)", dimName);
 		    // Last byte of the cdata maps to the following
@@ -761,7 +767,7 @@ namespace mcpe_viz
                                 log::info("{} Found Pillager Outpost", dimName);
 				break;
 			    default:
-				log::info("{} Found unknown structure", dimName);
+				log::error("{} Found unknown structure", dimName);
 		    }
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
@@ -773,6 +779,7 @@ namespace mcpe_viz
                     break;
                 case 0x3b:
                     // Appears to be a list of checksums for chunk data. Upcoming in 1.16
+		    // Appears to be no longer written as of 1.18 -- https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format#Chunk_key_format
                     log::trace("{} 0x3b chunk (checksum?)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
@@ -780,6 +787,25 @@ namespace mcpe_viz
                     // todo - what is this?
                     break;
 
+		case 0x3f:
+		    // "LevelChunkMetaDataKey"
+		    log::trace("{} 0x3f chunk (LevelChunkMetaDataKey)", dimName);
+		    // cdata contains a key to the NBT data that's in the global LevelChunkMetaDataDictionary
+                    if (control.verboseFlag) {
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                    }
+		case 0x40:
+                    log::trace("{} 0x40 chunk", dimName);
+                    if (control.verboseFlag) {
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                    }
+		    break;
+		case 0x41:
+                    log::trace("{} 0x41 chunk", dimName);
+                    if (control.verboseFlag) {
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                    }
+		    break;
                 case 0x2C:
                 case 0x76:
                     // "Version"
@@ -813,7 +839,7 @@ namespace mcpe_viz
                     // chunk block data - 10241 bytes
                     // todonow -- but have also seen 6145 on v1.1?
                     // we do the parsing in the destination object to save memcpy's
-                    // todonow - would be better to get the version # from the proper chunk record (0x76)
+                    // todonow - would be better to get the version # from the proper chunk record (0x2C)
                 {
                     int32_t chunkY = chunkTypeSub;
                     // check the first byte to see if anything interesting is in it
