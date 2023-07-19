@@ -2348,7 +2348,7 @@
     <biome id="0x16" name="Jungle Hills" color="0x036c14" />
     <biome id="0x17" name="Jungle Edge" color="0x21ab38" />
     <biome id="0x18" name="Deep Ocean" color="0x3644d8" />
-    <biome id="0x19" name="Stone Shoew" color="0x808080" />
+    <biome id="0x19" name="Stone Shore" color="0x808080" />
     <biome id="0x1a" name="Snowy Beach" color="0xe0e0ff" />
     <biome id="0x1b" name="Birch Forest" color="0x8af98f" />
     <biome id="0x1c" name="Birch Forest Hills" color="0x90e294" />
@@ -2394,21 +2394,21 @@
     <biome id="0xa5" name="Eroded Badlands" color="0xd18383" />
     <biome id="0xa6" name="Modified Wooded Badlands Plateau" color="0xd19292" />
     <biome id="0xa7" name="Modified Badlands Plateau" color="0xb87e7e" />
-    <biome id="0xa8" name="Bamboo Jungle" color="0x58d0a4" />
-    <biome id="0xa9" name="Bamboo Jungle Hills" color="0x20a776" />
-
-<!-- these are the ids according to the wiki -->
-    <biome id="0xaa" name="Soul Sand Valley" color="0x49372C" />
-    <biome id="0xab" name="Crimson Forest" color="0x521810" />
-    <biome id="0xac" name="Warped Forest" color="0x113835" />
-    <biome id="0xad" name="Basalt Deltas" color="0x1B2632" />
-
-<!-- ids on wiki seem incorrect -->
-<!-- these are the ids that we actually find when parsing levels -->
-    <biome id="0xb2" name="Soul Sand Valley x" color="0x49372C" />
-    <biome id="0xb3" name="Crimson Forest x" color="0x521810" />
-    <biome id="0xb4" name="Warped Forest x" color="0x113835" />
-    <biome id="0xb5" name="Basalt Deltas x" color="0x1B2632" />
+    <biome id="0xb2" name="Soul Sand Valley" color="0x49372C" />
+    <biome id="0xb3" name="Crimson Forest" color="0x521810" />
+    <biome id="0xb4" name="Warped Forest" color="0x113835" />
+    <biome id="0xb5" name="Basalt Deltas" color="0x1B2632" />
+    <biome id="0xb6" name="Jagged Peaks" color="0xe4eced" />
+    <biome id="0xb7" name="Frozen Peaks" color="0xedfafb" />
+    <biome id="0xb8" name="Snowy Slopes" color="0xdef0f1" />
+    <biome id="0xb9" name="Grove" color="0xe1ebe5" />
+    <biome id="0xba" name="Meadow" color="0x91a375" />
+    <biome id="0xbb" name="Lush Caves" color="0x805c2b" />
+    <biome id="0xbc" name="Dripstone Caves" color="0x716358" />
+    <biome id="0xbd" name="Stony Peaks" color="0xd1d1d1" />
+    <biome id="0xbe" name="Deep Dark" color="0x080808" />
+    <biome id="0xbf" name="Mangrove Swamp" color="0x5fc192" />
+    <biome id="0xc0" name="Cherry Grove" color="0xeebbda" />
   </biomelist>
 
   <!--
