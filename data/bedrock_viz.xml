@@ -2333,7 +2333,7 @@
     <biome id="0x07" name="River" color="0x616699" />
     <biome id="0x08" name="Hell" color="0xa00000" />
     <biome id="0x09" name="The End" color="0xd1d28a" />
-    <biome id="0x0a" name="Frozen Ocean" color="0x0cf5ed" />
+    <biome id="0x0a" name="Legacy Frozen Ocean" color="0x3644da" />
     <biome id="0x0b" name="Frozen River" color="0xabedeb" />
     <biome id="0x0c" name="Snowy Tundra" color="0xf0f0f0" />
     <biome id="0x0d" name="Snowy Mountains" color="0xe0e0e0" />
@@ -2363,16 +2363,16 @@
     <biome id="0x25" name="Badlands" color="0xb75252" />
     <biome id="0x26" name="Wooded Badlands Plateau" color="0xb76666" />
     <biome id="0x27" name="Badlands Plateau" color="0xb87474" />
-    <biome id="0x28" name="Small End Islands" color="0xd2cf7d" />
-    <biome id="0x29" name="End Midlands" color="0xaaa750" />
-    <biome id="0x2a" name="Ocean" color="0x3644d9" />
-    <biome id="0x2b" name="Legacy Frozen Ocean" color="0x3644da" />
-    <biome id="0x2c" name="Warm Ocean" color="0x838ade" />
-    <biome id="0x2d" name="Lukewarm Ocean" color="0x6770cb" />
-    <biome id="0x2e" name="Cold Ocean" color="0xa1a6d1" />
-    <biome id="0x2f" name="Deep Warm Ocean" color="0x1c268b" />
-    <biome id="0x30" name="Deep Lukewarm Ocean" color="0x2833a8" />
-    <biome id="0x31" name="Deep Cold Ocean" color="0x7b7fab" />
+    <biome id="0x28" name="Warm Ocean" color="0x838ade" />
+    <biome id="0x29" name="Deep Warm Ocean" color="0x1c268b" />
+    <biome id="0x2a" name="Lukewarm Ocean" color="0x6770cb" />
+    <biome id="0x2b" name="Deep Lukewarm Ocean" color="0x2833a8" />
+    <biome id="0x2c" name="Cold Ocean" color="0xa1a6d1" />
+    <biome id="0x2d" name="Deep Cold Ocean" color="0x7b7fab" />
+    <biome id="0x2e" name="Frozen Ocean" color="0x0cf5ed" />
+    <biome id="0x2f" name="Deep Frozen Ocean" color="0xa8aabe" />
+    <biome id="0x30" name="Bamboo Jungle" color="0x58d0a4" />
+    <biome id="0x31" name="Bamboo Jungle Hills" color="0x20a776" />
     <biome id="0x81" name="Sunflower Plains" color="0xf8f12c" />
     <biome id="0x82" name="Desert Lakes" color="0xb8b270" />
     <biome id="0x83" name="Gravelly Mountains" color="0xc0c0c0" />
