@@ -113,6 +113,7 @@
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="134">Allay</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="19">Bat</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="122">Bee</a></li>
+	    <li><a href="#" class="entityToggle" data-type="P" data-id="138">Camel</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="75">Cat</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="10">Chicken</a></li>
 	    <li><a href="#" class="entityToggle" data-type="P" data-id="11">Cow</a></li>
