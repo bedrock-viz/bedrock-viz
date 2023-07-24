@@ -2210,7 +2210,39 @@ namespace mcpe_viz
                         parseFlag = true;
                     }
                 }
-
+                else if (tileEntity->id == "Beehive") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "Bell") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "BlastFurnace") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "BrushableBlock") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "Campfire") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "Lectern") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "SculkCatalyst") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "SculkSensor") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "SculkShrieker") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "Smoker") {
+                    // todo - anything interesting?
+		}
+		else if (tileEntity->id == "SporeBlossom") {
+                    // todo - anything interesting?
+		}
                 else {
                     log::debug("Unknown tileEntity id=({})", tileEntity->id);
                 }
