@@ -2105,6 +2105,14 @@ namespace mcpe_viz
                 }
                 else if (tileEntity->id == "Furnace") {
                     // todo - anything interesting?
+		    // BurnDuration
+		    // BurnTime
+		    // CookTime
+		    // Items
+		    //     Slot 0 - Input
+		    //     Slot 1 - Fuel
+		    //     Slot 2 - Output
+		    // StoredXPInt
                 }
                 else if (tileEntity->id == "MobSpawner") {
                     tileEntity->addMobSpawner(tc);
@@ -2215,15 +2223,42 @@ namespace mcpe_viz
 		}
 		else if (tileEntity->id == "Bell") {
                     // todo - anything interesting?
+		    // Direction
+		    // Ringing
+		    // Ticks
 		}
 		else if (tileEntity->id == "BlastFurnace") {
                     // todo - anything interesting?
+		    // BurnDuration
+		    // BurnTime
+		    // CookTime
+		    // Items
+		    //     Slot 0 - Input
+		    //     Slot 1 - Fuel
+		    //     Slot 2 - Output
+		    // StoredXPInt
 		}
 		else if (tileEntity->id == "BrushableBlock") {
                     // todo - anything interesting?
+		    // LootTable
+		    //     loot_tables/entities/warm_ocean_ruins_brushable_block.json
+		    //     loot_tables/entities/desert_pyramid_brushable_block.json
+		    //     loot_tables/entities/trail_ruins_brushable_block_common.json
+		    //     loot_tables/entities/trail_ruins_brushable_block_rare.json
+		    //     loot_tables/entities/warm_ocean_ruins_brushable_block.json
+		    // LootTableSeed
+		    // brush_count
+		    // brush_direction
+		    // type
+		    //     minecraft:suspicious_sand
+		    //     minecraft:suspicious_gravel
 		}
 		else if (tileEntity->id == "Campfire") {
                     // todo - anything interesting?
+		    // ItemTime1
+		    // ItemTime2
+		    // ItemTime3
+		    // ItemTime4
 		}
 		else if (tileEntity->id == "Lectern") {
                     // todo - anything interesting?
@@ -2233,12 +2268,21 @@ namespace mcpe_viz
 		}
 		else if (tileEntity->id == "SculkSensor") {
                     // todo - anything interesting?
+		    // VibrationListener : {'event' is  6 or 28}
 		}
 		else if (tileEntity->id == "SculkShrieker") {
                     // todo - anything interesting?
 		}
 		else if (tileEntity->id == "Smoker") {
                     // todo - anything interesting?
+		    // BurnDuration
+		    // BurnTime
+		    // CookTime
+		    // Items
+		    //     Slot 0 - Input
+		    //     Slot 1 - Fuel
+		    //     Slot 2 - Output
+		    // StoredXPInt
 		}
 		else if (tileEntity->id == "SporeBlossom") {
                     // todo - anything interesting?
