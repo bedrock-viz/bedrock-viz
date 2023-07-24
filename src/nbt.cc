@@ -2241,8 +2241,9 @@ namespace mcpe_viz
 		else if (tileEntity->id == "BrushableBlock") {
                     // todo - anything interesting?
 		    // LootTable
-		    //     loot_tables/entities/warm_ocean_ruins_brushable_block.json
+		    //     loot_tables/entities/cold_ocean_ruins_brushable_block.json
 		    //     loot_tables/entities/desert_pyramid_brushable_block.json
+		    //     loot_tables/entities/desert_well_brushable_block.json
 		    //     loot_tables/entities/trail_ruins_brushable_block_common.json
 		    //     loot_tables/entities/trail_ruins_brushable_block_rare.json
 		    //     loot_tables/entities/warm_ocean_ruins_brushable_block.json
