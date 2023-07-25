@@ -2220,6 +2220,84 @@ namespace mcpe_viz
                 }
                 else if (tileEntity->id == "Beehive") {
                     // todo - anything interesting?
+		    // Occupants
+		    //     ActorIdentifier - minecraft:bee<>
+		    //     SaveData
+		    //         Air
+		    //         Armor
+		    //         AttackTime
+		    //         Attributes
+		    //         BreedCooldown
+		    //         Chested
+		    //         Color
+		    //         Color2
+		    //         Dead
+		    //         DeathTime
+		    //         FallDistance
+		    //         HasExecuted
+		    //         HomeDimensionId
+		    //         HomePos
+		    //         HurtTime
+		    //         InLove
+		    //         Invulnerable
+		    //         IsAngry
+		    //         IsAutonomous
+		    //         IsBaby
+		    //         IsEating
+		    //         IsGliding
+		    //         IsGlobal
+		    //         IsIllagerCaptain
+		    //         IsOrphaned
+		    //         IsOutOfControl
+		    //         IsPregnant
+		    //         IsRoaring
+		    //         IsScared
+		    //         IsStunned
+		    //         IsSwimming
+		    //         IsTamed
+		    //         IsTrusting
+		    //         LeasherID
+		    //         LootDropped
+		    //         LoveCause
+		    //         Mainhand
+		    //         MarkVariant
+		    //         Motion
+		    //         NaturalSpawn
+		    //         Offhand
+		    //         OnGround
+		    //         OwnerNew
+		    //         Persistent
+		    //         PortalCooldown
+		    //         Pos
+		    //         Rotation
+		    //         Saddled
+		    //         Sheared
+		    //         ShowBottom
+		    //         Sitting
+		    //         SkinID
+		    //         Strength
+		    //         StrengthMax
+		    //         Surface
+		    //         Tags
+		    //         TargetID
+		    //         TimeStamp
+		    //         TradeExperience
+		    //         TradeTier
+		    //         UniqueID
+		    //         Variant
+		    //         boundX
+		    //         boundY
+		    //         boundZ
+		    //         canPickupItems
+		    //         definitions
+		    //         expDropEnabled
+		    //         hasBoundOrigin
+		    //         hasSetCanPickupItems
+		    //         identifier
+		    //         internalComponents
+		    //         properties
+		    //     TicksLeftToStay
+		    // ShouldSpawnBees
 		}
 		else if (tileEntity->id == "Bell") {
                     // todo - anything interesting?
