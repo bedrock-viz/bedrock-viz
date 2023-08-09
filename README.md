@@ -121,18 +121,24 @@ If you are running Firefox or serving the files from a web server, you can make 
 ## Using an NGINX Webserver in Docker to display your world
 If you want to display your map locally through a webserver in Docker, these commands will set up an NGINX webserver with your data copied into a volume mounted to the /usr/share/nginx/html directory. The webserver is exposed on port 8080 and the web app can be viewed at http://localhost:8080.
 
-**Be aware of what folder will be copied to avoid copying sensitive files/folders. It is recommended to always ouput to a new directory.**
+**Be aware anything in your maps folder will now be exposed via the web-server.**
+
 ```
-docker volume create bedrock-viz-http
-docker create --name bedrock-viz -p 8080:80 -v bedrock-viz-http:/usr/share/nginx/html -d nginx
-# This cmd will copy the entire /path/to/output/folder recursively. Be careful!
-docker cp /path/to/output/folder:/usr/share/nginx/html bedrock-viz
-docker run bedrock-viz
+docker run --name bedrock-viz-http -v /path/to/output/folder:/usr/share/nginx/html:ro -p 8080:80 -d nginx
 ```
+
+You can check the status of your container using `docker ps`:
+
+```
+docker ps --filter "name=bedrock-viz-http"
+CONTAINER ID   IMAGE     COMMAND                  CREATED         STATUS         PORTS                                   NAMES
+5a1797ab3b7f   nginx     "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   bedrock-viz-http
+```
+
 To clean up your webserver and data when you are done:
 ```
-docker rm bedrock-viz
-docker volume rm bedrock-viz-http
+docker kill bedrock-viz-http
+docker rm bedrock-viz-http
 ```
 
 ## Usage
