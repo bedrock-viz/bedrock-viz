@@ -1917,6 +1917,11 @@
       <itemvariant extradata="0x80" name="Spawn Egg, Goat" uname="minecraft:goat_spawn_egg" /> <!-- 1.17 -->
       <itemvariant extradata="0x81" name="Spawn Egg, Glow Squid" uname="minecraft:glow_squid_spawn_egg" /> <!-- 1.17 -->
       <itemvariant extradata="0x82" name="Spawn Egg, Axolotl" uname="minecraft:axolotl_spawn_egg" /> <!-- 1.17 -->
+      <itemvariant extradata="0x83" name="Spawn Egg, Warden" uname="minecraft:warden_spawn_egg" />
+      <itemvariant extradata="0x84" name="Spawn Egg, Frog" uname="minecraft:frog_spawn_egg" />
+      <itemvariant extradata="0x85" name="Spawn Egg, Tadpole" uname="minecraft:tadpole_spawn_egg" />
+      <itemvariant extradata="0x86" name="Spawn Egg, Allay" uname="minecraft:allay_spawn_egg" />
+      <itemvariant extradata="0x8A" name="Spawn Egg, Camel" uname="minecraft:camel_spawn_egg" />
     </item>
     <item id="0x180" name="Bottle o' Enchanting" uname="minecraft:experience_bottle" />
     <item id="0x181" name="Fire Charge" uname="minecraft:fire_charge" /> <!-- 0.15 -->
@@ -2312,6 +2317,11 @@
     <entity id="0x7E" uname="minecraft:zoglin" name="Zoglin" etype="P" />
     <entity id="0x7F" uname="minecraft:piglin_brute" name="Piglin Brute" etype="H" />
     <entity id="0x80" uname="minecraft:goat" name="Goat" etype="P" />  <!-- 1.17 -->
+    <entity id="0x83" uname="minecraft:warden" name="Warden" etype="H" />
+    <entity id="0x84" uname="minecraft:frog" name="Frog" etype="P" />
+    <entity id="0x85" uname="minecraft:tadpole" name="Tadpole" etype="P" />
+    <entity id="0x86" uname="minecraft:allay" name="Allay" etype="P" />
+    <entity id="0x8A" uname="minecraft:cammel" name="Camel" etype="P" />
   </entitylist>
 
   <!--
