@@ -1,0 +1,19 @@
+--- third_party/pugixml/CMakeLists.txt
++++ third_party/pugixml/CMakeLists.txt
+@@ -210,6 +210,8 @@ set(namelink-component)
+ if (NOT CMAKE_VERSION VERSION_LESS 3.12)
+   set(namelink-component NAMELINK_COMPONENT ${PUGIXML_DEVELOPMENT_COMPONENT})
+ endif()
++
++if(FALSE)
+ install(TARGETS ${install-targets}
+   EXPORT pugixml-targets
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${PUGIXML_RUNTIME_COMPONENT}
+@@ -238,6 +240,7 @@ install(
+     "${PROJECT_SOURCE_DIR}/src/pugixml.hpp"
+   DESTINATION
+     ${CMAKE_INSTALL_INCLUDEDIR}${versioned-dir} COMPONENT ${PUGIXML_DEVELOPMENT_COMPONENT})
++endif()
+ 
+ if (PUGIXML_BUILD_TESTS)
+   set(fuzz-pattern "tests/fuzz_*.cpp")
