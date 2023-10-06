@@ -1781,7 +1781,7 @@ namespace mcpe_viz
             }
 
             // todo - diff entities have other fields:
-            // see: http://minecraft.gamepedia.com/Chunk_format#Mobs
+            // see: https://minecraft.wiki/w/Entity_format
 
             // chicken: IsChickenJockey
             entity->checkOtherProp(tc, "IsChickenJockey");
@@ -1834,7 +1834,7 @@ namespace mcpe_viz
 
                 if (vProfession >= 0) {
                     std::string vValue = "";
-                    // values from: http://minecraft.gamepedia.com/Villager#Data_values
+                    // values from: https://minecraft.wiki/w/Villager#Data_values
                     switch (vProfession) {
                     case 0:
                         vValue += "Farmer";
@@ -3208,7 +3208,7 @@ namespace mcpe_viz
 
         /*
           schematic file format
-          from: http://minecraft.gamepedia.com/Schematic_file_formathttp://minecraft.gamepedia.com/Schematic_file_format
+          from: https://minecraft.wiki/w/Schematic_file_format
 
           COMPOUND Schematic: Schematic data.
           SHORT Width: Size along the X axis.

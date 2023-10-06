@@ -2824,7 +2824,7 @@ function doTour(aboutFlag) {
                     '<li><a href="http://jquery.com/" target="_blank">jQuery</a></li>' +
                     '<li>Fork of <a href="https://github.com/Plethora777/mcpe_viz" target="_blank">MCPE Viz by Plethora777</a></li>' +
                     '</ul>' +
-                    'Block and Item images are borrowed from the <a href="http://minecraft.gamepedia.com/" target="_blank">Minecraft Wiki</a>.  The textures themselves are copyright Mojang.'
+                    'Block and Item images are borrowed from the <a href="https://minecraft.wiki" target="_blank">Minecraft Wiki</a>.  The textures themselves are copyright Mojang.'
             }
         ]});
     tour.init();

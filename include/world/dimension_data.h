@@ -417,7 +417,7 @@ namespace mcpe_viz {
                     }
                     else if (imageMode == kImageModeSlimeChunksMCPC) {
                         /*
-              from: http://minecraft.gamepedia.com/Slime_chunk#Low_layers
+              from: https://minecraft.wiki/w/Slime_chunk
               Random rnd = new Random(seed +
               (long) (xPosition * xPosition * 0x4c1906) +
               (long) (xPosition * 0x5ac0db) +
