@@ -443,15 +443,22 @@ namespace mcpe_viz
                 }
             }
             else if (strncmp(key, "VILLAGE_", 8) == 0) {
+                // Extract the unique 36 VID from the key in the form off:
                 // VILLAGE_07315855-d0e6-4fac-8b20-0c07cfad3d29_POI
-                char vid[37];
-                char rectype[9];
-                memcpy(vid, key + 8, 36);
-                vid[36] = '\0';
-                memcpy(rectype, key+45, key_size-45);
-                rectype[key_size-45] = '\0';
-                if (strncmp(rectype, "INFO", 5) == 0) {
-                    villages.push_back(vid);
+                // VILLAGE_Overworld_4faa34eb-af26-4a63-9251-851069a53573_DWELLERS\001\330b\a\006
+                std::string keyStr(key, key_size);
+                size_t last = keyStr.rfind("_");
+                size_t secondLast = std::string::npos;
+                if (last != std::string::npos) {
+                    secondLast = keyStr.rfind("_", last - 1);
+                }
+                if (last - secondLast == 37) {
+                    char vid[37];
+                    strncpy(vid, keyStr.data() + secondLast + 1, 36);
+                    vid[36] = '\0';
+                    if (strncmp(key + last + 1, "INFO", 4) == 0) {
+                        villages.push_back(vid);
+                    }
                 }
             }
             else if (strncmp(key, "game_flatworldlayers", key_size) == 0) {
@@ -974,18 +981,26 @@ namespace mcpe_viz
         for (auto vid : villages) {
             std::string data;
             MyNbtTagList info_tags, player_tags, dweller_tags, poi_tags;
-            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_INFO"), &data);
-            ret = parseNbt("village_info: ", data.data(), data.size(), info_tags);
-            if (ret != 0) continue;
-            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_PLAYERS"), &data);
-            ret = parseNbt("village_players: ", data.data(), data.size(), player_tags);
-            if (ret != 0) continue;
-            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_DWELLERS"), &data);
-            ret = parseNbt("village_dwellers: ", data.data(), data.size(), dweller_tags);
-            if (ret != 0) continue;
-            db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_POI"), &data);
-            ret = parseNbt("village_poi: ", data.data(), data.size(), poi_tags);
-            if (ret != 0) continue;
+            if (db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_INFO"), &data).ok() ||
+                db->Get(levelDbReadOptions, ("VILLAGE_Overworld_" + vid + "_INFO"), &data).ok() ) {
+                ret = parseNbt("village_info: ", data.data(), data.size(), info_tags);
+                if (ret != 0) continue;
+            }
+            if (db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_PLAYERS"), &data).ok() ||
+                db->Get(levelDbReadOptions, ("VILLAGE_Overworld_" + vid + "_PLAYERS"), &data).ok()) {
+                ret = parseNbt("village_players: ", data.data(), data.size(), player_tags);
+                if (ret != 0) continue;
+            }
+            if (db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_DWELLERS"), &data).ok() ||
+                db->Get(levelDbReadOptions, ("VILLAGE_Overworld_" + vid + "_DWELLERS"), &data).ok()) {
+                ret = parseNbt("village_dwellers: ", data.data(), data.size(), dweller_tags);
+                if (ret != 0) continue;
+            }
+            if (db->Get(levelDbReadOptions, ("VILLAGE_" + vid + "_POI"), &data).ok() ||
+                db->Get(levelDbReadOptions, ("VILLAGE_Overworld_" + vid + "_POI"), &data).ok()) {
+                ret = parseNbt("village_poi: ", data.data(), data.size(), poi_tags);
+                if (ret != 0) continue;
+            }
 
             parseNbt_village(info_tags, player_tags, dweller_tags, poi_tags, playerMap);
         }
