@@ -8,7 +8,7 @@ on:
 
 jobs:
   Ubuntu:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
     - uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
     - name: Install requirements
       run: |
         sudo -E apt-get -qq update
-        sudo -E apt-get -qq install python3 libpng++-dev zlib1g-dev g++-8 libboost-program-options-dev wget lcov libjson-perl libperlio-gzip-perl
+        sudo -E apt-get -qq install python3 libpng++-dev zlib1g-dev g++ libstdc++-11-dev libboost-program-options-dev wget lcov libjson-perl libperlio-gzip-perl
         g++ --version
         gcov --version
     
