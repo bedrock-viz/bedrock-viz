@@ -35,7 +35,7 @@
 
 
   * web - tool to extract schematics for a 3d cube of space -- produce a layer-by-layer depiction of the blocks in the cube
-  -- see: http://minecraft.gamepedia.com/Schematic_file_format  (NBT file format for schematics)
+  -- see: https://minecraft.wiki/w/Schematic_file_format  (NBT file format for schematics)
   -- https://irath96.github.io/webNBT/ = web nbt viewer/editor
 
   * /u/JustinUser -- reset world file outside given area (e.g. X blocks from spawn; given rectangles; etc)
@@ -156,7 +156,7 @@
   * join chests for geojson? (pairchest) - would require that we wait to toGeoJSON until we parse all chunks
   -- put ALL chests in a map<x,y,z>; go through list of chests and put PairChest in matching sets and mark all as unprocessed; go thru list and do all, if PairChest mark both as done
 
-  * see if there is interesting info re colors for overview map: http://minecraft.gamepedia.com/Map_item_format
+  * see if there is interesting info re colors for overview map: https://minecraft.wiki/w/Map_item_format
 
   * option to name output files w/ world name
 

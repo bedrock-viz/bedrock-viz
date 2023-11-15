@@ -1,9 +1,9 @@
 <xml>
   <!--
-      mostly from: http://minecraft.gamepedia.com/Data_values_%28Pocket_Edition%29
-      and:         https://minecraft.gamepedia.com/Pocket_Edition_data_values (more up to date than previous link)
-      and:         http://minecraft.gamepedia.com/Data_values#Block_IDs
-      and:         http://minecraft.gamepedia.com/Opacity
+      mostly from: https://minecraft.wiki/w/Data_values_%28Pocket_Edition%29 (deleted page)
+      and:         https://minecraft.wiki/w/Bedrock_Edition_data_values (active page)
+      and:         https://minecraft.wiki/w/Bedrock_Edition_data_values#Block_IDs
+      and:         https://minecraft.wiki/w/Opacity
       and:         https://gist.github.com/jocopa3/f8c9f9158ede0e9d057781188ba440f5
 
       blocklist: mcpe blocks
@@ -1582,7 +1582,7 @@
   </blocklist>
 
   <!--
-      mostly from: http://minecraft.gamepedia.com/Data_values_%28Pocket_Edition%29
+      mostly from: https://minecraft.wiki/w/Bedrock_Edition_data_values
 
       itemlist: mcpe items
       id - mcpe item id (hex)
@@ -2170,7 +2170,7 @@
   </itemlist>
 
   <!--
-      mostly from: http://minecraft.gamepedia.com/Data_values_%28Pocket_Edition%29
+      mostly from: https://minecraft.wiki/w/Bedrock_Edition_data_values
 
       entitylist: mcpe entities
       id - mcpe entity id (hex)
@@ -2325,7 +2325,7 @@
   </entitylist>
 
   <!--
-      mostly from: http://minecraft.gamepedia.com/Data_values#Biome_IDs
+      mostly from: https://minecraft.wiki/w/Bedrock_Edition_data_values#Block_IDs
 
       biomelist: mcpe biomes
       id - mcpe biome id (hex)
@@ -2422,7 +2422,7 @@
   </biomelist>
 
   <!--
-      note that values do NOT match: http://minecraft.gamepedia.com/Data_values#Enchantment_IDs
+      note that values do NOT match: https://minecraft.wiki/w/Bedrock_Edition_data_values#Enchantment_IDs
       these values were reverse engineered by me from MCPE directly
       todo - post these to mcpe wiki
   -->

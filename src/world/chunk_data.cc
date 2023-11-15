@@ -78,7 +78,7 @@ namespace mcpe_viz {
                         }
                         if (continueCheckSpawnFlag) {
 
-                            // note: rules adapted from: http://minecraft.gamepedia.com/Spawn
+                            // note: rules adapted from: https://minecraft.wiki/w/Spawn
 
                             // todobig - is this missing some spawnable blocks?
 
@@ -650,7 +650,7 @@ namespace mcpe_viz {
                         }
                         if (continueCheckSpawnFlag) {
 
-                            // note: rules adapted from: http://minecraft.gamepedia.com/Spawn
+                            // note: rules adapted from: https://minecraft.wiki/w/Spawn
 
                             // todobig - is this missing some spawnable blocks?
 
