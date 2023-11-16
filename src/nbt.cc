@@ -187,7 +187,7 @@ namespace mcpe_viz
         }
         break;
         default:
-            log::error("Unknown tag type = {}", tagType);
+            log::error("Unknown tag type = {}", static_cast<int8_t>(tagType));
             break;
         }
 

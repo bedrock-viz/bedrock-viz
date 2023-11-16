@@ -7,7 +7,8 @@ COPY . /bedrock-viz
 
 RUN cd /bedrock-viz && \
     patch -p0 < patches/leveldb-1.22.patch && \
-    patch -p0 < patches/pugixml-disable-install.patch && \
+    patch -p0 < patches/libnbtplusplus-2.5.patch \
+    patch -p0 < patches/pugixml-1.14.patch && \
     mkdir -p build && cd build && \
     cmake .. && \
     make && \
