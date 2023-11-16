@@ -554,6 +554,12 @@ namespace mcpe_viz
             else if (strncmp(key, "actorprefix", 11) == 0) {
                 continue;
             }
+	    else if(strncmp(key, "LevelChunkMetaDataDictionary", 28) == 0) {
+                log::debug("Found LevelChunkMetaDataDictionary");
+                if (control.verboseFlag) {
+                    printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                }
+	    }
             else if (key_size == 9 || key_size == 10 || key_size == 13 || key_size == 14) {
 
                 // these are probably chunk records, we parse the key and determine what we've got
@@ -659,6 +665,7 @@ namespace mcpe_viz
                 switch (chunkType) {
                 case 0x30:
                     // "LegacyTerrain"
+                    log::trace("{} 0x30 chunk (LegacyTerrain):", dimName);
                     // chunk block data
                     // we do the parsing in the destination object to save memcpy's
                     // todonow - would be better to get the version # from the proper chunk record (0x76)
@@ -668,7 +675,7 @@ namespace mcpe_viz
                 case 0x31:
                     // "BlockEntity"
                     // tile entity record (e.g. a chest)
-                    log::trace("{} 0x31 chunk (tile entity data):", dimName);
+                    log::trace("{} 0x31 chunk (BlockEntity):", dimName);
                     ret = parseNbt("0x31-te: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_tileEntity(chunkDimId, dimName + "-", tagList);
@@ -678,7 +685,7 @@ namespace mcpe_viz
                 case 0x32:
                     // "Entity"
                     // entity record (e.g. a mob)
-                    log::trace("{} 0x32 chunk (entity data):", dimName);
+                    log::trace("{} 0x32 chunk (Entity):", dimName);
                     ret = parseNbt("0x32-e: ", cdata, int32_t(cdata_size), tagList);
                     if (ret == 0) {
                         parseNbt_entity(chunkDimId, dimName + "-", tagList, false, false, "", "");
@@ -689,16 +696,15 @@ namespace mcpe_viz
                     // "PendingTicks"
                     // todo - this appears to be info on blocks that can move: water + lava + fire + sand + gravel
                     // todo - new nether has slowed things down quite a bit
-                    log::trace("{} 0x33 chunk (tick-list):", dimName);
+                    log::trace("{} 0x33 chunk (PendingTicks):", dimName);
                     //parseNbt("0x33-tick: ", cdata, int32_t(cdata_size), tagList);
                     // todo - parse tagList?
                     // todobig - could show location of active fires
                     break;
 
                 case 0x34:
-                    // "BlockExtraData"
-                    log::trace("{} 0x34 chunk (TODO - MYSTERY RECORD - BlockExtraData)",
-                        dimName.c_str());
+                    // "LegacyBlockExtraData"
+                    log::trace("{} 0x34 chunk (LegacyBlockExtraData)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -715,8 +721,7 @@ namespace mcpe_viz
 
                 case 0x35:
                     // "BiomeState"
-                    log::trace("{} 0x35 chunk (BiomeState)",
-                        dimName);
+                    log::trace("{} 0x35 chunk (BiomeState)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
@@ -729,24 +734,48 @@ namespace mcpe_viz
                       cat (logfile) | grep "WARNING: Unknown key size" | grep " 35\]" | cut -b75- | sort | nl
                     */
                     break;
-
                 case 0x36:
-                    // new for v1.2?
+		    // "FinalizedState"
                     log::trace("{} 0x36 chunk (FinalizedState)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
-                    // todo - what is this?
-                    // appears to be a single 4-byte integer?
+		    // From https://cran.r-project.org/web/packages/rbedrock/rbedrock.pdf
+		    // 0 NeedsInstaticking Chunk needs to be ticked
+                    // 1 NeedsPopulation Chunk needs to be populated with mobs
+                    // 2 Done Chunk generation is fully complete
                     break;
-
+                case 0x37:
+                    log::trace("{} 0x37 chunk (ConversionData)", dimName);
+		    break;
+                case 0x38:
+                    log::trace("{} 0x38 chunk (BorderBlocks)", dimName);
+		    break;
                 case 0x39:
+		    // "HardCodedSpawnAreas"
                     // Bounding boxes for structure spawns stored in binary format
                     log::trace("{} 0x39 chunk (HardCodedSpawnAreas)", dimName);
+		    // Last byte of the cdata maps to the following
+		    // 1: "Fortress", 3: "Monument", 5: "Villager Outpost", 2: "Witch Hut"
+		    switch (*(cdata + cdata_size - 1)) {
+			    case 1:
+                                log::info("{} Found Fortress", dimName);
+				break;
+			    case 2:
+                                log::info("{} Found Witch Hut", dimName);
+				break;
+			    case 3:
+                                log::info("{} Found Ocean Monument", dimName);
+				break;
+			    case 5:
+                                log::info("{} Found Pillager Outpost", dimName);
+				break;
+			    default:
+				log::error("{} Found unknown structure", dimName);
+		    }
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
-                    // todo - probably used for outposts and things of that nature
                     break;
                 case 0x3a:
                     // Tick counters - not used
@@ -754,13 +783,41 @@ namespace mcpe_viz
                     break;
                 case 0x3b:
                     // Appears to be a list of checksums for chunk data. Upcoming in 1.16
-                    log::trace("{} 0x3b chunk (checksum?)", dimName);
+		    // Appears to be no longer written as of 1.18 -- https://minecraft.fandom.com/wiki/Bedrock_Edition_level_format#Chunk_key_format
+                    log::trace("{} 0x3b chunk (CheckSums)", dimName);
                     if (control.verboseFlag) {
                         printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
                     }
                     // todo - what is this?
                     break;
-
+                case 0x3c:
+                    log::trace("{} 0x3c chunk (GenerationSeed)", dimName);
+		    break;
+                case 0x3d:
+                    log::trace("{} 0x3d chunk (GeneratedPreCavesAndCliffsBlending)", dimName);
+		    break;
+                case 0x3e:
+                    log::trace("{} 0x3c chunk (BlendingBiomeHeight)", dimName);
+		    break;
+		case 0x3f:
+		    // MetaDataHash
+		    log::trace("{} 0x3f chunk (MetaDataHash)", dimName);
+		    // cdata contains a key to the NBT data that's in the global LevelChunkMetaDataDictionary
+                    if (control.verboseFlag) {
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                    }
+		case 0x40:
+                    log::trace("{} 0x40 chunk (BlendingData)", dimName);
+                    if (control.verboseFlag) {
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                    }
+		    break;
+		case 0x41:
+                    log::trace("{} 0x41 chunk (ActorDigestVersion)", dimName);
+                    if (control.verboseFlag) {
+                        printKeyValue(key, int32_t(key_size), cdata, int32_t(cdata_size), false);
+                    }
+		    break;
                 case 0x2C:
                 case 0x76:
                     // "Version"
@@ -794,7 +851,7 @@ namespace mcpe_viz
                     // chunk block data - 10241 bytes
                     // todonow -- but have also seen 6145 on v1.1?
                     // we do the parsing in the destination object to save memcpy's
-                    // todonow - would be better to get the version # from the proper chunk record (0x76)
+                    // todonow - would be better to get the version # from the proper chunk record (0x2C)
                 {
                     int32_t chunkY = chunkTypeSub;
                     // check the first byte to see if anything interesting is in it
@@ -823,11 +880,13 @@ namespace mcpe_viz
 
                     // todonow - would be better to get the version # from the proper chunk record (0x76)
                 {
+                    log::trace("{} 0x2d chunk (Data2D)", dimName);
                     dimDataList[chunkDimId]->addChunkColumnData(3, chunkX, chunkZ, cdata, int32_t(cdata_size));
                 }
                 break;
 
                 case 0x2b:
+		    // "Data3D"
                     // 1.18 3D biome data
                     // 512 bytes -> heightmap
                     // Paletted biome data per subcunk (16x16x16) from bottom up
@@ -838,6 +897,7 @@ namespace mcpe_viz
                     //   int32 palette length
                     //   palette entries (int32)
                 {
+                    log::trace("{} 0x2b chunk (Data3D)", dimName);
                     dimDataList[chunkDimId]->addChunkColumnData(4, chunkX, chunkZ, cdata, int32_t(cdata_size));
                 }
                 break;
