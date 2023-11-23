@@ -63,12 +63,19 @@ namespace mcpe_viz
     Item* Item::add(const IdType& id, const std::string& name)
     {
         auto& instance = Wrapper::value();
-        if (instance[id] != nullptr) {
+        auto store = true;
+        if (id >= instance.size()) {
+            log::error("Item id={} name={} id is too big to store", id, name);
+            store = false;
+        }
+        else if (instance[id] != nullptr) {
             log::error("Item id={} name={} already exists", id, name);
             return nullptr;
         }
         auto const item = new Item(id, name);
-        instance[id] = item;
+        if (store) {
+            instance[id] = item;
+        }
         sItems.emplace_back(item);
         return item;
     }
